@@ -1,0 +1,1359 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<title>Work Better with AI 201 — Partner Hub</title>
+<link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+<style>
+:root {
+  --cobalt: #293851;
+  --cobalt-deep: #1a2438;
+  --gold: #FFCC00;
+  --gold-soft: rgba(255, 204, 0, 0.10);
+  --ink: #1a1f2e;
+  --muted: #5a6478;
+  --paper: #ffffff;
+  --line: #e2e5ea;
+  --soft: #f6f7f9;
+  --placeholder: #b8500a;
+  --placeholder-bg: #fef6ec;
+}
+
+* { box-sizing: border-box; margin: 0; padding: 0; }
+
+html { scroll-behavior: smooth; }
+
+body {
+  font-family: Georgia, 'Times New Roman', serif;
+  color: var(--ink);
+  background: var(--paper);
+  line-height: 1.5;
+}
+
+main, .landing-wrap {
+  max-width: 820px;
+  margin: 0 auto;
+  padding: 0 40px;
+}
+
+/* LANDING */
+.landing-wrap {
+  padding-top: 60px;
+  padding-bottom: 72px;
+}
+
+.brand-eyebrow {
+  font-family: 'Montserrat', sans-serif;
+  font-weight: 700;
+  font-size: 11px;
+  letter-spacing: 2.5px;
+  color: var(--cobalt);
+  text-transform: uppercase;
+  margin-bottom: 14px;
+}
+
+.brand-eyebrow .dot { color: var(--gold); margin: 0 6px; }
+
+.brand-title {
+  font-family: 'Montserrat', sans-serif;
+  font-weight: 800;
+  font-size: 38px;
+  line-height: 1.1;
+  color: var(--cobalt);
+  letter-spacing: -0.8px;
+  margin-bottom: 24px;
+}
+
+.landing-intro {
+  font-family: Georgia, serif;
+  font-size: 16px;
+  line-height: 1.7;
+  color: var(--ink);
+  margin-bottom: 36px;
+  max-width: 95%;
+}
+
+.landing-cards {
+  display: grid;
+  grid-template-columns: 1fr 1fr 1fr;
+  gap: 14px;
+}
+
+.card {
+  background: var(--paper);
+  border: 1px solid var(--line);
+  border-left: 3px solid var(--gold);
+  padding: 18px 20px 20px;
+  text-align: left;
+  cursor: pointer;
+  font-family: inherit;
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  box-shadow: 0 1px 3px rgba(41, 56, 81, 0.04);
+  transition: background 0.2s, border-color 0.2s, transform 0.18s, box-shadow 0.2s;
+}
+
+.card:hover,
+.card:focus-visible {
+  background: var(--gold-soft);
+  border-color: rgba(255, 204, 0, 0.45);
+  border-left-color: var(--gold);
+  transform: translateY(-3px);
+  box-shadow: 0 8px 20px rgba(41, 56, 81, 0.10), 0 2px 4px rgba(255, 204, 0, 0.18);
+  outline: none;
+}
+
+.card:hover .card-title,
+.card:focus-visible .card-title {
+  color: var(--cobalt-deep);
+}
+
+.card-title {
+  font-family: 'Montserrat', sans-serif;
+  font-weight: 700;
+  font-size: 14px;
+  color: var(--cobalt);
+  letter-spacing: -0.1px;
+  line-height: 1.3;
+}
+
+.card-desc {
+  font-family: Georgia, serif;
+  font-size: 12.5px;
+  line-height: 1.55;
+  color: var(--muted);
+}
+
+/* SECTION BREAKS - more prominent chapter-break style */
+.section-divider {
+  max-width: 760px;
+  margin: 0 auto;
+  padding: 0 40px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 14px;
+}
+
+.section-divider::before,
+.section-divider::after {
+  content: "";
+  flex: 1;
+  height: 1px;
+  background: var(--line);
+}
+
+.section-divider .marker {
+  width: 8px;
+  height: 8px;
+  background: var(--gold);
+  transform: rotate(45deg);
+}
+
+/* SECTIONS */
+section {
+  padding: 130px 0 96px;
+  scroll-margin-top: 24px;
+}
+
+section:first-of-type {
+  padding-top: 110px;
+}
+
+section.flash {
+  animation: targetFlash 1s ease-out;
+}
+
+@keyframes targetFlash {
+  0% { background-color: rgba(255, 204, 0, 0.10); }
+  100% { background-color: transparent; }
+}
+
+.section-opener {
+  margin-bottom: 60px;
+}
+
+.section-number {
+  font-family: 'Montserrat', sans-serif;
+  font-weight: 800;
+  font-size: 58px;
+  color: var(--gold);
+  line-height: 1;
+  letter-spacing: -2.5px;
+  margin-bottom: 14px;
+}
+
+.section-title {
+  font-family: 'Montserrat', sans-serif;
+  font-weight: 700;
+  font-size: 42px;
+  color: var(--cobalt);
+  letter-spacing: -0.8px;
+  line-height: 1.1;
+  margin-bottom: 18px;
+}
+
+.section-description {
+  font-family: Georgia, serif;
+  font-style: italic;
+  font-size: 17px;
+  line-height: 1.65;
+  color: var(--muted);
+  max-width: 88%;
+  margin-bottom: 0;
+}
+
+/* OVERVIEW - WHAT IT IS */
+.what-it-is {
+  font-family: Georgia, serif;
+  font-size: 15.5px;
+  line-height: 1.75;
+  color: var(--muted);
+  margin-bottom: 20px;
+  max-width: 92%;
+}
+
+.partner-built {
+  font-family: Georgia, serif;
+  font-size: 14.5px;
+  line-height: 1.7;
+  color: var(--ink);
+  padding: 14px 18px;
+  background: var(--gold-soft);
+  border-left: 3px solid var(--gold);
+  margin-bottom: 36px;
+}
+
+.partner-built strong {
+  font-family: 'Montserrat', sans-serif;
+  font-weight: 700;
+  font-style: normal;
+  font-size: 11px;
+  color: var(--cobalt);
+  letter-spacing: 1.5px;
+  text-transform: uppercase;
+  display: block;
+  margin-bottom: 4px;
+}
+
+/* RESOURCES BLOCK */
+.resources-label {
+  font-family: 'Montserrat', sans-serif;
+  font-weight: 700;
+  font-size: 10px;
+  letter-spacing: 2px;
+  color: var(--muted);
+  text-transform: uppercase;
+  margin-bottom: 12px;
+}
+
+.resources {
+  display: grid;
+  grid-template-columns: 1fr 1fr 1fr;
+  gap: 12px;
+  margin-bottom: 44px;
+}
+
+.resource-link {
+  display: block;
+  padding: 14px 16px 16px;
+  text-decoration: none;
+  background: var(--paper);
+  border: 1px solid var(--line);
+  border-left: 2px solid var(--gold);
+  transition: background 0.15s, border-color 0.15s, transform 0.15s;
+}
+
+.resource-link:hover {
+  background: var(--soft);
+  border-color: var(--cobalt);
+  border-left-color: var(--gold);
+  transform: translateY(-1px);
+}
+
+.resource-title {
+  font-family: 'Montserrat', sans-serif;
+  font-weight: 700;
+  font-size: 12.5px;
+  color: var(--cobalt);
+  margin-bottom: 6px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 8px;
+}
+
+.resource-title .ext {
+  color: var(--gold);
+  font-size: 14px;
+  font-weight: 800;
+  line-height: 1;
+}
+
+.resource-desc {
+  font-family: Georgia, serif;
+  font-size: 12px;
+  line-height: 1.55;
+  color: var(--muted);
+}
+
+/* HEADLINE */
+.headline {
+  font-family: 'Montserrat', sans-serif;
+  font-weight: 700;
+  font-size: 28px;
+  line-height: 1.2;
+  color: var(--cobalt);
+  margin-bottom: 28px;
+  letter-spacing: -0.5px;
+}
+
+.headline .setup {
+  display: block;
+  font-weight: 500;
+  color: var(--muted);
+  margin-bottom: 8px;
+  font-size: 26px;
+}
+
+.headline .punch { display: block; font-weight: 700; }
+
+.headline .accent {
+  background: linear-gradient(transparent 65%, var(--gold) 65%, var(--gold) 92%, transparent 92%);
+  padding: 0 3px;
+}
+
+.intro {
+  font-size: 16px;
+  line-height: 1.75;
+  color: var(--ink);
+  margin-bottom: 44px;
+  max-width: 94%;
+}
+
+.sub-header {
+  font-family: 'Montserrat', sans-serif;
+  font-weight: 700;
+  font-size: 11px;
+  letter-spacing: 2px;
+  color: var(--cobalt);
+  text-transform: uppercase;
+  margin-bottom: 20px;
+  padding-bottom: 10px;
+  border-bottom: 1px solid var(--line);
+}
+
+.artifacts {
+  display: grid;
+  grid-template-columns: 1fr 1fr 1fr;
+  gap: 24px;
+  margin-bottom: 44px;
+}
+
+.artifact {
+  padding-top: 14px;
+  border-top: 3px solid var(--gold);
+}
+
+.artifact-num {
+  font-family: 'Montserrat', sans-serif;
+  font-weight: 800;
+  font-size: 10px;
+  color: var(--muted);
+  letter-spacing: 1.5px;
+  margin-bottom: 6px;
+}
+
+.artifact-label {
+  font-family: 'Montserrat', sans-serif;
+  font-weight: 700;
+  font-size: 14px;
+  color: var(--cobalt);
+  margin-bottom: 10px;
+  line-height: 1.3;
+}
+
+.artifact-body {
+  font-size: 14px;
+  line-height: 1.65;
+  color: var(--ink);
+}
+
+.moves { margin-bottom: 40px; }
+
+.move {
+  display: flex;
+  gap: 18px;
+  align-items: flex-start;
+  padding: 16px 0;
+  font-size: 14px;
+  line-height: 1.7;
+  border-bottom: 1px dotted var(--line);
+}
+
+.move:first-child { padding-top: 8px; }
+.move:last-child { border-bottom: none; padding-bottom: 8px; }
+
+.move-label {
+  font-family: 'Montserrat', sans-serif;
+  font-weight: 700;
+  font-size: 11px;
+  letter-spacing: 1px;
+  color: var(--cobalt);
+  text-transform: uppercase;
+  flex-shrink: 0;
+  width: 190px;
+}
+
+.move-label .sub {
+  font-family: Georgia, serif;
+  font-style: italic;
+  font-weight: 400;
+  font-size: 11px;
+  color: var(--muted);
+  text-transform: none;
+  letter-spacing: 0;
+  display: block;
+  margin-top: 4px;
+}
+
+.move-content {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+}
+
+.move-body {
+  font-family: Georgia, serif;
+  color: var(--ink);
+}
+
+.move-output {
+  margin-top: 12px;
+  font-family: 'Montserrat', sans-serif;
+  font-weight: 700;
+  font-size: 10.5px;
+  letter-spacing: 1.5px;
+  color: var(--cobalt);
+  text-transform: uppercase;
+}
+
+.move-output .arrow {
+  color: var(--gold);
+  margin-right: 6px;
+  font-weight: 800;
+}
+
+.differentiator {
+  background: var(--cobalt);
+  color: #fff;
+  padding: 22px 26px;
+  border-left: 4px solid var(--gold);
+}
+
+.diff-line {
+  font-family: 'Montserrat', sans-serif;
+  font-size: 13.5px;
+  font-weight: 600;
+  color: #fff;
+  margin-bottom: 10px;
+  line-height: 1.55;
+}
+
+.diff-frame {
+  font-family: Georgia, serif;
+  font-size: 12.5px;
+  font-style: italic;
+  color: #c8d0dc;
+  line-height: 1.7;
+}
+
+.diff-frame strong {
+  font-style: normal;
+  font-weight: normal;
+  color: var(--gold);
+}
+
+/* BENEFIT GRID — used in Fits your programs and Amplifies your expertise */
+.benefit-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 32px 28px;
+  margin-top: 8px;
+}
+
+.benefit-block {
+  padding-top: 14px;
+  border-top: 3px solid var(--gold);
+}
+
+.benefit-title {
+  font-family: 'Montserrat', sans-serif;
+  font-weight: 700;
+  font-size: 12.5px;
+  letter-spacing: 1.5px;
+  color: var(--cobalt);
+  text-transform: uppercase;
+  margin-bottom: 12px;
+  line-height: 1.3;
+}
+
+.benefit-body {
+  font-family: Georgia, serif;
+  font-size: 14.5px;
+  line-height: 1.7;
+  color: var(--ink);
+}
+
+/* COPY BUTTON */
+.proposal-block {
+  position: relative;
+}
+
+.copy-btn {
+  position: absolute;
+  top: 18px;
+  right: 20px;
+  padding: 6px 12px;
+  background: var(--paper);
+  border: 1px solid var(--line);
+  color: var(--muted);
+  font-family: 'Montserrat', sans-serif;
+  font-weight: 700;
+  font-size: 9.5px;
+  letter-spacing: 1.5px;
+  text-transform: uppercase;
+  cursor: pointer;
+  transition: border-color 0.15s, color 0.15s, background 0.2s;
+}
+
+.copy-btn:hover {
+  border-color: var(--cobalt);
+  color: var(--cobalt);
+}
+
+.copy-btn.copied {
+  background: var(--gold);
+  border-color: var(--gold);
+  color: var(--cobalt);
+}
+
+/* PROPOSAL & ENGAGE BLOCKS */
+.proposal-intro,
+.engage-intro {
+  font-family: Georgia, serif;
+  font-style: italic;
+  font-size: 14.5px;
+  color: var(--muted);
+  margin-bottom: 32px;
+  line-height: 1.65;
+}
+
+.proposal-block,
+.engage-block {
+  margin-bottom: 22px;
+  padding: 22px 26px;
+  background: var(--soft);
+  border-left: 3px solid var(--gold);
+}
+
+.proposal-block {
+  padding-right: 90px;
+}
+
+.proposal-block:last-child,
+.engage-block:last-child { margin-bottom: 0; }
+
+.proposal-label,
+.engage-label {
+  font-family: 'Montserrat', sans-serif;
+  font-weight: 700;
+  font-size: 10px;
+  letter-spacing: 2px;
+  color: var(--cobalt);
+  text-transform: uppercase;
+  margin-bottom: 10px;
+}
+
+.proposal-body,
+.engage-body {
+  font-family: Georgia, serif;
+  font-size: 14.5px;
+  line-height: 1.7;
+  color: var(--ink);
+}
+
+.proposal-body ul {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+}
+
+.proposal-body ul li {
+  padding-left: 16px;
+  position: relative;
+  margin-bottom: 8px;
+}
+
+.proposal-body ul li:last-child { margin-bottom: 0; }
+
+.proposal-body ul li::before {
+  content: "·";
+  color: var(--gold);
+  font-weight: 800;
+  position: absolute;
+  left: 0;
+}
+
+.proposal-body ul li strong {
+  font-family: 'Montserrat', sans-serif;
+  font-weight: 700;
+  font-style: normal;
+  font-size: 12.5px;
+  color: var(--cobalt);
+  letter-spacing: 0.2px;
+  margin-right: 6px;
+}
+
+/* Special engage lead block (warm tone) */
+.engage-lead {
+  margin-bottom: 22px;
+  padding: 24px 26px;
+  background: var(--cobalt);
+  color: #fff;
+  border-left: 4px solid var(--gold);
+}
+
+.engage-lead-label {
+  font-family: 'Montserrat', sans-serif;
+  font-weight: 700;
+  font-size: 10px;
+  letter-spacing: 2px;
+  color: var(--gold);
+  text-transform: uppercase;
+  margin-bottom: 12px;
+}
+
+.engage-lead-body {
+  font-family: Georgia, serif;
+  font-size: 15.5px;
+  line-height: 1.7;
+  color: #fff;
+}
+
+.engage-lead-body .placeholder {
+  background: rgba(255, 204, 0, 0.15);
+  color: var(--gold);
+}
+
+/* WHO IT'S FOR */
+.fit-block { margin-bottom: 36px; }
+.fit-block:last-child { margin-bottom: 0; }
+
+.fit-block-label {
+  font-family: 'Montserrat', sans-serif;
+  font-weight: 700;
+  font-size: 11px;
+  letter-spacing: 2px;
+  color: var(--cobalt);
+  text-transform: uppercase;
+  margin-bottom: 14px;
+}
+
+.fit-prose {
+  font-family: Georgia, serif;
+  font-size: 15px;
+  line-height: 1.75;
+  color: var(--ink);
+  max-width: 92%;
+}
+
+.discovery-list {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+  counter-reset: question;
+}
+
+.discovery-list li {
+  counter-increment: question;
+  padding: 14px 0 14px 42px;
+  position: relative;
+  font-family: Georgia, serif;
+  font-style: italic;
+  font-size: 14.5px;
+  line-height: 1.65;
+  color: var(--ink);
+  border-bottom: 1px dotted var(--line);
+}
+
+.discovery-list li:last-child { border-bottom: none; }
+
+.discovery-list li::before {
+  content: counter(question, decimal-leading-zero);
+  position: absolute;
+  left: 0;
+  top: 15px;
+  font-family: 'Montserrat', sans-serif;
+  font-style: normal;
+  font-weight: 800;
+  font-size: 10px;
+  letter-spacing: 1.5px;
+  color: var(--gold);
+}
+
+.notfit-list {
+  list-style: none;
+  padding: 18px 22px;
+  margin: 0;
+  background: var(--soft);
+  border-left: 3px solid var(--cobalt);
+}
+
+.notfit-list li {
+  font-family: Georgia, serif;
+  font-size: 14px;
+  line-height: 1.65;
+  color: var(--ink);
+  padding-left: 20px;
+  position: relative;
+  margin-bottom: 8px;
+}
+
+.notfit-list li:last-child { margin-bottom: 0; }
+
+.notfit-list li::before {
+  content: "×";
+  position: absolute;
+  left: 0;
+  top: 0;
+  color: var(--cobalt);
+  font-weight: 800;
+}
+
+/* BUYER CUES */
+.cue { margin-bottom: 28px; }
+.cue:last-child { margin-bottom: 0; }
+
+.cue-title {
+  font-family: 'Montserrat', sans-serif;
+  font-weight: 700;
+  font-size: 16px;
+  color: var(--cobalt);
+  margin-bottom: 10px;
+  letter-spacing: -0.1px;
+}
+
+.cue-phrases {
+  font-family: Georgia, serif;
+  font-style: italic;
+  font-size: 14.5px;
+  line-height: 1.8;
+  color: var(--muted);
+  padding-left: 18px;
+  border-left: 2px solid var(--gold);
+}
+
+.cue-phrases span {
+  display: block;
+  margin-bottom: 4px;
+}
+
+.cue-phrases span:last-child { margin-bottom: 0; }
+
+/* FAQ */
+.faq-item {
+  margin-bottom: 24px;
+  padding-bottom: 24px;
+  border-bottom: 1px dotted var(--line);
+}
+
+.faq-item:last-child {
+  border-bottom: none;
+  margin-bottom: 0;
+  padding-bottom: 0;
+}
+
+.faq-question {
+  font-family: 'Montserrat', sans-serif;
+  font-weight: 600;
+  font-size: 15.5px;
+  color: var(--cobalt);
+  margin-bottom: 10px;
+  line-height: 1.4;
+  letter-spacing: -0.1px;
+}
+
+.faq-answer {
+  font-family: Georgia, serif;
+  font-size: 14.5px;
+  line-height: 1.7;
+  color: var(--ink);
+}
+
+/* PLACEHOLDER */
+.placeholder {
+  background: var(--placeholder-bg);
+  color: var(--placeholder);
+  padding: 1px 6px;
+  border-radius: 2px;
+  font-family: 'Montserrat', sans-serif;
+  font-weight: 600;
+  font-size: 11.5px;
+  font-style: normal;
+  letter-spacing: 0.2px;
+}
+
+/* FOOTER */
+footer {
+  max-width: 820px;
+  margin: 40px auto 0;
+  padding: 32px 40px 48px;
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: space-between;
+  align-items: center;
+  gap: 12px 24px;
+  border-top: 1px solid var(--line);
+}
+
+.format-facts {
+  font-family: 'Montserrat', sans-serif;
+  font-size: 10.5px;
+  font-weight: 500;
+  letter-spacing: 0.5px;
+  color: var(--muted);
+  white-space: nowrap;
+}
+
+.format-facts span { margin-right: 14px; }
+
+.format-facts span:not(:last-child)::after {
+  content: " ·";
+  margin-left: 14px;
+  color: var(--line);
+}
+
+.ep-mark {
+  font-family: 'Montserrat', sans-serif;
+  font-weight: 700;
+  font-size: 10.5px;
+  letter-spacing: 1.5px;
+  color: var(--cobalt);
+  text-transform: uppercase;
+  white-space: nowrap;
+}
+
+/* BACK TO TOP */
+.back-to-top {
+  position: fixed;
+  bottom: 28px;
+  right: 28px;
+  padding: 11px 16px 11px 14px;
+  background: var(--cobalt);
+  color: #fff;
+  border: none;
+  font-family: 'Montserrat', sans-serif;
+  font-weight: 700;
+  font-size: 10px;
+  letter-spacing: 1.5px;
+  text-transform: uppercase;
+  cursor: pointer;
+  opacity: 0;
+  visibility: hidden;
+  transition: opacity 0.25s, visibility 0.25s, transform 0.15s, background 0.15s;
+  z-index: 50;
+  box-shadow: 0 4px 14px rgba(41, 56, 81, 0.18);
+}
+
+.back-to-top::before {
+  content: "↑";
+  color: var(--gold);
+  margin-right: 8px;
+  font-weight: 800;
+  font-size: 11px;
+}
+
+.back-to-top.visible {
+  opacity: 0.96;
+  visibility: visible;
+}
+
+.back-to-top:hover {
+  opacity: 1;
+  background: var(--cobalt-deep);
+  transform: translateY(-1px);
+}
+
+@media print {
+  body { background: white; }
+  .back-to-top { display: none; }
+  section { page-break-inside: avoid; }
+  .section-divider { display: none; }
+}
+</style>
+</head>
+<body>
+
+<!-- LANDING -->
+<div class="landing-wrap">
+  <div class="brand-eyebrow">ExperiencePoint <span class="dot">·</span> Partner Hub</div>
+  <h1 class="brand-title">Work Better with AI 201</h1>
+
+  <p class="landing-intro">Everything you need to position, propose, and sell this workshop well, in one place.</p>
+
+  <div class="landing-cards">
+    <button type="button" class="card" data-target="overview">
+      <div class="card-title">Overview</div>
+      <div class="card-desc">What the workshop is and what participants walk out with.</div>
+    </button>
+    <button type="button" class="card" data-target="forpartners">
+      <div class="card-title">Made for the way you work</div>
+      <div class="card-desc">How this fits your programs and amplifies your expertise.</div>
+    </button>
+    <button type="button" class="card" data-target="proposal">
+      <div class="card-title">Proposal copy</div>
+      <div class="card-desc">Ready-to-paste language for proposals and RFPs.</div>
+    </button>
+    <button type="button" class="card" data-target="fit">
+      <div class="card-title">Who it's for</div>
+      <div class="card-desc">Ideal client, discovery questions, and fit signals.</div>
+    </button>
+    <button type="button" class="card" data-target="buyer-cues">
+      <div class="card-title">Buyer cues</div>
+      <div class="card-desc">Phrases to listen for in client conversations.</div>
+    </button>
+    <button type="button" class="card" data-target="faq">
+      <div class="card-title">FAQ</div>
+      <div class="card-desc">Quick answers to the questions partners hear most.</div>
+    </button>
+  </div>
+</div>
+
+<main>
+
+<!-- OVERVIEW -->
+<section id="overview">
+  <div class="section-opener">
+    <div class="section-number">01</div>
+    <h2 class="section-title">Overview</h2>
+    <p class="section-description">The workshop, the modules, and what participants walk out with.</p>
+  </div>
+
+  <p class="what-it-is">Work Better with AI 201 is ExperiencePoint's advanced AI workshop for teams already using AI tools and ready to put them to work in their real workflows. An applied learning experience built around hands-on agent building, workflow redesign, and a durable framework for where AI fits in the business.</p>
+
+  <div class="partner-built">
+    <strong>Built for partner programs</strong>
+    Designed to slot into your leadership development programs as a turnkey addition. Your facilitators can deliver it, or we'll bring in ours, including Copilot certified trainers from our network. This hub gives you what you need to position and propose well.
+  </div>
+
+  <div class="resources-label">Quick assets to share</div>
+  <div class="resources">
+    <a class="resource-link" href="https://docs.google.com/presentation/d/1vBB1v8s2SF1L9yXrl5dMtxHjqgEnHDxoJC0RWB4EGRI/edit?usp=sharing" target="_blank" rel="noopener noreferrer">
+      <div class="resource-title">One-page overview<span class="ext">↗</span></div>
+      <div class="resource-desc">Share with clients to introduce the workshop at a glance.</div>
+    </a>
+    <a class="resource-link" href="https://docs.google.com/presentation/d/1vBB1v8s2SF1L9yXrl5dMtxHjqgEnHDxoJC0RWB4EGRI/edit?usp=sharing" target="_blank" rel="noopener noreferrer">
+      <div class="resource-title">Details &amp; agenda<span class="ext">↗</span></div>
+      <div class="resource-desc">Full structure and modules for deeper buyer conversations.</div>
+    </a>
+    <a class="resource-link" href="https://docs.google.com/presentation/d/1vBB1v8s2SF1L9yXrl5dMtxHjqgEnHDxoJC0RWB4EGRI/edit?usp=sharing" target="_blank" rel="noopener noreferrer">
+      <div class="resource-title">Demo<span class="ext">↗</span></div>
+      <div class="resource-desc">Show clients what the workshop feels like in the room.</div>
+    </a>
+  </div>
+
+  <h1 class="headline">
+    <span class="setup">Most AI training ends with notes and good intentions.</span>
+    <span class="punch">This one ends with <span class="accent">working AI agents</span> teams use on Monday.</span>
+  </h1>
+
+  <p class="intro">Participants build working AI agents that unlock the latent knowledge and assets already in their organization, often making them 10x more valuable. They map a real workflow, identify the friction and judgment points where humans should stay in the loop, and automate the friction with agents. Then they assess where AI is making work abundant and where their own skills, context, and judgment uniquely matter, so they can focus their best work there with the time automation frees up.</p>
+
+  <div class="sub-header">What participants walk out with</div>
+  <div class="artifacts">
+    <div class="artifact">
+      <div class="artifact-num">01</div>
+      <div class="artifact-label">Working AI agents</div>
+      <div class="artifact-body">Built into their real recurring tasks. Tested before they leave the room. Ready to share with their teams on Monday.</div>
+    </div>
+    <div class="artifact">
+      <div class="artifact-num">02</div>
+      <div class="artifact-label">A redesigned workflow</div>
+      <div class="artifact-body">Storyboarded end to end. Friction points marked for AI. Judgment points marked for humans. A roadmap for what to build next.</div>
+    </div>
+    <div class="artifact">
+      <div class="artifact-num">03</div>
+      <div class="artifact-label">A core value statement</div>
+      <div class="artifact-body">A first-principles articulation of where each person uniquely creates value, paired with a durable framework for sorting what to automate and what to keep human-led.</div>
+    </div>
+  </div>
+
+  <div class="sub-header">How the workshop gets there</div>
+  <div class="moves">
+    <div class="move">
+      <div class="move-label">Activate <span class="sub">Dormant Resources</span></div>
+      <div class="move-content">
+        <div class="move-body">Find an existing asset (a policy doc, a knowledge folder, a winning template) and turn it into a working AI tool teams can use.</div>
+        <div class="move-output"><span class="arrow">→</span>Produces working AI agents</div>
+      </div>
+    </div>
+    <div class="move">
+      <div class="move-label">Automate <span class="sub">with Agents</span></div>
+      <div class="move-content">
+        <div class="move-body">Storyboard a real workflow. Build AI agents into the friction points that need them most. Test before declaring it done.</div>
+        <div class="move-output"><span class="arrow">→</span>Produces a redesigned workflow</div>
+      </div>
+    </div>
+    <div class="move">
+      <div class="move-label">Assess <span class="sub">Value Shifts</span></div>
+      <div class="move-content">
+        <div class="move-body">Build a durable framework for where AI fits in the work. Identify what to safely automate, what to keep human-led, and where each person uniquely creates value.</div>
+        <div class="move-output"><span class="arrow">→</span>Produces a core value statement</div>
+      </div>
+    </div>
+  </div>
+
+  <div class="differentiator">
+    <div class="diff-line">Not platform certification. Not prompt syntax. Not one-off tool training. Same workshop, same vocabulary, IC to executive.</div>
+    <div class="diff-frame">The frame underneath: <strong>replacement thinking</strong> (do what you already do, faster) and <strong>reimagination thinking</strong> (build what wasn't possible before). Most teams plateau in the first. WBWAI 201 builds the muscle for both.</div>
+  </div>
+</section>
+
+<!-- MADE FOR THE WAY YOU WORK -->
+<section id="forpartners">
+  <div class="section-opener">
+    <div class="section-number">02</div>
+    <h2 class="section-title">Made for the way you work</h2>
+    <p class="section-description">Designed to fit your programs and amplify your expertise. The workshop prepares your clients with AI literacy and concrete artifacts. Your firm brings the magic.</p>
+  </div>
+
+  <div class="sub-header">Fits your programs</div>
+  <div class="benefit-grid">
+    <div class="benefit-block">
+      <div class="benefit-title">Action learning programs</div>
+      <div class="benefit-body">Use it as the AI capability workshop inside a longer engagement. Participants enter the action learning sets with the literacy and shared frame to apply AI to the real problems they'll work through together. Your coaches get groups that are already AI-fluent, so the learning goes further.</div>
+    </div>
+    <div class="benefit-block">
+      <div class="benefit-title">Leadership development programs</div>
+      <div class="benefit-body">Plug in as the AI capability layer of your LDP. Connects naturally to leadership behaviors you already coach on: delegating to AI, enabling teams to redesign their own work, modeling judgment about where humans must stay in the loop.</div>
+    </div>
+    <div class="benefit-block">
+      <div class="benefit-title">Manager development</div>
+      <div class="benefit-body">Equips managers to lead AI adoption credibly. They leave with a working agent and a clear view of where AI fits in their team's work, so when you coach them on management practice, they have real ground to stand on.</div>
+    </div>
+    <div class="benefit-block">
+      <div class="benefit-title">Cohort programs</div>
+      <div class="benefit-body">Run as a single session inside a longer cohort. Your follow-up coaching cycles and peer learning circles get concrete anchor points to work from: the agents participants built, the workflows they redesigned, the value statements they wrote.</div>
+    </div>
+  </div>
+
+  <div class="sub-header" style="margin-top: 56px;">Amplifies your expertise</div>
+  <div class="benefit-grid">
+    <div class="benefit-block">
+      <div class="benefit-title">Leadership development</div>
+      <div class="benefit-body">Your coaching on what leadership looks like in an AI age has more to work with: clients who've built real agents, redesigned real workflows, and articulated their own unique value. The behavioral and culture work you do lands on a baseline that's already engaged and AI-literate.</div>
+    </div>
+    <div class="benefit-block">
+      <div class="benefit-title">Executive coaching</div>
+      <div class="benefit-body">Your coaching on leading and working differently in an AI age has concrete experience to anchor on. The artifacts each leader built and the redesign they did in the room mean the conversations you facilitate aren't theoretical, they're grounded in something the leader has already done.</div>
+    </div>
+    <div class="benefit-block">
+      <div class="benefit-title">Behavioral change</div>
+      <div class="benefit-body">Your behavioral and adoption expertise drives the embedding. WBWAI 201 surfaces what to redesign and produces early wins; you bring the methodology that turns those wins into durable change across the organization.</div>
+    </div>
+    <div class="benefit-block">
+      <div class="benefit-title">Talent management</div>
+      <div class="benefit-body">Your work on roles, careers, and skills strategy benefits from a shared framework for where humans uniquely create value. The core value statements and assessment outputs become input for performance conversations, role design, and skills-based planning that holds up as AI capabilities expand.</div>
+    </div>
+  </div>
+</section>
+
+<!-- PROPOSAL COPY -->
+<section id="proposal">
+  <div class="section-opener">
+    <div class="section-number">03</div>
+    <h2 class="section-title">Proposal copy</h2>
+    <p class="section-description">Ready-to-paste language for written proposals and RFPs. Copy as-is or adapt to your client's voice.</p>
+  </div>
+
+  <div class="proposal-block">
+    <button type="button" class="copy-btn" data-copy-target="proposal-description">Copy</button>
+    <div class="proposal-label">Description</div>
+    <div class="proposal-body" id="proposal-description">Work Better with AI 201 is a 150-minute hands-on workshop for teams already using AI tools who want to put them to work in their real workflows. Participants identify dormant resources to activate with AI, workflows to automate with humans in the loop, and where each person uniquely creates value that AI can't easily replace. They leave with three things they can use right away: working AI agents built for their own tasks, a redesigned workflow, and a durable framework for making AI decisions across teams.</div>
+  </div>
+
+  <div class="proposal-block">
+    <button type="button" class="copy-btn" data-copy-target="proposal-audience">Copy</button>
+    <div class="proposal-label">Audience</div>
+    <div class="proposal-body" id="proposal-audience">People already using AI for personal productivity who are ready to redesign work with it. Works well for intact teams, cross-functional groups, individual contributors, or leadership groups. No technical prerequisites. Mixed-experience rooms are fine because each participant works on their own task or their team's shared workflow.</div>
+  </div>
+
+  <div class="proposal-block">
+    <button type="button" class="copy-btn" data-copy-target="proposal-outcomes">Copy</button>
+    <div class="proposal-label">Learning and business outcomes</div>
+    <div class="proposal-body" id="proposal-outcomes">
+      <ul>
+        <li><strong>Built capability.</strong> Participants leave able to design AI into work, not just use it. The applied practice transfers as new tools and capabilities emerge.</li>
+        <li><strong>Behavior change.</strong> Teams approach work differently afterward: clearer judgment about where AI fits and where humans stay.</li>
+        <li><strong>Productivity gains.</strong> Working AI agents built into real recurring tasks, ready for teams to use immediately.</li>
+        <li><strong>Process efficiency.</strong> Redesigned workflows that show where AI takes over and where human judgment must stay.</li>
+        <li><strong>Strategic clarity.</strong> A durable framework for where each person uniquely creates value as AI capabilities expand.</li>
+        <li><strong>Coordinated AI decisions.</strong> A shared vocabulary that lets teams make consistent calls about automation, governance, and where humans stay involved.</li>
+      </ul>
+    </div>
+  </div>
+
+  <div class="proposal-block">
+    <button type="button" class="copy-btn" data-copy-target="proposal-format">Copy</button>
+    <div class="proposal-label">Format</div>
+    <div class="proposal-body" id="proposal-format">150 minutes. 20 to 200 participants. Live, virtual or in-person. English. Vendor-agnostic; works with whatever AI platforms your organization has approved.</div>
+  </div>
+</section>
+
+<!-- WHO IT'S FOR -->
+<section id="fit">
+  <div class="section-opener">
+    <div class="section-number">04</div>
+    <h2 class="section-title">Who it's for</h2>
+    <p class="section-description">The ideal client, the questions to ask, and the fit signals to listen for.</p>
+  </div>
+
+  <div class="fit-block">
+    <div class="fit-block-label">Ideal client</div>
+    <div class="fit-prose">Mid-to-large organizations that have rolled out AI tools (Copilot, ChatGPT, Gemini, or similar) but aren't seeing the impact match the investment. Teams use AI for low-stakes tasks. Functions have different practices. The HR or IT lead wants something more strategic than tool fluency training and more concrete than abstract AI strategy consulting.</div>
+  </div>
+
+  <div class="fit-block">
+    <div class="fit-block-label">Discovery questions to ask</div>
+    <ol class="discovery-list">
+      <li>How is AI being used across your team or organization today, and what's working or not working?</li>
+      <li>What does the gap between AI access and AI impact look like inside your business?</li>
+      <li>What would success look like 90 days after an AI training program for your people?</li>
+      <li>Where in your organization are you most worried about how AI is shifting value or expectations?</li>
+      <li>What's one workflow where you wish AI was doing more, but it isn't yet?</li>
+    </ol>
+  </div>
+
+  <div class="fit-block">
+    <div class="fit-block-label">Not a fit if</div>
+    <ul class="notfit-list">
+      <li>The team has never used AI tools and is starting from scratch (ask us about our WBWAI 101 workshop for this need)</li>
+      <li>The buyer is looking for technical AI training (machine learning, model fine-tuning, building AI from scratch)</li>
+      <li>The buyer is looking for AI strategy consulting rather than capability building inside their own team</li>
+    </ul>
+  </div>
+</section>
+
+<!-- BUYER CUES -->
+<section id="buyer-cues">
+  <div class="section-opener">
+    <div class="section-number">05</div>
+    <h2 class="section-title">Buyer cues</h2>
+    <p class="section-description">What clients say when they need this workshop.</p>
+  </div>
+
+  <div class="cue">
+    <div class="cue-title">AI access is up. AI impact isn't.</div>
+    <div class="cue-phrases">
+      <span>"We rolled out Copilot but adoption is flat."</span>
+      <span>"Our team uses AI for low-stakes stuff, not where it matters."</span>
+      <span>"I'm not seeing change in how work actually gets done."</span>
+    </div>
+  </div>
+
+  <div class="cue">
+    <div class="cue-title">Different teams, different practices.</div>
+    <div class="cue-phrases">
+      <span>"Every team is doing AI differently and nobody's coordinated."</span>
+      <span>"We have no shared way of thinking about where AI fits."</span>
+      <span>"Shadow AI is everywhere and our governance can't keep up."</span>
+    </div>
+  </div>
+
+  <div class="cue">
+    <div class="cue-title">Training that didn't transfer.</div>
+    <div class="cue-phrases">
+      <span>"We've done AI awareness training. Nothing stuck."</span>
+      <span>"We need something measurable, not another deck."</span>
+      <span>"We want strategic, not just functional."</span>
+    </div>
+  </div>
+</section>
+
+<!-- FAQ -->
+<section id="faq">
+  <div class="section-opener">
+    <div class="section-number">06</div>
+    <h2 class="section-title">Sales FAQ</h2>
+    <p class="section-description">Sharp answers to the questions partners hear most.</p>
+  </div>
+
+  <div class="faq-item">
+    <div class="faq-question">How is this different from free vendor training (Microsoft Copilot, Google AI, Anthropic)?</div>
+    <div class="faq-answer">Vendor training teaches teams how to use one platform's features. It assumes that if people learn the tools, they'll figure out the impact. They mostly don't. WBWAI 201 starts with a real workflow teams own and ends with working AI agents built into it. It's also vendor-agnostic, so it works regardless of which AI stack you've licensed.</div>
+  </div>
+
+  <div class="faq-item">
+    <div class="faq-question">How is this different from technical AI training (machine learning, AI bootcamps)?</div>
+    <div class="faq-answer">Technical AI training is about how AI works under the hood: models, code, datasets. WBWAI 201 is about how AI changes the business. Teams build working agents in the room using the AI tools their organization already has, but the durable value is what they leave with: a clear-eyed framework for which work AI takes over safely, which work needs human judgment, and where each role creates value AI can't easily replicate. That framework outlasts any specific platform or technique.</div>
+  </div>
+
+  <div class="faq-item">
+    <div class="faq-question">How is this different from what AI strategy consultants do?</div>
+    <div class="faq-answer">Consultants tell teams what to do. WBWAI 201 builds the muscle in teams to make those decisions themselves. By the end, they've built working AI agents, redesigned a workflow, and articulated where their roles uniquely add value. The artifacts and the vocabulary stay with them. The consultant's deck doesn't.</div>
+  </div>
+
+  <div class="faq-item">
+    <div class="faq-question">What happens after the workshop?</div>
+    <div class="faq-answer">Participants leave with three artifacts they own and a vocabulary teams can share. The working agents stay in use. The redesigned workflow is theirs to expand. The core value statement and assessment framework anchor how they think about their role and their team's work as AI capabilities grow. They have a clear plan for what to build next, without us.</div>
+  </div>
+
+  <div class="faq-item">
+    <div class="faq-question">What about data security and using real company data?</div>
+    <div class="faq-answer">Participants build agents inside the AI platforms your organization has already approved. They use their own work, their own files, their own context. ExperiencePoint doesn't ingest or retain that material. The workshop runs in your environment, within your governance.</div>
+  </div>
+
+  <div class="faq-item">
+    <div class="faq-question">Who should attend, and what's the right group composition?</div>
+    <div class="faq-answer">Anyone already using AI for personal productivity who wants to move from using it to designing with it. Works well for intact teams aligning on a shared workflow, cross-functional groups, individual contributors building agents for their own tasks, or leadership groups thinking about portfolio strategy. Mixed-experience rooms work well because each person brings their own work into the room.</div>
+  </div>
+</section>
+
+</main>
+
+<footer>
+  <div class="format-facts">
+    <span>150 minutes</span>
+    <span>20 to 200 participants</span>
+    <span>Live, virtual or in-person</span>
+  </div>
+  <div class="ep-mark">ExperiencePoint</div>
+</footer>
+
+<button type="button" class="back-to-top" id="backToTop">Top</button>
+
+<script>
+document.addEventListener('DOMContentLoaded', () => {
+  // Landing cards
+  document.querySelectorAll('.card').forEach(card => {
+    card.addEventListener('click', () => {
+      const targetId = card.getAttribute('data-target');
+      const target = document.getElementById(targetId);
+      if (target) {
+        target.scrollIntoView({ behavior: 'smooth', block: 'start' });
+        target.classList.add('flash');
+        setTimeout(() => target.classList.remove('flash'), 1000);
+      }
+    });
+  });
+
+  // Back to top
+  const backToTop = document.getElementById('backToTop');
+  if (backToTop) {
+    window.addEventListener('scroll', () => {
+      if (window.scrollY > 500) {
+        backToTop.classList.add('visible');
+      } else {
+        backToTop.classList.remove('visible');
+      }
+    });
+    backToTop.addEventListener('click', () => {
+      window.scrollTo({ top: 0, behavior: 'smooth' });
+    });
+  }
+
+  // Copy buttons (proposal blocks)
+  function fallbackCopy(text) {
+    const textarea = document.createElement('textarea');
+    textarea.value = text;
+    textarea.setAttribute('readonly', '');
+    textarea.style.position = 'fixed';
+    textarea.style.top = '0';
+    textarea.style.left = '0';
+    textarea.style.width = '1px';
+    textarea.style.height = '1px';
+    textarea.style.padding = '0';
+    textarea.style.border = 'none';
+    textarea.style.outline = 'none';
+    textarea.style.boxShadow = 'none';
+    textarea.style.background = 'transparent';
+    textarea.style.opacity = '0';
+    document.body.appendChild(textarea);
+    const selection = document.getSelection();
+    const previousRange = selection.rangeCount > 0 ? selection.getRangeAt(0) : null;
+    textarea.focus();
+    textarea.select();
+    textarea.setSelectionRange(0, text.length);
+    let success = false;
+    try {
+      success = document.execCommand('copy');
+    } catch (e) {
+      success = false;
+    }
+    document.body.removeChild(textarea);
+    if (previousRange) {
+      selection.removeAllRanges();
+      selection.addRange(previousRange);
+    }
+    return success;
+  }
+
+  function flashCopyState(btn, state) {
+    const originalText = btn.dataset.originalText || btn.textContent;
+    btn.dataset.originalText = originalText;
+    if (state === 'success') {
+      btn.textContent = 'Copied';
+      btn.classList.add('copied');
+    } else {
+      btn.textContent = 'Try again';
+      btn.classList.add('copied');
+    }
+    setTimeout(() => {
+      btn.textContent = originalText;
+      btn.classList.remove('copied');
+    }, 1500);
+  }
+
+  document.querySelectorAll('.copy-btn').forEach(btn => {
+    btn.addEventListener('click', async () => {
+      const targetId = btn.getAttribute('data-copy-target');
+      const target = document.getElementById(targetId);
+      if (!target) return;
+
+      // Extract plain text, preserving list structure
+      let text = '';
+      const lists = target.querySelectorAll('ul, ol');
+      if (lists.length > 0) {
+        const items = target.querySelectorAll('li');
+        text = Array.from(items).map(li => '- ' + li.textContent.trim().replace(/\s+/g, ' ')).join('\n');
+      } else {
+        text = target.textContent.trim().replace(/\s+/g, ' ');
+      }
+
+      let success = false;
+
+      // Try modern API first
+      if (navigator.clipboard && navigator.clipboard.writeText) {
+        try {
+          await navigator.clipboard.writeText(text);
+          success = true;
+        } catch (err) {
+          success = false;
+        }
+      }
+
+      // Fall back to execCommand if modern API blocked
+      if (!success) {
+        success = fallbackCopy(text);
+      }
+
+      flashCopyState(btn, success ? 'success' : 'error');
+    });
+  });
+});
+</script>
+
+</body>
+</html>
