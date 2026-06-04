@@ -1,4 +1,4 @@
-\# Create Your First Agent
+# Create Your First Agent
 
 A companion activity for ExperiencePoint's Work Better with AI 201 workshop.
 
