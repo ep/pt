@@ -7,6 +7,7 @@ There is no homepage at the repo root by design. Each project lives in its own f
 - https://ep.github.io/pt/agents/ : Create Your First Agent. A companion activity for Work Better with AI 201.
 - https://ep.github.io/pt/kc/ : KickstartChange partner enablement hub.
 - https://ep.github.io/pt/wbwai201/ : Work Better with AI 201 partner enablement hub.
+- https://ep.github.io/pt/podium-for-partners/ : A site to test Podium's positioning with prospective IP-holder partners.
 
 ## How it works
 
