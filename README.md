@@ -8,7 +8,7 @@ There is no homepage at the repo root by design. Each project lives in its own f
 - https://ep.github.io/pt/kc/ : KickstartChange partner enablement hub.
 - https://ep.github.io/pt/wbwai201/ : Work Better with AI 201 partner enablement hub.
 - https://ep.github.io/pt/podium-for-partners/ : Testing Podium's positioning with prospective IP-holder partners.
-- - https://ep.github.io/pt/podium-for-partners-ideo/
+ - https://ep.github.io/pt/podium-for-partners-ideo/
 
 ## How it works
 
