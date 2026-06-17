@@ -1,2078 +1,2594 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-<meta charset="UTF-8">
-<meta name="robots" content="noindex, nofollow">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>KickstartChange Partner Hub</title>
-<style>
-:root {
-  --cobalt: #293851;
-  --cobalt-deep: #1a2438;
-  --gold: #FFCC00;
-  --gold-soft: rgba(255, 204, 0, 0.10);
-  --ink: #1a1f2e;
-  --muted: #5a6478;
-  --paper: #ffffff;
-  --line: #e2e5ea;
-  --soft: #f6f7f9;
-  --placeholder: #b8500a;
-  --placeholder-bg: #fef6ec;
-  --sans: 'Helvetica Neue', Arial, 'Segoe UI', Roboto, sans-serif;
-}
-
-* { box-sizing: border-box; margin: 0; padding: 0; }
-
-html { scroll-behavior: smooth; }
-
-body {
-  font-family: Georgia, 'Times New Roman', serif;
-  color: var(--ink);
-  background: var(--paper);
-  line-height: 1.55;
-  -webkit-font-smoothing: antialiased;
-  -moz-osx-font-smoothing: grayscale;
-}
-
-main, .landing-wrap {
-  max-width: 900px;
-  margin: 0 auto;
-  padding: 0 40px;
-}
-
-/* Shared focus state for keyboard users */
-a:focus-visible,
-button:focus-visible {
-  outline: 2px solid var(--gold);
-  outline-offset: 3px;
-  border-radius: 2px;
-}
-
-/* LANDING */
-.landing-wrap {
-  padding-top: 60px;
-  padding-bottom: 76px;
-}
-
-.brand-eyebrow {
-  font-family: var(--sans);
-  font-weight: 700;
-  font-size: 11.5px;
-  letter-spacing: 2.5px;
-  color: var(--cobalt);
-  text-transform: uppercase;
-  margin-bottom: 16px;
-}
-
-.brand-eyebrow .dot { color: var(--gold); margin: 0 6px; }
-
-.brand-title {
-  font-family: var(--sans);
-  font-weight: 800;
-  font-size: 44px;
-  line-height: 1.08;
-  color: var(--cobalt);
-  letter-spacing: -0.8px;
-  margin-bottom: 24px;
-}
-
-.landing-intro {
-  font-family: Georgia, serif;
-  font-size: 17.5px;
-  line-height: 1.7;
-  color: var(--ink);
-  margin-bottom: 40px;
-  max-width: 95%;
-}
-
-.landing-cards {
-  display: grid;
-  grid-template-columns: 1fr 1fr 1fr;
-  gap: 14px;
-}
-
-.card {
-  background: var(--paper);
-  border: 1px solid var(--line);
-  border-left: 3px solid var(--gold);
-  padding: 20px 22px 22px;
-  text-align: left;
-  cursor: pointer;
-  font-family: inherit;
-  display: flex;
-  flex-direction: column;
-  gap: 8px;
-  box-shadow: 0 1px 3px rgba(41, 56, 81, 0.04);
-  transition: background 0.22s ease, border-color 0.22s ease, transform 0.22s cubic-bezier(0.2, 0.7, 0.3, 1), box-shadow 0.22s ease;
-}
-
-.card:hover,
-.card:focus-visible {
-  background: var(--gold-soft);
-  border-color: rgba(255, 204, 0, 0.45);
-  border-left-color: var(--gold);
-  transform: translateY(-4px);
-  box-shadow: 0 12px 26px rgba(41, 56, 81, 0.12), 0 2px 5px rgba(255, 204, 0, 0.20);
-  outline: none;
-}
-
-.card:hover .card-title,
-.card:focus-visible .card-title {
-  color: var(--cobalt-deep);
-}
-
-.card-title {
-  font-family: var(--sans);
-  font-weight: 700;
-  font-size: 15px;
-  color: var(--cobalt);
-  letter-spacing: -0.1px;
-  line-height: 1.3;
-}
-
-.card-desc {
-  font-family: Georgia, serif;
-  font-size: 13.5px;
-  line-height: 1.55;
-  color: var(--muted);
-}
-
-/* SECTIONS */
-section {
-  padding: 130px 0 96px;
-  scroll-margin-top: 24px;
-}
-
-section:first-of-type {
-  padding-top: 110px;
-}
-
-section.flash {
-  animation: targetFlash 1s ease-out;
-}
-
-@keyframes targetFlash {
-  0% { background-color: rgba(255, 204, 0, 0.10); }
-  100% { background-color: transparent; }
-}
-
-.section-opener {
-  margin-bottom: 64px;
-}
-
-.section-number {
-  font-family: var(--sans);
-  font-weight: 800;
-  font-size: 64px;
-  color: var(--gold);
-  line-height: 1;
-  letter-spacing: 0;
-  margin-bottom: 16px;
-}
-
-.section-title {
-  font-family: var(--sans);
-  font-weight: 700;
-  font-size: 46px;
-  color: var(--cobalt);
-  letter-spacing: -0.8px;
-  line-height: 1.08;
-  margin-bottom: 18px;
-}
-
-.section-description {
-  font-family: Georgia, serif;
-  font-style: italic;
-  font-size: 18.5px;
-  line-height: 1.6;
-  color: var(--muted);
-  max-width: 90%;
-  margin-bottom: 0;
-}
-
-/* OVERVIEW - WHAT IT IS */
-.what-it-is {
-  font-family: Georgia, serif;
-  font-size: 16.5px;
-  line-height: 1.75;
-  color: var(--muted);
-  margin-bottom: 22px;
-  max-width: 94%;
-}
-
-.partner-built {
-  font-family: Georgia, serif;
-  font-size: 15.5px;
-  line-height: 1.7;
-  color: var(--ink);
-  padding: 16px 20px;
-  background: var(--gold-soft);
-  border-left: 3px solid var(--gold);
-  margin-bottom: 38px;
-}
-
-.partner-built strong {
-  font-family: var(--sans);
-  font-weight: 700;
-  font-style: normal;
-  font-size: 11.5px;
-  color: var(--cobalt);
-  letter-spacing: 1.5px;
-  text-transform: uppercase;
-  display: block;
-  margin-bottom: 5px;
-}
-
-/* RESOURCES BLOCK */
-.resources-label {
-  font-family: var(--sans);
-  font-weight: 700;
-  font-size: 11px;
-  letter-spacing: 2px;
-  color: var(--muted);
-  text-transform: uppercase;
-  margin-bottom: 14px;
-}
-
-.resources {
-  display: grid;
-  grid-template-columns: 1fr 1fr 1fr;
-  gap: 12px;
-  margin-bottom: 46px;
-}
-
-.resource-link {
-  display: block;
-  padding: 16px 18px 18px;
-  text-decoration: none;
-  background: var(--paper);
-  border: 1px solid var(--line);
-  border-left: 2px solid var(--gold);
-  transition: background 0.18s ease, border-color 0.18s ease, transform 0.18s ease, box-shadow 0.18s ease;
-}
-
-.resource-link:hover {
-  background: var(--soft);
-  border-color: var(--cobalt);
-  border-left-color: var(--gold);
-  transform: translateY(-2px);
-  box-shadow: 0 8px 18px rgba(41, 56, 81, 0.08);
-}
-
-.resource-title {
-  font-family: var(--sans);
-  font-weight: 700;
-  font-size: 13.5px;
-  color: var(--cobalt);
-  margin-bottom: 7px;
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  gap: 8px;
-}
-
-.resource-title .ext {
-  color: var(--gold);
-  font-size: 15px;
-  font-weight: 800;
-  line-height: 1;
-  transition: transform 0.2s ease;
-}
-
-.resource-link:hover .ext {
-  transform: translate(2px, -2px);
-}
-
-.resource-desc {
-  font-family: Georgia, serif;
-  font-size: 13px;
-  line-height: 1.55;
-  color: var(--muted);
-}
-
-/* FEATURED ASSET (sample proposal) */
-.asset-feature {
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  gap: 24px;
-  margin-bottom: 12px;
-  padding: 22px 26px;
-  text-decoration: none;
-  background: var(--gold-soft);
-  border: 1px solid var(--line);
-  border-left: 4px solid var(--gold);
-  transition: background 0.18s ease, border-color 0.18s ease, transform 0.18s ease, box-shadow 0.18s ease;
-}
-
-.asset-feature:hover {
-  background: rgba(255, 204, 0, 0.18);
-  border-color: var(--cobalt);
-  border-left-color: var(--gold);
-  transform: translateY(-2px);
-  box-shadow: 0 10px 22px rgba(41, 56, 81, 0.10);
-}
-
-.asset-feature-label {
-  font-family: var(--sans);
-  font-weight: 700;
-  font-size: 10.5px;
-  letter-spacing: 1.8px;
-  text-transform: uppercase;
-  color: var(--placeholder);
-  margin-bottom: 7px;
-}
-
-.asset-feature-title {
-  font-family: var(--sans);
-  font-weight: 700;
-  font-size: 17px;
-  color: var(--cobalt);
-  line-height: 1.25;
-  margin-bottom: 6px;
-}
-
-.asset-feature-desc {
-  font-family: Georgia, serif;
-  font-size: 14px;
-  line-height: 1.55;
-  color: var(--muted);
-  max-width: 94%;
-}
-
-.asset-feature .ext {
-  color: var(--gold);
-  font-size: 26px;
-  font-weight: 800;
-  line-height: 1;
-  flex-shrink: 0;
-  transition: transform 0.2s ease;
-}
-
-.asset-feature:hover .ext { transform: translate(3px, -3px); }
-
-/* HEADLINE */
-.headline {
-  font-family: var(--sans);
-  font-weight: 700;
-  font-size: 31px;
-  line-height: 1.2;
-  color: var(--cobalt);
-  margin-bottom: 28px;
-  letter-spacing: -0.5px;
-}
-
-.headline .setup {
-  display: block;
-  font-weight: 500;
-  color: var(--muted);
-  margin-bottom: 8px;
-  font-size: 28px;
-}
-
-.headline .punch { display: block; font-weight: 700; }
-
-.headline .accent {
-  background: linear-gradient(transparent 65%, var(--gold) 65%, var(--gold) 92%, transparent 92%);
-  padding: 0 3px;
-}
-
-.intro {
-  font-family: Georgia, serif;
-  font-size: 17.5px;
-  line-height: 1.75;
-  color: var(--ink);
-  margin-bottom: 38px;
-  max-width: 95%;
-}
-
-/* DIP FIGURE */
-.dip-figure {
-  margin: 8px 0 46px;
-  padding: 30px 32px 24px;
-  background: var(--soft);
-  border-left: 3px solid var(--gold);
-}
-
-.dip-figure-label {
-  font-family: var(--sans);
-  font-weight: 700;
-  font-size: 11px;
-  letter-spacing: 2px;
-  color: var(--muted);
-  text-transform: uppercase;
-  margin-bottom: 18px;
-}
-
-.dip-figure svg { width: 100%; height: auto; display: block; }
-
-.dip-caption {
-  font-family: Georgia, serif;
-  font-style: italic;
-  font-size: 14px;
-  color: var(--muted);
-  margin-top: 18px;
-  line-height: 1.7;
-}
-
-.sub-header {
-  font-family: var(--sans);
-  font-weight: 700;
-  font-size: 12px;
-  letter-spacing: 2px;
-  color: var(--cobalt);
-  text-transform: uppercase;
-  margin-bottom: 22px;
-  padding-bottom: 12px;
-  border-bottom: 1px solid var(--line);
-  position: relative;
-}
-
-.sub-header::after {
-  content: "";
-  position: absolute;
-  left: 0;
-  bottom: -1px;
-  width: 44px;
-  height: 2px;
-  background: var(--gold);
-}
-
-.artifacts {
-  display: grid;
-  grid-template-columns: 1fr 1fr 1fr;
-  gap: 26px;
-  margin-bottom: 46px;
-}
-
-.artifact {
-  padding-top: 16px;
-  border-top: 3px solid var(--gold);
-}
-
-.artifact-num {
-  font-family: var(--sans);
-  font-weight: 800;
-  font-size: 10.5px;
-  color: var(--muted);
-  letter-spacing: 1.5px;
-  margin-bottom: 7px;
-}
-
-.artifact-label {
-  font-family: var(--sans);
-  font-weight: 700;
-  font-size: 15px;
-  color: var(--cobalt);
-  margin-bottom: 11px;
-  line-height: 1.3;
-}
-
-.artifact-body {
-  font-family: Georgia, serif;
-  font-size: 15.5px;
-  line-height: 1.65;
-  color: var(--ink);
-}
-
-.moves { margin-bottom: 42px; }
-
-.move {
-  display: flex;
-  gap: 20px;
-  align-items: flex-start;
-  padding: 18px 0;
-  font-size: 15.5px;
-  line-height: 1.7;
-  border-bottom: 1px dotted var(--line);
-}
-
-.move:first-child { padding-top: 8px; }
-.move:last-child { border-bottom: none; padding-bottom: 8px; }
-
-.move-label {
-  font-family: var(--sans);
-  font-weight: 700;
-  font-size: 11.5px;
-  letter-spacing: 1px;
-  color: var(--cobalt);
-  text-transform: uppercase;
-  flex-shrink: 0;
-  width: 195px;
-}
-
-.move-label .sub {
-  font-family: Georgia, serif;
-  font-style: italic;
-  font-weight: 400;
-  font-size: 12px;
-  color: var(--muted);
-  text-transform: none;
-  letter-spacing: 0;
-  display: block;
-  margin-top: 5px;
-}
-
-.move-content {
-  flex: 1;
-  display: flex;
-  flex-direction: column;
-}
-
-.move-body {
-  font-family: Georgia, serif;
-  color: var(--ink);
-}
-
-.move-output {
-  margin-top: 13px;
-  font-family: var(--sans);
-  font-weight: 700;
-  font-size: 11px;
-  letter-spacing: 1.5px;
-  color: var(--cobalt);
-  text-transform: uppercase;
-}
-
-.move-output .arrow {
-  color: var(--gold);
-  margin-right: 6px;
-  font-weight: 800;
-}
-
-.differentiator {
-  background: var(--cobalt);
-  color: #fff;
-  padding: 26px 30px;
-  border-left: 4px solid var(--gold);
-}
-
-.diff-line {
-  font-family: var(--sans);
-  font-size: 15px;
-  font-weight: 600;
-  color: #fff;
-  margin-bottom: 12px;
-  line-height: 1.55;
-}
-
-.diff-frame {
-  font-family: Georgia, serif;
-  font-size: 14px;
-  font-style: italic;
-  color: #c8d0dc;
-  line-height: 1.7;
-}
-
-.diff-frame strong {
-  font-style: normal;
-  font-weight: normal;
-  color: var(--gold);
-}
-
-/* BENEFIT GRID */
-.benefit-grid {
-  display: grid;
-  grid-template-columns: 1fr 1fr;
-  gap: 34px 30px;
-  margin-top: 8px;
-}
-
-.benefit-grid.three-col {
-  grid-template-columns: 1fr 1fr 1fr;
-  gap: 26px 24px;
-}
-
-.benefit-block {
-  padding-top: 16px;
-  border-top: 3px solid var(--gold);
-}
-
-.benefit-title {
-  font-family: var(--sans);
-  font-weight: 700;
-  font-size: 13px;
-  letter-spacing: 1.5px;
-  color: var(--cobalt);
-  text-transform: uppercase;
-  margin-bottom: 13px;
-  line-height: 1.3;
-}
-
-.benefit-body {
-  font-family: Georgia, serif;
-  font-size: 16px;
-  line-height: 1.7;
-  color: var(--ink);
-}
-
-/* COPY BUTTON */
-.proposal-block {
-  position: relative;
-}
-
-.copy-btn {
-  position: absolute;
-  top: 20px;
-  right: 22px;
-  padding: 7px 13px;
-  background: var(--paper);
-  border: 1px solid var(--line);
-  color: var(--muted);
-  font-family: var(--sans);
-  font-weight: 700;
-  font-size: 10px;
-  letter-spacing: 1.5px;
-  text-transform: uppercase;
-  cursor: pointer;
-  transition: border-color 0.15s ease, color 0.15s ease, background 0.2s ease, transform 0.15s ease;
-}
-
-.copy-btn:hover {
-  border-color: var(--cobalt);
-  color: var(--cobalt);
-  transform: translateY(-1px);
-}
-
-.copy-btn.copied {
-  background: var(--gold);
-  border-color: var(--gold);
-  color: var(--cobalt);
-}
-
-/* PROPOSAL BLOCKS */
-.proposal-block {
-  margin-bottom: 24px;
-  padding: 24px 28px 24px;
-  padding-right: 92px;
-  background: var(--soft);
-  border-left: 3px solid var(--gold);
-}
-
-.proposal-block:last-child { margin-bottom: 0; }
-
-.proposal-label {
-  font-family: var(--sans);
-  font-weight: 700;
-  font-size: 11px;
-  letter-spacing: 2px;
-  color: var(--cobalt);
-  text-transform: uppercase;
-  margin-bottom: 11px;
-}
-
-.proposal-body {
-  font-family: Georgia, serif;
-  font-size: 16px;
-  line-height: 1.7;
-  color: var(--ink);
-}
-
-.proposal-body ul {
-  list-style: none;
-  padding: 0;
-  margin: 0;
-}
-
-.proposal-body ul li {
-  padding-left: 17px;
-  position: relative;
-  margin-bottom: 9px;
-}
-
-.proposal-body ul li:last-child { margin-bottom: 0; }
-
-.proposal-body ul li::before {
-  content: "\00b7";
-  color: var(--gold);
-  font-weight: 800;
-  position: absolute;
-  left: 0;
-}
-
-.proposal-body ul li strong {
-  font-family: var(--sans);
-  font-weight: 700;
-  font-style: normal;
-  font-size: 13px;
-  color: var(--cobalt);
-  letter-spacing: 0.2px;
-  margin-right: 6px;
-}
-
-/* WHO IT'S FOR */
-.fit-block { margin-bottom: 38px; }
-.fit-block:last-child { margin-bottom: 0; }
-
-.fit-block-label {
-  font-family: var(--sans);
-  font-weight: 700;
-  font-size: 12px;
-  letter-spacing: 2px;
-  color: var(--cobalt);
-  text-transform: uppercase;
-  margin-bottom: 16px;
-}
-
-.fit-prose {
-  font-family: Georgia, serif;
-  font-size: 16.5px;
-  line-height: 1.75;
-  color: var(--ink);
-  max-width: 94%;
-}
-
-.discovery-list {
-  list-style: none;
-  padding: 0;
-  margin: 0;
-  counter-reset: question;
-}
-
-.discovery-list li {
-  counter-increment: question;
-  padding: 16px 0 16px 44px;
-  position: relative;
-  font-family: Georgia, serif;
-  font-size: 16px;
-  line-height: 1.65;
-  color: var(--ink);
-  border-bottom: 1px dotted var(--line);
-}
-
-.discovery-list li:last-child { border-bottom: none; }
-
-.discovery-list li::before {
-  content: counter(question, decimal-leading-zero);
-  position: absolute;
-  left: 0;
-  top: 18px;
-  font-family: var(--sans);
-  font-style: normal;
-  font-weight: 800;
-  font-size: 11px;
-  letter-spacing: 1.5px;
-  color: var(--gold);
-}
-
-.discovery-list li .layer {
-  font-family: var(--sans);
-  font-weight: 700;
-  font-size: 10.5px;
-  letter-spacing: 1.2px;
-  color: var(--placeholder);
-  text-transform: uppercase;
-  display: block;
-  margin-bottom: 4px;
-}
-
-.discovery-list li .q {
-  font-style: italic;
-}
-
-.notfit-list {
-  list-style: none;
-  padding: 20px 24px;
-  margin: 0;
-  background: var(--soft);
-  border-left: 3px solid var(--cobalt);
-}
-
-.notfit-list li {
-  font-family: Georgia, serif;
-  font-size: 15.5px;
-  line-height: 1.65;
-  color: var(--ink);
-  padding-left: 22px;
-  position: relative;
-  margin-bottom: 9px;
-}
-
-.notfit-list li:last-child { margin-bottom: 0; }
-
-.notfit-list li::before {
-  content: "\00d7";
-  position: absolute;
-  left: 0;
-  top: 0;
-  color: var(--cobalt);
-  font-weight: 800;
-}
-
-/* BUYER CUES */
-.cue { margin-bottom: 30px; }
-.cue:last-child { margin-bottom: 0; }
-
-.cue-title {
-  font-family: var(--sans);
-  font-weight: 700;
-  font-size: 17.5px;
-  color: var(--cobalt);
-  margin-bottom: 11px;
-  letter-spacing: -0.1px;
-}
-
-.cue-phrases {
-  font-family: Georgia, serif;
-  font-style: italic;
-  font-size: 16px;
-  line-height: 1.8;
-  color: var(--muted);
-  padding-left: 20px;
-  border-left: 2px solid var(--gold);
-}
-
-.cue-phrases span {
-  display: block;
-  margin-bottom: 5px;
-}
-
-.cue-phrases span:last-child { margin-bottom: 0; }
-
-/* FAQ */
-.faq-item {
-  margin-bottom: 26px;
-  padding-bottom: 26px;
-  border-bottom: 1px dotted var(--line);
-}
-
-.faq-item:last-child {
-  border-bottom: none;
-  margin-bottom: 0;
-  padding-bottom: 0;
-}
-
-.faq-question {
-  font-family: var(--sans);
-  font-weight: 600;
-  font-size: 16.5px;
-  color: var(--cobalt);
-  margin-bottom: 11px;
-  line-height: 1.4;
-  letter-spacing: -0.1px;
-}
-
-.faq-answer {
-  font-family: Georgia, serif;
-  font-size: 16px;
-  line-height: 1.7;
-  color: var(--ink);
-}
-
-/* LANDING - balance the trailing card */
-.landing-cards .card:last-child { grid-column: 2; }
-
-/* IN-PAGE JUMP LINK */
-.jump-link {
-  display: inline-flex;
-  align-items: center;
-  gap: 9px;
-  font-family: var(--sans);
-  font-weight: 700;
-  font-size: 13px;
-  letter-spacing: 0.2px;
-  color: var(--cobalt);
-  text-decoration: none;
-  border-bottom: 2px solid var(--gold);
-  padding-bottom: 4px;
-  transition: gap 0.18s ease, color 0.18s ease;
-}
-
-.jump-link:hover { gap: 13px; color: var(--cobalt-deep); }
-
-.jump-link .arrow { color: var(--gold); font-weight: 800; font-size: 14px; }
-
-/* POSITIONING PLAYS - FRAMES */
-.frames {
-  display: grid;
-  grid-template-columns: repeat(4, 1fr);
-  gap: 20px;
-}
-
-.frame {
-  padding-top: 14px;
-  border-top: 3px solid var(--gold);
-}
-
-.frame-label {
-  font-family: var(--sans);
-  font-weight: 700;
-  font-size: 12.5px;
-  letter-spacing: 1.4px;
-  color: var(--cobalt);
-  text-transform: uppercase;
-  margin-bottom: 9px;
-}
-
-.frame-desc {
-  font-family: Georgia, serif;
-  font-style: italic;
-  font-size: 14.5px;
-  line-height: 1.6;
-  color: var(--muted);
-}
-
-/* S-P-R PLAYS */
-.play {
-  border-top: 3px solid var(--gold);
-  padding-top: 18px;
-  margin-bottom: 46px;
-}
-
-.play:last-of-type { margin-bottom: 0; }
-
-.play-frame {
-  font-family: var(--sans);
-  font-weight: 800;
-  font-size: 10.5px;
-  letter-spacing: 1.6px;
-  color: var(--muted);
-  text-transform: uppercase;
-  margin-bottom: 7px;
-}
-
-.play-title {
-  font-family: var(--sans);
-  font-weight: 700;
-  font-size: 22px;
-  line-height: 1.22;
-  color: var(--cobalt);
-  letter-spacing: -0.4px;
-  margin-bottom: 22px;
-}
-
-.play-grid {
-  display: grid;
-  grid-template-columns: 1fr 1.32fr 1fr;
-  gap: 20px;
-  align-items: start;
-  margin-bottom: 18px;
-}
-
-.play-col { display: flex; flex-direction: column; }
-
-.play-col-label {
-  font-family: var(--sans);
-  font-weight: 700;
-  font-size: 10.5px;
-  letter-spacing: 1.5px;
-  text-transform: uppercase;
-  color: var(--cobalt);
-  margin-bottom: 12px;
-}
-
-.play-col--navy {
-  background: var(--cobalt);
-  border-left: 4px solid var(--gold);
-  padding: 22px 24px;
-}
-
-.play-col--navy .play-col-label { color: var(--gold); }
-
-.play-col-body {
-  font-family: Georgia, serif;
-  font-size: 14.5px;
-  line-height: 1.7;
-  color: var(--ink);
-}
-
-.play-col-body p { margin-bottom: 12px; }
-.play-col-body p:last-child { margin-bottom: 0; }
-
-.play-col--navy .play-col-body { color: #d7dde7; }
-
-.play-q {
-  font-style: italic;
-  color: var(--muted);
-  display: block;
-  margin-top: 4px;
-}
-
-.play-rec-title {
-  font-family: var(--sans);
-  font-weight: 700;
-  font-size: 14.5px;
-  color: var(--cobalt);
-  margin-bottom: 9px;
-  line-height: 1.3;
-}
-
-.play-note {
-  margin-top: 11px;
-  font-family: var(--sans);
-  font-size: 11.5px;
-  font-weight: 600;
-  color: var(--placeholder);
-  background: var(--placeholder-bg);
-  padding: 8px 12px;
-}
-
-.play-proof {
-  padding: 15px 20px;
-  background: var(--soft);
-  border-left: 3px solid var(--gold);
-}
-
-.play-proof-label {
-  font-family: var(--sans);
-  font-weight: 700;
-  font-size: 10px;
-  letter-spacing: 1.5px;
-  text-transform: uppercase;
-  color: var(--placeholder);
-  margin-bottom: 7px;
-  display: block;
-}
-
-.play-proof-body {
-  font-family: Georgia, serif;
-  font-size: 14px;
-  line-height: 1.65;
-  color: var(--ink);
-}
-
-.play-proof-body p { margin-bottom: 8px; }
-.play-proof-body p:last-child { margin-bottom: 0; }
-
-.play-proof-body strong {
-  font-family: var(--sans);
-  font-weight: 700;
-  font-size: 12.5px;
-  color: var(--cobalt);
-}
-
-/* BUNDLES */
-.bundles {
-  display: grid;
-  grid-template-columns: 1fr 1fr 1fr;
-  gap: 18px;
-}
-
-.bundle { display: flex; flex-direction: column; }
-
-.bundle-tile {
-  padding: 18px 18px 20px;
-  text-align: center;
-  min-height: 106px;
-  display: flex;
-  flex-direction: column;
-  justify-content: center;
-}
-
-.bundle-tag {
-  font-family: Georgia, serif;
-  font-style: italic;
-  font-size: 12.5px;
-  color: var(--muted);
-  margin-bottom: 8px;
-  line-height: 1.4;
-}
-
-.bundle-prod {
-  font-family: var(--sans);
-  font-weight: 800;
-  font-size: 16.5px;
-  line-height: 1.2;
-}
-
-.bundle-top {
-  background: var(--placeholder-bg);
-  border-left: 3px solid var(--placeholder);
-}
-
-.bundle-top .bundle-prod { color: var(--placeholder); }
-
-.bundle-top.is-ec {
-  background: rgba(41, 56, 81, 0.045);
-  border-left-color: var(--cobalt);
-}
-
-.bundle-top.is-ec .bundle-prod { color: var(--cobalt); }
-
-.bundle-plus {
-  text-align: center;
-  font-family: var(--sans);
-  font-weight: 800;
-  font-size: 20px;
-  color: var(--gold);
-  padding: 7px 0;
-}
-
-.bundle-bot {
-  background: var(--gold-soft);
-  border-left: 3px solid var(--gold);
-}
-
-.bundle-bot .bundle-prod { color: var(--cobalt); }
-
-.bundle-when {
-  margin-top: 13px;
-  font-family: var(--sans);
-  font-weight: 700;
-  font-size: 10.5px;
-  letter-spacing: 1px;
-  text-transform: uppercase;
-  color: var(--muted);
-  text-align: center;
-  line-height: 1.4;
-}
-
-/* SPARK (LIGHT) */
-.spark-grid {
-  display: grid;
-  grid-template-columns: 1fr 1fr 1fr;
-  gap: 24px;
-}
-
-.spark-col {
-  padding-top: 14px;
-  border-top: 2px solid var(--line);
-}
-
-.spark-stage {
-  font-family: var(--sans);
-  font-weight: 800;
-  font-size: 13px;
-  letter-spacing: 1.5px;
-  text-transform: uppercase;
-  color: var(--cobalt);
-  margin-bottom: 8px;
-}
-
-.spark-when {
-  font-family: Georgia, serif;
-  font-style: italic;
-  font-size: 13.5px;
-  line-height: 1.6;
-  color: var(--muted);
-  margin-bottom: 13px;
-}
-
-.spark-eps-label {
-  font-family: var(--sans);
-  font-weight: 700;
-  font-size: 10px;
-  letter-spacing: 1.2px;
-  text-transform: uppercase;
-  color: var(--placeholder);
-  margin-bottom: 6px;
-}
-
-.spark-eps {
-  font-family: Georgia, serif;
-  font-size: 13.5px;
-  line-height: 1.55;
-  color: var(--ink);
-}
-
-.spark-eps span { display: block; margin-bottom: 5px; }
-.spark-eps span:last-child { margin-bottom: 0; }
-
-/* FOOTER */
-footer {
-  max-width: 900px;
-  margin: 40px auto 0;
-  padding: 34px 40px 50px;
-  display: flex;
-  flex-wrap: wrap;
-  justify-content: space-between;
-  align-items: center;
-  gap: 12px 24px;
-  border-top: 1px solid var(--line);
-}
-
-.format-facts {
-  font-family: var(--sans);
-  font-size: 11px;
-  font-weight: 500;
-  letter-spacing: 0.5px;
-  color: var(--muted);
-  white-space: nowrap;
-}
-
-.format-facts span { margin-right: 14px; }
-
-.format-facts span:not(:last-child)::after {
-  content: " \00b7";
-  margin-left: 14px;
-  color: var(--line);
-}
-
-.ep-mark {
-  font-family: var(--sans);
-  font-weight: 700;
-  font-size: 11px;
-  letter-spacing: 1.5px;
-  color: var(--cobalt);
-  text-transform: uppercase;
-  white-space: nowrap;
-}
-
-/* BACK TO TOP */
-.back-to-top {
-  position: fixed;
-  bottom: 28px;
-  right: 28px;
-  padding: 12px 17px 12px 15px;
-  background: var(--cobalt);
-  color: #fff;
-  border: none;
-  font-family: var(--sans);
-  font-weight: 700;
-  font-size: 10.5px;
-  letter-spacing: 1.5px;
-  text-transform: uppercase;
-  cursor: pointer;
-  opacity: 0;
-  visibility: hidden;
-  transition: opacity 0.25s ease, visibility 0.25s ease, transform 0.15s ease, background 0.15s ease;
-  z-index: 50;
-  box-shadow: 0 4px 14px rgba(41, 56, 81, 0.18);
-}
-
-.back-to-top::before {
-  content: "\2191";
-  color: var(--gold);
-  margin-right: 8px;
-  font-weight: 800;
-  font-size: 11px;
-}
-
-.back-to-top.visible {
-  opacity: 0.96;
-  visibility: visible;
-}
-
-.back-to-top:hover {
-  opacity: 1;
-  background: var(--cobalt-deep);
-  transform: translateY(-2px);
-}
-
-@media (max-width: 720px) {
-  .landing-cards,
-  .resources,
-  .artifacts,
-  .benefit-grid,
-  .benefit-grid.three-col,
-  .frames,
-  .play-grid,
-  .bundles,
-  .spark-grid {
-    grid-template-columns: 1fr;
-  }
-  .move { flex-direction: column; gap: 8px; }
-  .move-label { width: auto; }
-  .landing-cards .card:last-child { grid-column: auto; }
-  .section-title { font-size: 38px; }
-  .section-number { font-size: 54px; }
-  .brand-title { font-size: 36px; }
-  .headline { font-size: 27px; }
-  .headline .setup { font-size: 24px; }
-  .proposal-block { padding-right: 28px; }
-  .copy-btn { position: static; margin-bottom: 14px; display: inline-block; }
-}
-
-@media print {
-  body { background: white; }
-  .back-to-top { display: none; }
-  section { page-break-inside: avoid; }
-}
-</style>
+	<meta charset="utf-8" />
+	<meta content="noindex, nofollow" name="robots" />
+	<meta content="width=device-width, initial-scale=1.0" name="viewport" />
+	<title>KickstartChange Partner Hub</title>
+	<style>
+		:root {
+		  --cobalt: #293851;
+		  --cobalt-deep: #1a2438;
+		  --gold: #FFCC00;
+		  --gold-soft: rgba(255, 204, 0, 0.10);
+		  --ink: #1a1f2e;
+		  --muted: #5a6478;
+		  --paper: #ffffff;
+		  --line: #e2e5ea;
+		  --soft: #f6f7f9;
+		  --placeholder: #b8500a;
+		  --placeholder-bg: #fef6ec;
+		  --sans: 'Helvetica Neue', Arial, 'Segoe UI', Roboto, sans-serif;
+		}
+		
+		* { box-sizing: border-box; margin: 0; padding: 0; }
+		
+		html { scroll-behavior: smooth; }
+		
+		body {
+		  font-family: Georgia, 'Times New Roman', serif;
+		  color: var(--ink);
+		  background: var(--paper);
+		  line-height: 1.55;
+		  -webkit-font-smoothing: antialiased;
+		  -moz-osx-font-smoothing: grayscale;
+		}
+		
+		main, .landing-wrap {
+		  max-width: 900px;
+		  margin: 0 auto;
+		  padding: 0 40px;
+		}
+		
+		/* Shared focus state for keyboard users */
+		a:focus-visible,
+		button:focus-visible {
+		  outline: 2px solid var(--gold);
+		  outline-offset: 3px;
+		  border-radius: 2px;
+		}
+		
+		/* LANDING */
+		.landing-wrap {
+		  padding-top: 60px;
+		  padding-bottom: 76px;
+		}
+		
+		.brand-eyebrow {
+		  font-family: var(--sans);
+		  font-weight: 700;
+		  font-size: 11.5px;
+		  letter-spacing: 2.5px;
+		  color: var(--cobalt);
+		  text-transform: uppercase;
+		  margin-bottom: 16px;
+		}
+		
+		.brand-eyebrow .dot { color: var(--gold); margin: 0 6px; }
+		
+		.brand-title {
+		  font-family: var(--sans);
+		  font-weight: 800;
+		  font-size: 44px;
+		  line-height: 1.08;
+		  color: var(--cobalt);
+		  letter-spacing: -0.8px;
+		  margin-bottom: 24px;
+		}
+		
+		.landing-intro {
+		  font-family: Georgia, serif;
+		  font-size: 17.5px;
+		  line-height: 1.7;
+		  color: var(--ink);
+		  margin-bottom: 40px;
+		  max-width: 95%;
+		}
+		
+		.landing-cards {
+		  display: grid;
+		  grid-template-columns: 1fr 1fr 1fr;
+		  gap: 14px;
+		}
+		
+		.card {
+		  background: var(--paper);
+		  border: 1px solid var(--line);
+		  border-left: 3px solid var(--gold);
+		  padding: 20px 22px 22px;
+		  text-align: left;
+		  cursor: pointer;
+		  font-family: inherit;
+		  display: flex;
+		  flex-direction: column;
+		  gap: 8px;
+		  box-shadow: 0 1px 3px rgba(41, 56, 81, 0.04);
+		  transition: background 0.22s ease, border-color 0.22s ease, transform 0.22s cubic-bezier(0.2, 0.7, 0.3, 1), box-shadow 0.22s ease;
+		}
+		
+		.card:hover,
+		.card:focus-visible {
+		  background: var(--gold-soft);
+		  border-color: rgba(255, 204, 0, 0.45);
+		  border-left-color: var(--gold);
+		  transform: translateY(-4px);
+		  box-shadow: 0 12px 26px rgba(41, 56, 81, 0.12), 0 2px 5px rgba(255, 204, 0, 0.20);
+		  outline: none;
+		}
+		
+		.card:hover .card-title,
+		.card:focus-visible .card-title {
+		  color: var(--cobalt-deep);
+		}
+		
+		.card-title {
+		  font-family: var(--sans);
+		  font-weight: 700;
+		  font-size: 15px;
+		  color: var(--cobalt);
+		  letter-spacing: -0.1px;
+		  line-height: 1.3;
+		}
+		
+		.card-desc {
+		  font-family: Georgia, serif;
+		  font-size: 13.5px;
+		  line-height: 1.55;
+		  color: var(--muted);
+		}
+		
+		/* SECTIONS */
+		section {
+		  padding: 130px 0 96px;
+		  scroll-margin-top: 24px;
+		}
+		
+		section:first-of-type {
+		  padding-top: 110px;
+		}
+		
+		section.flash {
+		  animation: targetFlash 1s ease-out;
+		}
+		
+		@keyframes targetFlash {
+		  0% { background-color: rgba(255, 204, 0, 0.10); }
+		  100% { background-color: transparent; }
+		}
+		
+		.section-opener {
+		  margin-bottom: 64px;
+		}
+		
+		.section-number {
+		  font-family: var(--sans);
+		  font-weight: 800;
+		  font-size: 64px;
+		  color: var(--gold);
+		  line-height: 1;
+		  letter-spacing: 0;
+		  margin-bottom: 16px;
+		}
+		
+		.section-title {
+		  font-family: var(--sans);
+		  font-weight: 700;
+		  font-size: 46px;
+		  color: var(--cobalt);
+		  letter-spacing: -0.8px;
+		  line-height: 1.08;
+		  margin-bottom: 18px;
+		}
+		
+		.section-description {
+		  font-family: Georgia, serif;
+		  font-style: italic;
+		  font-size: 18.5px;
+		  line-height: 1.6;
+		  color: var(--muted);
+		  max-width: 90%;
+		  margin-bottom: 0;
+		}
+		
+		/* OVERVIEW - WHAT IT IS */
+		.what-it-is {
+		  font-family: Georgia, serif;
+		  font-size: 16.5px;
+		  line-height: 1.75;
+		  color: var(--muted);
+		  margin-bottom: 22px;
+		  max-width: 94%;
+		}
+		
+		.partner-built {
+		  font-family: Georgia, serif;
+		  font-size: 15.5px;
+		  line-height: 1.7;
+		  color: var(--ink);
+		  padding: 16px 20px;
+		  background: var(--gold-soft);
+		  border-left: 3px solid var(--gold);
+		  margin-bottom: 38px;
+		}
+		
+		.partner-built strong {
+		  font-family: var(--sans);
+		  font-weight: 700;
+		  font-style: normal;
+		  font-size: 11.5px;
+		  color: var(--cobalt);
+		  letter-spacing: 1.5px;
+		  text-transform: uppercase;
+		  display: block;
+		  margin-bottom: 5px;
+		}
+		
+		/* RESOURCES BLOCK */
+		.resources-label {
+		  font-family: var(--sans);
+		  font-weight: 700;
+		  font-size: 11px;
+		  letter-spacing: 2px;
+		  color: var(--muted);
+		  text-transform: uppercase;
+		  margin-bottom: 14px;
+		}
+		
+		.resources {
+		  display: grid;
+		  grid-template-columns: 1fr 1fr 1fr;
+		  gap: 12px;
+		  margin-bottom: 46px;
+		}
+		
+		.resource-link {
+		  display: block;
+		  padding: 16px 18px 18px;
+		  text-decoration: none;
+		  background: var(--paper);
+		  border: 1px solid var(--line);
+		  border-left: 2px solid var(--gold);
+		  transition: background 0.18s ease, border-color 0.18s ease, transform 0.18s ease, box-shadow 0.18s ease;
+		}
+		
+		.resource-link:hover {
+		  background: var(--soft);
+		  border-color: var(--cobalt);
+		  border-left-color: var(--gold);
+		  transform: translateY(-2px);
+		  box-shadow: 0 8px 18px rgba(41, 56, 81, 0.08);
+		}
+		
+		.resource-title {
+		  font-family: var(--sans);
+		  font-weight: 700;
+		  font-size: 13.5px;
+		  color: var(--cobalt);
+		  margin-bottom: 7px;
+		  display: flex;
+		  align-items: center;
+		  justify-content: space-between;
+		  gap: 8px;
+		}
+		
+		.resource-title .ext {
+		  color: var(--gold);
+		  font-size: 15px;
+		  font-weight: 800;
+		  line-height: 1;
+		  transition: transform 0.2s ease;
+		}
+		
+		.resource-link:hover .ext {
+		  transform: translate(2px, -2px);
+		}
+		
+		.resource-desc {
+		  font-family: Georgia, serif;
+		  font-size: 13px;
+		  line-height: 1.55;
+		  color: var(--muted);
+		}
+		
+		/* FEATURED ASSET (sample proposal) */
+		.asset-feature {
+		  display: flex;
+		  align-items: center;
+		  justify-content: space-between;
+		  gap: 24px;
+		  margin-bottom: 12px;
+		  padding: 22px 26px;
+		  text-decoration: none;
+		  background: var(--gold-soft);
+		  border: 1px solid var(--line);
+		  border-left: 4px solid var(--gold);
+		  transition: background 0.18s ease, border-color 0.18s ease, transform 0.18s ease, box-shadow 0.18s ease;
+		}
+		
+		.asset-feature:hover {
+		  background: rgba(255, 204, 0, 0.18);
+		  border-color: var(--cobalt);
+		  border-left-color: var(--gold);
+		  transform: translateY(-2px);
+		  box-shadow: 0 10px 22px rgba(41, 56, 81, 0.10);
+		}
+		
+		.asset-feature-label {
+		  font-family: var(--sans);
+		  font-weight: 700;
+		  font-size: 10.5px;
+		  letter-spacing: 1.8px;
+		  text-transform: uppercase;
+		  color: var(--placeholder);
+		  margin-bottom: 7px;
+		}
+		
+		.asset-feature-title {
+		  font-family: var(--sans);
+		  font-weight: 700;
+		  font-size: 17px;
+		  color: var(--cobalt);
+		  line-height: 1.25;
+		  margin-bottom: 6px;
+		}
+		
+		.asset-feature-desc {
+		  font-family: Georgia, serif;
+		  font-size: 14px;
+		  line-height: 1.55;
+		  color: var(--muted);
+		  max-width: 94%;
+		}
+		
+		.asset-feature .ext {
+		  color: var(--gold);
+		  font-size: 26px;
+		  font-weight: 800;
+		  line-height: 1;
+		  flex-shrink: 0;
+		  transition: transform 0.2s ease;
+		}
+		
+		.asset-feature:hover .ext { transform: translate(3px, -3px); }
+		
+		/* HEADLINE */
+		.headline {
+		  font-family: var(--sans);
+		  font-weight: 700;
+		  font-size: 31px;
+		  line-height: 1.2;
+		  color: var(--cobalt);
+		  margin-bottom: 28px;
+		  letter-spacing: -0.5px;
+		}
+		
+		.headline .setup {
+		  display: block;
+		  font-weight: 500;
+		  color: var(--muted);
+		  margin-bottom: 8px;
+		  font-size: 28px;
+		}
+		
+		.headline .punch { display: block; font-weight: 700; }
+		
+		.headline .accent {
+		  background: linear-gradient(transparent 65%, var(--gold) 65%, var(--gold) 92%, transparent 92%);
+		  padding: 0 3px;
+		}
+		
+		.intro {
+		  font-family: Georgia, serif;
+		  font-size: 17.5px;
+		  line-height: 1.75;
+		  color: var(--ink);
+		  margin-bottom: 38px;
+		  max-width: 95%;
+		}
+		
+		/* DIP FIGURE */
+		.dip-figure {
+		  margin: 8px 0 46px;
+		  padding: 30px 32px 24px;
+		  background: var(--soft);
+		  border-left: 3px solid var(--gold);
+		}
+		
+		.dip-figure-label {
+		  font-family: var(--sans);
+		  font-weight: 700;
+		  font-size: 11px;
+		  letter-spacing: 2px;
+		  color: var(--muted);
+		  text-transform: uppercase;
+		  margin-bottom: 18px;
+		}
+		
+		.dip-figure svg { width: 100%; height: auto; display: block; }
+		
+		.dip-caption {
+		  font-family: Georgia, serif;
+		  font-style: italic;
+		  font-size: 14px;
+		  color: var(--muted);
+		  margin-top: 18px;
+		  line-height: 1.7;
+		}
+		
+		.sub-header {
+		  font-family: var(--sans);
+		  font-weight: 700;
+		  font-size: 12px;
+		  letter-spacing: 2px;
+		  color: var(--cobalt);
+		  text-transform: uppercase;
+		  margin-bottom: 22px;
+		  padding-bottom: 12px;
+		  border-bottom: 1px solid var(--line);
+		  position: relative;
+		}
+		
+		.sub-header::after {
+		  content: "";
+		  position: absolute;
+		  left: 0;
+		  bottom: -1px;
+		  width: 44px;
+		  height: 2px;
+		  background: var(--gold);
+		}
+		
+		.artifacts {
+		  display: grid;
+		  grid-template-columns: 1fr 1fr 1fr;
+		  gap: 26px;
+		  margin-bottom: 46px;
+		}
+		
+		.artifact {
+		  padding-top: 16px;
+		  border-top: 3px solid var(--gold);
+		}
+		
+		.artifact-num {
+		  font-family: var(--sans);
+		  font-weight: 800;
+		  font-size: 10.5px;
+		  color: var(--muted);
+		  letter-spacing: 1.5px;
+		  margin-bottom: 7px;
+		}
+		
+		.artifact-label {
+		  font-family: var(--sans);
+		  font-weight: 700;
+		  font-size: 15px;
+		  color: var(--cobalt);
+		  margin-bottom: 11px;
+		  line-height: 1.3;
+		}
+		
+		.artifact-body {
+		  font-family: Georgia, serif;
+		  font-size: 15.5px;
+		  line-height: 1.65;
+		  color: var(--ink);
+		}
+		
+		.moves { margin-bottom: 42px; }
+		
+		.move {
+		  display: flex;
+		  gap: 20px;
+		  align-items: flex-start;
+		  padding: 18px 0;
+		  font-size: 15.5px;
+		  line-height: 1.7;
+		  border-bottom: 1px dotted var(--line);
+		}
+		
+		.move:first-child { padding-top: 8px; }
+		.move:last-child { border-bottom: none; padding-bottom: 8px; }
+		
+		.move-label {
+		  font-family: var(--sans);
+		  font-weight: 700;
+		  font-size: 11.5px;
+		  letter-spacing: 1px;
+		  color: var(--cobalt);
+		  text-transform: uppercase;
+		  flex-shrink: 0;
+		  width: 195px;
+		}
+		
+		.move-label .sub {
+		  font-family: Georgia, serif;
+		  font-style: italic;
+		  font-weight: 400;
+		  font-size: 12px;
+		  color: var(--muted);
+		  text-transform: none;
+		  letter-spacing: 0;
+		  display: block;
+		  margin-top: 5px;
+		}
+		
+		.move-content {
+		  flex: 1;
+		  display: flex;
+		  flex-direction: column;
+		}
+		
+		.move-body {
+		  font-family: Georgia, serif;
+		  color: var(--ink);
+		}
+		
+		.move-output {
+		  margin-top: 13px;
+		  font-family: var(--sans);
+		  font-weight: 700;
+		  font-size: 11px;
+		  letter-spacing: 1.5px;
+		  color: var(--cobalt);
+		  text-transform: uppercase;
+		}
+		
+		.move-output .arrow {
+		  color: var(--gold);
+		  margin-right: 6px;
+		  font-weight: 800;
+		}
+		
+		.differentiator {
+		  background: var(--cobalt);
+		  color: #fff;
+		  padding: 26px 30px;
+		  border-left: 4px solid var(--gold);
+		}
+		
+		.diff-line {
+		  font-family: var(--sans);
+		  font-size: 15px;
+		  font-weight: 600;
+		  color: #fff;
+		  margin-bottom: 12px;
+		  line-height: 1.55;
+		}
+		
+		.diff-frame {
+		  font-family: Georgia, serif;
+		  font-size: 14px;
+		  font-style: italic;
+		  color: #c8d0dc;
+		  line-height: 1.7;
+		}
+		
+		.diff-frame strong {
+		  font-style: normal;
+		  font-weight: normal;
+		  color: var(--gold);
+		}
+		
+		/* BENEFIT GRID */
+		.benefit-grid {
+		  display: grid;
+		  grid-template-columns: 1fr 1fr;
+		  gap: 34px 30px;
+		  margin-top: 8px;
+		}
+		
+		.benefit-grid.three-col {
+		  grid-template-columns: 1fr 1fr 1fr;
+		  gap: 26px 24px;
+		}
+		
+		.benefit-block {
+		  padding-top: 16px;
+		  border-top: 3px solid var(--gold);
+		}
+		
+		.benefit-title {
+		  font-family: var(--sans);
+		  font-weight: 700;
+		  font-size: 13px;
+		  letter-spacing: 1.5px;
+		  color: var(--cobalt);
+		  text-transform: uppercase;
+		  margin-bottom: 13px;
+		  line-height: 1.3;
+		}
+		
+		.benefit-body {
+		  font-family: Georgia, serif;
+		  font-size: 16px;
+		  line-height: 1.7;
+		  color: var(--ink);
+		}
+		
+		/* COPY BUTTON */
+		.proposal-block {
+		  position: relative;
+		}
+		
+		.copy-btn {
+		  position: absolute;
+		  top: 20px;
+		  right: 22px;
+		  padding: 7px 13px;
+		  background: var(--paper);
+		  border: 1px solid var(--line);
+		  color: var(--muted);
+		  font-family: var(--sans);
+		  font-weight: 700;
+		  font-size: 10px;
+		  letter-spacing: 1.5px;
+		  text-transform: uppercase;
+		  cursor: pointer;
+		  transition: border-color 0.15s ease, color 0.15s ease, background 0.2s ease, transform 0.15s ease;
+		}
+		
+		.copy-btn:hover {
+		  border-color: var(--cobalt);
+		  color: var(--cobalt);
+		  transform: translateY(-1px);
+		}
+		
+		.copy-btn.copied {
+		  background: var(--gold);
+		  border-color: var(--gold);
+		  color: var(--cobalt);
+		}
+		
+		/* PROPOSAL BLOCKS */
+		.proposal-block {
+		  margin-bottom: 24px;
+		  padding: 24px 28px 24px;
+		  padding-right: 92px;
+		  background: var(--soft);
+		  border-left: 3px solid var(--gold);
+		}
+		
+		.proposal-block:last-child { margin-bottom: 0; }
+		
+		.proposal-label {
+		  font-family: var(--sans);
+		  font-weight: 700;
+		  font-size: 11px;
+		  letter-spacing: 2px;
+		  color: var(--cobalt);
+		  text-transform: uppercase;
+		  margin-bottom: 11px;
+		}
+		
+		.proposal-body {
+		  font-family: Georgia, serif;
+		  font-size: 16px;
+		  line-height: 1.7;
+		  color: var(--ink);
+		}
+		
+		.proposal-body ul {
+		  list-style: none;
+		  padding: 0;
+		  margin: 0;
+		}
+		
+		.proposal-body ul li {
+		  padding-left: 17px;
+		  position: relative;
+		  margin-bottom: 9px;
+		}
+		
+		.proposal-body ul li:last-child { margin-bottom: 0; }
+		
+		.proposal-body ul li::before {
+		  content: "\00b7";
+		  color: var(--gold);
+		  font-weight: 800;
+		  position: absolute;
+		  left: 0;
+		}
+		
+		.proposal-body ul li strong {
+		  font-family: var(--sans);
+		  font-weight: 700;
+		  font-style: normal;
+		  font-size: 13px;
+		  color: var(--cobalt);
+		  letter-spacing: 0.2px;
+		  margin-right: 6px;
+		}
+		
+		/* WHO IT'S FOR */
+		.fit-block { margin-bottom: 38px; }
+		.fit-block:last-child { margin-bottom: 0; }
+		
+		.fit-block-label {
+		  font-family: var(--sans);
+		  font-weight: 700;
+		  font-size: 12px;
+		  letter-spacing: 2px;
+		  color: var(--cobalt);
+		  text-transform: uppercase;
+		  margin-bottom: 16px;
+		}
+		
+		.fit-prose {
+		  font-family: Georgia, serif;
+		  font-size: 16.5px;
+		  line-height: 1.75;
+		  color: var(--ink);
+		  max-width: 94%;
+		}
+		
+		.discovery-list {
+		  list-style: none;
+		  padding: 0;
+		  margin: 0;
+		  counter-reset: question;
+		}
+		
+		.discovery-list li {
+		  counter-increment: question;
+		  padding: 16px 0 16px 44px;
+		  position: relative;
+		  font-family: Georgia, serif;
+		  font-size: 16px;
+		  line-height: 1.65;
+		  color: var(--ink);
+		  border-bottom: 1px dotted var(--line);
+		}
+		
+		.discovery-list li:last-child { border-bottom: none; }
+		
+		.discovery-list li::before {
+		  content: counter(question, decimal-leading-zero);
+		  position: absolute;
+		  left: 0;
+		  top: 18px;
+		  font-family: var(--sans);
+		  font-style: normal;
+		  font-weight: 800;
+		  font-size: 11px;
+		  letter-spacing: 1.5px;
+		  color: var(--gold);
+		}
+		
+		.discovery-list li .layer {
+		  font-family: var(--sans);
+		  font-weight: 700;
+		  font-size: 10.5px;
+		  letter-spacing: 1.2px;
+		  color: var(--placeholder);
+		  text-transform: uppercase;
+		  display: block;
+		  margin-bottom: 4px;
+		}
+		
+		.discovery-list li .q {
+		  font-style: italic;
+		}
+		
+		.notfit-list {
+		  list-style: none;
+		  padding: 20px 24px;
+		  margin: 0;
+		  background: var(--soft);
+		  border-left: 3px solid var(--cobalt);
+		}
+		
+		.notfit-list li {
+		  font-family: Georgia, serif;
+		  font-size: 15.5px;
+		  line-height: 1.65;
+		  color: var(--ink);
+		  padding-left: 22px;
+		  position: relative;
+		  margin-bottom: 9px;
+		}
+		
+		.notfit-list li:last-child { margin-bottom: 0; }
+		
+		.notfit-list li::before {
+		  content: "\00d7";
+		  position: absolute;
+		  left: 0;
+		  top: 0;
+		  color: var(--cobalt);
+		  font-weight: 800;
+		}
+		
+		/* BUYER CUES */
+		.cue { margin-bottom: 30px; }
+		.cue:last-child { margin-bottom: 0; }
+		
+		.cue-title {
+		  font-family: var(--sans);
+		  font-weight: 700;
+		  font-size: 17.5px;
+		  color: var(--cobalt);
+		  margin-bottom: 11px;
+		  letter-spacing: -0.1px;
+		}
+		
+		.cue-phrases {
+		  font-family: Georgia, serif;
+		  font-style: italic;
+		  font-size: 16px;
+		  line-height: 1.8;
+		  color: var(--muted);
+		  padding-left: 20px;
+		  border-left: 2px solid var(--gold);
+		}
+		
+		.cue-phrases span {
+		  display: block;
+		  margin-bottom: 5px;
+		}
+		
+		.cue-phrases span:last-child { margin-bottom: 0; }
+		
+		/* FAQ */
+		.faq-item {
+		  margin-bottom: 26px;
+		  padding-bottom: 26px;
+		  border-bottom: 1px dotted var(--line);
+		}
+		
+		.faq-item:last-child {
+		  border-bottom: none;
+		  margin-bottom: 0;
+		  padding-bottom: 0;
+		}
+		
+		.faq-question {
+		  font-family: var(--sans);
+		  font-weight: 600;
+		  font-size: 16.5px;
+		  color: var(--cobalt);
+		  margin-bottom: 11px;
+		  line-height: 1.4;
+		  letter-spacing: -0.1px;
+		}
+		
+		.faq-answer {
+		  font-family: Georgia, serif;
+		  font-size: 16px;
+		  line-height: 1.7;
+		  color: var(--ink);
+		}
+		
+		/* LANDING - balance the trailing card */
+		.landing-cards .card:last-child { grid-column: 2; }
+		
+		/* IN-PAGE JUMP LINK */
+		.jump-link {
+		  display: inline-flex;
+		  align-items: center;
+		  gap: 9px;
+		  font-family: var(--sans);
+		  font-weight: 700;
+		  font-size: 13px;
+		  letter-spacing: 0.2px;
+		  color: var(--cobalt);
+		  text-decoration: none;
+		  border-bottom: 2px solid var(--gold);
+		  padding-bottom: 4px;
+		  transition: gap 0.18s ease, color 0.18s ease;
+		}
+		
+		.jump-link:hover { gap: 13px; color: var(--cobalt-deep); }
+		
+		.jump-link .arrow { color: var(--gold); font-weight: 800; font-size: 14px; }
+		
+		/* POSITIONING PLAYS - FRAMES */
+		.frames {
+		  display: grid;
+		  grid-template-columns: repeat(4, 1fr);
+		  gap: 20px;
+		}
+		
+		.frame {
+		  padding-top: 14px;
+		  border-top: 3px solid var(--gold);
+		}
+		
+		.frame-label {
+		  font-family: var(--sans);
+		  font-weight: 700;
+		  font-size: 12.5px;
+		  letter-spacing: 1.4px;
+		  color: var(--cobalt);
+		  text-transform: uppercase;
+		  margin-bottom: 9px;
+		}
+		
+		.frame-desc {
+		  font-family: Georgia, serif;
+		  font-style: italic;
+		  font-size: 14.5px;
+		  line-height: 1.6;
+		  color: var(--muted);
+		}
+		
+		/* S-P-R PLAYS */
+		.play {
+		  border-top: 3px solid var(--gold);
+		  padding-top: 18px;
+		  margin-bottom: 46px;
+		}
+		
+		.play:last-of-type { margin-bottom: 0; }
+		
+		.play-frame {
+		  font-family: var(--sans);
+		  font-weight: 800;
+		  font-size: 10.5px;
+		  letter-spacing: 1.6px;
+		  color: var(--muted);
+		  text-transform: uppercase;
+		  margin-bottom: 7px;
+		}
+		
+		.play-title {
+		  font-family: var(--sans);
+		  font-weight: 700;
+		  font-size: 22px;
+		  line-height: 1.22;
+		  color: var(--cobalt);
+		  letter-spacing: -0.4px;
+		  margin-bottom: 22px;
+		}
+		
+		.play-grid {
+		  display: grid;
+		  grid-template-columns: 1fr 1.32fr 1fr;
+		  gap: 20px;
+		  align-items: start;
+		  margin-bottom: 18px;
+		}
+		
+		.play-col { display: flex; flex-direction: column; }
+		
+		.play-col-label {
+		  font-family: var(--sans);
+		  font-weight: 700;
+		  font-size: 10.5px;
+		  letter-spacing: 1.5px;
+		  text-transform: uppercase;
+		  color: var(--cobalt);
+		  margin-bottom: 12px;
+		}
+		
+		.play-col--navy {
+		  background: var(--cobalt);
+		  border-left: 4px solid var(--gold);
+		  padding: 22px 24px;
+		}
+		
+		.play-col--navy .play-col-label { color: var(--gold); }
+		
+		.play-col-body {
+		  font-family: Georgia, serif;
+		  font-size: 14.5px;
+		  line-height: 1.7;
+		  color: var(--ink);
+		}
+		
+		.play-col-body p { margin-bottom: 12px; }
+		.play-col-body p:last-child { margin-bottom: 0; }
+		
+		.play-col--navy .play-col-body { color: #d7dde7; }
+		
+		.play-q {
+		  font-style: italic;
+		  color: var(--muted);
+		  display: block;
+		  margin-top: 4px;
+		}
+		
+		.play-rec-title {
+		  font-family: var(--sans);
+		  font-weight: 700;
+		  font-size: 14.5px;
+		  color: var(--cobalt);
+		  margin-bottom: 9px;
+		  line-height: 1.3;
+		}
+		
+		.play-note {
+		  margin-top: 11px;
+		  font-family: var(--sans);
+		  font-size: 11.5px;
+		  font-weight: 600;
+		  color: var(--placeholder);
+		  background: var(--placeholder-bg);
+		  padding: 8px 12px;
+		}
+		
+		.play-proof {
+		  padding: 15px 20px;
+		  background: var(--soft);
+		  border-left: 3px solid var(--gold);
+		}
+		
+		.play-proof-label {
+		  font-family: var(--sans);
+		  font-weight: 700;
+		  font-size: 10px;
+		  letter-spacing: 1.5px;
+		  text-transform: uppercase;
+		  color: var(--placeholder);
+		  margin-bottom: 7px;
+		  display: block;
+		}
+		
+		.play-proof-body {
+		  font-family: Georgia, serif;
+		  font-size: 14px;
+		  line-height: 1.65;
+		  color: var(--ink);
+		}
+		
+		.play-proof-body p { margin-bottom: 8px; }
+		.play-proof-body p:last-child { margin-bottom: 0; }
+		
+		.play-proof-body strong {
+		  font-family: var(--sans);
+		  font-weight: 700;
+		  font-size: 12.5px;
+		  color: var(--cobalt);
+		}
+		
+		
+		
+		/* POSITIONING PLAYS - SELECTOR */
+		.play-selector {
+		  display: grid;
+		  grid-template-columns: repeat(5, 1fr);
+		  gap: 12px;
+		  margin: 0 0 36px;
+		}
+		
+		.play-tab {
+		  display: flex;
+		  flex-direction: column;
+		  align-items: flex-start;
+		  gap: 6px;
+		  min-height: 118px;
+		  padding: 16px 16px 17px;
+		  background: var(--paper);
+		  border: 1px solid var(--line);
+		  border-top: 3px solid var(--gold);
+		  text-align: left;
+		  cursor: pointer;
+		  transition: background 0.18s ease, border-color 0.18s ease, transform 0.18s ease, box-shadow 0.18s ease;
+		}
+		
+		.play-tab:hover,
+		.play-tab:focus-visible {
+		  background: var(--gold-soft);
+		  border-color: rgba(255, 204, 0, 0.55);
+		  transform: translateY(-2px);
+		  box-shadow: 0 8px 18px rgba(41, 56, 81, 0.08);
+		  outline: none;
+		}
+		
+		.play-tab.active {
+		  background: var(--cobalt);
+		  border-color: var(--cobalt);
+		  border-top-color: var(--gold);
+		  box-shadow: 0 10px 22px rgba(41, 56, 81, 0.12);
+		}
+		
+		.play-tab-num {
+		  font-family: var(--sans);
+		  font-weight: 800;
+		  font-size: 10.5px;
+		  letter-spacing: 1.5px;
+		  color: var(--gold);
+		}
+		
+		.play-tab-label {
+		  font-family: var(--sans);
+		  font-weight: 800;
+		  font-size: 13px;
+		  line-height: 1.2;
+		  letter-spacing: 0.8px;
+		  text-transform: uppercase;
+		  color: var(--cobalt);
+		}
+		
+		.play-tab-desc {
+		  font-family: Georgia, serif;
+		  font-style: italic;
+		  font-size: 13px;
+		  line-height: 1.45;
+		  color: var(--muted);
+		}
+		
+		.play-tab.active .play-tab-label { color: #fff; }
+		.play-tab.active .play-tab-desc { color: #c8d0dc; }
+		
+		.play-panel[hidden] { display: none; }
+		
+		.play-panel.active {
+		  animation: playFade 0.22s ease-out;
+		}
+		
+		@keyframes playFade {
+		  from { opacity: 0; transform: translateY(6px); }
+		  to { opacity: 1; transform: translateY(0); }
+		}
+		
+		/* BUNDLES */
+		.bundles {
+		  display: grid;
+		  grid-template-columns: 1fr 1fr 1fr;
+		  gap: 18px;
+		}
+		
+		.bundle { display: flex; flex-direction: column; }
+		
+		.bundle-tile {
+		  padding: 18px 18px 20px;
+		  text-align: center;
+		  min-height: 106px;
+		  display: flex;
+		  flex-direction: column;
+		  justify-content: center;
+		}
+		
+		.bundle-tag {
+		  font-family: Georgia, serif;
+		  font-style: italic;
+		  font-size: 12.5px;
+		  color: var(--muted);
+		  margin-bottom: 8px;
+		  line-height: 1.4;
+		}
+		
+		.bundle-prod {
+		  font-family: var(--sans);
+		  font-weight: 800;
+		  font-size: 16.5px;
+		  line-height: 1.2;
+		}
+		
+		.bundle-top {
+		  background: var(--placeholder-bg);
+		  border-left: 3px solid var(--placeholder);
+		}
+		
+		.bundle-top .bundle-prod { color: var(--placeholder); }
+		
+		.bundle-top.is-ec {
+		  background: rgba(41, 56, 81, 0.045);
+		  border-left-color: var(--cobalt);
+		}
+		
+		.bundle-top.is-ec .bundle-prod { color: var(--cobalt); }
+		
+		.bundle-plus {
+		  text-align: center;
+		  font-family: var(--sans);
+		  font-weight: 800;
+		  font-size: 20px;
+		  color: var(--gold);
+		  padding: 7px 0;
+		}
+		
+		.bundle-bot {
+		  background: var(--gold-soft);
+		  border-left: 3px solid var(--gold);
+		}
+		
+		.bundle-bot .bundle-prod { color: var(--cobalt); }
+		
+		.bundle-when {
+		  margin-top: 13px;
+		  font-family: var(--sans);
+		  font-weight: 700;
+		  font-size: 10.5px;
+		  letter-spacing: 1px;
+		  text-transform: uppercase;
+		  color: var(--muted);
+		  text-align: center;
+		  line-height: 1.4;
+		}
+		
+		/* SPARK (LIGHT) */
+		.spark-grid {
+		  display: grid;
+		  grid-template-columns: 1fr 1fr 1fr;
+		  gap: 24px;
+		}
+		
+		.spark-col {
+		  padding-top: 14px;
+		  border-top: 2px solid var(--line);
+		}
+		
+		.spark-stage {
+		  font-family: var(--sans);
+		  font-weight: 800;
+		  font-size: 13px;
+		  letter-spacing: 1.5px;
+		  text-transform: uppercase;
+		  color: var(--cobalt);
+		  margin-bottom: 8px;
+		}
+		
+		.spark-when {
+		  font-family: Georgia, serif;
+		  font-style: italic;
+		  font-size: 13.5px;
+		  line-height: 1.6;
+		  color: var(--muted);
+		  margin-bottom: 13px;
+		}
+		
+		.spark-eps-label {
+		  font-family: var(--sans);
+		  font-weight: 700;
+		  font-size: 10px;
+		  letter-spacing: 1.2px;
+		  text-transform: uppercase;
+		  color: var(--placeholder);
+		  margin-bottom: 6px;
+		}
+		
+		.spark-eps {
+		  font-family: Georgia, serif;
+		  font-size: 13.5px;
+		  line-height: 1.55;
+		  color: var(--ink);
+		}
+		
+		.spark-eps span { display: block; margin-bottom: 5px; }
+		.spark-eps span:last-child { margin-bottom: 0; }
+		
+		/* FOOTER */
+		footer {
+		  max-width: 900px;
+		  margin: 40px auto 0;
+		  padding: 34px 40px 50px;
+		  display: flex;
+		  flex-wrap: wrap;
+		  justify-content: space-between;
+		  align-items: center;
+		  gap: 12px 24px;
+		  border-top: 1px solid var(--line);
+		}
+		
+		.format-facts {
+		  font-family: var(--sans);
+		  font-size: 11px;
+		  font-weight: 500;
+		  letter-spacing: 0.5px;
+		  color: var(--muted);
+		  white-space: nowrap;
+		}
+		
+		.format-facts span { margin-right: 14px; }
+		
+		.format-facts span:not(:last-child)::after {
+		  content: " \00b7";
+		  margin-left: 14px;
+		  color: var(--line);
+		}
+		
+		.ep-mark {
+		  font-family: var(--sans);
+		  font-weight: 700;
+		  font-size: 11px;
+		  letter-spacing: 1.5px;
+		  color: var(--cobalt);
+		  text-transform: uppercase;
+		  white-space: nowrap;
+		}
+		
+		/* BACK TO TOP */
+		.back-to-top {
+		  position: fixed;
+		  bottom: 28px;
+		  right: 28px;
+		  padding: 12px 17px 12px 15px;
+		  background: var(--cobalt);
+		  color: #fff;
+		  border: none;
+		  font-family: var(--sans);
+		  font-weight: 700;
+		  font-size: 10.5px;
+		  letter-spacing: 1.5px;
+		  text-transform: uppercase;
+		  cursor: pointer;
+		  opacity: 0;
+		  visibility: hidden;
+		  transition: opacity 0.25s ease, visibility 0.25s ease, transform 0.15s ease, background 0.15s ease;
+		  z-index: 50;
+		  box-shadow: 0 4px 14px rgba(41, 56, 81, 0.18);
+		}
+		
+		.back-to-top::before {
+		  content: "\2191";
+		  color: var(--gold);
+		  margin-right: 8px;
+		  font-weight: 800;
+		  font-size: 11px;
+		}
+		
+		.back-to-top.visible {
+		  opacity: 0.96;
+		  visibility: visible;
+		}
+		
+		.back-to-top:hover {
+		  opacity: 1;
+		  background: var(--cobalt-deep);
+		  transform: translateY(-2px);
+		}
+		
+		@media (max-width: 720px) {
+		  .landing-cards,
+		  .resources,
+		  .artifacts,
+		  .benefit-grid,
+		  .benefit-grid.three-col,
+		  .frames,
+		  .play-selector,
+		  .play-grid,
+		  .bundles,
+		  .spark-grid {
+		    grid-template-columns: 1fr;
+		  }
+		  .move { flex-direction: column; gap: 8px; }
+		  .move-label { width: auto; }
+		  .landing-cards .card:last-child { grid-column: auto; }
+		  .section-title { font-size: 38px; }
+		  .section-number { font-size: 54px; }
+		  .brand-title { font-size: 36px; }
+		  .headline { font-size: 27px; }
+		  .headline .setup { font-size: 24px; }
+		  .proposal-block { padding-right: 28px; }
+		  .copy-btn { position: static; margin-bottom: 14px; display: inline-block; }
+		}
+		
+		@media print {
+		  body { background: white; }
+		  .back-to-top { display: none; }
+		  section { page-break-inside: avoid; }
+		}
+	</style>
 </head>
 <body>
-
 <!-- LANDING -->
 <div class="landing-wrap">
-  <div class="brand-eyebrow">ExperiencePoint <span class="dot">&#183;</span> Partner Hub</div>
-  <h1 class="brand-title">KickstartChange</h1>
-
-  <p class="landing-intro">Everything you need to position, propose, and sell this workshop well, in one place.</p>
-
-  <div class="landing-cards">
-    <button type="button" class="card" data-target="overview">
-      <div class="card-title">Overview</div>
-      <div class="card-desc">What the workshop is and what participants walk out with.</div>
-    </button>
-    <button type="button" class="card" data-target="forpartners">
-      <div class="card-title">Made for the way you work</div>
-      <div class="card-desc">How this fits your programs and amplifies your expertise.</div>
-    </button>
-    <button type="button" class="card" data-target="proposal">
-      <div class="card-title">Proposal copy</div>
-      <div class="card-desc">Ready-to-paste language for proposals and RFPs.</div>
-    </button>
-    <button type="button" class="card" data-target="fit">
-      <div class="card-title">Who it's for</div>
-      <div class="card-desc">Ideal client, discovery questions, and fit signals.</div>
-    </button>
-    <button type="button" class="card" data-target="buyer-cues">
-      <div class="card-title">Buyer cues</div>
-      <div class="card-desc">Phrases to listen for, and how clients frame the buy.</div>
-    </button>
-    <button type="button" class="card" data-target="plays">
-      <div class="card-title">Positioning plays</div>
-      <div class="card-desc">Fit matrix, the plays to run, and what to pair with KC.</div>
-    </button>
-    <button type="button" class="card" data-target="faq">
-      <div class="card-title">FAQ</div>
-      <div class="card-desc">Quick answers to the questions partners hear most.</div>
-    </button>
-  </div>
+	<div class="brand-eyebrow">
+		ExperiencePoint <span class="dot">·</span> Partner Hub
+	</div>
+	<h1 class="brand-title">
+		KickstartChange
+	</h1>
+	<p class="landing-intro">
+		Everything you need to position, propose, and sell this workshop well, in one place.
+	</p>
+	<div class="landing-cards">
+		<button class="card" data-target="overview" type="button"> 
+		<div class="card-title">
+			Overview
+		</div>
+		<div class="card-desc">
+			What the workshop is and what participants walk out with.
+		</div>
+		</button> <button class="card" data-target="forpartners" type="button"> 
+		<div class="card-title">
+			Made for the way you work
+		</div>
+		<div class="card-desc">
+			How this fits your programs and amplifies your expertise.
+		</div>
+		</button> <button class="card" data-target="proposal" type="button"> 
+		<div class="card-title">
+			Proposal copy
+		</div>
+		<div class="card-desc">
+			Ready-to-paste language for proposals and RFPs.
+		</div>
+		</button> <button class="card" data-target="fit" type="button"> 
+		<div class="card-title">
+			Who it's for
+		</div>
+		<div class="card-desc">
+			Ideal client, discovery questions, and fit signals.
+		</div>
+		</button> <button class="card" data-target="buyer-cues" type="button"> 
+		<div class="card-title">
+			Buyer cues
+		</div>
+		<div class="card-desc">
+			Phrases to listen for, and how clients frame the buy.
+		</div>
+		</button> <button class="card" data-target="plays" type="button"> 
+		<div class="card-title">
+			Positioning plays
+		</div>
+		<div class="card-desc">
+			Pick the client frame and see the relevant pitch, recommendation, and proof.
+		</div>
+		</button> <button class="card" data-target="faq" type="button"> 
+		<div class="card-title">
+			FAQ
+		</div>
+		<div class="card-desc">
+			Quick answers to the questions partners hear most.
+		</div>
+		</button> 
+	</div>
 </div>
-
 <main>
-
 <!-- OVERVIEW -->
-<section id="overview">
-  <div class="section-opener">
-    <div class="section-number">01</div>
-    <h2 class="section-title">Overview</h2>
-    <p class="section-description">The workshop, the modules, and what participants walk out with.</p>
-  </div>
-
-  <p class="what-it-is">KickstartChange is ExperiencePoint's hands-on change workshop for teams who are living through change and need to make it work. A 120-minute applied workout built around a current change challenge, a proven framework, and a real conversation participants refine and practice before they leave the room.</p>
-
-  <div class="partner-built">
-    <strong>Built for partner programs</strong>
-    Designed to drop into your leadership programs, client engagements and events as a turnkey two-hour module. Your facilitators can deliver it after a short certification, or you can bring in ours. This hub gives you what you need to position and propose it well.
-  </div>
-
-  <div class="resources-label">Quick assets to share</div>
-  <a class="asset-feature" href="https://assets.experiencepoint.com/materials/sales/Sample_ExperiencePoint_Proposal_KickstartChange_ExperienceChange_en.pdf?utm_campaign=44329810-KC%20SALES%20ENABLEMENT%20SESSIONS&amp;utm_source=KC%20Enablement%20session&amp;utm_medium=proposal%20pdf" target="_blank" rel="noopener noreferrer">
-    <div>
-      <div class="asset-feature-label">Sample proposal</div>
-      <div class="asset-feature-title">KickstartChange + ExperienceChange: a client-ready proposal</div>
-      <div class="asset-feature-desc">An anonymized, ready-to-adapt proposal. The strongest starting point for writing your own winning KickstartChange proposal.</div>
-    </div>
-    <span class="ext">&#8599;</span>
-  </a>
-  <div class="resources">
-    <a class="resource-link" href="https://assets.experiencepoint.com/materials/simulations/kc/en/KickstartChange_overview_en.pdf" target="_blank" rel="noopener noreferrer">
-      <div class="resource-title">One-page overview<span class="ext">&#8599;</span></div>
-      <div class="resource-desc">Share with clients to introduce the workshop at a glance.</div>
-    </a>
-    <a class="resource-link" href="https://assets.experiencepoint.com/materials/simulations/shared/experiencechange/en/ExperienceChange_KickstartChange_Comparison_en.pdf" target="_blank" rel="noopener noreferrer">
-      <div class="resource-title">KC and EC compared<span class="ext">&#8599;</span></div>
-      <div class="resource-desc">Show how the two change experiences differ and pair.</div>
-    </a>
-    <a class="resource-link" href="https://docs.google.com/presentation/d/13krYSV1tTGhX1nc8Ln-uNcWuqFRgrB9pLbEUiOCdjug/edit?usp=sharing" target="_blank" rel="noopener noreferrer">
-      <div class="resource-title">Demo walkthrough<span class="ext">&#8599;</span></div>
-      <div class="resource-desc">Show clients what the workshop feels like in the room.</div>
-    </a>
-  </div>
-
-  <h1 class="headline">
-    <span class="setup">Most change training explains the model and hopes people use it.</span>
-    <span class="punch">This one ends with a <span class="accent">real conversation people are ready to have</span> on Monday.</span>
-  </h1>
-
-  <p class="intro">Clients pursue change because they expect performance to improve. But when people are asked to work in new ways, results rarely rise immediately. Performance often dips first as people learn, adapt, and change behavior. The dip is where change gets expensive. KickstartChange builds the capability to moderate that dip by helping people avoid the missteps and delays that prolong it. Participants apply a proven framework to a current change challenge, then walk out with a clear message, a plan for the barriers in the way, and a real conversation already rehearsed.</p>
-
-  <div class="dip-figure">
-    <div class="dip-figure-label">A powerful frame to open the conversation</div>
-    <svg viewBox="0 0 660 300" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="The Dip: performance over time, comparing change managed well against poorly managed change">
-      <line x1="84" y1="44" x2="84" y2="250" stroke="#293851" stroke-width="2"/>
-      <line x1="84" y1="250" x2="624" y2="250" stroke="#293851" stroke-width="2"/>
-      <text x="48" y="150" font-family="Helvetica Neue, Arial, sans-serif" font-size="11" font-weight="700" letter-spacing="1.5" fill="#5a6478" transform="rotate(-90 48 150)" text-anchor="middle">PERFORMANCE</text>
-      <text x="354" y="284" font-family="Helvetica Neue, Arial, sans-serif" font-size="11" font-weight="700" letter-spacing="1.5" fill="#5a6478" text-anchor="middle">TIME</text>
-      <line x1="98" y1="128" x2="150" y2="128" stroke="#9aa3b2" stroke-width="2" stroke-dasharray="2 5" stroke-linecap="round"/>
-      <circle cx="98" cy="128" r="4" fill="#9aa3b2"/>
-      <circle cx="150" cy="128" r="4" fill="#293851"/>
-      <path d="M150,128 C205,170 240,214 305,214 C392,214 462,150 548,86" fill="none" stroke="#9aa3b2" stroke-width="3" stroke-linecap="round"/>
-      <circle cx="548" cy="86" r="4.5" fill="#9aa3b2"/>
-      <path d="M150,128 C200,152 222,178 282,178 C352,178 412,118 472,70" fill="none" stroke="#FFCC00" stroke-width="3.5" stroke-linecap="round"/>
-      <circle cx="472" cy="70" r="5" fill="#FFCC00"/>
-      <text x="356" y="60" font-family="Helvetica Neue, Arial, sans-serif" font-size="12.5" font-weight="700" fill="#293851">Change managed well</text>
-      <text x="406" y="205" font-family="Helvetica Neue, Arial, sans-serif" font-size="12.5" font-weight="700" fill="#5a6478">Poorly managed change</text>
-    </svg>
-    <p class="dip-caption">The Dip is a useful opening frame because clients recognize themselves in it immediately. It shifts the conversation from "Do you need change training?" to "Where is change getting expensive?". You cannot avoid the dip, but you can moderate it. That is the work KickstartChange does.</p>
-  </div>
-
-  <div class="sub-header">What participants walk out with</div>
-  <div class="artifacts">
-    <div class="artifact">
-      <div class="artifact-num">01</div>
-      <div class="artifact-label">A compelling "why change"</div>
-      <div class="artifact-body">A message built with the power of contrast. It names the threats of standing still and the opportunities of moving, so a real team can see the gap and act.</div>
-    </div>
-    <div class="artifact">
-      <div class="artifact-num">02</div>
-      <div class="artifact-label">A WIIFM message and barrier plan</div>
-      <div class="artifact-body">A "what's in it for me" message tailored to a specific stakeholder, grounded in their pains and gains, plus a plan for the barriers standing in the way of new behavior.</div>
-    </div>
-    <div class="artifact">
-      <div class="artifact-num">03</div>
-      <div class="artifact-label">A practiced conversation</div>
-      <div class="artifact-body">The Hallway Huddle: a real stakeholder conversation rehearsed and refined with peer feedback, plus a simple roadmap for the steps after the workshop.</div>
-    </div>
-  </div>
-
-  <div class="sub-header">How the workshop gets there</div>
-  <div class="moves">
-    <div class="move">
-      <div class="move-label">Ready <span class="sub">Do they know?</span></div>
-      <div class="move-content">
-        <div class="move-body">Create clarity and urgency. Use contrast, the threats of inaction set against the opportunities of change, to craft a compelling "why change" before explaining the details.</div>
-        <div class="move-output"><span class="arrow">&#8594;</span>Produces a "why change" message</div>
-      </div>
-    </div>
-    <div class="move">
-      <div class="move-label">Willing <span class="sub">Do they care?</span></div>
-      <div class="move-content">
-        <div class="move-body">Connect with what people actually care about. Use pains and gains to understand the roots of resistance and craft a message that resonates at a personal level.</div>
-        <div class="move-output"><span class="arrow">&#8594;</span>Produces a WIIFM message</div>
-      </div>
-    </div>
-    <div class="move">
-      <div class="move-label">Able <span class="sub">Can they do it?</span></div>
-      <div class="move-content">
-        <div class="move-body">Shape the skills and conditions that make new behavior possible. Identify the More of and Less of behaviors, then bust the barriers in the way.</div>
-        <div class="move-output"><span class="arrow">&#8594;</span>Produces a barrier plan and practiced conversation</div>
-      </div>
-    </div>
-  </div>
-
-  <div class="differentiator">
-    <div class="diff-line">Not a long simulation. Not theory. Not generic awareness training. Same practical tools, same shared language, individual contributor to executive.</div>
-    <div class="diff-frame">The premise underneath: change happens one person at a time. People struggle for one of three reasons. They <strong>don't know</strong>, they <strong>don't care</strong>, or they <strong>can't do</strong> what is being asked. The Ready, Willing, Able model teaches people to diagnose which one is in play, and respond the right way.</div>
-  </div>
-</section>
-
+	<section id="overview">
+		<div class="section-opener">
+			<div class="section-number">
+				01
+			</div>
+			<h2 class="section-title">
+				Overview
+			</h2>
+			<p class="section-description">
+				The workshop, the modules, and what participants walk out with.
+			</p>
+		</div>
+		<p class="what-it-is">
+			KickstartChange is ExperiencePoint's hands-on change workshop for teams who are living through change and need to make it work. A 120-minute applied workout built around a current change challenge, a proven framework, and a real conversation participants refine and practice before they leave the room.
+		</p>
+		<div class="partner-built">
+			<strong>Built for partner programs</strong> Designed to drop into your leadership programs, client engagements and events as a turnkey two-hour module. Your facilitators can deliver it after a short certification, or you can bring in ours. This hub gives you what you need to position and propose it well. 
+		</div>
+		<div class="resources-label">
+			Quick assets to share
+		</div>
+		<a class="asset-feature" href="https://assets.experiencepoint.com/materials/sales/Sample_ExperiencePoint_Proposal_KickstartChange_ExperienceChange_en.pdf?utm_campaign=44329810-KC%20SALES%20ENABLEMENT%20SESSIONS&amp;utm_source=KC%20Enablement%20session&amp;utm_medium=proposal%20pdf" rel="noopener noreferrer" target="_blank"> 
+		<div>
+			<div class="asset-feature-label">
+				Sample proposal
+			</div>
+			<div class="asset-feature-title">
+				KickstartChange + ExperienceChange: a client-ready proposal
+			</div>
+			<div class="asset-feature-desc">
+				An anonymized, ready-to-adapt proposal. The strongest starting point for writing your own winning KickstartChange proposal.
+			</div>
+		</div>
+		<span class="ext">↗</span> </a> 
+		<div class="resources">
+			<a class="resource-link" href="https://assets.experiencepoint.com/materials/simulations/kc/en/KickstartChange_overview_en.pdf" rel="noopener noreferrer" target="_blank"> 
+			<div class="resource-title">
+				One-page overview<span class="ext">↗</span>
+			</div>
+			<div class="resource-desc">
+				Share with clients to introduce the workshop at a glance.
+			</div>
+			</a> <a class="resource-link" href="https://assets.experiencepoint.com/materials/simulations/shared/experiencechange/en/ExperienceChange_KickstartChange_Comparison_en.pdf" rel="noopener noreferrer" target="_blank"> 
+			<div class="resource-title">
+				KC and EC compared<span class="ext">↗</span>
+			</div>
+			<div class="resource-desc">
+				Show how the two change experiences differ and pair.
+			</div>
+			</a> <a class="resource-link" href="https://docs.google.com/presentation/d/13krYSV1tTGhX1nc8Ln-uNcWuqFRgrB9pLbEUiOCdjug/edit?usp=sharing" rel="noopener noreferrer" target="_blank"> 
+			<div class="resource-title">
+				Demo walkthrough<span class="ext">↗</span>
+			</div>
+			<div class="resource-desc">
+				Show clients what the workshop feels like in the room.
+			</div>
+			</a> 
+		</div>
+		<h1 class="headline">
+			<span class="setup">Most change training explains the model and hopes people use it.</span> <span class="punch">This one ends with a <span class="accent">real conversation people are ready to have</span> on Monday.</span> 
+		</h1>
+		<p class="intro">
+			Clients pursue change because they expect performance to improve. But when people are asked to work in new ways, results rarely rise immediately. Performance often dips first as people learn, adapt, and change behavior. The dip is where change gets expensive. KickstartChange builds the capability to moderate that dip by helping people avoid the missteps and delays that prolong it. Participants apply a proven framework to a current change challenge, then walk out with a clear message, a plan for the barriers in the way, and a real conversation already rehearsed.
+		</p>
+		<div class="dip-figure">
+			<div class="dip-figure-label">
+				A powerful frame to open the conversation
+			</div>
+			<svg aria-label="The Dip: performance over time, comparing change managed well against poorly managed change" role="img" viewbox="0 0 660 300" xmlns="http://www.w3.org/2000/svg"> <line stroke="#293851" stroke-width="2" x1="84" x2="84" y1="44" y2="250"></line> <line stroke="#293851" stroke-width="2" x1="84" x2="624" y1="250" y2="250"></line> <text fill="#5a6478" font-family="Helvetica Neue, Arial, sans-serif" font-size="11" font-weight="700" letter-spacing="1.5" text-anchor="middle" transform="rotate(-90 48 150)" x="48" y="150">PERFORMANCE</text> <text fill="#5a6478" font-family="Helvetica Neue, Arial, sans-serif" font-size="11" font-weight="700" letter-spacing="1.5" text-anchor="middle" x="354" y="284">TIME</text> <line stroke="#9aa3b2" stroke-dasharray="2 5" stroke-linecap="round" stroke-width="2" x1="98" x2="150" y1="128" y2="128"></line> <circle cx="98" cy="128" fill="#9aa3b2" r="4"></circle> <circle cx="150" cy="128" fill="#293851" r="4"></circle> <path d="M150,128 C205,170 240,214 305,214 C392,214 462,150 548,86" fill="none" stroke="#9aa3b2" stroke-linecap="round" stroke-width="3"></path> <circle cx="548" cy="86" fill="#9aa3b2" r="4.5"></circle> <path d="M150,128 C200,152 222,178 282,178 C352,178 412,118 472,70" fill="none" stroke="#FFCC00" stroke-linecap="round" stroke-width="3.5"></path> <circle cx="472" cy="70" fill="#FFCC00" r="5"></circle> <text fill="#293851" font-family="Helvetica Neue, Arial, sans-serif" font-size="12.5" font-weight="700" x="356" y="60">Change managed well</text> <text fill="#5a6478" font-family="Helvetica Neue, Arial, sans-serif" font-size="12.5" font-weight="700" x="406" y="205">Poorly managed change</text> </svg> 
+			<p class="dip-caption">
+				The Dip is a useful opening frame because clients recognize themselves in it immediately. It shifts the conversation from "Do you need change training?" to "Where is change getting expensive?". You cannot avoid the dip, but you can moderate it. That is the work KickstartChange does.
+			</p>
+		</div>
+		<div class="sub-header">
+			What participants walk out with
+		</div>
+		<div class="artifacts">
+			<div class="artifact">
+				<div class="artifact-num">
+					01
+				</div>
+				<div class="artifact-label">
+					A compelling "why change"
+				</div>
+				<div class="artifact-body">
+					A message built with the power of contrast. It names the threats of standing still and the opportunities of moving, so a real team can see the gap and act.
+				</div>
+			</div>
+			<div class="artifact">
+				<div class="artifact-num">
+					02
+				</div>
+				<div class="artifact-label">
+					A WIIFM message and barrier plan
+				</div>
+				<div class="artifact-body">
+					A "what's in it for me" message tailored to a specific stakeholder, grounded in their pains and gains, plus a plan for the barriers standing in the way of new behavior.
+				</div>
+			</div>
+			<div class="artifact">
+				<div class="artifact-num">
+					03
+				</div>
+				<div class="artifact-label">
+					A practiced conversation
+				</div>
+				<div class="artifact-body">
+					The Hallway Huddle: a real stakeholder conversation rehearsed and refined with peer feedback, plus a simple roadmap for the steps after the workshop.
+				</div>
+			</div>
+		</div>
+		<div class="sub-header">
+			How the workshop gets there
+		</div>
+		<div class="moves">
+			<div class="move">
+				<div class="move-label">
+					Ready <span class="sub">Do they know?</span>
+				</div>
+				<div class="move-content">
+					<div class="move-body">
+						Create clarity and urgency. Use contrast, the threats of inaction set against the opportunities of change, to craft a compelling "why change" before explaining the details.
+					</div>
+					<div class="move-output">
+						<span class="arrow">→</span>Produces a "why change" message
+					</div>
+				</div>
+			</div>
+			<div class="move">
+				<div class="move-label">
+					Willing <span class="sub">Do they care?</span>
+				</div>
+				<div class="move-content">
+					<div class="move-body">
+						Connect with what people actually care about. Use pains and gains to understand the roots of resistance and craft a message that resonates at a personal level.
+					</div>
+					<div class="move-output">
+						<span class="arrow">→</span>Produces a WIIFM message
+					</div>
+				</div>
+			</div>
+			<div class="move">
+				<div class="move-label">
+					Able <span class="sub">Can they do it?</span>
+				</div>
+				<div class="move-content">
+					<div class="move-body">
+						Shape the skills and conditions that make new behavior possible. Identify the More of and Less of behaviors, then bust the barriers in the way.
+					</div>
+					<div class="move-output">
+						<span class="arrow">→</span>Produces a barrier plan and practiced conversation
+					</div>
+				</div>
+			</div>
+		</div>
+		<div class="differentiator">
+			<div class="diff-line">
+				Not a long simulation. Not theory. Not generic awareness training. Same practical tools, same shared language, individual contributor to executive.
+			</div>
+			<div class="diff-frame">
+				The premise underneath: change happens one person at a time. People struggle for one of three reasons. They <strong>don't know</strong>, they <strong>don't care</strong>, or they <strong>can't do</strong> what is being asked. The Ready, Willing, Able model teaches people to diagnose which one is in play, and respond the right way.
+			</div>
+		</div>
+	</section>
 <!-- MADE FOR THE WAY YOU WORK -->
-<section id="forpartners">
-  <div class="section-opener">
-    <div class="section-number">02</div>
-    <h2 class="section-title">Made for the way you work</h2>
-    <p class="section-description">Designed to fit your programs and amplify your expertise. The workshop builds change-ready people and a current change moves forward in the room. Your firm brings the depth.</p>
-  </div>
-
-  <div class="sub-header">Fits your programs</div>
-  <div class="benefit-grid">
-    <div class="benefit-block">
-      <div class="benefit-title">Leadership development programs</div>
-      <div class="benefit-body">Plug in as the applied change module of your LDP. Leaders leave with practical tools they can use with their teams immediately, and a real conversation they have already rehearsed.</div>
-    </div>
-    <div class="benefit-block">
-      <div class="benefit-title">Action learning programs</div>
-      <div class="benefit-body">Use the two-hour format to advance the real challenge your cohort is working. Participants build the communications that align their organizations around the strategy they are shaping.</div>
-    </div>
-    <div class="benefit-block">
-      <div class="benefit-title">Change implementations</div>
-      <div class="benefit-body">Move strategy from announcement to action. KickstartChange helps the people closest to the work understand the change, own their role in it, and tackle the communication and behavior barriers that determine whether implementation sticks.</div>
-    </div>
-    <div class="benefit-block">
-      <div class="benefit-title">Events and conferences</div>
-      <div class="benefit-body">A high-energy, hands-on session that fits a packed agenda. Participants work a real challenge rather than sitting through a keynote, which is why it tends to rate as the session people remember.</div>
-    </div>
-  </div>
-
-  <div class="sub-header" style="margin-top: 58px;">Amplifies your expertise</div>
-  <div class="benefit-grid three-col">
-    <div class="benefit-block">
-      <div class="benefit-title">Leadership development</div>
-      <div class="benefit-body">Your leadership model shows what good looks like. KickstartChange helps leaders put it into practice.</div>
-    </div>
-    <div class="benefit-block">
-      <div class="benefit-title">Consulting</div>
-      <div class="benefit-body">Your methodology sets the path. KickstartChange helps people start walking it.</div>
-    </div>
-    <div class="benefit-block">
-      <div class="benefit-title">Executive education</div>
-      <div class="benefit-body">Your program expands how leaders think. KickstartChange gives them a real change to apply it to.</div>
-    </div>
-  </div>
-
-  <div class="differentiator" style="margin-top: 42px;">
-    <div class="diff-line">KickstartChange and ExperienceChange are two standalone experiences that work in tandem.</div>
-    <div class="diff-frame">ExperienceChange is the <strong>5 to 8 hour simulation</strong> for leaders driving organization-wide change. KickstartChange is the <strong>two-hour applied workout</strong> for everyone making that change work day to day. Sell either on its own. Propose them together for a change journey that builds capability at both the individual and the organizational level.</div>
-  </div>
-</section>
-
+	<section id="forpartners">
+		<div class="section-opener">
+			<div class="section-number">
+				02
+			</div>
+			<h2 class="section-title">
+				Made for the way you work
+			</h2>
+			<p class="section-description">
+				Designed to fit your programs and amplify your expertise. The workshop builds change-ready people and a current change moves forward in the room. Your firm brings the depth.
+			</p>
+		</div>
+		<div class="sub-header">
+			Fits your programs
+		</div>
+		<div class="benefit-grid">
+			<div class="benefit-block">
+				<div class="benefit-title">
+					Leadership development programs
+				</div>
+				<div class="benefit-body">
+					Plug in as the applied change module of your LDP. Leaders leave with practical tools they can use with their teams immediately, and a real conversation they have already rehearsed.
+				</div>
+			</div>
+			<div class="benefit-block">
+				<div class="benefit-title">
+					Action learning programs
+				</div>
+				<div class="benefit-body">
+					Use the two-hour format to advance the real challenge your cohort is working. Participants build the communications that align their organizations around the strategy they are shaping.
+				</div>
+			</div>
+			<div class="benefit-block">
+				<div class="benefit-title">
+					Change implementations
+				</div>
+				<div class="benefit-body">
+					Move strategy from announcement to action. KickstartChange helps the people closest to the work understand the change, own their role in it, and tackle the communication and behavior barriers that determine whether implementation sticks.
+				</div>
+			</div>
+			<div class="benefit-block">
+				<div class="benefit-title">
+					Events and conferences
+				</div>
+				<div class="benefit-body">
+					A high-energy, hands-on session that fits a packed agenda. Participants work a real challenge rather than sitting through a keynote, which is why it tends to rate as the session people remember.
+				</div>
+			</div>
+		</div>
+		<div class="sub-header" style="margin-top: 58px;">
+			Amplifies your expertise
+		</div>
+		<div class="benefit-grid three-col">
+			<div class="benefit-block">
+				<div class="benefit-title">
+					Leadership development
+				</div>
+				<div class="benefit-body">
+					Your leadership model shows what good looks like. KickstartChange helps leaders put it into practice.
+				</div>
+			</div>
+			<div class="benefit-block">
+				<div class="benefit-title">
+					Consulting
+				</div>
+				<div class="benefit-body">
+					Your methodology sets the path. KickstartChange helps people start walking it.
+				</div>
+			</div>
+			<div class="benefit-block">
+				<div class="benefit-title">
+					Executive education
+				</div>
+				<div class="benefit-body">
+					Your program expands how leaders think. KickstartChange gives them a real change to apply it to.
+				</div>
+			</div>
+		</div>
+		<div class="differentiator" style="margin-top: 42px;">
+			<div class="diff-line">
+				KickstartChange and ExperienceChange are two standalone experiences that work in tandem.
+			</div>
+			<div class="diff-frame">
+				ExperienceChange is the <strong>5 to 8 hour simulation</strong> for leaders driving organization-wide change. KickstartChange is the <strong>two-hour applied workout</strong> for everyone making that change work day to day. Sell either on its own. Propose them together for a change journey that builds capability at both the individual and the organizational level.
+			</div>
+		</div>
+	</section>
 <!-- PROPOSAL COPY -->
-<section id="proposal">
-  <div class="section-opener">
-    <div class="section-number">03</div>
-    <h2 class="section-title">Proposal copy</h2>
-    <p class="section-description">Ready-to-paste language for written proposals and RFPs. Copy as-is or adapt to your client's voice.</p>
-  </div>
-
-  <div class="proposal-block">
-    <button type="button" class="copy-btn" data-copy-target="proposal-description">Copy</button>
-    <div class="proposal-label">Description</div>
-    <div class="proposal-body" id="proposal-description">KickstartChange is a 120-minute hands-on change workshop that helps people at every level become ready, willing, and able to make change work. Participants bring a real change they are living through and work it through a proven framework, learning to create clarity with a compelling "why change," connect with what people care about, and shape the conditions that make new behavior possible. They leave with practical tools, a current change advanced, and an action plan to keep it moving. Over 90% of KickstartChange participants report improved change capabilities in just two hours.</div>
-  </div>
-
-  <div class="proposal-block">
-    <button type="button" class="copy-btn" data-copy-target="proposal-audience">Copy</button>
-    <div class="proposal-label">Audience</div>
-    <div class="proposal-body" id="proposal-audience">Anyone navigating or supporting change in their work, whether they are a senior leader, a manager, or an individual contributor. Works well for intact teams, cross-functional groups, and open-enrollment cohorts across any industry. No prerequisites. Mixed-experience and mixed-level rooms work well, because each participant or pair brings their own real change into the room.</div>
-  </div>
-
-  <div class="proposal-block">
-    <button type="button" class="copy-btn" data-copy-target="proposal-outcomes">Copy</button>
-    <div class="proposal-label">Learning and business outcomes</div>
-    <div class="proposal-body" id="proposal-outcomes">
-      <ul>
-        <li><strong>Built capability.</strong> Participants leave able to support change, not just react to it. The tools transfer to every change that follows.</li>
-        <li><strong>Behavior change.</strong> Teams move from abstract agreement to observable action: clearer messages, fewer barriers, real conversations.</li>
-        <li><strong>Faster adoption.</strong> A current change advances inside the workshop, with a roadmap for what comes next.</li>
-        <li><strong>Reduced resistance.</strong> People learn to diagnose where resistance comes from and respond to it the right way.</li>
-        <li><strong>A shared change language.</strong> One vocabulary across levels and functions, so change efforts stay coordinated.</li>
-        <li><strong>Resilient, change-ready people.</strong> Capability that compounds as change keeps coming.</li>
-      </ul>
-    </div>
-  </div>
-
-  <div class="proposal-block">
-    <button type="button" class="copy-btn" data-copy-target="proposal-format">Copy</button>
-    <div class="proposal-label">Format</div>
-    <div class="proposal-body" id="proposal-format">120 minutes, easily extendable. 20 to 200 participants in-person, 20 to 50 virtually. Delivered live, virtual or in-person. Available in English, Spanish, and French. Cross-functional teams at any level, within any industry.</div>
-  </div>
-</section>
-
+	<section id="proposal">
+		<div class="section-opener">
+			<div class="section-number">
+				03
+			</div>
+			<h2 class="section-title">
+				Proposal copy
+			</h2>
+			<p class="section-description">
+				Ready-to-paste language for written proposals and RFPs. Copy as-is or adapt to your client's voice.
+			</p>
+		</div>
+		<div class="proposal-block">
+			<button class="copy-btn" data-copy-target="proposal-description" type="button">Copy</button> 
+			<div class="proposal-label">
+				Description
+			</div>
+			<div class="proposal-body" id="proposal-description">
+				KickstartChange is a 120-minute hands-on change workshop that helps people at every level become ready, willing, and able to make change work. Participants bring a real change they are living through and work it through a proven framework, learning to create clarity with a compelling "why change," connect with what people care about, and shape the conditions that make new behavior possible. They leave with practical tools, a current change advanced, and an action plan to keep it moving. Over 90% of KickstartChange participants report improved change capabilities in just two hours.
+			</div>
+		</div>
+		<div class="proposal-block">
+			<button class="copy-btn" data-copy-target="proposal-audience" type="button">Copy</button> 
+			<div class="proposal-label">
+				Audience
+			</div>
+			<div class="proposal-body" id="proposal-audience">
+				Anyone navigating or supporting change in their work, whether they are a senior leader, a manager, or an individual contributor. Works well for intact teams, cross-functional groups, and open-enrollment cohorts across any industry. No prerequisites. Mixed-experience and mixed-level rooms work well, because each participant or pair brings their own real change into the room.
+			</div>
+		</div>
+		<div class="proposal-block">
+			<button class="copy-btn" data-copy-target="proposal-outcomes" type="button">Copy</button> 
+			<div class="proposal-label">
+				Learning and business outcomes
+			</div>
+			<div class="proposal-body" id="proposal-outcomes">
+				<ul>
+					<li><strong>Built capability.</strong> Participants leave able to support change, not just react to it. The tools transfer to every change that follows.</li>
+					<li><strong>Behavior change.</strong> Teams move from abstract agreement to observable action: clearer messages, fewer barriers, real conversations.</li>
+					<li><strong>Faster adoption.</strong> A current change advances inside the workshop, with a roadmap for what comes next.</li>
+					<li><strong>Reduced resistance.</strong> People learn to diagnose where resistance comes from and respond to it the right way.</li>
+					<li><strong>A shared change language.</strong> One vocabulary across levels and functions, so change efforts stay coordinated.</li>
+					<li><strong>Resilient, change-ready people.</strong> Capability that compounds as change keeps coming.</li>
+				</ul>
+			</div>
+		</div>
+		<div class="proposal-block">
+			<button class="copy-btn" data-copy-target="proposal-format" type="button">Copy</button> 
+			<div class="proposal-label">
+				Format
+			</div>
+			<div class="proposal-body" id="proposal-format">
+				120 minutes, easily extendable. 20 to 200 participants in-person, 20 to 50 virtually. Delivered live, virtual or in-person. Available in English, Spanish, and French. Cross-functional teams at any level, within any industry.
+			</div>
+		</div>
+	</section>
 <!-- WHO IT'S FOR -->
-<section id="fit">
-  <div class="section-opener">
-    <div class="section-number">04</div>
-    <h2 class="section-title">Who it's for</h2>
-    <p class="section-description">The ideal client, where to start discovery, and the fit signals to listen for.</p>
-  </div>
-
-  <div class="fit-block">
-    <div class="fit-block-label">Ideal client</div>
-    <div class="fit-prose">Organizations with a real change underway, a project, a system implementation, a restructure, a new strategy, where the change will stall unless people are ready, willing, and able to act. The L&amp;D, HR, or business-unit buyer wants something short and practical that applies to actual work, not another awareness session that does not transfer. Equally strong for clients building general change agility, where the goal is broader change readiness, not just support for one initiative.</div>
-  </div>
-
-  <div class="fit-block">
-    <div class="fit-block-label">Discovery questions to ask</div>
-    <ol class="discovery-list">
-      <li><span class="layer">Results</span><span class="q">What are the desired results you are seeking to achieve, and how will you know it worked?</span></li>
-      <li><span class="layer">Behaviors</span><span class="q">What behaviors do people need to do more of, or less of, to achieve these desired results?</span></li>
-      <li><span class="layer">Conditions</span><span class="q">Why are you not seeing more of those behaviors today? What is getting in the way?</span></li>
-      <li><span class="layer">Skills</span><span class="q">What new skills do people need to develop to support those new behaviors?</span></li>
-    </ol>
-  </div>
-
-  <div class="fit-block">
-    <div class="fit-block-label">Not a fit if</div>
-    <ul class="notfit-list">
-      <li>The client needs deep, end-to-end change leadership capability (ExperienceChange is the better fit, or pair the two)</li>
-      <li>The buyer wants a lecture or a theory session rather than hands-on application</li>
-    </ul>
-  </div>
-</section>
-
+	<section id="fit">
+		<div class="section-opener">
+			<div class="section-number">
+				04
+			</div>
+			<h2 class="section-title">
+				Who it's for
+			</h2>
+			<p class="section-description">
+				The ideal client, where to start discovery, and the fit signals to listen for.
+			</p>
+		</div>
+		<div class="fit-block">
+			<div class="fit-block-label">
+				Ideal client
+			</div>
+			<div class="fit-prose">
+				Organizations with a real change underway, a project, a system implementation, a restructure, a new strategy, where the change will stall unless people are ready, willing, and able to act. The L&amp;D, HR, or business-unit buyer wants something short and practical that applies to actual work, not another awareness session that does not transfer. Equally strong for clients building general change agility, where the goal is broader change readiness, not just support for one initiative.
+			</div>
+		</div>
+		<div class="fit-block">
+			<div class="fit-block-label">
+				Discovery questions to ask
+			</div>
+			<ol class="discovery-list">
+				<li><span class="layer">Results</span><span class="q">What are the desired results you are seeking to achieve, and how will you know it worked?</span></li>
+				<li><span class="layer">Behaviors</span><span class="q">What behaviors do people need to do more of, or less of, to achieve these desired results?</span></li>
+				<li><span class="layer">Conditions</span><span class="q">Why are you not seeing more of those behaviors today? What is getting in the way?</span></li>
+				<li><span class="layer">Skills</span><span class="q">What new skills do people need to develop to support those new behaviors?</span></li>
+			</ol>
+		</div>
+		<div class="fit-block">
+			<div class="fit-block-label">
+				Not a fit if
+			</div>
+			<ul class="notfit-list">
+				<li>The client needs deep, end-to-end change leadership capability (ExperienceChange is the better fit, or pair the two)</li>
+				<li>The buyer wants a lecture or a theory session rather than hands-on application</li>
+			</ul>
+		</div>
+	</section>
 <!-- BUYER CUES -->
-<section id="buyer-cues">
-  <div class="section-opener">
-    <div class="section-number">05</div>
-    <h2 class="section-title">Buyer cues</h2>
-    <p class="section-description">What clients say when they need this workshop, and how they signal the way they want to buy.</p>
-  </div>
-
-  <div class="sub-header">Listen for these cues</div>
-
-  <div class="cue">
-    <div class="cue-title">Time cue</div>
-    <div class="cue-phrases">
-      <span>"We only have a few hours."</span>
-      <span>"We need something short and impactful."</span>
-      <span>"It has to fit inside a day that is already full."</span>
-    </div>
-  </div>
-
-  <div class="cue">
-    <div class="cue-title">Application cue</div>
-    <div class="cue-phrases">
-      <span>"We need people applying this to real work."</span>
-      <span>"We need to demonstrate ROI."</span>
-      <span>"We have done awareness training. Nothing stuck."</span>
-    </div>
-  </div>
-
-  <div class="cue">
-    <div class="cue-title">Change-capability cue</div>
-    <div class="cue-phrases">
-      <span>"[This initiative] is a really important change for us."</span>
-      <span>"Our culture needs greater agility and resilience."</span>
-      <span>"We expect everyone to be a leader of change."</span>
-    </div>
-  </div>
-
-  <div class="sub-header" style="margin-top: 58px;">Then listen for how they frame the buy</div>
-  <p class="fit-prose" style="margin-bottom: 30px;">The cues tell you the need. The frame tells you how the client is trying to buy. Most opportunities land in one of four frames, and KickstartChange fits all four.</p>
-  <div class="frames">
-    <div class="frame">
-      <div class="frame-label">Programs</div>
-      <div class="frame-desc">"We need a training program for a specific audience."</div>
-    </div>
-    <div class="frame">
-      <div class="frame-label">Roll-outs</div>
-      <div class="frame-desc">"We need to build capability across the organization, quickly."</div>
-    </div>
-    <div class="frame">
-      <div class="frame-label">Initiatives</div>
-      <div class="frame-desc">"We have a specific change and need people aligned around it."</div>
-    </div>
-    <div class="frame">
-      <div class="frame-label">Events</div>
-      <div class="frame-desc">"We're bringing people together and want to include some learning."</div>
-    </div>
-  </div>
-  <a class="jump-link" href="#plays" style="margin-top: 28px;"><span>See the play to run for each frame</span><span class="arrow">&#8595;</span></a>
-</section>
-
+	<section id="buyer-cues">
+		<div class="section-opener">
+			<div class="section-number">
+				05
+			</div>
+			<h2 class="section-title">
+				Buyer cues
+			</h2>
+			<p class="section-description">
+				What clients say when they need this workshop.
+			</p>
+		</div>
+		<div class="sub-header">
+			Listen for these cues
+		</div>
+		<div class="cue">
+			<div class="cue-title">
+				Time cue
+			</div>
+			<div class="cue-phrases">
+				<span>"We only have a few hours."</span> <span>"We need something short and impactful."</span> <span>"It has to fit inside a day that is already full."</span> 
+			</div>
+		</div>
+		<div class="cue">
+			<div class="cue-title">
+				Application cue
+			</div>
+			<div class="cue-phrases">
+				<span>"We need people applying this to real work."</span> <span>"We need to demonstrate ROI."</span> <span>"We have done awareness training. Nothing stuck."</span> 
+			</div>
+		</div>
+		<div class="cue">
+			<div class="cue-title">
+				Change-capability cue
+			</div>
+			<div class="cue-phrases">
+				<span>"[This initiative] is a really important change for us."</span> <span>"Our culture needs greater agility and resilience."</span> <span>"We expect everyone to be a leader of change."</span> 
+			</div>
+		</div>
+		<div class="sub-header" style="margin-top: 58px;">
+			Then listen for how they frame the buy
+		</div>
+		<p class="fit-prose" style="margin-bottom: 30px;">
+			The cues tell you the need. The frame tells you how the client is trying to buy. Most opportunities land in one of four frames, and KickstartChange fits all four.
+		</p>
+		<div class="frames">
+			<div class="frame">
+				<div class="frame-label">
+					Programs
+				</div>
+				<div class="frame-desc">
+					"We need a training program for a specific audience."
+				</div>
+			</div>
+			<div class="frame">
+				<div class="frame-label">
+					Roll-outs
+				</div>
+				<div class="frame-desc">
+					"We need to build capability across the organization, quickly."
+				</div>
+			</div>
+			<div class="frame">
+				<div class="frame-label">
+					Initiatives
+				</div>
+				<div class="frame-desc">
+					"We have a specific change and need people aligned around it."
+				</div>
+			</div>
+			<div class="frame">
+				<div class="frame-label">
+					Events
+				</div>
+				<div class="frame-desc">
+					"We're bringing people together and want to include some learning."
+				</div>
+			</div>
+		</div>
+		<a class="jump-link" href="#plays" style="margin-top: 28px;"><span>See the play to run for each frame</span><span class="arrow">↓</span></a> 
+	</section>
 <!-- POSITIONING PLAYS -->
-<section id="plays">
-  <div class="section-opener">
-    <div class="section-number">06</div>
-    <h2 class="section-title">Positioning plays</h2>
-    <p class="section-description">Connect KickstartChange to the problem the client is trying to solve.</p>
-  </div>
-
-  <div class="sub-header">The plays</div>
-  <p class="fit-prose" style="margin-bottom: 36px;">Five common client situations, each paired with the right conversation frame, recommendation, and proposal-ready language. Lift the language straight into a proposal or adapt it to the client's voice.</p>
-
-  <div class="play">
-    <div class="play-frame">Programs</div>
-    <div class="play-title">When leadership development needs application</div>
-    <div class="play-grid">
-      <div class="play-col">
-        <div class="play-col-label">Situation</div>
-        <div class="play-col-body">
-          <p>The client is building a leadership program for executives, managers, directors, emerging leaders, or high-potential talent, and wants participants to apply the learning to real work.</p>
-        </div>
-      </div>
-      <div class="play-col play-col--navy">
-        <div class="play-col-label">Positioning</div>
-        <div class="play-col-body">
-          <p>Leadership programs create insight.</p>
-          <p>The hard part is turning that insight into action when leaders are back in the complexity of real work.</p>
-          <p>KickstartChange builds the change reflexes leaders need when people are confused, skeptical or stuck.</p>
-        </div>
-      </div>
-      <div class="play-col">
-        <div class="play-col-label">Recommendation</div>
-        <div class="play-col-body">
-          <div class="play-rec-title">KickstartChange for Leaders</div>
-          <p>A 2-3 hour applied leadership lab</p>
-          <p>Work through a real change challenge</p> 
-          <p>Proven framework with practical tools</p>
-          <p>Leave with a practiced conversation and practical next step.</p>
-        </div>
-      </div>
-    </div>
-    <div class="play-proof">
-      <span class="play-proof-label">In practice</span>
-      <div class="play-proof-body">
-        <p><strong>Multinational leadership program.</strong> KickstartChange ran as the action-learning engine for top executives across a 12-month, four-session program, advancing real business challenges rather than just teaching them.</p>
-        <p><strong>Executive education, financial services.</strong> 200+ high-potential managers and directors, only two hours available, used to translate strategy into change leadership action.</p>
-        <p><strong>Manufacturing, sales managers.</strong> After years of market volatility and double-digit price increases, sales managers used it to communicate change to customers with more clarity and confidence.</p>
-      </div>
-    </div>
-  </div>
-
-  <div class="play">
-    <div class="play-frame">Roll-outs</div>
-    <div class="play-title">When change capability needs to scale</div>
-    <div class="play-grid">
-      <div class="play-col">
-        <div class="play-col-label">Situation</div>
-        <div class="play-col-body">
-          <p>Change is continuous, faster-moving, and increasingly part of everyone's role. Leaders and managers need to make clearer decisions, experiment to learn, and move work forward with more confidence and accountability.</p>
-        </div>
-      </div>
-      <div class="play-col play-col--navy">
-        <div class="play-col-label">Positioning</div>
-        <div class="play-col-body">
-          <p>Change capability can’t live with a few experts.</p>
-          <p>The hard part is giving people at every level a practical way to lead day-to-day change.</p>
-          <p>KickstartChange equips people at every level to lead day-to-day change.</p>
-        </div>
-      </div>
-      <div class="play-col">
-        <div class="play-col-label">Recommendation</div>
-        <div class="play-col-body">
-          <div class="play-rec-title">KickstartChange for everyone</div>
-          <p>A 2-3 hour scalable experience</p>
-          <p>Build a shared Ready, Willing, Able language as people work through real change challenges</p>
-          <p>Create consistency across levels, functions, and regions</p>
-          <p>Pairs well with ExperienceChange for leaders</p>
-        </div>
-      </div>
-    </div>
-    <div class="play-proof">
-      <span class="play-proof-label">In practice</span>
-      <div class="play-proof-body">
-        <p><strong>Global resource leader, 20,000 employees.</strong> ExperienceChange built deep capability with directors and above. KickstartChange scaled practical change methods to supervisors in English, Spanish, and French, delivered by internal high-potentials. One change language across every level.</p>
-        <p><strong>Energy Utility, 5,000 employees.</strong> ExperienceChange built change leadership, accountability, and confidence with directors. KickstartChange scaled practical change methods to office and field managers leading day-to-day implementation. One shared change language from strategy to the field. </p>
-        <p><a class="jump-link" href="https://assets.experiencepoint.com/materials/sales/Sample_ExperiencePoint_Proposal_KickstartChange_ExperienceChange_en.pdf?utm_campaign=44329810-KC%20SALES%20ENABLEMENT%20SESSIONS&amp;utm_source=KC%20Enablement%20session&amp;utm_medium=proposal%20pdf" target="_blank" rel="noopener noreferrer" style="margin-top: 14px;"><span>See winning proposal (anonymized).</span><span class="arrow">&#8599;</span></a></p>
-      </div>
-    </div>
-  </div>
-
-  <div class="play">
-    <div class="play-frame">Initiatives</div>
-    <div class="play-title">When new strategy requires new behaviors</div>
-    <div class="play-grid">
-      <div class="play-col">
-        <div class="play-col-label">Situation</div>
-        <div class="play-col-body">
-          <p>The client is launching a new strategic initiative, transformation, system implementation, restructure, or new way of working.</p>
-        </div>
-      </div>
-      <div class="play-col play-col--navy">
-        <div class="play-col-label">Positioning</div>
-        <div class="play-col-body">
-          <p>New strategy sets direction</p>
-          <p>The hard part is turning that direction into local meaning, shared ownership, and practical action.</p>
-          <p>KickstartChange helps teams turn strategic direction into local action.</p>
-        </div>
-      </div>
-      <div class="play-col">
-        <div class="play-col-label">Recommendation</div>
-        <div class="play-col-body">
-          <div class="play-rec-title">KickstartChange for teams</div>
-          <p>A 2-3 hour applied experience</p>
-          <p>Clarify why the initiative matters</p> 
-          <p>Build commitment</p>
-          <p>Remove barriers to new ways of working</p>          
-          <p>Leave with a practiced conversation that moves action forward</p>
-        </div>
-      </div>
-    </div>
-    <div class="play-proof">
-      <span class="play-proof-label">In practice</span>
-      <div class="play-proof-body">
-        <p><strong>Pharma M&amp;A.</strong> 200+ global leaders and middle managers from both sides of a merger used it to lead integration consistently, building common language and real progress on integration challenges.</p>
-        <p><strong>Professional services, ERP implementation.</strong> Cross-functional leaders built shared language and tools to bring their teams through a major system change without losing momentum.</p>
-      </div>
-    </div>
-  </div>
-
-  <div class="play">
-    <div class="play-frame">Initiatives &#183; AI adoption</div>
-    <div class="play-title">When AI technical training isn't enough</div>
-    <div class="play-grid">
-      <div class="play-col">
-        <div class="play-col-label">Situation</div>
-        <div class="play-col-body">
-          <p>The client has rolled out AI tools, invested in licenses and training, and expects gains. Curiosity was high at first, but usage is uneven. Some people are experimenting, some avoiding it, and many are unsure how AI applies to their real work.</p>
-        </div>
-      </div>
-      <div class="play-col play-col--navy">
-        <div class="play-col-label">Positioning</div>
-        <div class="play-col-body">
-          <p>AI holds real promise.</p>
-          <p>But that promise only becomes impact when people change how they work.</p>
-          <p>KickstartChange helps teams move from AI promise to AI adoption.</p>                    
-        </div>
-      </div>
-      <div class="play-col">
-        <div class="play-col-label">Recommendation</div>
-        <div class="play-col-body">
-          <div class="play-rec-title">KickstartChange for Teams</div>
-          <p>A 2-3 hour applied adoption lab</p>   
-          <p>Clarify why AI matters, build commitment, and remove barriers to new AI-enabled behaviors.</p>   
-          <p>Pairs  well with WBWAI 201, which helps people find the right workflows to unlock value.</p>
-        </div>
-      </div>
-    </div>
-    <div class="play-proof">
-      <span class="play-proof-label">In practice</span>
-      <div class="play-proof-body">
-        <p><strong>Healthcare AI implementation.</strong> 120 medical practitioners adopting a new AI-enabled workflow. KickstartChange shifted communication from command-and-control to empathy, engagement, and influence.</p>
-        <p><strong>Executive education, public agency.</strong> AI adoption started with the leadership team, treated as a trust, messaging, and stakeholder challenge rather than a tools rollout.</p>
-      </div>
-    </div>
-  </div>
-
-  <div class="play">
-    <div class="play-frame">Events</div>
-    <div class="play-title">When coming together needs to create momentum</div>
-    <div class="play-grid">
-      <div class="play-col">
-        <div class="play-col-label">Situation</div>
-        <div class="play-col-body">
-          <p>The client is bringing people together for a conference, summit, or offsite. They want it to feel energizing and memorable, and to do more than inspire.</p>
-        </div>
-      </div>
-      <div class="play-col play-col--navy">
-        <div class="play-col-label">Positioning</div>
-        <div class="play-col-body">
-          <p>Events create a rare moment of attention.</p>
-          <p>The hard part is turning that attention into action people carry back to their teams.</p>
-          <p>KickstartChange turns shared attention into shared action.</p>
-        </div>
-      </div>
-      <div class="play-col">
-        <div class="play-col-label">Recommendation</div>
-        <div class="play-col-body">
-          <div class="play-rec-title">KickstartChange for events</div>
-          <p>A 2-3 hour applied experience</p>
-          <p>Work through a real challenge</p> 
-          <p>Build connection through team-based application</p>
-          <p>Leave with shared understanding and a practical next step</p>          
-        </div>
-      </div>
-    </div>
-    <div class="play-proof">
-      <span class="play-proof-label">In practice</span>
-      <div class="play-proof-body">
-        <p><strong>Technology client conference.</strong> Ran three times in a single day and rated one of the most engaging sessions.</p>
-        <p><strong>Financial services hackathon.</strong> ExperienceInnovation Aware generated market-expansion ideas. KickstartChange mobilized teams around them.</p>
-        <p><strong>Financial services leadership summit.</strong> As the organization moved from paper to digital systems, the client wanted a meaningful, hands-on session rather than a keynote.</p>
-      </div>
-    </div>
-  </div>
-
-  <div class="sub-header" style="margin-top: 58px;">Bundle KickstartChange as the activation layer</div>
-  <p class="fit-prose" style="margin-bottom: 30px;">Other experiences identify what to change. KickstartChange turns that into people actually moving. Three pairings come up most.</p>
-  <div class="bundles">
-    <div class="bundle">
-      <div class="bundle-tile bundle-top">
-        <div class="bundle-tag">Identify what to change</div>
-        <div class="bundle-prod">ExperienceInnovation Aware / Apply</div>
-      </div>
-      <div class="bundle-plus">+</div>
-      <div class="bundle-tile bundle-bot">
-        <div class="bundle-tag">Identify how to mobilize change</div>
-        <div class="bundle-prod">KickstartChange</div>
-      </div>
-      <div class="bundle-when">Strategic initiative &#183; Hackathon</div>
-    </div>
-    <div class="bundle">
-      <div class="bundle-tile bundle-top">
-        <div class="bundle-tag">Identify workflow opportunities</div>
-        <div class="bundle-prod">WBWAI 201</div>
-      </div>
-      <div class="bundle-plus">+</div>
-      <div class="bundle-tile bundle-bot">
-        <div class="bundle-tag">Mobilize AI adoption</div>
-        <div class="bundle-prod">KickstartChange</div>
-      </div>
-      <div class="bundle-when">AI rollout</div>
-    </div>
-    <div class="bundle">
-      <div class="bundle-tile bundle-top is-ec">
-        <div class="bundle-tag">Align leaders</div>
-        <div class="bundle-prod">ExperienceChange</div>
-      </div>
-      <div class="bundle-plus">+</div>
-      <div class="bundle-tile bundle-bot">
-        <div class="bundle-tag">Engage workforce</div>
-        <div class="bundle-prod">KickstartChange</div>
-      </div>
-      <div class="bundle-when">Strategic initiative &#183; Capability rollout</div>
-    </div>
-  </div>
-
-  <div class="sub-header" style="margin-top: 58px;">Reinforce with Spark</div>
-  <p class="fit-prose" style="margin-bottom: 30px;">When a change needs to keep moving after the workshop, short Spark episodes pick up wherever people are stuck, mapped to the same Ready, Willing, Able model.</p>
-  <div class="spark-grid">
-    <div class="spark-col">
-      <div class="spark-stage">Ready</div>
-      <div class="spark-when">When people need more clarity on what is changing, why it matters, or what to do differently.</div>
-      <div class="spark-eps-label">Spark episodes</div>
-      <div class="spark-eps">
-        <span>Craft a Message That Sticks</span>
-        <span>Storytelling</span>
-      </div>
-    </div>
-    <div class="spark-col">
-      <div class="spark-stage">Willing</div>
-      <div class="spark-when">When people understand the change but are hesitant, skeptical, or not yet committed.</div>
-      <div class="spark-eps-label">Spark episodes</div>
-      <div class="spark-eps">
-        <span>Hopes &amp; Fears</span>
-        <span>Surface Risks &amp; Manage Resistance</span>
-      </div>
-    </div>
-    <div class="spark-col">
-      <div class="spark-stage">Able</div>
-      <div class="spark-when">When people struggle to translate intended behaviors into day-to-day action.</div>
-      <div class="spark-eps-label">Spark episodes</div>
-      <div class="spark-eps">
-        <span>Align on Behaviors &amp; Assess Conditions</span>
-        <span>Design for Behavior Change</span>
-      </div>
-    </div>
-  </div>
-</section>
-
+	<section id="plays">
+		<div class="section-opener">
+			<div class="section-number">
+				06
+			</div>
+			<h2 class="section-title">
+				Positioning plays
+			</h2>
+			<p class="section-description">
+				Connect KickstartChange to the problem the client is trying to solve.
+			</p>
+		</div>
+		<div class="sub-header">
+			The plays
+		</div>
+		<p class="fit-prose" style="margin-bottom: 36px;">
+			Five common client situations, each paired with the right conversation frame, recommendation, and proposal-ready language. Choose a frame below to show the relevant play.
+		</p>
+		<div aria-label="Positioning plays" class="play-selector" role="tablist">
+			<button aria-controls="play-programs" aria-selected="true" class="play-tab active" data-play="programs" id="play-tab-programs" role="tab" type="button"><span class="play-tab-num">01</span><span class="play-tab-label">Programs</span><span class="play-tab-desc">Leadership development needs application</span></button><button aria-controls="play-rollouts" aria-selected="false" class="play-tab" data-play="rollouts" id="play-tab-rollouts" role="tab" type="button"><span class="play-tab-num">02</span><span class="play-tab-label">Roll-outs</span><span class="play-tab-desc">Change capability needs to scale</span></button><button aria-controls="play-initiatives" aria-selected="false" class="play-tab" data-play="initiatives" id="play-tab-initiatives" role="tab" type="button"><span class="play-tab-num">03</span><span class="play-tab-label">Initiatives</span><span class="play-tab-desc">New strategy requires new behaviors</span></button><button aria-controls="play-ai-adoption" aria-selected="false" class="play-tab" data-play="ai-adoption" id="play-tab-ai-adoption" role="tab" type="button"><span class="play-tab-num">04</span><span class="play-tab-label">AI adoption</span><span class="play-tab-desc">AI technical training isn't enough</span></button><button aria-controls="play-events" aria-selected="false" class="play-tab" data-play="events" id="play-tab-events" role="tab" type="button"><span class="play-tab-num">05</span><span class="play-tab-label">Events</span><span class="play-tab-desc">Coming together needs to create momentum</span></button>
+		</div>
+		<article aria-labelledby="play-tab-programs" class="play play-panel active" data-play-panel="programs" id="play-programs" role="tabpanel">
+			<div class="play-frame">
+				Programs
+			</div>
+			<div class="play-title">
+				When leadership development needs application
+			</div>
+			<div class="play-grid">
+				<div class="play-col">
+					<div class="play-col-label">
+						Situation
+					</div>
+					<div class="play-col-body">
+						<p>
+							The client is building a leadership program for executives, managers, directors, emerging leaders, or high-potential talent, and wants participants to apply the learning to real work.
+						</p>
+					</div>
+				</div>
+				<div class="play-col play-col--navy">
+					<div class="play-col-label">
+						Positioning
+					</div>
+					<div class="play-col-body">
+						<p>
+							Leadership programs create insight.
+						</p>
+						<p>
+							The hard part is turning that insight into action when leaders are back in the complexity of real work.
+						</p>
+						<p>
+							KickstartChange builds the change reflexes leaders need when people are confused, skeptical or stuck.
+						</p>
+					</div>
+				</div>
+				<div class="play-col">
+					<div class="play-col-label">
+						Recommendation
+					</div>
+					<div class="play-col-body">
+						<div class="play-rec-title">
+							KickstartChange for Leaders
+						</div>
+						<p>
+							A 2-3 hour applied leadership lab
+						</p>
+						<p>
+							Work through a real change challenge
+						</p>
+						<p>
+							Proven framework with practical tools
+						</p>
+						<p>
+							Leave with a practiced conversation and practical next step.
+						</p>
+					</div>
+				</div>
+			</div>
+			<div class="play-proof">
+				<span class="play-proof-label">In practice</span> 
+				<div class="play-proof-body">
+					<p>
+						<strong>Multinational leadership program.</strong> KickstartChange ran as the action-learning engine for top executives across a 12-month, four-session program, advancing real business challenges rather than just teaching them.
+					</p>
+					<p>
+						<strong>Executive education, financial services.</strong> 200+ high-potential managers and directors, only two hours available, used to translate strategy into change leadership action.
+					</p>
+					<p>
+						<strong>Manufacturing, sales managers.</strong> After years of market volatility and double-digit price increases, sales managers used it to communicate change to customers with more clarity and confidence.
+					</p>
+				</div>
+			</div>
+		</article>
+		<article aria-labelledby="play-tab-rollouts" class="play play-panel" data-play-panel="rollouts" hidden="" id="play-rollouts" role="tabpanel">
+			<div class="play-frame">
+				Roll-outs
+			</div>
+			<div class="play-title">
+				When change capability needs to scale
+			</div>
+			<div class="play-grid">
+				<div class="play-col">
+					<div class="play-col-label">
+						Situation
+					</div>
+					<div class="play-col-body">
+						<p>
+							Change is continuous, faster-moving, and increasingly part of everyone's role. Leaders and managers need to make clearer decisions, experiment to learn, and move work forward with more confidence and accountability.
+						</p>
+					</div>
+				</div>
+				<div class="play-col play-col--navy">
+					<div class="play-col-label">
+						Positioning
+					</div>
+					<div class="play-col-body">
+						<p>
+							Change capability can’t live with a few experts.
+						</p>
+						<p>
+							The hard part is giving people at every level a practical way to lead day-to-day change.
+						</p>
+						<p>
+							KickstartChange equips people at every level to lead day-to-day change.
+						</p>
+					</div>
+				</div>
+				<div class="play-col">
+					<div class="play-col-label">
+						Recommendation
+					</div>
+					<div class="play-col-body">
+						<div class="play-rec-title">
+							KickstartChange for everyone
+						</div>
+						<p>
+							A 2-3 hour scalable experience
+						</p>
+						<p>
+							Build a shared Ready, Willing, Able language as people work through real change challenges
+						</p>
+						<p>
+							Create consistency across levels, functions, and regions
+						</p>
+						<p>
+							Pairs well with ExperienceChange for leaders
+						</p>
+					</div>
+				</div>
+			</div>
+			<div class="play-proof">
+				<span class="play-proof-label">In practice</span> 
+				<div class="play-proof-body">
+					<p>
+						<strong>Global resource leader, 20,000 employees.</strong> ExperienceChange built deep capability with directors and above. KickstartChange scaled practical change methods to supervisors in English, Spanish, and French, delivered by internal high-potentials. One change language across every level.
+					</p>
+					<p>
+						<strong>Energy Utility, 5,000 employees.</strong> ExperienceChange built change leadership, accountability, and confidence with directors. KickstartChange scaled practical change methods to office and field managers leading day-to-day implementation. One shared change language from strategy to the field. 
+					</p>
+					<p>
+						<a class="jump-link" href="https://assets.experiencepoint.com/materials/sales/Sample_ExperiencePoint_Proposal_KickstartChange_ExperienceChange_en.pdf?utm_campaign=44329810-KC%20SALES%20ENABLEMENT%20SESSIONS&amp;utm_source=KC%20Enablement%20session&amp;utm_medium=proposal%20pdf" rel="noopener noreferrer" style="margin-top: 14px;" target="_blank"><span>See winning proposal (anonymized).</span><span class="arrow">↗</span></a>
+					</p>
+				</div>
+			</div>
+		</article>
+		<article aria-labelledby="play-tab-initiatives" class="play play-panel" data-play-panel="initiatives" hidden="" id="play-initiatives" role="tabpanel">
+			<div class="play-frame">
+				Initiatives
+			</div>
+			<div class="play-title">
+				When new strategy requires new behaviors
+			</div>
+			<div class="play-grid">
+				<div class="play-col">
+					<div class="play-col-label">
+						Situation
+					</div>
+					<div class="play-col-body">
+						<p>
+							The client is launching a new strategic initiative, transformation, system implementation, restructure, or new way of working.
+						</p>
+					</div>
+				</div>
+				<div class="play-col play-col--navy">
+					<div class="play-col-label">
+						Positioning
+					</div>
+					<div class="play-col-body">
+						<p>
+							New strategy sets direction
+						</p>
+						<p>
+							The hard part is turning that direction into local meaning, shared ownership, and practical action.
+						</p>
+						<p>
+							KickstartChange helps teams turn strategic direction into local action.
+						</p>
+					</div>
+				</div>
+				<div class="play-col">
+					<div class="play-col-label">
+						Recommendation
+					</div>
+					<div class="play-col-body">
+						<div class="play-rec-title">
+							KickstartChange for teams
+						</div>
+						<p>
+							A 2-3 hour applied experience
+						</p>
+						<p>
+							Clarify why the initiative matters
+						</p>
+						<p>
+							Build commitment
+						</p>
+						<p>
+							Remove barriers to new ways of working
+						</p>
+						<p>
+							Leave with a practiced conversation that moves action forward
+						</p>
+					</div>
+				</div>
+			</div>
+			<div class="play-proof">
+				<span class="play-proof-label">In practice</span> 
+				<div class="play-proof-body">
+					<p>
+						<strong>Pharma M&amp;A.</strong> 200+ global leaders and middle managers from both sides of a merger used it to lead integration consistently, building common language and real progress on integration challenges.
+					</p>
+					<p>
+						<strong>Professional services, ERP implementation.</strong> Cross-functional leaders built shared language and tools to bring their teams through a major system change without losing momentum.
+					</p>
+				</div>
+			</div>
+		</article>
+		<article aria-labelledby="play-tab-ai-adoption" class="play play-panel" data-play-panel="ai-adoption" hidden="" id="play-ai-adoption" role="tabpanel">
+			<div class="play-frame">
+				Initiatives · AI adoption
+			</div>
+			<div class="play-title">
+				When AI technical training isn't enough
+			</div>
+			<div class="play-grid">
+				<div class="play-col">
+					<div class="play-col-label">
+						Situation
+					</div>
+					<div class="play-col-body">
+						<p>
+							The client has rolled out AI tools, invested in licenses and training, and expects gains. Curiosity was high at first, but usage is uneven. Some people are experimenting, some avoiding it, and many are unsure how AI applies to their real work.
+						</p>
+					</div>
+				</div>
+				<div class="play-col play-col--navy">
+					<div class="play-col-label">
+						Positioning
+					</div>
+					<div class="play-col-body">
+						<p>
+							AI holds real promise.
+						</p>
+						<p>
+							But that promise only becomes impact when people change how they work.
+						</p>
+						<p>
+							KickstartChange helps teams move from AI promise to AI adoption.
+						</p>
+					</div>
+				</div>
+				<div class="play-col">
+					<div class="play-col-label">
+						Recommendation
+					</div>
+					<div class="play-col-body">
+						<div class="play-rec-title">
+							KickstartChange for Teams
+						</div>
+						<p>
+							A 2-3 hour applied adoption lab
+						</p>
+						<p>
+							Clarify why AI matters, build commitment, and remove barriers to new AI-enabled behaviors.
+						</p>
+						<p>
+							Pairs well with WBWAI 201, which helps people find the right workflows to unlock value.
+						</p>
+					</div>
+				</div>
+			</div>
+			<div class="play-proof">
+				<span class="play-proof-label">In practice</span> 
+				<div class="play-proof-body">
+					<p>
+						<strong>Healthcare AI implementation.</strong> 120 medical practitioners adopting a new AI-enabled workflow. KickstartChange shifted communication from command-and-control to empathy, engagement, and influence.
+					</p>
+					<p>
+						<strong>Executive education, public agency.</strong> AI adoption started with the leadership team, treated as a trust, messaging, and stakeholder challenge rather than a tools rollout.
+					</p>
+				</div>
+			</div>
+		</article>
+		<article aria-labelledby="play-tab-events" class="play play-panel" data-play-panel="events" hidden="" id="play-events" role="tabpanel">
+			<div class="play-frame">
+				Events
+			</div>
+			<div class="play-title">
+				When coming together needs to create momentum
+			</div>
+			<div class="play-grid">
+				<div class="play-col">
+					<div class="play-col-label">
+						Situation
+					</div>
+					<div class="play-col-body">
+						<p>
+							The client is bringing people together for a conference, summit, or offsite. They want it to feel energizing and memorable, and to do more than inspire.
+						</p>
+					</div>
+				</div>
+				<div class="play-col play-col--navy">
+					<div class="play-col-label">
+						Positioning
+					</div>
+					<div class="play-col-body">
+						<p>
+							Events create a rare moment of attention.
+						</p>
+						<p>
+							The hard part is turning that attention into action people carry back to their teams.
+						</p>
+						<p>
+							KickstartChange turns shared attention into shared action.
+						</p>
+					</div>
+				</div>
+				<div class="play-col">
+					<div class="play-col-label">
+						Recommendation
+					</div>
+					<div class="play-col-body">
+						<div class="play-rec-title">
+							KickstartChange for events
+						</div>
+						<p>
+							A 2-3 hour applied experience
+						</p>
+						<p>
+							Work through a real challenge
+						</p>
+						<p>
+							Build connection through team-based application
+						</p>
+						<p>
+							Leave with shared understanding and a practical next step
+						</p>
+					</div>
+				</div>
+			</div>
+			<div class="play-proof">
+				<span class="play-proof-label">In practice</span> 
+				<div class="play-proof-body">
+					<p>
+						<strong>Technology client conference.</strong> Ran three times in a single day and rated one of the most engaging sessions.
+					</p>
+					<p>
+						<strong>Financial services hackathon.</strong> ExperienceInnovation Aware generated market-expansion ideas. KickstartChange mobilized teams around them.
+					</p>
+					<p>
+						<strong>Financial services leadership summit.</strong> As the organization moved from paper to digital systems, the client wanted a meaningful, hands-on session rather than a keynote.
+					</p>
+				</div>
+			</div>
+		</article>
+		<div class="sub-header" style="margin-top: 58px;">
+			Bundle KickstartChange as the activation layer
+		</div>
+		<p class="fit-prose" style="margin-bottom: 30px;">
+			Other experiences identify what to change. KickstartChange turns that into people actually moving. Three pairings come up most.
+		</p>
+		<div class="bundles">
+			<div class="bundle">
+				<div class="bundle-tile bundle-top">
+					<div class="bundle-tag">
+						Identify what to change
+					</div>
+					<div class="bundle-prod">
+						ExperienceInnovation Aware / Apply
+					</div>
+				</div>
+				<div class="bundle-plus">
+					+
+				</div>
+				<div class="bundle-tile bundle-bot">
+					<div class="bundle-tag">
+						Identify how to mobilize change
+					</div>
+					<div class="bundle-prod">
+						KickstartChange
+					</div>
+				</div>
+				<div class="bundle-when">
+					Strategic initiative · Hackathon
+				</div>
+			</div>
+			<div class="bundle">
+				<div class="bundle-tile bundle-top">
+					<div class="bundle-tag">
+						Identify workflow opportunities
+					</div>
+					<div class="bundle-prod">
+						WBWAI 201
+					</div>
+				</div>
+				<div class="bundle-plus">
+					+
+				</div>
+				<div class="bundle-tile bundle-bot">
+					<div class="bundle-tag">
+						Mobilize AI adoption
+					</div>
+					<div class="bundle-prod">
+						KickstartChange
+					</div>
+				</div>
+				<div class="bundle-when">
+					AI rollout
+				</div>
+			</div>
+			<div class="bundle">
+				<div class="bundle-tile bundle-top is-ec">
+					<div class="bundle-tag">
+						Align leaders
+					</div>
+					<div class="bundle-prod">
+						ExperienceChange
+					</div>
+				</div>
+				<div class="bundle-plus">
+					+
+				</div>
+				<div class="bundle-tile bundle-bot">
+					<div class="bundle-tag">
+						Engage workforce
+					</div>
+					<div class="bundle-prod">
+						KickstartChange
+					</div>
+				</div>
+				<div class="bundle-when">
+					Strategic initiative · Capability rollout
+				</div>
+			</div>
+		</div>
+		<div class="sub-header" style="margin-top: 58px;">
+			Reinforce with Spark
+		</div>
+		<p class="fit-prose" style="margin-bottom: 30px;">
+			When a change needs to keep moving after the workshop, short Spark episodes pick up wherever people are stuck, mapped to the same Ready, Willing, Able model.
+		</p>
+		<div class="spark-grid">
+			<div class="spark-col">
+				<div class="spark-stage">
+					Ready
+				</div>
+				<div class="spark-when">
+					When people need more clarity on what is changing, why it matters, or what to do differently.
+				</div>
+				<div class="spark-eps-label">
+					Spark episodes
+				</div>
+				<div class="spark-eps">
+					<span>Craft a Message That Sticks</span> <span>Storytelling</span> 
+				</div>
+			</div>
+			<div class="spark-col">
+				<div class="spark-stage">
+					Willing
+				</div>
+				<div class="spark-when">
+					When people understand the change but are hesitant, skeptical, or not yet committed.
+				</div>
+				<div class="spark-eps-label">
+					Spark episodes
+				</div>
+				<div class="spark-eps">
+					<span>Hopes &amp; Fears</span> <span>Surface Risks &amp; Manage Resistance</span> 
+				</div>
+			</div>
+			<div class="spark-col">
+				<div class="spark-stage">
+					Able
+				</div>
+				<div class="spark-when">
+					When people struggle to translate intended behaviors into day-to-day action.
+				</div>
+				<div class="spark-eps-label">
+					Spark episodes
+				</div>
+				<div class="spark-eps">
+					<span>Align on Behaviors &amp; Assess Conditions</span> <span>Design for Behavior Change</span> 
+				</div>
+			</div>
+		</div>
+	</section>
 <!-- FAQ -->
-<section id="faq">
-  <div class="section-opener">
-    <div class="section-number">07</div>
-    <h2 class="section-title">Sales FAQ</h2>
-    <p class="section-description">Sharp answers to the questions partners hear most.</p>
-  </div>
-
-  <div class="faq-item">
-    <div class="faq-question">How is this different from ExperienceChange?</div>
-    <div class="faq-answer">ExperienceChange is the 5 to 8 hour simulation for leaders and teams driving organization-wide change. It builds deep, end-to-end understanding of how to plan and lead a full change initiative. KickstartChange is the two-hour applied workout for everyone supporting change in day-to-day work. It is more tactical and immediately practical. Where ExperienceChange covers the what and when of a change plan, KickstartChange focuses on the how. Sell either alone, or pair them for a journey across both levels.</div>
-  </div>
-
-  <div class="faq-item">
-    <div class="faq-question">Is this just for leaders, or for everyone?</div>
-    <div class="faq-answer">Both. Leaders are the majority of participants, and the workshop carries a clear leadership lens, surfacing the traps leaders fall into, such as rushing to the "what," relying on one-size-fits-all messaging, and treating change like a checkbox. But the Ready, Willing, Able model works for anyone in an organization. The practical tools make it easy for any participant to take part and make progress, regardless of their change experience.</div>
-  </div>
-
-  <div class="faq-item">
-    <div class="faq-question">What do participants leave with?</div>
-    <div class="faq-answer">Three things they can use right away: a compelling "why change" message built with the power of contrast, a "what's in it for me" message tailored to a real stakeholder along with a plan for the barriers in the way, and a rehearsed stakeholder conversation captured in the Hallway Huddle tool. They also leave with a simple roadmap for the steps after the workshop and a shared change vocabulary their team can keep using.</div>
-  </div>
-
-  <div class="faq-item">
-    <div class="faq-question">How does the AI integration work, and what about data?</div>
-    <div class="faq-answer">AI support is flexible to the client's governance. By default, participants can use Copy for AI with the tools their organization has already approved. Where the client allows it, they can use the in-platform Refine feature instead. Either way, participants work with their own change challenge and their own context. The workshop runs within the client's environment and their rules.</div>
-  </div>
-
-  <div class="faq-item">
-    <div class="faq-question">Can our facilitators deliver it?</div>
-    <div class="faq-answer">Yes. KickstartChange is designed to be easy to facilitate, with a simplified intro and a lighter facilitation load, while keeping the experience grounded in participants' real work. Your facilitators can deliver it after a short certification, and the platform now does more of the heavy lifting on timing and team progress. Where you prefer, ExperiencePoint can provide facilitators instead.</div>
-  </div>
-
-  <div class="faq-item">
-    <div class="faq-question">What if the client needs deeper change capability than two hours can build?</div>
-    <div class="faq-answer">KickstartChange is strongest when the need is short, practical, change-related, and tied to real work. When a client needs deep, end-to-end change leadership capability, that is where it pairs with ExperienceChange, and with Spark for sustainment, as part of a longer journey. Position KickstartChange as the applied module inside that journey rather than the whole answer.</div>
-  </div>
-</section>
-
+	<section id="faq">
+		<div class="section-opener">
+			<div class="section-number">
+				07
+			</div>
+			<h2 class="section-title">
+				Sales FAQ
+			</h2>
+			<p class="section-description">
+				Sharp answers to the questions partners hear most.
+			</p>
+		</div>
+		<div class="faq-item">
+			<div class="faq-question">
+				How is this different from ExperienceChange?
+			</div>
+			<div class="faq-answer">
+				ExperienceChange is the 5 to 8 hour simulation for leaders and teams driving organization-wide change. It builds deep, end-to-end understanding of how to plan and lead a full change initiative. KickstartChange is the two-hour applied workout for everyone supporting change in day-to-day work. It is more tactical and immediately practical. Where ExperienceChange covers the what and when of a change plan, KickstartChange focuses on the how. Sell either alone, or pair them for a journey across both levels.
+			</div>
+		</div>
+		<div class="faq-item">
+			<div class="faq-question">
+				Is this just for leaders, or for everyone?
+			</div>
+			<div class="faq-answer">
+				Both. Leaders are the majority of participants, and the workshop carries a clear leadership lens, surfacing the traps leaders fall into, such as rushing to the "what," relying on one-size-fits-all messaging, and treating change like a checkbox. But the Ready, Willing, Able model works for anyone in an organization. The practical tools make it easy for any participant to take part and make progress, regardless of their change experience.
+			</div>
+		</div>
+		<div class="faq-item">
+			<div class="faq-question">
+				What do participants leave with?
+			</div>
+			<div class="faq-answer">
+				Three things they can use right away: a compelling "why change" message built with the power of contrast, a "what's in it for me" message tailored to a real stakeholder along with a plan for the barriers in the way, and a rehearsed stakeholder conversation captured in the Hallway Huddle tool. They also leave with a simple roadmap for the steps after the workshop and a shared change vocabulary their team can keep using.
+			</div>
+		</div>
+		<div class="faq-item">
+			<div class="faq-question">
+				How does the AI integration work, and what about data?
+			</div>
+			<div class="faq-answer">
+				AI support is flexible to the client's governance. By default, participants can use Copy for AI with the tools their organization has already approved. Where the client allows it, they can use the in-platform Refine feature instead. Either way, participants work with their own change challenge and their own context. The workshop runs within the client's environment and their rules.
+			</div>
+		</div>
+		<div class="faq-item">
+			<div class="faq-question">
+				Can our facilitators deliver it?
+			</div>
+			<div class="faq-answer">
+				Yes. KickstartChange is designed to be easy to facilitate, with a simplified intro and a lighter facilitation load, while keeping the experience grounded in participants' real work. Your facilitators can deliver it after a short certification, and the platform now does more of the heavy lifting on timing and team progress. Where you prefer, ExperiencePoint can provide facilitators instead.
+			</div>
+		</div>
+		<div class="faq-item">
+			<div class="faq-question">
+				What if the client needs deeper change capability than two hours can build?
+			</div>
+			<div class="faq-answer">
+				KickstartChange is strongest when the need is short, practical, change-related, and tied to real work. When a client needs deep, end-to-end change leadership capability, that is where it pairs with ExperienceChange, and with Spark for sustainment, as part of a longer journey. Position KickstartChange as the applied module inside that journey rather than the whole answer.
+			</div>
+		</div>
+	</section>
 </main>
-
 <footer>
-  <div class="format-facts">
-    <span>120 minutes</span>
-    <span>20 to 200 participants</span>
-    <span>Live, virtual or in-person</span>
-  </div>
-  <div class="ep-mark">ExperiencePoint</div>
+	<div class="format-facts">
+		<span>120 minutes</span> <span>20 to 200 participants</span> <span>Live, virtual or in-person</span> 
+	</div>
+	<div class="ep-mark">
+		ExperiencePoint
+	</div>
 </footer>
-
-<button type="button" class="back-to-top" id="backToTop">Top</button>
-
-<script>
-document.addEventListener('DOMContentLoaded', () => {
-  // Landing cards
-  document.querySelectorAll('.card').forEach(card => {
-    card.addEventListener('click', () => {
-      const targetId = card.getAttribute('data-target');
-      const target = document.getElementById(targetId);
-      if (target) {
-        target.scrollIntoView({ behavior: 'smooth', block: 'start' });
-        target.classList.add('flash');
-        setTimeout(() => target.classList.remove('flash'), 1000);
-      }
-    });
-  });
-
-  // Back to top
-  const backToTop = document.getElementById('backToTop');
-  if (backToTop) {
-    window.addEventListener('scroll', () => {
-      if (window.scrollY > 500) {
-        backToTop.classList.add('visible');
-      } else {
-        backToTop.classList.remove('visible');
-      }
-    });
-    backToTop.addEventListener('click', () => {
-      window.scrollTo({ top: 0, behavior: 'smooth' });
-    });
-  }
-
-  // Copy buttons (proposal blocks)
-  function fallbackCopy(text) {
-    const textarea = document.createElement('textarea');
-    textarea.value = text;
-    textarea.setAttribute('readonly', '');
-    textarea.style.position = 'fixed';
-    textarea.style.top = '0';
-    textarea.style.left = '0';
-    textarea.style.width = '1px';
-    textarea.style.height = '1px';
-    textarea.style.padding = '0';
-    textarea.style.border = 'none';
-    textarea.style.outline = 'none';
-    textarea.style.boxShadow = 'none';
-    textarea.style.background = 'transparent';
-    textarea.style.opacity = '0';
-    document.body.appendChild(textarea);
-    const selection = document.getSelection();
-    const previousRange = selection.rangeCount > 0 ? selection.getRangeAt(0) : null;
-    textarea.focus();
-    textarea.select();
-    textarea.setSelectionRange(0, text.length);
-    let success = false;
-    try {
-      success = document.execCommand('copy');
-    } catch (e) {
-      success = false;
-    }
-    document.body.removeChild(textarea);
-    if (previousRange) {
-      selection.removeAllRanges();
-      selection.addRange(previousRange);
-    }
-    return success;
-  }
-
-  function flashCopyState(btn, state) {
-    const originalText = btn.dataset.originalText || btn.textContent;
-    btn.dataset.originalText = originalText;
-    if (state === 'success') {
-      btn.textContent = 'Copied';
-      btn.classList.add('copied');
-    } else {
-      btn.textContent = 'Try again';
-      btn.classList.add('copied');
-    }
-    setTimeout(() => {
-      btn.textContent = originalText;
-      btn.classList.remove('copied');
-    }, 1500);
-  }
-
-  document.querySelectorAll('.copy-btn').forEach(btn => {
-    btn.addEventListener('click', async () => {
-      const targetId = btn.getAttribute('data-copy-target');
-      const target = document.getElementById(targetId);
-      if (!target) return;
-
-      // Extract plain text, preserving list structure
-      let text = '';
-      const lists = target.querySelectorAll('ul, ol');
-      if (lists.length > 0) {
-        const items = target.querySelectorAll('li');
-        text = Array.from(items).map(li => '- ' + li.textContent.trim().replace(/\s+/g, ' ')).join('\n');
-      } else {
-        text = target.textContent.trim().replace(/\s+/g, ' ');
-      }
-
-      let success = false;
-
-      // Try modern API first
-      if (navigator.clipboard && navigator.clipboard.writeText) {
-        try {
-          await navigator.clipboard.writeText(text);
-          success = true;
-        } catch (err) {
-          success = false;
-        }
-      }
-
-      // Fall back to execCommand if modern API blocked
-      if (!success) {
-        success = fallbackCopy(text);
-      }
-
-      flashCopyState(btn, success ? 'success' : 'error');
-    });
-  });
-});
+<button class="back-to-top" id="backToTop" type="button">Top</button> <script>
+	document.addEventListener('DOMContentLoaded', () => {
+	  // Landing cards
+	  document.querySelectorAll('.card').forEach(card => {
+	    card.addEventListener('click', () => {
+	      const targetId = card.getAttribute('data-target');
+	      const target = document.getElementById(targetId);
+	      if (target) {
+	        target.scrollIntoView({ behavior: 'smooth', block: 'start' });
+	        target.classList.add('flash');
+	        setTimeout(() => target.classList.remove('flash'), 1000);
+	      }
+	    });
+	  });
+	
+	  // Back to top
+	  const backToTop = document.getElementById('backToTop');
+	  if (backToTop) {
+	    window.addEventListener('scroll', () => {
+	      if (window.scrollY > 500) {
+	        backToTop.classList.add('visible');
+	      } else {
+	        backToTop.classList.remove('visible');
+	      }
+	    });
+	    backToTop.addEventListener('click', () => {
+	      window.scrollTo({ top: 0, behavior: 'smooth' });
+	    });
+	  }
+	
+	
+	
+	  // Positioning play selector
+	  const playTabs = document.querySelectorAll('.play-tab');
+	  const playPanels = document.querySelectorAll('.play-panel');
+	
+	  function activatePlay(key) {
+	    playTabs.forEach(tab => {
+	      const isActive = tab.getAttribute('data-play') === key;
+	      tab.classList.toggle('active', isActive);
+	      tab.setAttribute('aria-selected', isActive ? 'true' : 'false');
+	    });
+	
+	    playPanels.forEach(panel => {
+	      const isActive = panel.getAttribute('data-play-panel') === key;
+	      panel.classList.toggle('active', isActive);
+	      if (isActive) {
+	        panel.removeAttribute('hidden');
+	      } else {
+	        panel.setAttribute('hidden', '');
+	      }
+	    });
+	  }
+	
+	  playTabs.forEach(tab => {
+	    tab.addEventListener('click', () => {
+	      activatePlay(tab.getAttribute('data-play'));
+	    });
+	  });
+	
+	  // Copy buttons (proposal blocks)
+	  function fallbackCopy(text) {
+	    const textarea = document.createElement('textarea');
+	    textarea.value = text;
+	    textarea.setAttribute('readonly', '');
+	    textarea.style.position = 'fixed';
+	    textarea.style.top = '0';
+	    textarea.style.left = '0';
+	    textarea.style.width = '1px';
+	    textarea.style.height = '1px';
+	    textarea.style.padding = '0';
+	    textarea.style.border = 'none';
+	    textarea.style.outline = 'none';
+	    textarea.style.boxShadow = 'none';
+	    textarea.style.background = 'transparent';
+	    textarea.style.opacity = '0';
+	    document.body.appendChild(textarea);
+	    const selection = document.getSelection();
+	    const previousRange = selection.rangeCount > 0 ? selection.getRangeAt(0) : null;
+	    textarea.focus();
+	    textarea.select();
+	    textarea.setSelectionRange(0, text.length);
+	    let success = false;
+	    try {
+	      success = document.execCommand('copy');
+	    } catch (e) {
+	      success = false;
+	    }
+	    document.body.removeChild(textarea);
+	    if (previousRange) {
+	      selection.removeAllRanges();
+	      selection.addRange(previousRange);
+	    }
+	    return success;
+	  }
+	
+	  function flashCopyState(btn, state) {
+	    const originalText = btn.dataset.originalText || btn.textContent;
+	    btn.dataset.originalText = originalText;
+	    if (state === 'success') {
+	      btn.textContent = 'Copied';
+	      btn.classList.add('copied');
+	    } else {
+	      btn.textContent = 'Try again';
+	      btn.classList.add('copied');
+	    }
+	    setTimeout(() => {
+	      btn.textContent = originalText;
+	      btn.classList.remove('copied');
+	    }, 1500);
+	  }
+	
+	  document.querySelectorAll('.copy-btn').forEach(btn => {
+	    btn.addEventListener('click', async () => {
+	      const targetId = btn.getAttribute('data-copy-target');
+	      const target = document.getElementById(targetId);
+	      if (!target) return;
+	
+	      // Extract plain text, preserving list structure
+	      let text = '';
+	      const lists = target.querySelectorAll('ul, ol');
+	      if (lists.length > 0) {
+	        const items = target.querySelectorAll('li');
+	        text = Array.from(items).map(li => '- ' + li.textContent.trim().replace(/\s+/g, ' ')).join('\n');
+	      } else {
+	        text = target.textContent.trim().replace(/\s+/g, ' ');
+	      }
+	
+	      let success = false;
+	
+	      // Try modern API first
+	      if (navigator.clipboard && navigator.clipboard.writeText) {
+	        try {
+	          await navigator.clipboard.writeText(text);
+	          success = true;
+	        } catch (err) {
+	          success = false;
+	        }
+	      }
+	
+	      // Fall back to execCommand if modern API blocked
+	      if (!success) {
+	        success = fallbackCopy(text);
+	      }
+	
+	      flashCopyState(btn, success ? 'success' : 'error');
+	    });
+	  });
+	});
 </script>
-
 </body>
 </html>
