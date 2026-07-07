@@ -1,0 +1,1925 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="robots" content="noindex, nofollow">
+<title>Work Better with AI 201 Partner Hub</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+<style>
+:root {
+  --cobalt: #293851;
+  --cobalt-deep: #1a2438;
+  --gold: #FFCC00;
+  --gold-soft: rgba(255, 204, 0, 0.10);
+  --ink: #1a1f2e;
+  --muted: #5a6478;
+  --paper: #ffffff;
+  --line: #e2e5ea;
+  --soft: #f6f7f9;
+  --placeholder: #b8500a;
+  --placeholder-bg: #fef6ec;
+  --pigeon: #D5D9E3;
+  --pigeon-faint: rgba(213, 217, 227, 0.62);
+  --rule-dark: rgba(213, 217, 227, 0.18);
+  --sans: 'Montserrat', 'Helvetica Neue', Arial, 'Segoe UI', Roboto, sans-serif;
+}
+
+* { box-sizing: border-box; margin: 0; padding: 0; }
+
+html { scroll-behavior: smooth; }
+
+body {
+  font-family: Georgia, 'Times New Roman', serif;
+  color: var(--ink);
+  background: var(--paper);
+  line-height: 1.55;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+main, .landing-wrap {
+  max-width: 900px;
+  margin: 0 auto;
+  padding: 0 40px;
+}
+
+/* Shared focus state for keyboard users */
+a:focus-visible,
+button:focus-visible {
+  outline: 2px solid var(--gold);
+  outline-offset: 3px;
+  border-radius: 2px;
+}
+
+/* LANDING */
+.hero {
+  background: linear-gradient(180deg, var(--cobalt-deep) 0%, var(--cobalt) 70%, var(--cobalt) 100%);
+  background-color: var(--cobalt);
+}
+
+.hero-inner {
+  background-image:
+    radial-gradient(circle at 18% 25%, rgba(255, 204, 0, 0.07), transparent 42%),
+    radial-gradient(circle at 85% 80%, rgba(88, 106, 144, 0.20), transparent 52%);
+}
+
+.landing-wrap {
+  padding-top: 68px;
+  padding-bottom: 66px;
+}
+
+.brand-eyebrow {
+  font-family: var(--sans);
+  font-weight: 600;
+  font-size: 11px;
+  letter-spacing: 0.3em;
+  color: var(--gold);
+  text-transform: uppercase;
+  margin-bottom: 18px;
+}
+
+.brand-eyebrow .dot { color: var(--gold); margin: 0 6px; }
+
+.brand-title {
+  font-family: var(--sans);
+  font-weight: 800;
+  font-size: 46px;
+  line-height: 1.06;
+  color: #fff;
+  letter-spacing: -0.02em;
+  margin-bottom: 22px;
+}
+
+.landing-intro {
+  font-family: Georgia, serif;
+  font-style: italic;
+  font-size: 17.5px;
+  line-height: 1.7;
+  color: var(--pigeon);
+  margin-bottom: 46px;
+  max-width: 95%;
+}
+
+/* EDITORIAL INDEX */
+.index {
+  display: grid;
+  grid-template-columns: 1fr 1.15fr 1fr;
+  gap: 44px;
+  padding-top: 30px;
+  border-top: 1px solid var(--rule-dark);
+  position: relative;
+}
+
+.index::before {
+  content: "";
+  position: absolute;
+  top: -1px;
+  left: 0;
+  width: 44px;
+  height: 2px;
+  background: var(--gold);
+}
+
+.index-lane-label {
+  font-family: var(--sans);
+  font-weight: 600;
+  font-size: 10.5px;
+  letter-spacing: 0.25em;
+  color: var(--pigeon-faint);
+  text-transform: uppercase;
+  margin-bottom: 18px;
+}
+
+.index-list { list-style: none; padding: 0; margin: 0; }
+
+.index-list li { margin-bottom: 2px; }
+
+.index-list a {
+  display: flex;
+  align-items: baseline;
+  gap: 12px;
+  padding: 7px 0;
+  text-decoration: none;
+  font-family: var(--sans);
+  font-weight: 600;
+  font-size: 14.5px;
+  letter-spacing: 0;
+  color: #fff;
+  transition: color 0.15s ease;
+}
+
+.index-list a .n {
+  font-family: var(--sans);
+  font-weight: 800;
+  font-size: 10.5px;
+  letter-spacing: 1px;
+  color: var(--gold);
+  width: 20px;
+  flex-shrink: 0;
+}
+
+.index-list a .t {
+  border-bottom: 2px solid transparent;
+  padding-bottom: 2px;
+  transition: border-color 0.15s ease;
+}
+
+.index-list a:hover { color: var(--gold); }
+.index-list a:hover .t { border-bottom-color: var(--gold); }
+.index-list a:hover .n { text-shadow: 0 0 8px rgba(255, 204, 0, 0.55); }
+
+.index-list a .ext {
+  color: var(--gold);
+  font-weight: 800;
+  font-size: 13px;
+  margin-left: 2px;
+}
+
+.index-hint {
+  margin-top: 36px;
+  font-family: Georgia, serif;
+  font-style: italic;
+  font-size: 14px;
+  color: var(--pigeon-faint);
+}
+.index-hint .dot { color: var(--gold); font-style: normal; font-weight: 800; margin-right: 8px; }
+
+/* SECTION BREAKS - chapter-break style (available if needed) */
+.section-divider {
+  max-width: 760px;
+  margin: 0 auto;
+  padding: 0 40px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 14px;
+}
+
+.section-divider::before,
+.section-divider::after {
+  content: "";
+  flex: 1;
+  height: 1px;
+  background: var(--line);
+}
+
+.section-divider .marker {
+  width: 8px;
+  height: 8px;
+  background: var(--gold);
+  transform: rotate(45deg);
+}
+
+/* SECTIONS */
+section {
+  padding: 100px 0 96px;
+  scroll-margin-top: 24px;
+}
+
+section:first-of-type {
+  padding-top: 84px;
+}
+
+section.flash {
+  animation: targetFlash 1s ease-out;
+}
+
+@keyframes targetFlash {
+  0% { background-color: rgba(255, 204, 0, 0.10); }
+  100% { background-color: transparent; }
+}
+
+.section-opener {
+  margin-bottom: 64px;
+}
+
+.section-number {
+  font-family: var(--sans);
+  font-weight: 700;
+  font-size: 12px;
+  color: var(--gold);
+  line-height: 1;
+  letter-spacing: 0.32em;
+  margin-bottom: 18px;
+  padding-bottom: 14px;
+  position: relative;
+}
+
+.section-number::after {
+  content: "";
+  position: absolute;
+  left: 0;
+  bottom: 0;
+  width: 44px;
+  height: 2px;
+  background: var(--gold);
+}
+
+.section-title {
+  font-family: var(--sans);
+  font-weight: 800;
+  font-size: 40px;
+  color: var(--cobalt);
+  letter-spacing: -0.02em;
+  line-height: 1.08;
+  margin-bottom: 18px;
+}
+
+.section-description {
+  font-family: Georgia, serif;
+  font-style: italic;
+  font-size: 18.5px;
+  line-height: 1.6;
+  color: var(--muted);
+  max-width: 90%;
+  margin-bottom: 0;
+}
+
+/* OVERVIEW - WHAT IT IS */
+.what-it-is {
+  font-family: Georgia, serif;
+  font-size: 16.5px;
+  line-height: 1.75;
+  color: var(--muted);
+  margin-bottom: 22px;
+  max-width: 94%;
+}
+
+.partner-built {
+  font-family: Georgia, serif;
+  font-size: 15.5px;
+  line-height: 1.7;
+  color: var(--ink);
+  padding: 16px 20px;
+  background: var(--gold-soft);
+  border-left: 3px solid var(--gold);
+  margin-bottom: 38px;
+}
+
+.partner-built strong {
+  font-family: var(--sans);
+  font-weight: 700;
+  font-style: normal;
+  font-size: 11.5px;
+  color: var(--cobalt);
+  letter-spacing: 1.5px;
+  text-transform: uppercase;
+  display: block;
+  margin-bottom: 5px;
+}
+
+/* HEADLINE */
+.headline {
+  font-family: var(--sans);
+  font-weight: 700;
+  font-size: 28px;
+  line-height: 1.25;
+  color: var(--cobalt);
+  margin-bottom: 28px;
+  letter-spacing: -0.015em;
+}
+
+.headline .setup {
+  display: block;
+  font-weight: 500;
+  color: var(--muted);
+  margin-bottom: 8px;
+  font-size: 28px;
+}
+
+.headline .punch { display: block; font-weight: 700; }
+
+.headline .accent {
+  background: linear-gradient(transparent 65%, var(--gold) 65%, var(--gold) 92%, transparent 92%);
+  padding: 0 3px;
+}
+
+.intro {
+  font-family: Georgia, serif;
+  font-size: 17.5px;
+  line-height: 1.75;
+  color: var(--ink);
+  margin-bottom: 38px;
+  max-width: 95%;
+}
+
+.sub-header {
+  font-family: var(--sans);
+  font-weight: 700;
+  font-size: 11px;
+  letter-spacing: 0.24em;
+  color: var(--cobalt);
+  text-transform: uppercase;
+  margin-bottom: 24px;
+  padding-bottom: 12px;
+  border-bottom: 1px solid var(--line);
+  position: relative;
+}
+
+.sub-header::after {
+  content: "";
+  position: absolute;
+  left: 0;
+  bottom: -1px;
+  width: 44px;
+  height: 2px;
+  background: var(--gold);
+}
+
+.artifacts {
+  display: grid;
+  grid-template-columns: 1fr 1fr 1fr;
+  gap: 34px 30px;
+  margin-bottom: 50px;
+}
+
+.artifact {
+  padding-top: 16px;
+  border-top: 3px solid var(--gold);
+}
+
+.artifact-num {
+  font-family: var(--sans);
+  font-weight: 800;
+  font-size: 10.5px;
+  color: var(--muted);
+  letter-spacing: 1.5px;
+  margin-bottom: 7px;
+}
+
+.artifact-label {
+  font-family: var(--sans);
+  font-weight: 700;
+  font-size: 15px;
+  color: var(--cobalt);
+  margin-bottom: 11px;
+  line-height: 1.3;
+}
+
+.artifact-body {
+  font-family: Georgia, serif;
+  font-size: 15.5px;
+  line-height: 1.65;
+  color: var(--ink);
+}
+
+.moves { margin-bottom: 42px; }
+
+.move {
+  display: flex;
+  gap: 20px;
+  align-items: flex-start;
+  padding: 18px 0;
+  font-size: 15.5px;
+  line-height: 1.7;
+  border-bottom: 1px dotted var(--line);
+}
+
+.move:first-child { padding-top: 8px; }
+.move:last-child { border-bottom: none; padding-bottom: 8px; }
+
+.move-label {
+  font-family: var(--sans);
+  font-weight: 700;
+  font-size: 11.5px;
+  letter-spacing: 1px;
+  color: var(--cobalt);
+  text-transform: uppercase;
+  flex-shrink: 0;
+  width: 195px;
+}
+
+.move-label .sub {
+  font-family: Georgia, serif;
+  font-style: italic;
+  font-weight: 400;
+  font-size: 12px;
+  color: var(--muted);
+  text-transform: none;
+  letter-spacing: 0;
+  display: block;
+  margin-top: 5px;
+}
+
+.move-content {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+}
+
+.move-body {
+  font-family: Georgia, serif;
+  color: var(--ink);
+}
+
+.move-output {
+  margin-top: 15px;
+  font-family: var(--sans);
+  font-weight: 600;
+  font-size: 13px;
+  letter-spacing: 0.2px;
+  color: var(--cobalt);
+}
+
+.move-output .arrow {
+  color: var(--gold);
+  margin-right: 6px;
+  font-weight: 800;
+}
+
+.differentiator {
+  background: var(--cobalt);
+  background-image: radial-gradient(circle at 85% 10%, rgba(255, 204, 0, 0.08), transparent 55%);
+  color: #fff;
+  padding: 26px 30px;
+  border-left: 4px solid var(--gold);
+}
+
+.diff-line {
+  font-family: var(--sans);
+  font-size: 15px;
+  font-weight: 600;
+  color: #fff;
+  margin-bottom: 12px;
+  line-height: 1.55;
+}
+
+.diff-frame {
+  font-family: Georgia, serif;
+  font-size: 14px;
+  font-style: italic;
+  color: #c8d0dc;
+  line-height: 1.7;
+}
+
+.diff-frame strong {
+  font-style: normal;
+  font-weight: normal;
+  color: var(--gold);
+}
+
+/* BENEFIT GRID (used in Fits your programs and Amplifies your expertise) */
+.benefit-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 46px 40px;
+  margin-top: 8px;
+}
+
+.benefit-grid.three-col {
+  grid-template-columns: 1fr 1fr 1fr;
+  gap: 36px 30px;
+}
+
+.benefit-block {
+  padding-top: 16px;
+  border-top: 3px solid var(--gold);
+}
+
+.benefit-title {
+  font-family: var(--sans);
+  font-weight: 700;
+  font-size: 13px;
+  letter-spacing: 1.5px;
+  color: var(--cobalt);
+  text-transform: uppercase;
+  margin-bottom: 13px;
+  line-height: 1.3;
+}
+
+.benefit-body {
+  font-family: Georgia, serif;
+  font-size: 16px;
+  line-height: 1.7;
+  color: var(--ink);
+}
+
+/* COPY BUTTON */
+.proposal-block {
+  position: relative;
+}
+
+.copy-btn {
+  position: absolute;
+  top: 20px;
+  right: 22px;
+  padding: 7px 15px;
+  background: var(--paper);
+  border: 1px solid var(--line);
+  border-radius: 100px;
+  color: var(--muted);
+  font-family: var(--sans);
+  font-weight: 700;
+  font-size: 10px;
+  letter-spacing: 1.5px;
+  text-transform: uppercase;
+  cursor: pointer;
+  transition: all 0.3s ease;
+}
+
+.copy-btn:hover {
+  border-color: var(--cobalt);
+  color: var(--cobalt);
+  transform: translateY(-1px);
+  box-shadow: 0 8px 24px rgba(255, 204, 0, 0.25);
+}
+
+.copy-btn.copied {
+  background: var(--gold);
+  border-color: var(--gold);
+  color: var(--cobalt);
+}
+
+/* PROPOSAL & ENGAGE BLOCKS */
+.proposal-intro,
+.engage-intro {
+  font-family: Georgia, serif;
+  font-style: italic;
+  font-size: 16px;
+  color: var(--muted);
+  margin-bottom: 32px;
+  line-height: 1.7;
+}
+
+.proposal-block,
+.engage-block {
+  margin-bottom: 24px;
+  padding: 24px 28px;
+  background: var(--soft);
+  border-left: 3px solid var(--gold);
+}
+
+.proposal-block {
+  padding-right: 92px;
+}
+
+.proposal-block:last-child,
+.engage-block:last-child { margin-bottom: 0; }
+
+.proposal-label,
+.engage-label {
+  font-family: var(--sans);
+  font-weight: 700;
+  font-size: 11px;
+  letter-spacing: 2px;
+  color: var(--cobalt);
+  text-transform: uppercase;
+  margin-bottom: 11px;
+}
+
+.proposal-body,
+.engage-body {
+  font-family: Georgia, serif;
+  font-size: 16px;
+  line-height: 1.7;
+  color: var(--ink);
+}
+
+.proposal-body ul {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+}
+
+.proposal-body ul li {
+  padding-left: 17px;
+  position: relative;
+  margin-bottom: 9px;
+}
+
+.proposal-body ul li:last-child { margin-bottom: 0; }
+
+.proposal-body ul li::before {
+  content: "·";
+  color: var(--gold);
+  font-weight: 800;
+  position: absolute;
+  left: 0;
+}
+
+.proposal-body ul li strong {
+  font-family: var(--sans);
+  font-weight: 700;
+  font-style: normal;
+  font-size: 16px;
+  color: var(--cobalt);
+  letter-spacing: 0.2px;
+  margin-right: 6px;
+}
+
+/* Special engage lead block (warm tone) */
+.engage-lead {
+  margin-bottom: 24px;
+  padding: 26px 30px;
+  background: var(--cobalt);
+  color: #fff;
+  border-left: 4px solid var(--gold);
+}
+
+.engage-lead-label {
+  font-family: var(--sans);
+  font-weight: 700;
+  font-size: 11px;
+  letter-spacing: 2px;
+  color: var(--gold);
+  text-transform: uppercase;
+  margin-bottom: 12px;
+}
+
+.engage-lead-body {
+  font-family: Georgia, serif;
+  font-size: 16px;
+  line-height: 1.7;
+  color: #fff;
+}
+
+.engage-lead-body .placeholder {
+  background: rgba(255, 204, 0, 0.15);
+  color: var(--gold);
+}
+
+/* WHO IT'S FOR */
+.fit-block { margin-bottom: 38px; }
+.fit-block:last-child { margin-bottom: 0; }
+
+.fit-block-label {
+  font-family: var(--sans);
+  font-weight: 700;
+  font-size: 12px;
+  letter-spacing: 2px;
+  color: var(--cobalt);
+  text-transform: uppercase;
+  margin-bottom: 16px;
+}
+
+.fit-prose {
+  font-family: Georgia, serif;
+  font-size: 16.5px;
+  line-height: 1.75;
+  color: var(--ink);
+  max-width: 94%;
+}
+
+.discovery-list {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+  counter-reset: question;
+}
+
+.discovery-list li {
+  counter-increment: question;
+  padding: 16px 0 16px 44px;
+  position: relative;
+  font-family: Georgia, serif;
+  font-style: italic;
+  font-size: 16px;
+  line-height: 1.65;
+  color: var(--ink);
+  border-bottom: 1px dotted var(--line);
+}
+
+.discovery-list li:last-child { border-bottom: none; }
+
+.discovery-list li::before {
+  content: counter(question, decimal-leading-zero);
+  position: absolute;
+  left: 0;
+  top: 18px;
+  font-family: var(--sans);
+  font-style: normal;
+  font-weight: 800;
+  font-size: 11px;
+  letter-spacing: 1.5px;
+  color: var(--gold);
+}
+
+.notfit-list {
+  list-style: none;
+  padding: 20px 24px;
+  margin: 0;
+  background: var(--placeholder-bg);
+  border-left: 3px solid var(--placeholder);
+}
+
+.notfit-list li {
+  font-family: Georgia, serif;
+  font-size: 15.5px;
+  line-height: 1.65;
+  color: var(--ink);
+  padding-left: 22px;
+  position: relative;
+  margin-bottom: 9px;
+}
+
+.notfit-list li:last-child { margin-bottom: 0; }
+
+.notfit-list li::before {
+  content: "×";
+  position: absolute;
+  left: 0;
+  top: 0;
+  color: var(--placeholder);
+  font-weight: 800;
+}
+
+/* BUYER CUES */
+.cue { margin-bottom: 30px; }
+.cue:last-child { margin-bottom: 0; }
+
+.cue-title {
+  font-family: var(--sans);
+  font-weight: 700;
+  font-size: 17.5px;
+  color: var(--cobalt);
+  margin-bottom: 11px;
+  letter-spacing: -0.1px;
+}
+
+.cue-phrases {
+  font-family: Georgia, serif;
+  font-style: italic;
+  font-size: 16px;
+  line-height: 1.8;
+  color: var(--muted);
+  padding-left: 20px;
+  border-left: 2px solid var(--gold);
+}
+
+.cue-phrases span {
+  display: block;
+  margin-bottom: 5px;
+}
+
+.cue-phrases span:last-child { margin-bottom: 0; }
+
+/* FAQ */
+.faq-item {
+  margin-bottom: 26px;
+  padding-bottom: 26px;
+  border-bottom: 1px dotted var(--line);
+}
+
+.faq-item:last-child {
+  border-bottom: none;
+  margin-bottom: 0;
+  padding-bottom: 0;
+}
+
+.faq-question {
+  font-family: var(--sans);
+  font-weight: 600;
+  font-size: 16.5px;
+  color: var(--cobalt);
+  margin-bottom: 11px;
+  line-height: 1.4;
+  letter-spacing: -0.1px;
+}
+
+.faq-answer {
+  font-family: Georgia, serif;
+  font-size: 16px;
+  line-height: 1.7;
+  color: var(--ink);
+}
+
+/* PLACEHOLDER (inline highlight, available if needed) */
+.placeholder {
+  background: var(--placeholder-bg);
+  color: var(--placeholder);
+  padding: 1px 6px;
+  border-radius: 2px;
+  font-family: var(--sans);
+  font-weight: 600;
+  font-size: 11.5px;
+  font-style: normal;
+  letter-spacing: 0.2px;
+}
+
+/* POSITIONING PLAYS */
+#plays .section-opener { margin-bottom: 40px; }
+
+.play-selector {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 12px;
+  margin: 0 0 36px;
+}
+
+.play-tab {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: 6px;
+  min-height: 112px;
+  padding: 16px 16px 17px;
+  background: var(--paper);
+  border: 1px solid var(--line);
+  border-top: 3px solid var(--gold);
+  text-align: left;
+  cursor: pointer;
+  transition: background 0.18s ease, border-color 0.18s ease, transform 0.18s ease, box-shadow 0.18s ease;
+}
+
+.play-tab:hover,
+.play-tab:focus-visible {
+  background: var(--gold-soft);
+  border-color: rgba(255, 204, 0, 0.55);
+  transform: translateY(-2px);
+  box-shadow: 0 8px 20px rgba(41, 56, 81, 0.08), 0 10px 30px rgba(255, 204, 0, 0.18);
+  outline: none;
+}
+
+.play-tab.active::after {
+  content: "";
+  position: absolute;
+  left: 50%;
+  bottom: -9px;
+  transform: translateX(-50%);
+  border-left: 8px solid transparent;
+  border-right: 8px solid transparent;
+  border-top: 9px solid var(--cobalt);
+}
+
+.play-tab.active {
+  background: var(--cobalt);
+  background-image: radial-gradient(circle at 85% 12%, rgba(255, 204, 0, 0.10), transparent 60%);
+  border-color: var(--cobalt);
+  border-top-color: var(--gold);
+  box-shadow: 0 10px 22px rgba(41, 56, 81, 0.12);
+}
+
+.play-tab-num {
+  font-family: var(--sans);
+  font-weight: 800;
+  font-size: 10.5px;
+  letter-spacing: 1.5px;
+  color: var(--gold);
+}
+
+.play-tab-label {
+  font-family: var(--sans);
+  font-weight: 800;
+  font-size: 13px;
+  line-height: 1.2;
+  letter-spacing: 0.8px;
+  text-transform: uppercase;
+  color: var(--cobalt);
+}
+
+.play-tab-desc {
+  font-family: Georgia, serif;
+  font-style: italic;
+  font-size: 13px;
+  line-height: 1.45;
+  color: var(--muted);
+}
+
+.play-tab.active .play-tab-label { color: #fff; }
+.play-tab.active .play-tab-desc { color: #c8d0dc; }
+
+.play { display: none; }
+
+.play.active {
+  display: block;
+  animation: playRise 0.28s ease-out;
+}
+
+@keyframes playRise {
+  0% { opacity: 0; transform: translateY(6px); }
+  100% { opacity: 1; transform: translateY(0); }
+}
+
+.play-context-label {
+  font-family: var(--sans);
+  font-weight: 800;
+  font-size: 11px;
+  letter-spacing: 1.5px;
+  color: var(--muted);
+  text-transform: uppercase;
+  margin-bottom: 9px;
+}
+
+.play-title {
+  font-family: var(--sans);
+  font-weight: 700;
+  font-size: 25px;
+  line-height: 1.25;
+  color: var(--cobalt);
+  letter-spacing: -0.3px;
+  margin-bottom: 26px;
+}
+
+.play-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr 1fr;
+  gap: 12px;
+  margin-bottom: 22px;
+}
+
+.play-col {
+  padding: 20px 20px 22px;
+  background: var(--paper);
+  border: 1px solid var(--line);
+  border-top: 3px solid var(--gold);
+}
+
+.play-col--navy {
+  background: var(--cobalt);
+  background-image: radial-gradient(circle at 85% 8%, rgba(255, 204, 0, 0.09), transparent 55%);
+  border-color: var(--cobalt);
+  border-top-color: var(--gold);
+}
+
+.play-col-label {
+  font-family: var(--sans);
+  font-weight: 700;
+  font-size: 11px;
+  letter-spacing: 1.5px;
+  color: var(--cobalt);
+  text-transform: uppercase;
+  margin-bottom: 13px;
+  padding-bottom: 9px;
+  border-bottom: 1px solid var(--line);
+}
+
+.play-col--navy .play-col-label {
+  color: var(--gold);
+  border-bottom-color: rgba(255, 255, 255, 0.18);
+}
+
+.play-col-body {
+  font-family: Georgia, serif;
+  font-size: 14.5px;
+  line-height: 1.65;
+  color: var(--ink);
+}
+
+.play-col-body p { margin-bottom: 11px; }
+.play-col-body p:last-child { margin-bottom: 0; }
+
+.play-col--navy .play-col-body { color: #e6eaf2; }
+
+.play-q {
+  display: block;
+  font-style: italic;
+  color: var(--muted);
+  padding-left: 13px;
+  border-left: 2px solid var(--gold);
+  margin-top: 9px;
+  line-height: 1.5;
+}
+
+.play-rec-title {
+  font-family: var(--sans);
+  font-weight: 700;
+  font-size: 14px;
+  color: var(--cobalt);
+  margin-bottom: 9px;
+  line-height: 1.35;
+}
+
+.play-pair {
+  margin-top: 12px;
+  padding-top: 12px;
+  border-top: 1px dotted var(--line);
+}
+
+.play-pair strong {
+  font-family: var(--sans);
+  font-weight: 700;
+  font-size: 13px;
+  color: var(--cobalt);
+}
+
+.play-proof {
+  background: var(--placeholder-bg);
+  border-left: 3px solid var(--placeholder);
+  padding: 18px 22px;
+}
+
+.play-proof-label {
+  display: block;
+  font-family: var(--sans);
+  font-weight: 800;
+  font-size: 10.5px;
+  letter-spacing: 1.5px;
+  color: var(--placeholder);
+  text-transform: uppercase;
+  margin-bottom: 10px;
+}
+
+.play-proof-body {
+  font-family: Georgia, serif;
+  font-size: 14.5px;
+  line-height: 1.65;
+  color: var(--ink);
+}
+
+.play-proof-body strong {
+  font-family: var(--sans);
+  font-weight: 700;
+  font-size: 12.5px;
+  color: var(--cobalt);
+  letter-spacing: 0.2px;
+}
+
+/* FOOTER */
+footer {
+  background: var(--cobalt-deep);
+  margin-top: 60px;
+}
+
+.footer-inner {
+  max-width: 900px;
+  margin: 0 auto;
+  padding: 38px 40px 44px;
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: space-between;
+  align-items: center;
+  gap: 14px 24px;
+}
+
+.format-facts {
+  font-family: var(--sans);
+  font-size: 10.5px;
+  font-weight: 500;
+  letter-spacing: 0.08em;
+  color: var(--pigeon);
+  white-space: nowrap;
+}
+
+.format-facts span { margin-right: 14px; }
+
+.format-facts span:not(:last-child)::after {
+  content: " ·";
+  margin-left: 14px;
+  color: var(--line);
+}
+
+.ep-mark {
+  font-family: var(--sans);
+  font-weight: 700;
+  font-size: 11px;
+  letter-spacing: 0.22em;
+  color: #fff;
+  text-transform: uppercase;
+  white-space: nowrap;
+}
+
+/* BACK TO TOP */
+.back-to-top {
+  position: fixed;
+  bottom: 28px;
+  right: 28px;
+  padding: 12px 17px 12px 15px;
+  background: var(--cobalt);
+  color: #fff;
+  border: none;
+  font-family: var(--sans);
+  font-weight: 700;
+  font-size: 10.5px;
+  letter-spacing: 1.5px;
+  text-transform: uppercase;
+  cursor: pointer;
+  opacity: 0;
+  visibility: hidden;
+  border-radius: 100px;
+  transition: opacity 0.25s ease, visibility 0.25s ease, transform 0.3s ease, background 0.3s ease, box-shadow 0.3s ease;
+  z-index: 50;
+  box-shadow: 0 4px 14px rgba(41, 56, 81, 0.18);
+}
+
+.back-to-top::before {
+  content: "↑";
+  color: var(--gold);
+  margin-right: 8px;
+  font-weight: 800;
+  font-size: 11px;
+}
+
+.back-to-top.visible {
+  opacity: 0.96;
+  visibility: visible;
+}
+
+.back-to-top:hover {
+  opacity: 1;
+  background: var(--cobalt-deep);
+  transform: translateY(-2px);
+  box-shadow: 0 6px 18px rgba(41, 56, 81, 0.22), 0 10px 30px rgba(255, 204, 0, 0.20);
+}
+
+/* STICKY SECTION NAV */
+.section-nav {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  background: rgba(255, 255, 255, 0.97);
+  border-bottom: 1px solid var(--line);
+  z-index: 60;
+  opacity: 0;
+  visibility: hidden;
+  transform: translateY(-6px);
+  transition: opacity 0.22s ease, visibility 0.22s ease, transform 0.22s ease;
+}
+
+.section-nav.visible {
+  opacity: 1;
+  visibility: visible;
+  transform: translateY(0);
+}
+
+.section-nav-inner {
+  max-width: 900px;
+  margin: 0 auto;
+  padding: 11px 40px;
+  display: flex;
+  flex-wrap: wrap;
+  gap: 4px 20px;
+}
+
+.section-nav a {
+  font-family: var(--sans);
+  font-weight: 700;
+  font-size: 11px;
+  letter-spacing: 1px;
+  text-transform: uppercase;
+  color: var(--muted);
+  text-decoration: none;
+  padding-bottom: 2px;
+  border-bottom: 2px solid transparent;
+  transition: color 0.15s ease, border-color 0.15s ease;
+}
+
+.section-nav a:hover { color: var(--cobalt); border-bottom-color: var(--gold); }
+
+.section-nav a.current { color: var(--cobalt); border-bottom-color: var(--gold); }
+
+.section-nav a .n { color: var(--gold); font-weight: 800; margin-right: 5px; }
+
+/* BENEFIT TAKEAWAY LINE */
+.benefit-take {
+  margin-top: 15px;
+  font-family: var(--sans);
+  font-weight: 600;
+  font-size: 13px;
+  letter-spacing: 0.2px;
+  color: var(--cobalt);
+}
+
+.benefit-take .arrow {
+  color: var(--gold);
+  margin-right: 6px;
+  font-weight: 800;
+}
+
+/* FOOTER COPYRIGHT */
+.copyright {
+  width: 100%;
+  font-family: var(--sans);
+  font-size: 10px;
+  letter-spacing: 0.06em;
+  color: var(--pigeon-faint);
+}
+
+@media (max-width: 720px) {
+  .index { grid-template-columns: 1fr; gap: 30px; }
+  .artifacts,
+  .benefit-grid,
+  .benefit-grid.three-col,
+  .play-selector,
+  .play-grid {
+    grid-template-columns: 1fr;
+  }
+  .section-nav { display: none; }
+  .move { flex-direction: column; gap: 8px; }
+  .move-label { width: auto; }
+  .section-title { font-size: 31px; }
+  .brand-title { font-size: 34px; }
+  .headline { font-size: 27px; }
+  .headline .setup { font-size: 24px; }
+  .proposal-block { padding-right: 28px; }
+  .copy-btn { position: static; margin-bottom: 14px; display: inline-block; }
+}
+
+@media print {
+  body { background: white; }
+  .back-to-top { display: none; }
+  .section-nav { display: none; }
+  .hero, .hero-inner, footer { background: #fff !important; background-image: none !important; }
+  .brand-title, .index-list a, .ep-mark { color: var(--cobalt) !important; }
+  .landing-intro, .index-lane-label, .index-hint, .format-facts, .copyright { color: var(--muted) !important; }
+  section { page-break-inside: avoid; }
+  .section-divider { display: none; }
+}
+</style>
+</head>
+<body>
+
+<!-- LANDING -->
+<div class="hero"><div class="hero-inner">
+<div class="landing-wrap">
+  <div class="brand-eyebrow">ExperiencePoint <span class="dot">·</span> Partner Hub</div>
+  <h1 class="brand-title">Work Better with AI 201</h1>
+
+  <p class="landing-intro">Everything you need to position, propose, and sell this workshop well, in one place.</p>
+
+  <div class="index">
+    <div class="index-lane">
+      <div class="index-lane-label">Understand</div>
+      <ul class="index-list">
+        <li><a href="#overview"><span class="n">01</span><span class="t">Overview</span></a></li>
+        <li><a href="#forpartners"><span class="n">02</span><span class="t">Program fit</span></a></li>
+        <li><a href="https://docs.google.com/presentation/d/1vBB1v8s2SF1L9yXrl5dMtxHjqgEnHDxoJC0RWB4EGRI/edit?usp=sharing" target="_blank" rel="noopener noreferrer"><span class="n">&#8599;</span><span class="t">One-page overview</span></a></li>
+      </ul>
+    </div>
+    <div class="index-lane">
+      <div class="index-lane-label">Sell</div>
+      <ul class="index-list">
+        <li><a href="#proposal"><span class="n">03</span><span class="t">Proposal copy</span></a></li>
+        <li><a href="#fit"><span class="n">04</span><span class="t">Who it's for</span></a></li>
+        <li><a href="#buyer-cues"><span class="n">05</span><span class="t">Buyer cues</span></a></li>
+        <li><a href="#plays"><span class="n">06</span><span class="t">Positioning</span></a></li>
+        <li><a href="#faq"><span class="n">07</span><span class="t">Sales FAQ</span></a></li>
+        <li><a href="https://docs.google.com/presentation/d/1Q7Yn7ZndtpImiU_BYKLkti2yaCOMrRkT1B0VWK4oB8g/edit?usp=sharing" target="_blank" rel="noopener noreferrer"><span class="n">&#8599;</span><span class="t">Use cases from the field</span></a></li>
+      </ul>
+    </div>
+    <div class="index-lane">
+      <div class="index-lane-label">Demo</div>
+      <ul class="index-list">
+        <li><a href="https://docs.google.com/presentation/d/1XcIPU6yjkyYNlU2oeCQcXHgRxHMAXOZoRBLftHMCv_4/edit?usp=sharing" target="_blank" rel="noopener noreferrer"><span class="n">&#8599;</span><span class="t">Demo walkthrough</span></a></li>
+        <li><a href="https://docs.google.com/presentation/d/14iGET3YPDXccWmQTX-6XcSYO8yXVwHTbsIdYjmrHMDc/edit?usp=sharing" target="_blank" rel="noopener noreferrer"><span class="n">&#8599;</span><span class="t">Details &amp; agenda</span></a></li>
+      </ul>
+    </div>
+  </div>
+
+  <p class="index-hint"><span class="dot">&#8595;</span>New to the hub? Start with the Overview and read straight down.</p>
+</div>
+</div></div>
+
+<nav class="section-nav" id="sectionNav" aria-label="Section navigation">
+  <div class="section-nav-inner">
+    <a href="#overview"><span class="n">01</span>Overview</a>
+    <a href="#forpartners"><span class="n">02</span>Program fit</a>
+    <a href="#proposal"><span class="n">03</span>Proposal copy</a>
+    <a href="#fit"><span class="n">04</span>Who it's for</a>
+    <a href="#buyer-cues"><span class="n">05</span>Buyer cues</a>
+    <a href="#plays"><span class="n">06</span>Positioning</a>
+    <a href="#faq"><span class="n">07</span>FAQ</a>
+  </div>
+</nav>
+
+<main>
+
+<!-- OVERVIEW -->
+<section id="overview">
+  <div class="section-opener">
+    <div class="section-number">01</div>
+    <h2 class="section-title">Overview</h2>
+    <p class="section-description">The workshop, the modules, and what participants walk out with.</p>
+  </div>
+
+  <p class="what-it-is">Work Better with AI 201 is ExperiencePoint's applied AI workshop for teams already using AI tools and ready to put them to work in their real workflows. A 150-minute hands-on experience built around agent building, workflow redesign, and a durable framework for where AI fits in the business.</p>
+
+  <div class="partner-built">
+    <strong>Built for partner programs</strong>
+    Designed to slot into your leadership development programs as a turnkey addition. You or your facilitators can deliver it: the room needs someone expert at engaging a group who understands the principles of adoption, not the deepest AI expert. This hub gives you what you need to position and propose it well.
+  </div>
+
+  <h1 class="headline">
+    <span class="setup">Most AI training ends with notes and good intentions.</span>
+    <span class="punch">This one ends with <span class="accent">working AI agents</span> teams use on Monday.</span>
+  </h1>
+
+  <p class="intro">Participants build working AI agents that unlock knowledge and assets their organization already owns, often making them 10x more valuable. They storyboard a real workflow, marking the friction points for agents and the judgment points for humans. Then they assess where AI is making work abundant and where their own skills and judgment uniquely matter, so the time automation frees up goes to their best work.</p>
+
+  <div class="sub-header">What participants walk out with</div>
+  <div class="artifacts">
+    <div class="artifact">
+      <div class="artifact-num">01</div>
+      <div class="artifact-label">Working AI agents</div>
+      <div class="artifact-body">Built into their real recurring tasks. Tested before they leave the room. Ready to share with their teams on Monday.</div>
+    </div>
+    <div class="artifact">
+      <div class="artifact-num">02</div>
+      <div class="artifact-label">A redesigned workflow</div>
+      <div class="artifact-body">Storyboarded end to end. Friction points marked for AI. Judgment points marked for humans. A roadmap for what to build next.</div>
+    </div>
+    <div class="artifact">
+      <div class="artifact-num">03</div>
+      <div class="artifact-label">Their defensible value</div>
+      <div class="artifact-body">A first-principles articulation of where each person uniquely creates value, paired with a durable framework for sorting what to automate and what to keep human-led.</div>
+    </div>
+  </div>
+
+  <div class="partner-built">
+    <strong>And it happens in the room</strong>
+    At one of the world's largest technology distributors, about 30% of the room had built an agent before the session. By the end, everyone had. It all travels home in the participant report and toolkit.
+  </div>
+
+  <div class="sub-header">How the workshop gets there</div>
+  <div class="moves">
+    <div class="move">
+      <div class="move-label">Activate <span class="sub">Dormant Resources</span></div>
+      <div class="move-content">
+        <div class="move-body">Find an existing asset (a policy doc, a knowledge folder, a winning template) and turn it into a working AI tool teams can use.</div>
+        <div class="move-output"><span class="arrow">→</span>Produces a first working agent from an asset they already own</div>
+      </div>
+    </div>
+    <div class="move">
+      <div class="move-label">Automate <span class="sub">with Agents</span></div>
+      <div class="move-content">
+        <div class="move-body">Storyboard a real workflow. Build AI agents into the friction points that need them most. Test before declaring it done.</div>
+        <div class="move-output"><span class="arrow">→</span>Produces the workflow storyboard, friction and judgment points marked</div>
+      </div>
+    </div>
+    <div class="move">
+      <div class="move-label">Assess <span class="sub">Value Shifts</span></div>
+      <div class="move-content">
+        <div class="move-body">Build a durable framework for where AI fits in the work. Identify what to safely automate, what to keep human-led, and where each person uniquely creates value.</div>
+        <div class="move-output"><span class="arrow">→</span>Produces the Value Shifts assessment, a frame teams rerun</div>
+      </div>
+    </div>
+  </div>
+
+  <div class="differentiator">
+    <div class="diff-line">Not technical platform training. Not prompting jargon. Not specific to one tool. This is a workshop that suits top executives and individual contributors alike.</div>
+    <div class="diff-frame">The frame underneath: <strong>replacement thinking</strong> (do what you already do, faster) and <strong>reimagination thinking</strong> (build what wasn't possible before). Most teams plateau in the first. WBWAI 201 builds the muscle for both.</div>
+  </div>
+</section>
+
+<!-- PROGRAM FIT -->
+<section id="forpartners">
+  <div class="section-opener">
+    <div class="section-number">02</div>
+    <h2 class="section-title">Program fit</h2>
+    <p class="section-description">Where the workshop slots into your programs, and why the expertise you already have is exactly what it takes to deliver it.</p>
+  </div>
+
+  <div class="benefit-grid">
+    <div class="benefit-block">
+      <div class="benefit-title">Action learning programs</div>
+      <div class="benefit-body">Use it as the AI capability workshop inside a longer engagement. Participants enter the action learning sets with the literacy and a shared frame to apply AI to the real problems they'll work through together.</div>
+      <div class="benefit-take"><span class="arrow">&#8594;</span>Your coaches get AI-fluent groups</div>
+    </div>
+    <div class="benefit-block">
+      <div class="benefit-title">Leadership development programs</div>
+      <div class="benefit-body">Plug in as the AI capability layer of your LDP, built on behaviors you already coach: delegating to AI, enabling teams to redesign their own work, modeling judgment about where humans stay in the loop.</div>
+      <div class="benefit-take"><span class="arrow">&#8594;</span>Leaders model an AI way of working</div>
+    </div>
+    <div class="benefit-block">
+      <div class="benefit-title">Manager development</div>
+      <div class="benefit-body">Equips managers to lead AI adoption credibly. They leave with a working agent and a clear view of where AI fits in their team's work.</div>
+      <div class="benefit-take"><span class="arrow">&#8594;</span>Real ground for your management coaching</div>
+    </div>
+    <div class="benefit-block">
+      <div class="benefit-title">Cohort programs</div>
+      <div class="benefit-body">Run as a single session inside a longer cohort. Everything participants make in the room, agents, workflows, value statements, becomes material for the coaching cycles and peer circles that follow.</div>
+      <div class="benefit-take"><span class="arrow">&#8594;</span>Concrete anchors for your follow-up cycles</div>
+    </div>
+  </div>
+
+  <div class="sub-header" style="margin-top: 56px;">What you bring, and what the workshop carries</div>
+  <div class="benefit-grid three-col">
+    <div class="benefit-block">
+      <div class="benefit-title">You bring</div>
+      <div class="benefit-body">The craft you already have: engaging a room, coaching behavior change, reading your client's context. That is the expertise this workshop runs on, and none of it needs to be rebuilt for AI.</div>
+    </div>
+    <div class="benefit-block">
+      <div class="benefit-title">The workshop carries</div>
+      <div class="benefit-body">The AI depth. A self-guided agent builder walks every participant through the technical steps, and "ask AI first" is taught as a working habit from the opening minutes.</div>
+    </div>
+    <div class="benefit-block">
+      <div class="benefit-title">Your follow-on work gains</div>
+      <div class="benefit-body">Concrete anchors for whatever you deliver next. Your coaching, talent, and culture work lands on ground the client has already walked, with the artifacts from the room as your starting material.</div>
+    </div>
+  </div>
+</section>
+
+<!-- PROPOSAL COPY -->
+<section id="proposal">
+  <div class="section-opener">
+    <div class="section-number">03</div>
+    <h2 class="section-title">Proposal copy</h2>
+    <p class="section-description">Ready-to-paste language for written proposals and RFPs. Copy as-is or adapt to your client's voice.</p>
+  </div>
+
+  <div class="partner-built">
+    <strong>Make it yours in one step</strong>
+    Paste any block below into the AI tool you already use and ask for it in your voice. It works in reverse too: upload your proposal draft and ask it to weave this language in.
+  </div>
+
+  <div class="proposal-block">
+    <button type="button" class="copy-btn" data-copy-target="proposal-description">Copy</button>
+    <div class="proposal-label">Description</div>
+    <div class="proposal-body" id="proposal-description">Work Better with AI 201 is a 150-minute hands-on workshop for teams already using AI tools who want to put them to work in their real workflows. Participants identify dormant resources to activate with AI, workflows to automate with humans in the loop, and where each person uniquely creates value that AI can't easily replace. They leave with three things they can use right away: working AI agents built for their own tasks, a redesigned workflow, and a durable framework for making AI decisions across teams.</div>
+  </div>
+
+  <div class="proposal-block">
+    <button type="button" class="copy-btn" data-copy-target="proposal-audience">Copy</button>
+    <div class="proposal-label">Audience</div>
+    <div class="proposal-body" id="proposal-audience">People already using AI for personal productivity who are ready to redesign work with it. Works well for intact teams, cross-functional groups, individual contributors, or leadership groups. No technical prerequisites. Mixed-experience rooms are fine because each participant works on their own task or their team's shared workflow.</div>
+  </div>
+
+  <div class="proposal-block">
+    <button type="button" class="copy-btn" data-copy-target="proposal-outcomes">Copy</button>
+    <div class="proposal-label">Learning and business outcomes</div>
+    <div class="proposal-body" id="proposal-outcomes">
+      <ul>
+        <li><strong>Built capability.</strong> Participants leave able to design AI into work, not just use it. The applied practice transfers as new tools and capabilities emerge.</li>
+        <li><strong>Behavior change.</strong> Teams approach work differently afterward: clearer judgment about where AI fits and where humans stay.</li>
+        <li><strong>Productivity gains.</strong> Working AI agents built into real recurring tasks, ready for teams to use immediately.</li>
+        <li><strong>Process efficiency.</strong> Redesigned workflows that show where AI takes over and where human judgment must stay.</li>
+        <li><strong>Strategic clarity.</strong> A durable framework for where each person uniquely creates value as AI capabilities expand.</li>
+        <li><strong>Coordinated AI decisions.</strong> A shared vocabulary that lets teams make consistent calls about automation, governance, and where humans stay involved.</li>
+      </ul>
+    </div>
+  </div>
+
+  <div class="proposal-block">
+    <button type="button" class="copy-btn" data-copy-target="proposal-format">Copy</button>
+    <div class="proposal-label">Format</div>
+    <div class="proposal-body" id="proposal-format">150 minutes, with an optional 30-minute Reimagine extension. 20 to 200 participants, and smaller team sessions run well. Live, virtual or in-person. English. Platform-agnostic; works with whatever AI platforms your client's organization has approved.</div>
+  </div>
+</section>
+
+<!-- WHO IT'S FOR -->
+<section id="fit">
+  <div class="section-opener">
+    <div class="section-number">04</div>
+    <h2 class="section-title">Who it's for</h2>
+    <p class="section-description">The ideal client, the questions to ask, and the fit signals to listen for.</p>
+  </div>
+
+  <div class="fit-block">
+    <div class="fit-block-label">Ideal client</div>
+    <div class="fit-prose">Mid-to-large organizations that have rolled out AI tools (Copilot, ChatGPT, Gemini, or similar) but aren't seeing the impact match the investment. Teams use AI for low-stakes tasks. Functions have different practices. The HR or IT lead wants something more strategic than tool fluency training and more concrete than abstract AI strategy consulting.</div>
+  </div>
+
+  <div class="fit-block">
+    <div class="fit-block-label">Discovery questions to ask</div>
+    <ol class="discovery-list">
+      <li>How is AI being used across your team or organization today, and what's working or not working?</li>
+      <li>What does the gap between AI access and AI impact look like inside your business?</li>
+      <li>What would success look like 90 days after an AI training program for your people?</li>
+      <li>Where in your organization are you most worried about how AI is shifting value or expectations?</li>
+      <li>What's one workflow where you wish AI was doing more, but it isn't yet?</li>
+    </ol>
+  </div>
+
+  <div class="fit-block">
+    <div class="fit-block-label">Not a fit if</div>
+    <ul class="notfit-list">
+      <li>The team has never used AI tools and is starting from scratch (ask us about our WBWAI 101 workshop for this need)</li>
+      <li>The buyer is looking for technical AI training (machine learning, model fine-tuning, building AI from scratch)</li>
+      <li>The buyer is looking for AI strategy consulting rather than capability building inside their own team (though when an AI strategy exists and needs to land with people, ask us about KickstartChange for the communication side of the change)</li>
+    </ul>
+  </div>
+</section>
+
+<!-- BUYER CUES -->
+<section id="buyer-cues">
+  <div class="section-opener">
+    <div class="section-number">05</div>
+    <h2 class="section-title">Buyer cues</h2>
+    <p class="section-description">What clients say when they need this workshop.</p>
+  </div>
+
+  <div class="cue">
+    <div class="cue-title">AI access is up. AI impact isn't.</div>
+    <div class="cue-phrases">
+      <span>"We rolled out Copilot but adoption is flat."</span>
+      <span>"Our team uses AI for low-stakes stuff, not where it matters."</span>
+      <span>"Leaders are asking what the AI spend returns."</span>
+    </div>
+  </div>
+
+  <div class="cue">
+    <div class="cue-title">Different teams, different practices.</div>
+    <div class="cue-phrases">
+      <span>"Every team is doing AI differently and nobody's coordinated."</span>
+      <span>"We have no shared way of thinking about where AI fits."</span>
+      <span>"Shadow AI is everywhere and our governance can't keep up."</span>
+    </div>
+  </div>
+
+  <div class="cue">
+    <div class="cue-title">Training that didn't transfer.</div>
+    <div class="cue-phrases">
+      <span>"We've done AI awareness training. Nothing stuck."</span>
+      <span>"We need something measurable, not another deck."</span>
+      <span>"We want strategic, not just functional."</span>
+    </div>
+  </div>
+
+  <div class="cue">
+    <div class="cue-title">Leaders in a room, expecting momentum.</div>
+    <div class="cue-phrases">
+      <span>"We are bringing our leaders together to accelerate our AI capabilities."</span>
+      <span>"We will have people tackle real initiatives in sprints, and need to do some training first."</span>
+    </div>
+  </div>
+</section>
+
+<!-- POSITIONING PLAYS -->
+<section id="plays">
+  <div class="section-opener">
+    <div class="section-number">06</div>
+    <h2 class="section-title">Positioning</h2>
+    <p class="section-description">Matching client context to positioning: the frame to use, what to recommend, and the proof to bring.</p>
+  </div>
+
+  <div class="sub-header">Choose the client context</div>
+  <p class="fit-prose" style="margin-bottom: 30px;">Three common situations. Pick the one that best matches your client, and the pitch, recommendation, and proof below change to fit.</p>
+
+  <div class="play-selector" role="tablist" aria-label="Positioning by client context">
+    <button type="button" class="play-tab active" id="tab-leadership" role="tab" aria-selected="true" aria-controls="play-leadership" data-play="play-leadership"><span class="play-tab-num">01</span><span class="play-tab-label">Leadership program</span><span class="play-tab-desc">A program needs a real AI moment</span></button>
+    <button type="button" class="play-tab" id="tab-rollout" role="tab" aria-selected="false" aria-controls="play-rollout" data-play="play-rollout"><span class="play-tab-num">02</span><span class="play-tab-label">AI rollout</span><span class="play-tab-desc">Tools are in, impact isn't</span></button>
+    <button type="button" class="play-tab" id="tab-standalone" role="tab" aria-selected="false" aria-controls="play-standalone" data-play="play-standalone"><span class="play-tab-num">03</span><span class="play-tab-label">Standalone or event</span><span class="play-tab-desc">A single session that has to land</span></button>
+  </div>
+
+  <div class="play active" id="play-leadership" role="tabpanel" aria-labelledby="tab-leadership">
+    <div class="play-context-label">Leadership development program</div>
+    <div class="play-title">When a leadership program needs a real AI moment</div>
+    <div class="play-grid">
+      <div class="play-col">
+        <div class="play-col-label">Situation</div>
+        <div class="play-col-body">
+          <p>The client runs a leadership or high-potential program and knows AI has to be part of it. But a tools demo or a keynote won't land. They want leaders engaging with AI in a way that's practical and tied to real work.</p>
+          <p>They're asking:
+            <span class="play-q">How do we make AI real for our leaders, not just another talk?</span>
+            <span class="play-q">How do we help them lead their teams into an AI way of working?</span>
+            <span class="play-q">How do we add AI without blowing up the agenda?</span>
+          </p>
+        </div>
+      </div>
+      <div class="play-col play-col--navy">
+        <div class="play-col-label">Positioning</div>
+        <div class="play-col-body">
+          <p>Leadership programs build judgment, and AI is now where that judgment gets tested: what to automate, what to keep human, where a leader still creates the value AI can't.</p>
+          <p>The hard part is lived experience. Most leaders have talked about AI far more than they have built with it, so their guidance stays abstract.</p>
+          <p>WBWAI 201 gives every leader that experience in one 150-minute sitting. They build, they redesign real work, and they go back able to model an AI way of working for their teams instead of describing one.</p>
+        </div>
+      </div>
+      <div class="play-col">
+        <div class="play-col-label">Recommendation</div>
+        <div class="play-col-body">
+          <div class="play-rec-title">WBWAI 201 as the applied AI module</div>
+          <p>Slot it in as the AI session inside a broader leadership journey. Leaders come away with a working agent, a redesigned workflow, and their own defensible-value statement, concrete artifacts that make the rest of your program's content land harder. Your facilitators can deliver it after a short certification, or bring in ExperiencePoint's.</p>
+        </div>
+      </div>
+    </div>
+    <div class="play-proof">
+      <span class="play-proof-label">In practice</span>
+      <div class="play-proof-body">
+        <p><strong>Extending a client's own 101.</strong> The client had designed and delivered their own AI 101. WBWAI 201 took the same audience from general readiness to real use cases and process improvements, adapted to run even for a team without agent access.</p>
+        <p><strong>Year three of an 'AI for everyone' journey.</strong> A program aimed at leaders ready to act, built to lower the effort of learning AI and make it obvious where it improves daily workflows. Feedback was strong enough to unlock funding for roughly 50 sessions.</p>
+      </div>
+    </div>
+  </div>
+
+  <div class="play" id="play-rollout" role="tabpanel" aria-labelledby="tab-rollout">
+    <div class="play-context-label">AI adoption and rollout</div>
+    <div class="play-title">When the AI tools are in, but the usage isn't</div>
+    <div class="play-grid">
+      <div class="play-col">
+        <div class="play-col-label">Situation</div>
+        <div class="play-col-body">
+          <p>The client bought the licenses, ran the basic training, and expected a productivity jump. Instead usage is uneven. Some people experiment, some avoid it, and most are unsure how AI applies to their real work.</p>
+          <p>They're asking:
+            <span class="play-q">We've paid for AI. Why isn't it changing how work gets done?</span>
+            <span class="play-q">How do we turn access into real business impact?</span>
+            <span class="play-q">Where does AI actually fit in our workflows?</span>
+          </p>
+        </div>
+      </div>
+      <div class="play-col play-col--navy">
+        <div class="play-col-label">Positioning</div>
+        <div class="play-col-body">
+          <p>Every rollout hits the same wall: access is up, impact isn't.</p>
+          <p>The hard part is that this was never a tools problem. It is a workflow and behavior problem, and licenses alone don't touch it.</p>
+          <p>WBWAI 201 is where teams stop discussing AI in the abstract and put it to work on their own real workflows. They surface the dormant resources worth activating, automate the manual work with agents, and leave clear on where AI creates value and where their judgment still does.</p>
+        </div>
+      </div>
+      <div class="play-col">
+        <div class="play-col-label">Recommendation</div>
+        <div class="play-col-body">
+          <div class="play-rec-title">WBWAI 201 as the workflow and capability layer</div>
+          <p>Run it for the teams whose adoption has stalled. In 150 minutes they build working AI agents into real recurring tasks, redesign a workflow end to end, and name where each person uniquely creates value. They leave with things they use on Monday, not notes.</p>
+          <div class="play-pair">
+            <p><strong>Pair with KickstartChange</strong> for the full rollout. 201 finds where AI creates value and builds it. KickstartChange mobilizes the people around the change: the readiness, the resistance, the new behaviors. Together you cover both the capability and the adoption.</p>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="play-proof">
+      <span class="play-proof-label">In practice</span>
+      <div class="play-proof-body">
+        <p><strong>A Fortune 500 medical technology leader.</strong> A team session built around AI agents and automation. Beforehand, 73% rated themselves basic or occasional AI users. Afterward, every participant felt confident using AI, 57% fully confident, and 86% said they were very likely to use it in their daily work, with all expecting to save time each week. 100% rated the session Good or Excellent.</p>
+        <p><strong>An Asia Pacific market leader.</strong> Ran entirely on the client's own internal LLM and closed the gap between technical and non-technical teams.</p>
+        <p><strong>An open-enrollment adoption series.</strong> Four sessions grew to eight on demand, reaching hundreds of team members across the organization.</p>
+      </div>
+    </div>
+  </div>
+
+  <div class="play" id="play-standalone" role="tabpanel" aria-labelledby="tab-standalone">
+    <div class="play-context-label">Standalone workshop or event</div>
+    <div class="play-title">When they want a high-impact AI session on its own</div>
+    <div class="play-grid">
+      <div class="play-col">
+        <div class="play-col-label">Situation</div>
+        <div class="play-col-body">
+          <p>The client wants a standout AI session for a summit, an offsite, a learning day, or a single team, with no program around it. They want it energizing and genuinely useful, something people act on, not just enjoy.</p>
+          <p>They're asking:
+            <span class="play-q">How do we give people a real AI experience, not another presentation?</span>
+            <span class="play-q">How do we move a room from AI curiosity to confident action in one session?</span>
+            <span class="play-q">How do we make a one-off actually stick?</span>
+          </p>
+        </div>
+      </div>
+      <div class="play-col play-col--navy">
+        <div class="play-col-label">Positioning</div>
+        <div class="play-col-body">
+          <p>A single session is a rare moment of collective attention, and most AI talks spend it on awareness.</p>
+          <p>The hard part is being hands-on enough to change behavior while staying accessible to a mixed room.</p>
+          <p>WBWAI 201 does both. Everyone builds something real from their own work, it scales from one team to a few hundred people, and it's platform-agnostic, so it works with whatever AI stack the client has.</p>
+        </div>
+      </div>
+      <div class="play-col">
+        <div class="play-col-label">Recommendation</div>
+        <div class="play-col-body">
+          <div class="play-rec-title">WBWAI 201 as the anchor AI session</div>
+          <p>Use it as the hands-on AI centerpiece of a summit, conference, offsite, or learning day, or as a one-time team workshop. Participants take home working agents, a redesigned workflow, and a clear view of where their own value holds as AI advances.</p>
+          <div class="play-pair">
+            <p><strong>Follow with Spark</strong> to keep a one-off moving. Short Spark episodes pick up wherever people get stuck putting AI to work, so the momentum from the session does not fade once everyone is back at their desks.</p>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="play-proof">
+      <span class="play-proof-label">In practice</span>
+      <div class="play-proof-body">
+        <p><strong>A global treasury and cash management summit.</strong> Work Better with AI ran as the day-three anchor with 350+ global finance leaders in the room. Daily AI use among attendees jumped from 13% to 59%, one leader said they wished they had started sooner, and the organizer called it the ideal anchor for the day.</p>
+        <p><strong>A leadership summit for client CEOs.</strong> A global IT services organization extended the session to 3.5 hours for 300 leaders who were comfortable with AI but unsure where it created operational value. They left with concrete opportunities they could act on.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- FAQ -->
+<section id="faq">
+  <div class="section-opener">
+    <div class="section-number">07</div>
+    <h2 class="section-title">Sales FAQ</h2>
+    <p class="section-description">Sharp answers to the questions partners hear most.</p>
+  </div>
+
+  <div class="faq-item">
+    <div class="faq-question">How is this different from free platform training (Microsoft Copilot, Google AI, Anthropic)?</div>
+    <div class="faq-answer">Platform training teaches teams how to use one platform's features. It assumes that if people learn the tools, they'll figure out the impact. They mostly don't. WBWAI 201 starts with a real workflow teams own and ends with working AI agents built into it. It's also platform-agnostic, so it works regardless of which AI stack the client has licensed.</div>
+  </div>
+
+  <div class="faq-item">
+    <div class="faq-question">How is this different from technical AI training (machine learning, AI bootcamps)?</div>
+    <div class="faq-answer">Technical AI training is about how AI works under the hood: models, code, datasets. WBWAI 201 is about how AI changes the business. Teams build working agents in the room using the AI tools their organization already has, but the durable value is what they leave with: a clear-eyed framework for which work AI takes over safely, which work needs human judgment, and where each role creates value AI can't easily replicate. That framework outlasts any specific platform or technique.</div>
+  </div>
+
+  <div class="faq-item">
+    <div class="faq-question">How is this different from what AI strategy consultants do?</div>
+    <div class="faq-answer">Consultants tell teams what to do. WBWAI 201 builds the muscle in teams to make those decisions themselves. By the end, they've built working AI agents, redesigned a workflow, and articulated where their roles uniquely add value. The artifacts and the vocabulary stay with them. The consultant's deck doesn't.</div>
+  </div>
+
+  <div class="faq-item">
+    <div class="faq-question">What happens after the workshop?</div>
+    <div class="faq-answer">Participants leave with three artifacts they own, the participant toolkit to carry them, and a vocabulary teams can share. The working agents stay in use. The redesigned workflow is theirs to expand. And the durable frames from the session, the hopes and fears they surfaced, the dormant resource map, the Value Shifts assessment, are ones their teams can rerun as AI capabilities grow. They have a clear plan for what to build next, without us.</div>
+  </div>
+
+  <div class="faq-item">
+    <div class="faq-question">Can our facilitators deliver it?</div>
+    <div class="faq-answer">Yes, and you are likely better set up for it than you think. What the room needs from a facilitator is skill at engaging a group and a grounding in the principles of adoption, which is the craft you already have. The AI depth is carried for you: a self-guided agent builder walks every participant through the technical steps, and "ask AI first" is taught as a habit in the room, so it is also the graceful answer to any question nobody can field. Certification is short, and ExperiencePoint can provide facilitators where you'd rather not.</div>
+  </div>
+
+  <div class="faq-item">
+    <div class="faq-question">What about data security and using real company data?</div>
+    <div class="faq-answer">Participants build agents inside the AI platforms the client's organization has already approved. They use their own work, their own files, their own context. ExperiencePoint doesn't ingest or retain that material. The workshop runs in the client's environment, within their governance.</div>
+  </div>
+
+  <div class="faq-item">
+    <div class="faq-question">Who should attend, and what's the right group composition?</div>
+    <div class="faq-answer">Anyone already using AI for personal productivity who wants to move from using it to designing with it. Works well for intact teams aligning on a shared workflow, cross-functional groups, individual contributors building agents for their own tasks, or leadership groups thinking about portfolio strategy. Mixed-experience rooms work well because each person brings their own work into the room.</div>
+  </div>
+</section>
+
+</main>
+
+<footer>
+  <div class="footer-inner">
+  <div class="format-facts">
+    <span>150 minutes</span>
+    <span>20 to 200 participants</span>
+    <span>Live, virtual or in-person</span>
+  </div>
+  <div class="ep-mark">ExperiencePoint</div>
+  <div class="copyright">Copyright &copy; ExperiencePoint Inc. 2026, all rights reserved.</div>
+  </div>
+</footer>
+
+<button type="button" class="back-to-top" id="backToTop">Top</button>
+
+<script>
+document.addEventListener('DOMContentLoaded', () => {
+  // Index links: flash the destination section
+  document.querySelectorAll('.index-list a[href^="#"]:not([href="#"])').forEach(link => {
+    link.addEventListener('click', () => {
+      const target = document.getElementById(link.getAttribute('href').slice(1));
+      if (target) {
+        target.classList.add('flash');
+        setTimeout(() => target.classList.remove('flash'), 1000);
+      }
+    });
+  });
+
+  // Positioning play context selector
+  const ctxButtons = document.querySelectorAll('.play-tab');
+  const plays = document.querySelectorAll('.play');
+  ctxButtons.forEach(btn => {
+    btn.addEventListener('click', () => {
+      const playId = btn.getAttribute('data-play');
+      ctxButtons.forEach(b => {
+        const isActive = b === btn;
+        b.classList.toggle('active', isActive);
+        b.setAttribute('aria-selected', isActive ? 'true' : 'false');
+      });
+      plays.forEach(pl => pl.classList.toggle('active', pl.id === playId));
+    });
+  });
+
+  // Back to top and sticky section nav
+  const backToTop = document.getElementById('backToTop');
+  const sectionNav = document.getElementById('sectionNav');
+  window.addEventListener('scroll', () => {
+    if (backToTop) backToTop.classList.toggle('visible', window.scrollY > 500);
+    if (sectionNav) sectionNav.classList.toggle('visible', window.scrollY > 600);
+  });
+
+  // Scrollspy: mark the current section in the sticky nav
+  if (sectionNav) {
+    const navLinks = sectionNav.querySelectorAll('a[href^="#"]');
+    const sections = Array.from(document.querySelectorAll('main section[id]'));
+    const setCurrent = () => {
+      const line = window.innerHeight * 0.35;
+      let cur = null;
+      sections.forEach(sec => {
+        if (sec.getBoundingClientRect().top <= line) cur = sec;
+      });
+      navLinks.forEach(l => l.classList.toggle('current', !!cur && l.getAttribute('href') === '#' + cur.id));
+    };
+    window.addEventListener('scroll', setCurrent, { passive: true });
+    setCurrent();
+  }
+  if (backToTop) {
+    backToTop.addEventListener('click', () => {
+      window.scrollTo({ top: 0, behavior: 'smooth' });
+    });
+  }
+
+  // Copy buttons (proposal blocks)
+  function fallbackCopy(text) {
+    const textarea = document.createElement('textarea');
+    textarea.value = text;
+    textarea.setAttribute('readonly', '');
+    textarea.style.position = 'fixed';
+    textarea.style.top = '0';
+    textarea.style.left = '0';
+    textarea.style.width = '1px';
+    textarea.style.height = '1px';
+    textarea.style.padding = '0';
+    textarea.style.border = 'none';
+    textarea.style.outline = 'none';
+    textarea.style.boxShadow = 'none';
+    textarea.style.background = 'transparent';
+    textarea.style.opacity = '0';
+    document.body.appendChild(textarea);
+    const selection = document.getSelection();
+    const previousRange = selection.rangeCount > 0 ? selection.getRangeAt(0) : null;
+    textarea.focus();
+    textarea.select();
+    textarea.setSelectionRange(0, text.length);
+    let success = false;
+    try {
+      success = document.execCommand('copy');
+    } catch (e) {
+      success = false;
+    }
+    document.body.removeChild(textarea);
+    if (previousRange) {
+      selection.removeAllRanges();
+      selection.addRange(previousRange);
+    }
+    return success;
+  }
+
+  function flashCopyState(btn, state) {
+    const originalText = btn.dataset.originalText || btn.textContent;
+    btn.dataset.originalText = originalText;
+    if (state === 'success') {
+      btn.textContent = 'Copied';
+      btn.classList.add('copied');
+    } else {
+      btn.textContent = 'Try again';
+      btn.classList.add('copied');
+    }
+    setTimeout(() => {
+      btn.textContent = originalText;
+      btn.classList.remove('copied');
+    }, 1500);
+  }
+
+  document.querySelectorAll('.copy-btn').forEach(btn => {
+    btn.addEventListener('click', async () => {
+      const targetId = btn.getAttribute('data-copy-target');
+      const target = document.getElementById(targetId);
+      if (!target) return;
+
+      // Extract plain text, preserving list structure
+      let text = '';
+      const lists = target.querySelectorAll('ul, ol');
+      if (lists.length > 0) {
+        const items = target.querySelectorAll('li');
+        text = Array.from(items).map(li => '- ' + li.textContent.trim().replace(/\s+/g, ' ')).join('\n');
+      } else {
+        text = target.textContent.trim().replace(/\s+/g, ' ');
+      }
+
+      let success = false;
+
+      // Try modern API first
+      if (navigator.clipboard && navigator.clipboard.writeText) {
+        try {
+          await navigator.clipboard.writeText(text);
+          success = true;
+        } catch (err) {
+          success = false;
+        }
+      }
+
+      // Fall back to execCommand if modern API blocked
+      if (!success) {
+        success = fallbackCopy(text);
+      }
+
+      flashCopyState(btn, success ? 'success' : 'error');
+    });
+  });
+});
+</script>
+
+</body>
+</html>
