@@ -1,0 +1,842 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>The Six-Sentence Charter · ExperiencePoint</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;500;600;700&display=swap" rel="stylesheet">
+<script type="text/javascript">
+  (function(c,l,a,r,i,t,y){
+    c[a]=c[a]||function(){(c[a].q=c[a].q||[]).push(arguments)};
+    t=l.createElement(r);t.async=1;t.src="https://www.clarity.ms/tag/"+i;
+    y=l.getElementsByTagName(r)[0];y.parentNode.insertBefore(t,y);
+  })(window, document, "clarity", "script", "y1t5l9zfdm");
+</script>
+<style>
+  :root{
+    --gold:#FFCC00;
+    --wheat:#FFE165;
+    --pollen:#FEF6C9;
+    --cobalt:#293851;
+    --aegean:#586A90;
+    --pigeon:#D5D9E3;
+    --coastal:#68BFBD;
+    --slush:#E4F4F4;
+    --prairie:#D86527;
+    --blush:#F6E2D5;
+    --fern:#90B210;
+    --leaf:#E9F0CF;
+    --paper:#FFFFFF;
+    --editorial:#F9F6F6;
+    --sans:'Montserrat','Gotham',Arial,sans-serif;
+    --serif:Georgia,'Times New Roman',serif;
+  }
+  *{box-sizing:border-box;}
+  html,body{margin:0;padding:0;background:var(--editorial);color:var(--cobalt);font-family:var(--sans);font-size:16px;line-height:1.55;-webkit-font-smoothing:antialiased;}
+  .wrap{max-width:760px;margin:0 auto;padding:0 20px 80px;}
+  button{font-family:var(--sans);}
+  :focus-visible{outline:3px solid var(--gold);outline-offset:2px;}
+  @media (prefers-reduced-motion: reduce){
+    *{transition:none !important;animation:none !important;scroll-behavior:auto !important;}
+  }
+
+  /* ---------- HERO ---------- */
+  .hero{background:var(--cobalt);color:var(--paper);padding:54px 20px 46px;}
+  .hero-inner{max-width:760px;margin:0 auto;}
+  .eyebrow{font-size:11px;font-weight:600;letter-spacing:0.14em;text-transform:uppercase;color:var(--gold);margin:0 0 16px;}
+  .reg{font-size:0.62em;vertical-align:super;letter-spacing:0;}
+  .hero h1{font-weight:700;font-size:clamp(30px,5vw,42px);line-height:1.1;margin:0 0 16px;max-width:600px;}
+  .hero p{font-family:var(--serif);font-size:17px;line-height:1.65;color:var(--pigeon);max-width:580px;margin:0;}
+  .hero p b{color:var(--paper);font-weight:normal;font-style:italic;}
+
+  /* ---------- SECTIONS ---------- */
+  .act{margin-top:60px;}
+  .act-head{display:flex;align-items:center;gap:12px;margin:0 0 6px;}
+  .act-num{font-size:12px;font-weight:700;color:var(--gold);letter-spacing:0.08em;background:var(--cobalt);padding:3px 8px;border-radius:2px;}
+  .act-head h2{font-family:var(--serif);font-weight:normal;font-size:25px;margin:0;color:var(--cobalt);}
+  .act-sub{color:var(--aegean);font-size:15px;line-height:1.6;margin:0 0 22px;max-width:600px;text-wrap:balance;}
+
+  /* ---------- OPTION BUTTONS ---------- */
+  .card{background:var(--paper);border:1px solid var(--pigeon);border-radius:3px;padding:22px;margin-bottom:14px;}
+  .q-text{font-size:16px;font-weight:600;color:var(--cobalt);margin:0 0 14px;line-height:1.45;}
+  .opts{display:grid;gap:8px;}
+  .opt{
+    text-align:left;display:block;width:100%;padding:12px 14px;border:1px solid var(--pigeon);
+    border-radius:3px;cursor:pointer;font-size:14.5px;line-height:1.45;background:var(--editorial);
+    color:var(--cobalt);transition:border-color .15s, background .15s;
+  }
+  .opt:hover{border-color:var(--aegean);}
+  .opt[aria-pressed="true"]{border-color:var(--cobalt);background:var(--pollen);font-weight:600;}
+
+  /* ---------- STEMS ---------- */
+  .stem-block{display:none;}
+  .stem-block.show{display:block;}
+  .stem-lead{font-family:var(--serif);font-size:17px;color:var(--cobalt);margin:26px 0 14px;}
+  .stem{background:var(--paper);border:1px solid var(--pigeon);border-radius:3px;padding:15px 18px;margin-bottom:9px;}
+  .stem .clause{font-size:11px;font-weight:600;letter-spacing:0.1em;text-transform:uppercase;color:var(--aegean);margin:0 0 5px;}
+  .stem .stem-text{font-family:var(--serif);font-style:italic;font-size:16px;color:var(--cobalt);margin:0 0 11px;}
+  .stem .trio{display:flex;gap:8px;flex-wrap:wrap;}
+  .trio button{
+    flex:1;min-width:106px;padding:9px 10px;font-size:13px;border:1px solid var(--pigeon);border-radius:3px;
+    background:var(--editorial);color:var(--cobalt);cursor:pointer;transition:all .15s;
+  }
+  .trio button:hover{border-color:var(--aegean);}
+  .trio button[aria-pressed="true"]{background:var(--cobalt);color:var(--paper);border-color:var(--cobalt);font-weight:600;}
+
+  /* ---------- RACK REVEAL ---------- */
+  .rack-reveal{display:none;margin-top:30px;background:var(--paper);border:1px solid var(--pigeon);border-top:3px solid var(--gold);border-radius:4px;padding:22px;}
+  .panel-tag{font-size:11px;font-weight:700;letter-spacing:0.1em;text-transform:uppercase;color:var(--aegean);margin:0 0 16px;}
+  .panel-tag::before{content:'';display:inline-block;width:8px;height:8px;background:var(--gold);border-radius:50%;margin-right:8px;}
+  @keyframes rise{from{opacity:0;transform:translateY(10px);}to{opacity:1;transform:none;}}
+  .rack-reveal.show,.verdict.show,.bench-reveal.show{animation:rise .4s ease both;}
+  .rack-reveal.show{display:block;}
+  .rack{display:grid;grid-template-columns:repeat(6,1fr);gap:10px;margin:16px 0 20px;}
+  .slot{text-align:center;}
+  .slot .box{height:44px;border-radius:3px;margin-bottom:7px;display:flex;align-items:center;justify-content:center;font-size:17px;font-weight:700;}
+  .slot .box.full{background:var(--cobalt);color:var(--paper);}
+  .slot .box.half{background:var(--pigeon);color:var(--aegean);}
+  .slot .box.gap{background:#FFFBEB;border:2px dashed var(--gold);}
+  .slot .lbl{font-size:9.5px;font-weight:700;letter-spacing:0.06em;text-transform:uppercase;color:var(--cobalt);display:block;}
+  .slot .state{font-size:10px;display:block;margin-top:1px;}
+  .slot .state.s-full{color:var(--aegean);}
+  .slot .state.s-half{color:var(--aegean);}
+  .slot .state.s-gap{color:#B58900;font-weight:700;}
+  .rack-verdict{font-family:var(--serif);font-size:18px;line-height:1.6;color:var(--cobalt);margin:0 0 8px;}
+  .rack-verdict b{background:var(--pollen);font-weight:normal;padding:0 3px;}
+  .rack-note{font-size:14px;color:var(--aegean);line-height:1.6;margin:0;}
+  @media (max-width:520px){
+    .rack{grid-template-columns:repeat(3,1fr);}
+  }
+
+  /* ---------- ACT 2 DARK ---------- */
+  .dark{background:var(--cobalt);border-radius:4px;padding:32px 26px;color:var(--paper);}
+  .dark .q-text{color:var(--paper);font-family:var(--serif);font-weight:normal;font-size:19px;}
+  .dark .opt{background:rgba(255,255,255,0.06);border-color:rgba(255,255,255,0.25);color:var(--paper);}
+  .dark .opt:hover{border-color:var(--gold);}
+  .dark .opt[aria-pressed="true"]{background:rgba(255,204,0,0.15);border-color:var(--gold);font-weight:600;}
+  .verdict{display:none;margin-top:20px;padding:16px 18px;background:rgba(255,255,255,0.05);border-radius:0 3px 3px 0;}
+  .verdict.show{display:block;}
+  .verdict.cut{border-left:4px solid var(--prairie);}
+  .verdict.funded{border-left:4px solid var(--fern);}
+  .v-tag{display:inline-block;font-size:10px;font-weight:700;letter-spacing:0.1em;text-transform:uppercase;padding:3px 9px;border-radius:2px;margin:0 0 10px;}
+  .verdict.cut .v-tag{background:var(--prairie);color:var(--paper);}
+  .verdict.funded .v-tag{background:var(--fern);color:var(--cobalt);}
+  .verdict .vq{font-family:var(--serif);font-style:italic;font-size:19px;color:var(--gold);margin:0 0 8px;}
+  .verdict p{font-size:14.5px;line-height:1.6;color:var(--pigeon);margin:0;}
+
+  /* ---------- CHIPS ---------- */
+  .pool{font-size:13px;font-weight:700;letter-spacing:0.04em;text-transform:uppercase;color:var(--aegean);margin:0 0 12px;}
+  .pool b{color:var(--cobalt);font-size:15px;}
+  .chip-row{background:var(--paper);border:1px solid var(--pigeon);border-radius:3px;padding:14px 16px;margin-bottom:9px;}
+  .chip-top{display:flex;justify-content:space-between;align-items:center;gap:12px;}
+  .row-name{font-size:13px;font-weight:700;letter-spacing:0.06em;text-transform:uppercase;}
+  .row-desc{font-size:13.5px;color:var(--aegean);margin:3px 0 10px;line-height:1.5;}
+  .stepper{display:flex;align-items:center;gap:6px;flex-shrink:0;}
+  .chip-btn{
+    width:34px;height:34px;border-radius:3px;border:1px solid var(--pigeon);background:var(--editorial);
+    color:var(--cobalt);font-size:19px;font-weight:600;cursor:pointer;line-height:1;transition:all .15s;
+  }
+  .chip-btn:hover{border-color:var(--cobalt);}
+  .chip-btn:disabled{opacity:0.3;cursor:default;}
+  .chip-tray{display:flex;gap:5px;min-height:16px;flex-wrap:wrap;}
+  .chip{width:22px;height:14px;border-radius:2px;}
+  .r1 .row-name{color:var(--prairie);} .r1 .chip{background:var(--prairie);}
+  .r2 .row-name{color:#3E8E8C;} .r2 .chip{background:var(--coastal);}
+  .r3 .row-name{color:#6B860C;} .r3 .chip{background:var(--fern);}
+
+  .curve-box{background:var(--paper);border:1px solid var(--pigeon);border-top:3px solid var(--gold);border-radius:4px;padding:22px 22px 18px;margin-top:18px;}
+  .curve-caption{font-size:13.5px;color:var(--aegean);margin:10px 0 0;line-height:1.55;}
+
+  /* ---------- ARCHETYPES ---------- */
+  .arch-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:12px;margin-bottom:26px;}
+  @media (max-width:640px){.arch-grid{grid-template-columns:1fr;}}
+  .arch{background:var(--paper);border:1px solid var(--pigeon);border-top:4px solid;border-radius:3px;padding:20px 18px;}
+  .arch.a1{border-top-color:var(--prairie);}
+  .arch.a2{border-top-color:var(--coastal);}
+  .arch.a3{border-top-color:var(--fern);}
+  .arch h3{font-size:15px;font-weight:700;letter-spacing:0.04em;text-transform:uppercase;margin:0 0 3px;}
+  .arch .phase{font-size:11px;font-weight:600;letter-spacing:0.08em;text-transform:uppercase;color:var(--aegean);margin:0 0 16px;padding-bottom:14px;border-bottom:1px solid var(--pigeon);}
+  .arch p{font-size:13.5px;line-height:1.5;margin:0 0 15px;}
+  .arch p:last-child{margin-bottom:0;}
+  .arch .k{font-weight:700;font-size:11px;letter-spacing:0.06em;text-transform:uppercase;color:var(--aegean);display:block;margin-bottom:4px;}
+
+  .bench-reveal{display:none;margin-top:26px;background:var(--paper);border:1px solid var(--pigeon);border-top:3px solid var(--gold);border-radius:4px;padding:22px;}
+  .bench-reveal.show{display:block;}
+  .pair-legend{font-size:12px;color:var(--aegean);margin:0 0 12px;}
+  .pair-legend .sw{display:inline-block;width:14px;height:10px;border-radius:2px;vertical-align:baseline;margin:0 5px 0 0;background:var(--cobalt);}
+  .pair-legend .sw.lite{opacity:0.35;margin-left:14px;}
+  .pair-group{background:var(--editorial);border:1px solid var(--pigeon);border-radius:3px;padding:13px 16px;margin-bottom:8px;}
+  .pair-title{font-size:12px;font-weight:700;letter-spacing:0.06em;text-transform:uppercase;margin:0 0 8px;}
+  .bar-row{display:flex;align-items:center;gap:10px;margin-bottom:6px;}
+  .bar-lbl{font-size:11px;font-weight:600;color:var(--aegean);width:104px;flex-shrink:0;text-transform:uppercase;letter-spacing:0.03em;}
+  .bar-track{flex:1;height:14px;background:var(--paper);border:1px solid var(--pigeon);border-radius:2px;overflow:hidden;}
+  .bar-fill{height:100%;border-radius:2px;transition:width .3s;}
+  .gap-callout{border-left:4px solid var(--gold);background:var(--pollen);padding:14px 16px;border-radius:0 3px 3px 0;margin-top:14px;}
+  .gap-callout p{margin:0;font-family:var(--serif);font-size:16.5px;line-height:1.6;color:var(--cobalt);}
+
+  /* ---------- DRAFT ---------- */
+  .draft-grid{display:grid;grid-template-columns:1fr 1fr;gap:14px;}
+  @media (max-width:640px){.draft-grid{grid-template-columns:1fr;}}
+  .clause-card{background:var(--paper);border:1px solid var(--pigeon);border-radius:3px;padding:18px;display:flex;flex-direction:column;}
+  .clause-card .tag-row{display:flex;justify-content:space-between;align-items:center;gap:8px;margin-bottom:6px;}
+  .clause-card .c-tag{font-size:11px;font-weight:700;letter-spacing:0.1em;text-transform:uppercase;color:var(--aegean);}
+  .pol-flag{font-size:9.5px;font-weight:700;letter-spacing:0.08em;text-transform:uppercase;color:var(--cobalt);background:var(--gold);padding:2px 7px;border-radius:2px;white-space:nowrap;}
+  .clause-card h3{font-family:var(--serif);font-weight:normal;font-size:17px;margin:0 0 10px;color:var(--cobalt);line-height:1.4;min-height:2.8em;}
+  .clause-card textarea{
+    width:100%;flex:1 1 auto;min-height:84px;border:1px solid var(--pigeon);border-radius:3px;padding:10px 12px;
+    font-family:var(--sans);font-size:13.5px;color:var(--cobalt);resize:vertical;background:var(--editorial);
+  }
+  .clause-card textarea:focus{outline:none;border-color:var(--cobalt);}
+  .pol-cost{font-size:12.5px;color:var(--aegean);font-style:italic;margin:8px 0 0;line-height:1.5;}
+  .clause-card.political{border:1px solid var(--cobalt);}
+
+  /* ---------- OUTPUT ---------- */
+  .charter-output{background:var(--cobalt);color:var(--paper);border-left:5px solid var(--gold);padding:26px 26px 22px;margin-top:26px;border-radius:4px;}
+  .mo-tag{font-size:11px;font-weight:700;color:var(--gold);letter-spacing:0.1em;text-transform:uppercase;margin:0 0 14px;}
+  .mo-placeholder{color:var(--pigeon);font-size:14.5px;font-style:italic;margin:0;line-height:1.6;}
+  .mo-context{font-size:12px;color:var(--pigeon);letter-spacing:0.04em;text-transform:uppercase;font-weight:600;margin:0 0 16px;}
+  .mo-line{margin:0 0 14px;}
+  .mo-k{display:block;font-size:10.5px;font-weight:700;letter-spacing:0.1em;text-transform:uppercase;color:var(--gold);margin-bottom:3px;}
+  .mo-user{font-family:var(--serif);font-size:16.5px;line-height:1.6;color:var(--paper);border-bottom:1px solid rgba(255,204,0,0.3);padding-bottom:1px;}
+  .mo-open{font-family:var(--serif);font-style:italic;font-size:15px;color:var(--pigeon);}
+  .mo-close{margin:18px 0 0;padding-top:14px;border-top:1px solid rgba(255,255,255,0.2);font-size:14px;line-height:1.6;color:var(--pigeon);}
+  .mo-btns{margin-top:18px;display:flex;gap:10px;flex-wrap:wrap;}
+  .mo-btns button{
+    font-size:12px;font-weight:700;letter-spacing:0.06em;text-transform:uppercase;
+    padding:11px 16px;border-radius:3px;cursor:pointer;transition:all .15s;
+  }
+  .btn-primary{background:var(--gold);border:1px solid var(--gold);color:var(--cobalt);}
+  .btn-primary:hover{background:var(--wheat);}
+  .btn-ghost{background:none;border:1px solid rgba(255,255,255,0.45);color:var(--paper);}
+  .btn-ghost:hover{border-color:var(--gold);color:var(--gold);}
+
+  .benchmark-note{margin-top:24px;background:var(--slush);border:1px solid var(--coastal);border-radius:3px;padding:15px 18px;}
+  .benchmark-note p{margin:0;font-size:14px;line-height:1.6;}
+  .benchmark-note .k{font-weight:700;font-size:11px;letter-spacing:0.08em;text-transform:uppercase;display:block;margin-bottom:4px;color:#3E8E8C;}
+
+  /* ---------- FOOTER ---------- */
+  .next-strip{margin-top:56px;padding-top:26px;border-top:1px solid var(--pigeon);}
+  .next-strip .pitch{font-family:var(--serif);font-size:16px;line-height:1.65;color:var(--cobalt);margin:0;max-width:620px;}
+  .footer-row{margin-top:34px;padding-top:16px;border-top:1px solid var(--pigeon);display:flex;justify-content:space-between;align-items:baseline;gap:8px 20px;flex-wrap:wrap;}
+  .footer-brand{font-size:10.5px;font-weight:700;letter-spacing:0.12em;text-transform:uppercase;color:var(--aegean);}
+  .footer-legal{font-size:11px;color:var(--aegean);}
+  .terminal-dot{display:block;width:12px;height:12px;border-radius:50%;background:var(--gold);margin:30px auto 0;}
+  button.reset{
+    font-size:11px;font-weight:600;letter-spacing:0.06em;text-transform:uppercase;
+    background:none;border:1px solid var(--pigeon);color:var(--aegean);padding:8px 14px;border-radius:3px;cursor:pointer;margin-top:24px;
+  }
+  button.reset:hover{border-color:var(--cobalt);color:var(--cobalt);}
+
+  /* ---------- PRINT ---------- */
+  @media print{
+    *{-webkit-print-color-adjust:exact;print-color-adjust:exact;}
+    body{background:var(--paper);}
+    .hero{padding:28px 20px 24px;}
+    .act{margin-top:30px;}
+    .opts .opt{display:none;}
+    .opts .opt[aria-pressed="true"]{display:block;}
+    #stemBlock{display:none;}
+    .trio,.stepper,.pool{display:none;}
+    .draft-grid{display:none;}
+    .mo-btns,button.reset,.benchmark-note{display:none;}
+    .card,.curve-box,.pair-group,.verdict,.arch,.charter-output,.rack-reveal,.gap-callout{page-break-inside:avoid;}
+  }
+</style>
+</head>
+<body>
+
+<div class="hero">
+  <div class="hero-inner">
+    <p class="eyebrow">ExperiencePoint<span class="reg">®</span> Field Tool</p>
+    <h1>The Six-Sentence Charter</h1>
+    <p>Most organizations choose their AI champions carefully. Far fewer write down the job. A working charter fits in six sentences, and this tool helps you draft yours in about ten minutes, <b>including the three sentences we can't write for you.</b></p>
+  </div>
+</div>
+
+<div class="wrap">
+
+  <!-- ============ ACT 1 ============ -->
+  <div class="act">
+    <div class="act-head"><span class="act-num">01</span><h2>Two questions</h2></div>
+    <p class="act-sub">Answer for the champions you have, or the role you're planning.</p>
+
+    <div class="card">
+      <p class="q-text">How were your AI champions selected?</p>
+      <div class="opts" id="q1opts">
+        <button class="opt" data-v="a">They volunteered, or showed real enthusiasm and comfort with the tools</button>
+        <button class="opt" data-v="b">They were assessed against defined criteria before being chosen</button>
+        <button class="opt" data-v="c">They were the only ones willing to take it on</button>
+        <button class="opt" data-v="d">Leadership assigned it to them as an extra duty</button>
+      </div>
+    </div>
+
+    <div class="stem-block" id="stemBlock">
+      <p class="stem-lead">Now six more. Could you finish each of these sentences today?</p>
+      <div id="stems"></div>
+    </div>
+
+    <div class="rack-reveal" id="rackReveal">
+      <p class="panel-tag">Your six sentences</p>
+      <div class="rack" id="rack"></div>
+      <p class="rack-verdict" id="rackVerdict"></p>
+      <p class="rack-note" id="rackNote"></p>
+    </div>
+  </div>
+
+  <!-- ============ ACT 2 ============ -->
+  <div class="act">
+    <div class="act-head"><span class="act-num">02</span><h2>Fast-forward twelve months</h2></div>
+    <p class="act-sub">Every champion program eventually faces this moment.</p>
+
+    <div class="dark">
+      <p class="q-text">It's a year from now. Someone senior asks what the champions program delivered. Pick the answer closest to the one you could give today.</p>
+      <div class="opts" id="tapeOpts">
+        <button class="opt" data-kind="activity">"We have 60 champions enrolled."</button>
+        <button class="opt" data-kind="outcome">"14 individual wins became team workflows."</button>
+        <button class="opt" data-kind="activity">"We ran 40 lunch-and-learns."</button>
+        <button class="opt" data-kind="activity">"Engagement is really strong."</button>
+        <button class="opt" data-kind="outcome">"2,100 team hours recovered, reported quarterly."</button>
+      </div>
+      <div class="verdict" id="tapeVerdict">
+        <span class="v-tag" id="tapeTag"></span>
+        <p class="vq">"And what changed?"</p>
+        <p id="tapeVerdictText"></p>
+      </div>
+    </div>
+  </div>
+
+  <!-- ============ ACT 3 ============ -->
+  <div class="act">
+    <div class="act-head"><span class="act-num">03</span><h2>The terrain</h2></div>
+    <p class="act-sub">AI adoption spreads unevenly: at any given moment, different teams sit in different phases. You have 10 chips. Each one stands for about a tenth of your teams. Deal them across the three phases.</p>
+
+    <p class="pool">Chips left: <b id="orgPool">10</b></p>
+    <div id="orgChips"></div>
+
+    <div class="curve-box">
+      <p class="panel-tag">Your distribution</p>
+      <svg id="curveSvg" viewBox="0 0 400 220" width="100%" height="auto" role="img" aria-label="AI value curve with your distribution shaded across three phases">
+        <rect id="band1" x="20" y="10" width="120" height="190" fill="#D86527" opacity="0.06"/>
+        <rect id="band2" x="140" y="10" width="120" height="190" fill="#68BFBD" opacity="0.06"/>
+        <rect id="band3" x="260" y="10" width="120" height="190" fill="#90B210" opacity="0.06"/>
+        <text x="80" y="26" font-family="Montserrat,Arial" font-size="9" font-weight="700" fill="#D86527" text-anchor="middle" letter-spacing="1">EARLY FRICTION</text>
+        <text x="200" y="26" font-family="Montserrat,Arial" font-size="9" font-weight="700" fill="#3E8E8C" text-anchor="middle" letter-spacing="1">OPTIMIZATION</text>
+        <text x="320" y="26" font-family="Montserrat,Arial" font-size="9" font-weight="700" fill="#6B860C" text-anchor="middle" letter-spacing="1">REIMAGINATION</text>
+        <line x1="20" y1="200" x2="380" y2="200" stroke="#D5D9E3" stroke-width="1"/>
+        <path d="M20,150 C60,175 95,195 140,190 C190,183 220,140 260,100 C300,62 340,45 380,35" fill="none" stroke="#293851" stroke-width="2.5"/>
+        <circle id="massDot" cx="0" cy="0" r="8" fill="#FFCC00" stroke="#293851" stroke-width="2" opacity="0"/>
+        <text x="200" y="214" font-family="Montserrat,Arial" font-size="9" fill="#586A90" text-anchor="middle" letter-spacing="1">TIME</text>
+      </svg>
+      <p class="curve-caption" id="curveCaption">Deal the chips and your distribution shades onto the curve. The gold dot marks your center of mass.</p>
+    </div>
+  </div>
+
+  <!-- ============ ACT 4 ============ -->
+  <div class="act">
+    <div class="act-head"><span class="act-num">04</span><h2>The bench</h2></div>
+    <p class="act-sub">Each phase needs a different kind of champion. Three archetypes:</p>
+
+    <div class="arch-grid">
+      <div class="arch a1">
+        <h3 style="color:var(--prairie);">Activators</h3>
+        <p class="phase">Early Friction</p>
+        <p><span class="k">The job</span>Get people through the dip: first wins, safety to experiment.</p>
+        <p><span class="k">The signal</span>Breadth of experimentation.</p>
+        <p><span class="k">They need</span>Protected time, ready-to-run assets, transitional change management.</p>
+      </div>
+      <div class="arch a2">
+        <h3 style="color:#3E8E8C;">Multipliers</h3>
+        <p class="phase">Optimization</p>
+        <p><span class="k">The job</span>Turn one person's win into a team's repeatable workflow.</p>
+        <p><span class="k">The signal</span>Team hours recovered.</p>
+        <p><span class="k">They need</span>Workflow design skill, packaged team plays.</p>
+      </div>
+      <div class="arch a3">
+        <h3 style="color:#6B860C;">Reimaginers</h3>
+        <p class="phase">Reimagination</p>
+        <p><span class="k">The job</span>Surface what's newly possible and connect it to strategy.</p>
+        <p><span class="k">The signal</span>Outcomes that couldn't have existed before.</p>
+        <p><span class="k">They need</span>An innovation method, transformational change management, a line to strategy.</p>
+      </div>
+    </div>
+
+    <p class="act-sub" style="margin-bottom:14px;">Same 10 chips, different question: where does your champions' time actually go? Deal them by the kind of work, and then we'll set need next to effort.</p>
+
+    <p class="pool">Chips left: <b id="benchPool">10</b></p>
+    <div id="benchChips"></div>
+
+    <div class="bench-reveal" id="benchReveal">
+      <p class="panel-tag">Need next to effort</p>
+      <p class="pair-legend"><span class="sw"></span>Share of your teams<span class="sw lite"></span>Share of champion time</p>
+      <div id="pairGroups"></div>
+      <div class="gap-callout"><p id="gapText"></p></div>
+    </div>
+  </div>
+
+  <!-- ============ ACT 5 ============ -->
+  <div class="act">
+    <div class="act-head"><span class="act-num">05</span><h2>The draft</h2></div>
+    <p class="act-sub">A charter is six sentences. Three of them anyone can draft. The other three cost their author something inside the organization, which is why they're usually the blanks. Write what you can; whatever stays open becomes the agenda.</p>
+
+    <div class="draft-grid" id="draftGrid"></div>
+
+    <div class="charter-output" id="charterOutput">
+      <p class="mo-tag">The charter, on one page</p>
+      <p class="mo-placeholder">Fill in any box above and your words assemble here, ready to hand to a champion.</p>
+    </div>
+
+    <div class="benchmark-note">
+      <p><span class="k">Want a benchmark?</span>Send the same six sentences to one of your champions. The distance between your answers and theirs tells you more than any industry comparison would.</p>
+    </div>
+
+    <button class="reset" onclick="downloadReport()" style="margin-right:8px;">Download report</button><button class="reset" onclick="resetTool()">Reset the tool</button>
+  </div>
+
+  <div class="next-strip">
+    <p class="pitch">Where this goes next: a short working session to agree on your phase and your number, then a facilitated session that turns this draft into a signed Champion Charter.</p>
+    <div class="footer-row">
+      <span class="footer-brand">ExperiencePoint<span class="reg">&reg;</span> Field Series</span>
+      <span class="footer-legal">Copyright &copy; ExperiencePoint Inc. 2026, all rights reserved.</span>
+    </div>
+    <span class="terminal-dot" aria-hidden="true"></span>
+  </div>
+
+</div>
+
+<script>
+/* ================= DATA ================= */
+var CLAUSES = [
+  {id:'outcome',  name:'Outcome',   stem:'If our champions succeed, the business change we\u2019ll see is\u2026', political:false,
+   label:'If they succeed'},
+  {id:'mechanism',name:'Mechanism', stem:'The recurring thing they run or feed is\u2026', political:false,
+   label:'The mechanism'},
+  {id:'scope',    name:'Scope',     stem:'The things they are explicitly not responsible for are\u2026', political:true,
+   cost:'Easy to type, harder to own: writing this means saying no to colleagues who ask champions for help today.',
+   label:'Out of scope'},
+  {id:'authority',name:'Authority', stem:'Without asking anyone, a champion can\u2026', political:false,
+   label:'They can, without asking'},
+  {id:'capacity', name:'Capacity',  stem:'The time formally protected for this work is\u2026', political:true,
+   cost:'Easy to type, harder to own: writing this sends a request up the chain.',
+   label:'Leadership\u2019s side'},
+  {id:'signal',   name:'Signal',    stem:'We\u2019ll know it\u2019s working when\u2026', political:true,
+   cost:'Easy to type, harder to own: writing this volunteers the program to be measured.',
+   label:'The one number'}
+];
+
+var PLACEHOLDERS = {
+  1:{outcome:'e.g. By Q3, 70% of the team has shipped one real task with AI and shown it to someone',
+     mechanism:'e.g. A weekly 25-minute open lab where anyone brings a task and leaves with a working start',
+     scope:'e.g. Not the help desk, not tool procurement, not writing policy',
+     authority:'e.g. Can run pilots with any volunteer team and spend up to a small fixed budget',
+     capacity:'e.g. Four protected hours per champion per month, honoured in workload plans',
+     signal:'e.g. Share of the team that has shipped one real task with AI this quarter'},
+  2:{outcome:'e.g. By Q3, 14 individual wins have a documented team workflow in active use',
+     mechanism:'e.g. A monthly workflow clinic where one win gets rebuilt as a team play',
+     scope:'e.g. Not training beginners, not the help desk, not chasing licences',
+     authority:'e.g. Can change a team workflow with the team lead\u2019s nod, no committee',
+     capacity:'e.g. Four protected hours per champion per month plus executive airtime twice a year',
+     signal:'e.g. Team hours recovered, reported quarterly'},
+  3:{outcome:'e.g. By Q3, two initiatives exist that couldn\u2019t have existed before, each with an owner and a budget line',
+     mechanism:'e.g. A quarterly review where champions pitch what\u2019s newly possible to the leadership team',
+     scope:'e.g. Not delivery of the initiatives themselves, not everyday adoption support',
+     authority:'e.g. Can convene a cross-functional sprint of up to five people for two weeks',
+     capacity:'e.g. A day per month per champion, plus a seat in the strategy cycle',
+     signal:'e.g. Number of live initiatives that could not have existed before AI'}
+};
+
+var PHASE_NAMES = {1:'Early Friction', 2:'Optimization', 3:'Reimagination'};
+var PHASE_COLORS = {1:'#D86527', 2:'#68BFBD', 3:'#90B210'};
+var PHASE_TEXT   = {1:'#D86527', 2:'#3E8E8C', 3:'#6B860C'};
+var ARCH_NAMES = {1:'Activator', 2:'Multiplier', 3:'Reimaginer'};
+
+var CURVE_PTS = [[20,150],[50,168],[80,183],[110,191],[140,190],[170,176],[200,152],[230,127],[260,100],[290,76],[320,57],[350,44],[380,35]];
+function curveY(x){
+  for (var i=0;i<CURVE_PTS.length-1;i++){
+    var a=CURVE_PTS[i], b=CURVE_PTS[i+1];
+    if (x>=a[0] && x<=b[0]){
+      var t=(x-a[0])/(b[0]-a[0]);
+      return a[1]+t*(b[1]-a[1]);
+    }
+  }
+  return 150;
+}
+function esc(s){
+  return s.replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/\n/g,'<br>');
+}
+
+/* ================= STATE ================= */
+var stemAnswers = {};
+var org = [0,0,0];
+var bench = [0,0,0];
+var dominantPhase = 2;
+var TOTAL_CHIPS = 10;
+
+/* ================= ACT 1 ================= */
+var q1opts = document.getElementById('q1opts');
+q1opts.addEventListener('click', function(e){
+  var btn = e.target.closest('.opt'); if(!btn) return;
+  q1opts.querySelectorAll('.opt').forEach(function(o){o.setAttribute('aria-pressed','false');});
+  btn.setAttribute('aria-pressed','true');
+  document.getElementById('stemBlock').classList.add('show');
+});
+
+var stemsEl = document.getElementById('stems');
+CLAUSES.forEach(function(c){
+  var d = document.createElement('div');
+  d.className='stem';
+  d.innerHTML = '<p class="clause">'+c.name+'</p>'+
+    '<p class="stem-text">\u201C'+c.stem+'\u201D</p>'+
+    '<div class="trio" data-id="'+c.id+'">'+
+      '<button data-v="2">Could write it now</button>'+
+      '<button data-v="1">Loosely</button>'+
+      '<button data-v="0">Haven\u2019t decided</button>'+
+    '</div>';
+  stemsEl.appendChild(d);
+});
+stemsEl.addEventListener('click', function(e){
+  var btn = e.target.closest('button'); if(!btn) return;
+  var trio = btn.parentElement;
+  trio.querySelectorAll('button').forEach(function(b){b.setAttribute('aria-pressed','false');});
+  btn.setAttribute('aria-pressed','true');
+  stemAnswers[trio.dataset.id] = Number(btn.dataset.v);
+  if (Object.keys(stemAnswers).length === CLAUSES.length) revealRack();
+});
+
+function revealRack(){
+  var rack = document.getElementById('rack');
+  rack.innerHTML='';
+  var full=0, half=0, gaps=0;
+  CLAUSES.forEach(function(c){
+    var v = stemAnswers[c.id];
+    var cls, mark, state, stateCls;
+    if (v===2){ cls='full'; mark='\u2713'; state='ready'; stateCls='s-full'; full++; }
+    else if (v===1){ cls='half'; mark='\u007E'; state='loose'; stateCls='s-half'; half++; }
+    else { cls='gap'; mark=''; state='missing'; stateCls='s-gap'; gaps++; }
+    rack.innerHTML += '<div class="slot"><div class="box '+cls+'">'+mark+'</div><span class="lbl">'+c.name+'</span><span class="state '+stateCls+'">'+state+'</span></div>';
+  });
+  var verdict = document.getElementById('rackVerdict');
+  var note = document.getElementById('rackNote');
+  if (gaps===0 && half===0){
+    verdict.innerHTML = 'All six sentences exist. Genuinely rare. The draft in step 05 tests whether they\u2019d survive being written down and signed.';
+    note.textContent = '';
+  } else {
+    var counts = [];
+    if (full>0) counts.push(full+' ready');
+    if (half>0) counts.push(half+' loose');
+    if (gaps>0) counts.push('<b>'+gaps+' missing</b>');
+    verdict.innerHTML = 'The first question was easy. These six ran thinner: '+counts.join(', ')+'.';
+    note.textContent = 'The missing sentences are the parts of the job your champions are currently guessing at. Naming people fast was the right instinct. The written job is what has to catch up, and the rest of this page drafts it.';
+  }
+  document.getElementById('rackReveal').classList.add('show');
+}
+
+/* ================= ACT 2 ================= */
+var tapeOpts = document.getElementById('tapeOpts');
+tapeOpts.addEventListener('click', function(e){
+  var btn = e.target.closest('.opt'); if(!btn) return;
+  tapeOpts.querySelectorAll('.opt').forEach(function(o){o.setAttribute('aria-pressed','false');});
+  btn.setAttribute('aria-pressed','true');
+  var v = document.getElementById('tapeVerdict');
+  var t = document.getElementById('tapeVerdictText');
+  var tag = document.getElementById('tapeTag');
+  v.classList.remove('cut','funded');
+  if (btn.dataset.kind==='activity'){
+    v.classList.add('cut');
+    tag.textContent = 'This answer gets cut';
+    t.textContent = 'Activity numbers can\u2019t answer that question. A program that reports activity gets funded like a club, and clubs get trimmed in the first tight budget cycle, with your name on the program. The rest of this page is about earning the other kind of answer.';
+  } else {
+    v.classList.add('funded');
+    tag.textContent = 'This answer gets funded';
+    t.textContent = 'A result with a number survives that question. The rest of this page checks whether the charter behind an answer like that actually exists yet, because a good number without a written charter is luck.';
+  }
+  v.classList.add('show');
+});
+
+/* ================= CHIPS ================= */
+function buildChipRows(containerId, group, rows){
+  var el = document.getElementById(containerId);
+  rows.forEach(function(r, i){
+    var d = document.createElement('div');
+    d.className = 'chip-row r'+(i+1);
+    d.innerHTML =
+      '<div class="chip-top"><span class="row-name">'+r.name+'</span>'+
+      '<div class="stepper">'+
+        '<button class="chip-btn" data-g="'+group+'" data-i="'+i+'" data-d="-1" aria-label="Remove a chip from '+r.name+'">\u2212</button>'+
+        '<button class="chip-btn" data-g="'+group+'" data-i="'+i+'" data-d="1" aria-label="Add a chip to '+r.name+'">+</button>'+
+      '</div></div>'+
+      '<p class="row-desc">'+r.desc+'</p>'+
+      '<div class="chip-tray" id="'+group+'_t'+i+'"></div>';
+    el.appendChild(d);
+  });
+  el.addEventListener('click', function(e){
+    var btn = e.target.closest('.chip-btn'); if(!btn) return;
+    var i = Number(btn.dataset.i), d = Number(btn.dataset.d);
+    var arr = group==='org' ? org : bench;
+    var sum = arr[0]+arr[1]+arr[2];
+    if (d>0 && sum>=TOTAL_CHIPS) return;
+    if (d<0 && arr[i]<=0) return;
+    arr[i]+=d;
+    renderChips(group);
+    if (group==='org'){ updateTerrain(); } 
+    updateBench();
+  });
+}
+function renderChips(group){
+  var arr = group==='org' ? org : bench;
+  var sum = arr[0]+arr[1]+arr[2];
+  document.getElementById(group==='org'?'orgPool':'benchPool').textContent = TOTAL_CHIPS - sum;
+  for (var i=0;i<3;i++){
+    var tray = document.getElementById(group+'_t'+i);
+    var html='';
+    for (var k=0;k<arr[i];k++){ html += '<span class="chip"></span>'; }
+    tray.innerHTML = html;
+  }
+  document.querySelectorAll('#'+(group==='org'?'orgChips':'benchChips')+' .chip-btn').forEach(function(b){
+    var i = Number(b.dataset.i), d = Number(b.dataset.d);
+    b.disabled = (d>0 && sum>=TOTAL_CHIPS) || (d<0 && arr[i]<=0);
+  });
+}
+
+buildChipRows('orgChips','org',[
+  {name:'Early Friction', desc:'Most people here are hesitant. AI shows up for small, low-stakes tasks, if at all.'},
+  {name:'Optimization', desc:'AI is used daily to speed up existing work, with clear guardrails.'},
+  {name:'Reimagination', desc:'Teams here are redesigning workflows, roles, or products around what AI makes possible.'}
+]);
+buildChipRows('benchChips','bench',[
+  {name:'Activator work', desc:'Demos, lunch-and-learns, helping individuals get first wins.'},
+  {name:'Multiplier work', desc:'Turning individual wins into team workflows.'},
+  {name:'Reimaginer work', desc:'Surfacing what\u2019s newly possible and connecting it to strategy.'}
+]);
+
+/* ================= ACT 3 ================= */
+function updateTerrain(){
+  var sum = org[0]+org[1]+org[2];
+  var bands=['band1','band2','band3'];
+  for (var j=0;j<3;j++){
+    document.getElementById(bands[j]).setAttribute('opacity', sum===0 ? 0.06 : (0.06+0.05*org[j]));
+  }
+  var dot = document.getElementById('massDot');
+  var caption = document.getElementById('curveCaption');
+  if (sum===0){
+    dot.setAttribute('opacity',0);
+    caption.textContent = 'Deal the chips and your distribution shades onto the curve. The gold dot marks your center of mass.';
+    dominantPhase = 2;
+  } else {
+    var centers=[80,200,320];
+    var cx = (org[0]*centers[0]+org[1]*centers[1]+org[2]*centers[2])/sum;
+    dot.setAttribute('cx',cx); dot.setAttribute('cy',curveY(cx)); dot.setAttribute('opacity',1);
+    var maxI = org.indexOf(Math.max(org[0],org[1],org[2]));
+    dominantPhase = maxI+1;
+    if (org[maxI]===sum){
+      caption.textContent = 'All of your chips sit in '+PHASE_NAMES[dominantPhase]+'. That happens, though most organizations find some spread once they look team by team.';
+    } else {
+      caption.textContent = 'Your center of mass sits in '+PHASE_NAMES[dominantPhase]+', with teams spread beyond it. That spread is normal, and it\u2019s why a single kind of champion rarely covers an organization.';
+    }
+  }
+  refreshPlaceholders();
+}
+
+/* ================= ACT 4 ================= */
+function updateBench(){
+  var bSum = bench[0]+bench[1]+bench[2];
+  var oSum = org[0]+org[1]+org[2];
+  var reveal = document.getElementById('benchReveal');
+  if (bSum===0 || oSum===0){ reveal.classList.remove('show'); return; }
+
+  var groups = document.getElementById('pairGroups');
+  groups.innerHTML='';
+  for (var p=0;p<3;p++){
+    var col = PHASE_COLORS[p+1];
+    groups.innerHTML +=
+      '<div class="pair-group">'+
+        '<p class="pair-title" style="color:'+PHASE_TEXT[p+1]+';">'+PHASE_NAMES[p+1]+'</p>'+
+        '<div class="bar-row"><span class="bar-lbl">Your teams</span><div class="bar-track"><div class="bar-fill" style="width:'+(org[p]*10)+'%;background:'+col+';"></div></div></div>'+
+        '<div class="bar-row"><span class="bar-lbl">Champion time</span><div class="bar-track"><div class="bar-fill" style="width:'+(bench[p]*10)+'%;background:'+col+';opacity:0.35;"></div></div></div>'+
+      '</div>';
+  }
+
+  var maxOrg = org.indexOf(Math.max(org[0],org[1],org[2]));
+  var maxBench = bench.indexOf(Math.max(bench[0],bench[1],bench[2]));
+  var gapText = document.getElementById('gapText');
+  if (maxBench !== maxOrg || bench[maxOrg]+2 < org[maxOrg]){
+    gapText.textContent = 'Most of your teams are in '+PHASE_NAMES[maxOrg+1]+', while most champion time goes to '+ARCH_NAMES[maxBench+1]+' work. The effort is real. It\u2019s aimed at a different phase than the one your teams are in, and closing that gap is what a written charter is for.';
+  } else {
+    gapText.textContent = 'Champion time roughly tracks where your teams are. The open question is whether that happened by design or by luck, and the draft below is how it becomes design.';
+  }
+  reveal.classList.add('show');
+}
+
+/* ================= ACT 5 ================= */
+var draftGrid = document.getElementById('draftGrid');
+CLAUSES.forEach(function(c){
+  var d = document.createElement('div');
+  d.className = 'clause-card' + (c.political ? ' political' : '');
+  d.innerHTML =
+    '<div class="tag-row"><span class="c-tag">'+c.name+'</span>'+(c.political?'<span class="pol-flag">Costs a signature</span>':'')+'</div>'+
+    '<h3>\u201C'+c.stem+'\u201D</h3>'+
+    '<textarea id="in_'+c.id+'" placeholder=""></textarea>'+
+    (c.political?'<p class="pol-cost">'+c.cost+'</p>':'');
+  draftGrid.appendChild(d);
+});
+function refreshPlaceholders(){
+  var set = PLACEHOLDERS[dominantPhase] || PLACEHOLDERS[2];
+  CLAUSES.forEach(function(c){
+    document.getElementById('in_'+c.id).setAttribute('placeholder', set[c.id]);
+  });
+}
+refreshPlaceholders();
+
+function renderOutput(){
+  var out = document.getElementById('charterOutput');
+  var anyFilled = false;
+  CLAUSES.forEach(function(c){
+    if (document.getElementById('in_'+c.id).value.trim()) anyFilled = true;
+  });
+  if (!anyFilled){
+    out.innerHTML = '<p class="mo-tag">The charter, on one page</p><p class="mo-placeholder">Fill in any box above and your words assemble here, ready to hand to a champion.</p>';
+    return;
+  }
+  var html = '<p class="mo-tag">The charter, on one page</p>';
+  var oSum = org[0]+org[1]+org[2];
+  if (oSum>0){
+    html += '<p class="mo-context">Drafted for an organization whose center of mass is in '+PHASE_NAMES[dominantPhase]+'</p>';
+  }
+  var missing = [], politicalMissing = [];
+  CLAUSES.forEach(function(c){
+    var v = document.getElementById('in_'+c.id).value.trim();
+    html += '<div class="mo-line"><span class="mo-k">'+c.label+'</span>';
+    if (v){
+      html += '<span class="mo-user">'+esc(v)+'</span>';
+    } else {
+      html += '<span class="mo-open">still open</span>';
+      missing.push(c.name);
+      if (c.political) politicalMissing.push(c.name);
+    }
+    html += '</div>';
+  });
+  if (politicalMissing.length){
+    html += '<p class="mo-close">The open clauses include '+(politicalMissing.length===1?'a decision':'decisions')+' nobody inside wants to author alone. A facilitated session exists to force '+(politicalMissing.length===1?'it':'them')+', with the right people in the room.</p>';
+  } else if (!missing.length){
+    html += '<p class="mo-close">Now the harder question: who signs it? A clause without a signature is a wish.</p>';
+  }
+  html += '<div class="mo-btns">'+
+    '<button class="btn-primary" id="copyDraft">Copy the draft</button>'+
+    '<button class="btn-ghost" id="copyChampion">Copy the champion version</button>'+
+  '</div>';
+  out.innerHTML = html;
+  document.getElementById('copyDraft').addEventListener('click', function(){ copyText(buildDraftText(), this); });
+  document.getElementById('copyChampion').addEventListener('click', function(){ copyText(buildChampionText(), this); });
+}
+CLAUSES.forEach(function(c){
+  document.getElementById('in_'+c.id).addEventListener('input', renderOutput);
+});
+
+function buildDraftText(){
+  var lines = ['CHAMPION CHARTER, DRAFT'];
+  var oSum = org[0]+org[1]+org[2];
+  if (oSum>0) lines.push('Center of mass: '+PHASE_NAMES[dominantPhase]);
+  lines.push('');
+  CLAUSES.forEach(function(c){
+    var v = document.getElementById('in_'+c.id).value.trim();
+    lines.push(c.label.toUpperCase()+': '+(v ? v : '[still open]'));
+  });
+  lines.push('');
+  lines.push('Open clauses are the agenda for the next conversation.');
+  return lines.join('\n');
+}
+function buildChampionText(){
+  var lines = ['Quick exercise. Could you finish these six sentences about your champion role today?',''];
+  var stems = [
+    'If I succeed, the business change we\u2019ll see is\u2026',
+    'The recurring thing I run or feed is\u2026',
+    'The things I\u2019m explicitly not responsible for are\u2026',
+    'Without asking anyone, I can\u2026',
+    'The time formally protected for this work is\u2026',
+    'We\u2019ll know it\u2019s working when\u2026'
+  ];
+  stems.forEach(function(s,i){ lines.push((i+1)+'. '+s); });
+  lines.push('');
+  lines.push('Send back whatever you can. Blanks are useful too.');
+  return lines.join('\n');
+}
+function copyText(text, btn){
+  var done = function(){
+    var old = btn.textContent;
+    btn.textContent = 'Copied';
+    setTimeout(function(){ btn.textContent = old; }, 1600);
+  };
+  if (navigator.clipboard && navigator.clipboard.writeText){
+    navigator.clipboard.writeText(text).then(done, function(){ fallbackCopy(text, done); });
+  } else {
+    fallbackCopy(text, done);
+  }
+}
+function fallbackCopy(text, done){
+  var ta = document.createElement('textarea');
+  ta.value = text;
+  ta.style.position='fixed'; ta.style.opacity='0';
+  document.body.appendChild(ta);
+  ta.select();
+  try { document.execCommand('copy'); } catch(e){}
+  document.body.removeChild(ta);
+  done();
+}
+
+/* ================= REPORT DOWNLOAD ================= */
+function buildReportHTML(){
+  var clone = document.documentElement.cloneNode(true);
+  clone.querySelectorAll('script').forEach(function(s){ s.remove(); });
+  clone.querySelectorAll('button.reset').forEach(function(b){ b.remove(); });
+  clone.querySelectorAll('.mo-btns').forEach(function(b){ b.remove(); });
+  ['.draft-grid','.benchmark-note','#stemBlock'].forEach(function(sel){
+    var el = clone.querySelector(sel); if (el) el.remove();
+  });
+  var head = clone.querySelector('head');
+  if (head){
+    var extra = document.createElement('style');
+    extra.textContent = '.opts .opt{display:none;}.opts .opt[aria-pressed="true"]{display:block;}.stepper,.pool{display:none;}';
+    head.appendChild(extra);
+  }
+  var hero = clone.querySelector('.hero-inner');
+  if (hero){
+    var d = document.createElement('p');
+    d.style.cssText = 'font-size:11px;font-weight:600;letter-spacing:0.12em;text-transform:uppercase;color:#D5D9E3;margin:16px 0 0;font-family:Montserrat,Arial,sans-serif;';
+    d.textContent = 'Report \u00B7 ' + new Date().toLocaleDateString(undefined,{year:'numeric',month:'long',day:'numeric'});
+    hero.appendChild(d);
+  }
+  return '<!DOCTYPE html>\n' + clone.outerHTML;
+}
+function downloadReport(){
+  var blob = new Blob([buildReportHTML()], {type:'text/html'});
+  var url = URL.createObjectURL(blob);
+  var a = document.createElement('a');
+  a.href = url;
+  a.download = 'six-sentence-charter-report.html';
+  document.body.appendChild(a);
+  a.click();
+  setTimeout(function(){ URL.revokeObjectURL(url); a.remove(); }, 500);
+}
+
+/* ================= RESET ================= */
+function resetTool(){
+  stemAnswers = {}; dominantPhase=2;
+  org=[0,0,0]; bench=[0,0,0];
+  document.querySelectorAll('[aria-pressed]').forEach(function(b){b.setAttribute('aria-pressed','false');});
+  document.getElementById('stemBlock').classList.remove('show');
+  document.getElementById('rackReveal').classList.remove('show');
+  document.getElementById('tapeVerdict').classList.remove('show','cut','funded');
+  renderChips('org'); renderChips('bench');
+  updateTerrain();
+  document.getElementById('benchReveal').classList.remove('show');
+  CLAUSES.forEach(function(c){ document.getElementById('in_'+c.id).value=''; });
+  renderOutput();
+  window.scrollTo({top:0, behavior:'smooth'});
+}
+
+renderChips('org'); renderChips('bench');
+updateTerrain();
+</script>
+
+</body>
+</html>
