@@ -115,17 +115,20 @@ check('clear deletes behind the gate', r.data.ok===true);
 r=await call('GET','/api/state?tool=pyc&code=ABCD',null,KH);
 check('cleared session reads empty', r.data.state===null);
 
-// origin lock
-const oenv={ DB: env.DB, ALLOW_ORIGIN:'https://ep.github.io' };
-async function ocall(origin){
-  const req=new Request(base+'/api/state?tool=open&code=ABCD',{method:'GET',headers:{Origin:origin}});
-  const res=await worker.fetch(req,oenv);
+// origin lock: active by default from the code, no dashboard variable needed
+async function ocall(origin, oenv){
+  const req=new Request(base+'/api/state?tool=open&code=ABCD',{method:'GET',headers:origin?{Origin:origin}:{}});
+  const res=await worker.fetch(req, oenv||env);
   return { status:res.status, allow:res.headers.get('Access-Control-Allow-Origin') };
 }
 let o=await ocall('https://ep.github.io');
-check('allowed origin passes, header echoed', o.status===200 && o.allow==='https://ep.github.io');
+check('pages origin passes by default, header echoed', o.status===200 && o.allow==='https://ep.github.io');
 o=await ocall('https://evil.example');
-check('other origins refused', o.status===403);
+check('other origins refused by default', o.status===403);
+o=await ocall(null);
+check('no-origin requests (health checks, curl) pass', o.status===200);
+o=await ocall('https://staging.example', { DB: env.DB, ALLOW_ORIGIN:'https://staging.example' });
+check('dashboard variable overrides the code default', o.status===200 && o.allow==='https://staging.example');
 
 // retention sweep
 const db2=FakeDB();
