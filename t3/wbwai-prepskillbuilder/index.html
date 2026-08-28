@@ -1,0 +1,654 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>201 Prep Skill Builder</title>
+<style>
+  :root{
+    --cobalt:#293851;
+    --aegean:#586A90;
+    --pigeon:#D5D9E3;
+    --coastal:#68BFBD;
+    --glacier:#B3DFDE;
+    --prairie:#D86527;
+    --fern:#90B210;
+    --gold:#FFCC00;
+    --paper:#FFFFFF;
+    --editorial:#F9F6F6;
+    --inked:#0A0E14;
+    --font-display: 'Montserrat', 'Helvetica Neue', Arial, sans-serif;
+    --font-body: Georgia, 'Times New Roman', serif;
+  }
+
+  *{ box-sizing:border-box; }
+  html,body{ height:100%; }
+  body{
+    margin:0;
+    font-family:var(--font-display);
+    background:var(--editorial);
+    color:var(--inked);
+    display:flex;
+    align-items:center;
+    justify-content:center;
+    min-height:100vh;
+    padding:24px 16px;
+  }
+
+  .app{
+    width:100%;
+    max-width:760px;
+    background:var(--paper);
+    border-radius:20px;
+    box-shadow:0 20px 60px rgba(41,56,81,0.16), 0 2px 8px rgba(41,56,81,0.08);
+    overflow:hidden;
+    position:relative;
+  }
+
+  .topbar{
+    padding:22px 28px 0 28px;
+  }
+  .eyebrow{
+    font-size:11px;
+    font-weight:700;
+    letter-spacing:0.14em;
+    color:var(--aegean);
+    text-transform:uppercase;
+  }
+  .progress{
+    display:flex;
+    gap:6px;
+    margin-top:14px;
+  }
+  .progress .seg{
+    flex:1;
+    height:4px;
+    border-radius:4px;
+    background:var(--pigeon);
+    overflow:hidden;
+  }
+  .progress .seg span{
+    display:block;
+    height:100%;
+    width:0%;
+    background:var(--cobalt);
+    transition:width .45s cubic-bezier(.65,0,.35,1);
+  }
+  .progress .seg.done span{ width:100%; }
+  .progress .seg.active span{ width:100%; }
+
+  .stages{
+    position:relative;
+  }
+  .stage{
+    padding:26px 28px 28px 28px;
+    display:none;
+  }
+  .stage.visible{
+    display:block;
+    animation: enter .38s cubic-bezier(.2,.8,.3,1);
+  }
+  @keyframes enter{
+    from{ opacity:0; transform:translateX(18px); }
+    to{ opacity:1; transform:translateX(0); }
+  }
+
+  h1{
+    font-family:var(--font-display);
+    font-size:26px;
+    font-weight:700;
+    color:var(--cobalt);
+    margin:6px 0 4px 0;
+    letter-spacing:-0.01em;
+  }
+  .sub{
+    font-family:var(--font-body);
+    font-style:italic;
+    color:var(--aegean);
+    font-size:15px;
+    margin:0 0 22px 0;
+    line-height:1.4;
+  }
+
+  /* ---- Step 1: archetype cards ---- */
+  .cards{
+    display:grid;
+    grid-template-columns:1fr 1fr;
+    gap:12px;
+  }
+  @media (max-width:560px){
+    .cards{ grid-template-columns:1fr; }
+  }
+  .card{
+    text-align:left;
+    border:2px solid var(--pigeon);
+    background:var(--editorial);
+    border-radius:14px;
+    padding:16px 16px 15px 16px;
+    cursor:pointer;
+    transition:transform .16s ease, border-color .16s ease, box-shadow .16s ease, background .16s ease;
+    position:relative;
+    font-family:inherit;
+  }
+  .card:hover{
+    transform:translateY(-2px);
+    box-shadow:0 8px 20px rgba(41,56,81,0.12);
+  }
+  .card:active{ transform:translateY(0px) scale(.99); }
+  .card:focus-visible{
+    outline:3px solid var(--cobalt);
+    outline-offset:2px;
+  }
+  .card.selected{
+    background:var(--paper);
+    box-shadow:0 10px 26px rgba(41,56,81,0.18);
+  }
+  .tag{
+    display:inline-block;
+    font-size:10px;
+    font-weight:700;
+    letter-spacing:0.1em;
+    text-transform:uppercase;
+    padding:3px 9px;
+    border-radius:20px;
+    color:var(--paper);
+    margin-bottom:9px;
+  }
+  .card-title{
+    font-family:var(--font-display);
+    font-weight:700;
+    font-size:16.5px;
+    color:var(--cobalt);
+    margin:0 0 6px 0;
+  }
+  .card-quote{
+    font-family:var(--font-body);
+    font-style:italic;
+    font-size:12.8px;
+    color:#333;
+    line-height:1.38;
+    margin:0;
+  }
+  .check{
+    position:absolute;
+    top:12px; right:12px;
+    width:22px; height:22px;
+    border-radius:50%;
+    background:var(--cobalt);
+    color:var(--paper);
+    display:flex;
+    align-items:center;
+    justify-content:center;
+    font-size:13px;
+    opacity:0;
+    transform:scale(.5);
+    transition:opacity .18s ease, transform .18s cubic-bezier(.34,1.56,.64,1);
+  }
+  .card.selected .check{ opacity:1; transform:scale(1); }
+
+  /* ---- Step 2 ---- */
+  .chip-row{
+    display:flex;
+    flex-wrap:wrap;
+    gap:8px;
+    margin-bottom:14px;
+  }
+  .chip{
+    font-family:var(--font-display);
+    font-size:13.5px;
+    font-weight:600;
+    color:var(--cobalt);
+    background:var(--editorial);
+    border:2px solid var(--pigeon);
+    padding:9px 16px;
+    border-radius:30px;
+    cursor:pointer;
+    transition:all .14s ease;
+  }
+  .chip:hover{ border-color:var(--aegean); }
+  .chip.selected{
+    background:var(--cobalt);
+    border-color:var(--cobalt);
+    color:var(--paper);
+  }
+
+  .field-label{
+    font-size:11px;
+    font-weight:700;
+    letter-spacing:0.08em;
+    text-transform:uppercase;
+    color:var(--aegean);
+    margin:18px 0 8px 0;
+  }
+  .datefield, .textfield{
+    width:100%;
+    font-family:var(--font-display);
+    font-size:14.5px;
+    padding:11px 14px;
+    border-radius:10px;
+    border:2px solid var(--pigeon);
+    background:var(--editorial);
+    color:var(--cobalt);
+    transition:border-color .14s ease;
+  }
+  .datefield:focus, .textfield:focus{
+    outline:none;
+    border-color:var(--cobalt);
+  }
+
+  .selected-badge{
+    display:inline-flex;
+    align-items:center;
+    gap:8px;
+    font-size:12px;
+    font-weight:700;
+    letter-spacing:0.04em;
+    color:var(--cobalt);
+    background:var(--editorial);
+    border:1px solid var(--pigeon);
+    padding:6px 12px 6px 8px;
+    border-radius:30px;
+    margin-bottom:16px;
+  }
+  .selected-badge .dot{
+    width:9px; height:9px; border-radius:50%;
+  }
+
+  .build-card{
+    background:var(--editorial);
+    border-radius:14px;
+    padding:16px 18px;
+    margin-bottom:6px;
+  }
+  .build-card .k{
+    font-size:10.5px;
+    font-weight:700;
+    letter-spacing:0.1em;
+    text-transform:uppercase;
+    color:var(--aegean);
+    margin-bottom:6px;
+  }
+  .build-card .v{
+    font-family:var(--font-body);
+    font-size:15px;
+    line-height:1.48;
+    color:var(--inked);
+  }
+
+  /* ---- Step 3: output ---- */
+  .terminal{
+    background:var(--cobalt);
+    border-radius:14px;
+    padding:20px 20px 18px 20px;
+    position:relative;
+  }
+  .terminal .dots{ display:flex; gap:6px; margin-bottom:14px; }
+  .terminal .dots span{
+    width:9px; height:9px; border-radius:50%;
+    background:var(--aegean);
+    display:inline-block;
+  }
+  .terminal pre{
+    margin:0;
+    font-family:'SFMono-Regular', Consolas, 'Liberation Mono', Menlo, monospace;
+    font-size:12.6px;
+    line-height:1.55;
+    color:#E9EDF3;
+    white-space:pre-wrap;
+    word-wrap:break-word;
+    max-height:340px;
+    overflow-y:auto;
+  }
+
+  .btn-row{
+    display:flex;
+    gap:10px;
+    margin-top:16px;
+  }
+  .btn{
+    font-family:var(--font-display);
+    font-weight:700;
+    font-size:14px;
+    border:none;
+    border-radius:11px;
+    padding:13px 20px;
+    cursor:pointer;
+    transition:transform .12s ease, opacity .12s ease, background .16s ease;
+    display:inline-flex;
+    align-items:center;
+    gap:8px;
+  }
+  .btn:active{ transform:scale(.97); }
+  .btn-primary{
+    background:var(--cobalt);
+    color:var(--paper);
+    flex:1;
+    justify-content:center;
+  }
+  .btn-primary:hover{ background:#1f2b3f; }
+  .btn-primary.copied{ background:var(--fern); }
+  .btn-primary:disabled{ opacity:.4; cursor:not-allowed; }
+  .btn-ghost{
+    background:transparent;
+    color:var(--aegean);
+    font-size:13.5px;
+    padding:13px 8px;
+  }
+  .btn-ghost:hover{ color:var(--cobalt); }
+
+  .nav-row{
+    display:flex;
+    justify-content:space-between;
+    align-items:center;
+    margin-top:22px;
+  }
+  .back-link{
+    background:none;
+    border:none;
+    color:var(--aegean);
+    font-family:var(--font-display);
+    font-size:13.5px;
+    font-weight:600;
+    cursor:pointer;
+    padding:8px 0;
+  }
+  .back-link:hover{ color:var(--cobalt); }
+  .next-btn{
+    background:var(--cobalt);
+    color:var(--paper);
+    border:none;
+    border-radius:11px;
+    padding:12px 24px;
+    font-family:var(--font-display);
+    font-weight:700;
+    font-size:14px;
+    cursor:pointer;
+    transition:background .16s ease, opacity .16s ease, transform .12s ease;
+  }
+  .next-btn:hover{ background:#1f2b3f; }
+  .next-btn:active{ transform:scale(.97); }
+  .next-btn:disabled{ opacity:.35; cursor:not-allowed; }
+
+  .footer-note{
+    font-family:var(--font-body);
+    font-style:italic;
+    font-size:12.5px;
+    color:var(--aegean);
+    text-align:center;
+    margin-top:14px;
+  }
+
+  .brandfoot{
+    display:flex;
+    align-items:center;
+    justify-content:center;
+    gap:6px;
+    padding:14px;
+    font-size:10.5px;
+    color:var(--aegean);
+    letter-spacing:0.02em;
+    border-top:1px solid var(--pigeon);
+  }
+  .brandfoot .gold-dot{
+    width:6px; height:6px; border-radius:50%; background:var(--gold);
+  }
+</style>
+</head>
+<body>
+
+<div class="app">
+  <div class="topbar">
+    <div class="eyebrow">WBWAI 201 &middot; PREP SKILL BUILDER</div>
+    <div class="progress">
+      <div class="seg active" id="seg1"><span></span></div>
+      <div class="seg" id="seg2"><span></span></div>
+      <div class="seg" id="seg3"><span></span></div>
+    </div>
+  </div>
+
+  <div class="stages">
+
+    <!-- STEP 1 -->
+    <div class="stage visible" id="stage1">
+      <h1>Where are you today?</h1>
+      <p class="sub">Pick the one that's most true right now &mdash; not the one you aspire to.</p>
+      <div class="cards" id="cardGrid"></div>
+    </div>
+
+    <!-- STEP 2 -->
+    <div class="stage" id="stage2">
+      <div class="selected-badge" id="badge2"></div>
+      <h1>Your next move</h1>
+      <p class="sub">Commit to a real date. Vague intentions don't make it onto a calendar.</p>
+
+      <div class="build-card">
+        <div class="k">Your build</div>
+        <div class="v" id="buildText"></div>
+      </div>
+
+      <div class="field-label">When will you try it?</div>
+      <div class="chip-row" id="chipRow">
+        <button class="chip" data-val="This week">This week</button>
+        <button class="chip" data-val="Next week">Next week</button>
+        <button class="chip" data-val="Within 2 weeks">Within 2 weeks</button>
+      </div>
+      <input class="datefield" type="date" id="dateInput" />
+
+      <div class="field-label">Accountability partner <span style="text-transform:none;font-weight:400;">(optional)</span></div>
+      <input class="textfield" type="text" id="partnerInput" placeholder="e.g. Jamie R." />
+
+      <div class="nav-row">
+        <button class="back-link" id="back2">&larr; Back</button>
+        <button class="next-btn" id="next2" disabled>Build my prompt &rarr;</button>
+      </div>
+    </div>
+
+    <!-- STEP 3 -->
+    <div class="stage" id="stage3">
+      <div class="selected-badge" id="badge3"></div>
+      <h1>Your 201 Prep Skill</h1>
+      <p class="sub">Copy this into any AI tool &mdash; Claude, ChatGPT, Copilot. It's self-contained, so no prior context needed.</p>
+
+      <div class="terminal">
+        <div class="dots"><span></span><span></span><span></span></div>
+        <pre id="promptOut"></pre>
+      </div>
+
+      <div class="btn-row">
+        <button class="btn btn-primary" id="copyBtn">Copy prompt</button>
+      </div>
+      <p class="footer-note">Paste it in, hit send, and read the plan later &mdash; you don't need to wait for it now.</p>
+
+      <div class="nav-row" style="justify-content:center;">
+        <button class="back-link" id="startOver">&larr; Start over</button>
+      </div>
+    </div>
+
+  </div>
+
+  <div class="brandfoot"><span class="gold-dot"></span> ExperiencePoint&reg; &middot; WBWAI 201 Train-the-Trainer</div>
+</div>
+
+<script>
+(function(){
+  var ARCHETYPES = [
+    {
+      id:'activate', tag:'ACTIVATE', color:'#90B210',
+      title:'The Everyday User',
+      quote:"I use AI to draft emails and speed up small tasks, but I haven't activated dormant resources or looked for bigger opportunities yet.",
+      build:"Activate 1 dormant resource. Pick one document, template, or dataset your team already has, and turn it into a working agent or skill."
+    },
+    {
+      id:'automate', tag:'AUTOMATE', color:'#68BFBD',
+      title:'The Resource Activator',
+      quote:"I've turned a resource or two into an agent, but I haven't automated a real team workflow yet.",
+      build:"Automate 1 real workflow. Map a friction point in your own work and build an agent that removes it \u2014 not a demo, a workflow you'll actually use."
+    },
+    {
+      id:'assess', tag:'ASSESS', color:'#D86527',
+      title:'The Workflow Automator',
+      quote:"My team has an agent live in a real workflow, but I haven't stepped back to ask what's becoming abundant vs. what still needs me.",
+      build:"Audit your own value shift. List the tasks in your role, sort abundant vs. scarce, delegate one abundant task to AI entirely, then partner with AI to augment one scarce task you're keeping."
+    },
+    {
+      id:'reimagine', tag:'REIMAGINE', color:'#FFCC00', textDark:true,
+      title:'The Reimaginer',
+      quote:"I'm automating and assessing well, but I haven't pushed into rethinking how the work could be structured differently.",
+      build:"Keep going, start mentoring. There's no new build here \u2014 you're already there. Pair up with a peer and walk them through your process."
+    }
+  ];
+
+  var state = { archetype:null, commitment:null, partner:'' };
+
+  var cardGrid = document.getElementById('cardGrid');
+  ARCHETYPES.forEach(function(a){
+    var card = document.createElement('button');
+    card.className = 'card';
+    card.setAttribute('data-id', a.id);
+    card.innerHTML =
+      '<div class="check">\u2713</div>' +
+      '<span class="tag" style="background:'+a.color+';color:'+(a.textDark?'#293851':'#FFFFFF')+'">'+a.tag+'</span>' +
+      '<div class="card-title">'+a.title+'</div>' +
+      '<p class="card-quote">\u201C'+a.quote+'\u201D</p>';
+    card.addEventListener('click', function(){ selectArchetype(a.id); });
+    cardGrid.appendChild(card);
+  });
+
+  function selectArchetype(id){
+    state.archetype = id;
+    Array.prototype.forEach.call(cardGrid.children, function(c){
+      c.classList.toggle('selected', c.getAttribute('data-id') === id);
+    });
+    setTimeout(function(){ goToStage(2); }, 380);
+  }
+
+  function getArchetype(){
+    return ARCHETYPES.filter(function(a){ return a.id === state.archetype; })[0];
+  }
+
+  function goToStage(n){
+    ['stage1','stage2','stage3'].forEach(function(id, i){
+      document.getElementById(id).classList.toggle('visible', i === n-1);
+    });
+    ['seg1','seg2','seg3'].forEach(function(id, i){
+      var el = document.getElementById(id);
+      el.classList.remove('active','done');
+      if (i < n-1) el.classList.add('done');
+      else if (i === n-1) el.classList.add('active');
+    });
+    if (n === 2){
+      var a = getArchetype();
+      document.getElementById('badge2').innerHTML =
+        '<span class="dot" style="background:'+a.color+'"></span>' + a.title;
+      document.getElementById('buildText').textContent = a.build;
+    }
+    if (n === 3){
+      var a3 = getArchetype();
+      document.getElementById('badge3').innerHTML =
+        '<span class="dot" style="background:'+a3.color+'"></span>' + a3.title;
+      document.getElementById('promptOut').textContent = buildPrompt();
+    }
+  }
+
+  // Step 2 interactions
+  var chipRow = document.getElementById('chipRow');
+  var dateInput = document.getElementById('dateInput');
+  var partnerInput = document.getElementById('partnerInput');
+  var next2 = document.getElementById('next2');
+
+  chipRow.addEventListener('click', function(e){
+    if (!e.target.classList.contains('chip')) return;
+    state.commitment = e.target.getAttribute('data-val');
+    dateInput.value = '';
+    Array.prototype.forEach.call(chipRow.children, function(c){
+      c.classList.toggle('selected', c === e.target);
+    });
+    next2.disabled = false;
+  });
+
+  dateInput.addEventListener('change', function(){
+    if (dateInput.value){
+      var d = new Date(dateInput.value + 'T00:00:00');
+      state.commitment = d.toLocaleDateString(undefined, { weekday:'long', month:'long', day:'numeric' });
+      Array.prototype.forEach.call(chipRow.children, function(c){ c.classList.remove('selected'); });
+      next2.disabled = false;
+    }
+  });
+
+  partnerInput.addEventListener('input', function(){
+    state.partner = partnerInput.value.trim();
+  });
+
+  document.getElementById('back2').addEventListener('click', function(){ goToStage(1); });
+  document.getElementById('next2').addEventListener('click', function(){ goToStage(3); });
+  document.getElementById('startOver').addEventListener('click', function(){
+    state = { archetype:null, commitment:null, partner:'' };
+    Array.prototype.forEach.call(cardGrid.children, function(c){ c.classList.remove('selected'); });
+    Array.prototype.forEach.call(chipRow.children, function(c){ c.classList.remove('selected'); });
+    dateInput.value = '';
+    partnerInput.value = '';
+    next2.disabled = true;
+    goToStage(1);
+  });
+
+  function buildPrompt(){
+    var a = getArchetype();
+    var lines = [];
+    lines.push("I'm training to facilitate WBWAI 201, a workshop that helps teams find and act on AI opportunities in four moves: Activate Dormant Resources, Automate With Agents, Assess Value Shifts, and Reimagine.");
+    lines.push("");
+    lines.push('My archetype: "' + a.quote + '"');
+    lines.push("My next build: " + a.build);
+    lines.push("I'm committing to trying this by: " + (state.commitment || "[pick a date]"));
+    if (state.partner){
+      lines.push("My accountability partner: " + state.partner);
+    }
+    lines.push("");
+    lines.push("Help me turn this into a simple 2-week practice plan with dates for:");
+    lines.push("1. A self-run practice of this build");
+    lines.push("2. A peer teach-back");
+    lines.push("3. A full solo practice session, start to finish");
+    lines.push("");
+    lines.push("Also help me draft a 2-minute case for this workshop and a short delivery-readiness checklist. Then save everything above as a reusable \u2018201 Prep Skill\u2019 \u2014 a saved prompt, project, custom GPT, or skill, whatever your tool supports \u2014 so I can open and update it before every future session I deliver.");
+    return lines.join("\n");
+  }
+
+  // Copy
+  var copyBtn = document.getElementById('copyBtn');
+  copyBtn.addEventListener('click', function(){
+    var text = document.getElementById('promptOut').textContent;
+    copyToClipboard(text).then(function(){
+      copyBtn.textContent = 'Copied \u2713';
+      copyBtn.classList.add('copied');
+      setTimeout(function(){
+        copyBtn.textContent = 'Copy prompt';
+        copyBtn.classList.remove('copied');
+      }, 1600);
+    });
+  });
+
+  function copyToClipboard(text){
+    if (navigator.clipboard && navigator.clipboard.writeText){
+      return navigator.clipboard.writeText(text).catch(function(){ return fallbackCopy(text); });
+    }
+    return fallbackCopy(text);
+  }
+
+  function fallbackCopy(text){
+    return new Promise(function(resolve){
+      var ta = document.createElement('textarea');
+      ta.value = text;
+      ta.style.position = 'fixed';
+      ta.style.left = '-9999px';
+      document.body.appendChild(ta);
+      ta.focus();
+      ta.select();
+      try { document.execCommand('copy'); } catch(e){}
+      document.body.removeChild(ta);
+      resolve();
+    });
+  }
+})();
+</script>
+
+</body>
+</html>
