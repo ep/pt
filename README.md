@@ -5,12 +5,13 @@ A product testing space for simple, temporary, client-facing assets and tools, p
 There is no homepage at the repo root by design. Each project lives in its own folder and is published at its own URL:
 
 - https://ep.github.io/pt/agents/ : Create Your First Agent. Companion activity for Work Better with AI 201.
-- https://ep.github.io/pt/Logistics/EC/In-Person/ : Support's experimental logistics checklist
+- https://ep.github.io/pt/Logistics/EC/In-Person/ : Support's experimental logistics checklist.
 - https://ep.github.io/pt/kc/ : KickstartChange partner enablement hub.
 - https://ep.github.io/pt/wbwai201/ : Work Better with AI 201 partner enablement hub.
 - https://ep.github.io/pt/field-tools/chips/ : Place Your Chips, a live prioritization game (field tool).
 - https://ep.github.io/pt/ai-champion-charter/ : Interactive tool to help sponsors draft AI champion charters.
-- https://ep.github.io/pt/t3/wbwai-curveballroleplay/ : Experimental T3 artefact: WBWAI Curveball Roleplay 
+- https://ep.github.io/pt/t3/wbwai-curveballroleplay/ : Experimental T3 artefact: WBWAI Curveball Roleplay.
+- https://ep.github.io/pt/t3/wbwai-prepskillbuilder/ : Experimental T3 artefact: WBWAI Prep Skill Builder.
 - https://ep.github.io/pt/podium-for-partners/ : Positioning Podium with IP-holder partner prospects.
   - https://ep.github.io/pt/podium-for-partners-ideo/ IDEO version.
 
