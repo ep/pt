@@ -1,0 +1,45 @@
+# Deploys the pt worker whenever something under _backend/ lands on main.
+# Every test harness runs first. Red means nothing deploys.
+name: Deploy worker
+
+on:
+  push:
+    branches: [main]
+    paths: ['_backend/**']
+
+permissions:
+  contents: read
+
+concurrency:
+  group: deploy-worker
+  cancel-in-progress: false
+
+jobs:
+  test-and-deploy:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+
+      - name: Install the test browser
+        run: npm install jsdom
+
+      - name: Run every harness (any failure stops the deploy)
+        run: |
+          for f in _backend/tests/qa-*; do
+            echo "== $f"
+            node "$f" || exit 1
+          done
+
+      - name: Deploy with wrangler
+        uses: cloudflare/wrangler-action@v3
+        with:
+          apiToken: ${{ secrets.CLOUDFLARE_API_TOKEN }}
+          accountId: ${{ secrets.CLOUDFLARE_ACCOUNT_ID }}
+          workingDirectory: _backend
+
+      - name: Health check
+        run: curl -fsS https://pt.armand-khambatta.workers.dev/api/health
