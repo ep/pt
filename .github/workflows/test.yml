@@ -1,0 +1,26 @@
+# Runs every test harness on every push and pull request, so a broken tool
+# is caught even when no worker deploy is involved.
+name: Tests
+
+on:
+  push:
+  pull_request:
+
+permissions:
+  contents: read
+
+jobs:
+  test:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+      - run: npm install jsdom
+      - name: Run every harness
+        run: |
+          for f in _backend/tests/qa-*; do
+            echo "== $f"
+            node "$f" || exit 1
+          done
