@@ -28,17 +28,17 @@ Add `<meta name="robots" content="noindex, nofollow">` inside `<head>` to preven
 ## Two things to know before committing anything
 
 1. Everything in this repo is public twice: browsable here on GitHub, and served as a live page at the Pages URL. That includes this README and the `_backend` folder. Never commit client-sensitive content, internal strategy, or anything you would not put on the open internet.
-2. Never commit secrets. No API keys, no passwords, not even briefly to test something. The moment a secret touches a public repo, treat it as leaked. Secrets live in the Cloudflare dashboard only.
+2. Never commit secrets. No API keys, no passwords, not even briefly to test something. The moment a secret touches a public repo, treat it as leaked. Secrets live only as Cloudflare dashboard secrets or as GitHub Actions secrets, never in a file.
 
 ## The backend
 
 Static pages cannot remember anything or keep a secret, so tools that need shared live state (like Place Your Chips) talk to a small server we run on Cloudflare: a Worker named `pt` with a D1 database, also named `pt`. One backend serves every tool in this repo; each tool identifies itself with a short id, so their data never mixes.
 
-- The source of truth for the deployed code is `_backend/pt-worker.js` in this repo. Deploying a change means pasting that file into the Cloudflare dashboard (Workers & Pages, `pt`, Edit code, Deploy). If you change one, change the other.
+- The source of truth for the worker is this repo: `_backend/pt-worker.js` is the code and `_backend/wrangler.toml` is the configuration (name, database binding, cron trigger). Deploys are automatic: when a change under `_backend/` lands on `main`, GitHub Actions runs every test suite and, only if all pass, deploys with wrangler. Nobody edits the worker in the Cloudflare dashboard; a dashboard edit is overwritten by the next push.
+- Tests live in `_backend/tests/` and run on every push and pull request. See `_backend/tests/README.md` to run them locally.
 - Some tools are gated: their sessions require a key that is generated when a facilitator starts a session and rides inside the join link. Participants just click the link. The list of gated tools is the `GATED_TOOLS_DEFAULT` line near the top of the worker file. Tools handling anything sensitive belong on that list.
 - Session data is temporary by design. Ending a session deletes it immediately, and a daily sweep deletes anything untouched for 7 days. Nothing in the backend is an archive; if a session produced something worth keeping, download the report.
 
 ## Adding a tool that needs the backend
 
-Pick a short id for the tool (letters, numbers, hyphens, like `pyc`), point the tool at the worker URL, and send that id with every request. If the tool will hold sensitive content, add its id to `GATED_TOOLS_DEFAULT` in `_backend/pt-worker.js` and redeploy. If you are unsure whether a tool needs the backend at all, it probably does not: pages that only display things need nothing.
-
+Pick a short id for the tool (letters, numbers, hyphens, like `pyc`), point the tool at the worker URL, and send that id with every request. If the tool will hold sensitive content, add its id to `GATED_TOOLS_DEFAULT` in `_backend/pt-worker.js` and commit; the deploy is automatic. If you are unsure whether a tool needs the backend at all, it probably does not: pages that only display things need nothing.
