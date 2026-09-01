@@ -1,0 +1,22 @@
+# pt worker: the shared backend for every tool in this repo.
+# This file IS the infrastructure. GitHub Actions deploys it on every push to main
+# that touches _backend/. Nobody edits the worker in the Cloudflare dashboard anymore;
+# a dashboard edit is overwritten by the next deploy.
+
+name = "pt"
+main = "pt-worker.js"
+workers_dev = true
+
+# Copy from Cloudflare > Workers & Pages > pt > Settings (Compatibility date).
+# Keep whatever the live worker already uses so behavior does not shift.
+compatibility_date = "2026-08-26"
+
+[triggers]
+# Daily retention sweep, 04:00 UTC. Removing this line would delete the live cron trigger.
+crons = ["0 4 * * *"]
+
+[[d1_databases]]
+binding = "DB"
+database_name = "pt"
+# Copy from Cloudflare > Storage & Databases > D1 > pt (Database ID). An identifier, not a secret.
+database_id = "5f202717-5ac5-4c44-a1bb-fb1a064ebd5e"
