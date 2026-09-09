@@ -2,50 +2,7 @@ import worker from '../pt-worker.js';
 let failures = 0;
 function check(name, cond){ console.log((cond?'PASS  ':'FAIL  ')+name); if(!cond) failures++; }
 
-/* fake D1: just enough SQL for this worker */
-function FakeDB(){
-  const rows = new Map(); // key room|path -> {value, updated}
-  return {
-    prepare(sql){
-      return { bind(...args){
-        return {
-          async all(){
-            const room=args[0], out=[];
-            rows.forEach((v,k)=>{ const [r,p]=k.split('|'); if(r===room) out.push({path:p, value:v.value}); });
-            return { results: out };
-          },
-          async first(){
-            const key=args[0]+'|'+args[1];
-            return rows.has(key) ? { value: rows.get(key).value } : null;
-          },
-          async run(){
-            if (sql.includes('HAVING MAX')){
-              const cutoff=args[0], maxBy={};
-              rows.forEach((v,k)=>{ const r=k.split('|')[0]; maxBy[r]=Math.max(maxBy[r]||0, v.updated); });
-              let n=0;
-              rows.forEach((v,k)=>{ const r=k.split('|')[0]; if (maxBy[r]<cutoff){ rows.delete(k); n++; } });
-              return { meta:{ changes:n } };
-            }
-            if (sql.startsWith('DELETE')){
-              const room=args[0]; let n=0;
-              rows.forEach((v,k)=>{ if (k.split('|')[0]===room){ rows.delete(k); n++; } });
-              return { meta:{ changes:n } };
-            }
-            const key=args[0]+'|'+args[1];
-            if (sql.includes('DO NOTHING')){
-              if (rows.has(key)) return { meta:{ changes:0 } };
-              rows.set(key,{value:args[2],updated:args[3]});
-              return { meta:{ changes:1 } };
-            }
-            rows.set(key,{value:args[2],updated:args[3]});
-            return { meta:{ changes:1 } };
-          }
-        };
-      }};
-    },
-    _rows: rows
-  };
-}
+import { FakeDB } from './fake-db.mjs';
 
 const base='https://pt.test';
 const env={ DB: FakeDB() };  /* no dashboard variable: the code default must gate pyc */
@@ -62,7 +19,7 @@ const KH={'X-Session-Key':SK};
 (async function(){
 // health names the gated tools
 let r=await call('GET','/api/health');
-check('gating works with no dashboard variable set', r.data.ok===true && r.data.gatedTools.join()==='pyc');
+check('gating works with no dashboard variable set', r.data.ok===true && r.data.gatedTools.join()==='pyc,pair-poll');
 /* and a dashboard variable, if ever set, still wins */
 const ovEnv={ DB: FakeDB(), GATED_TOOLS:'other-tool' };
 const ovRes=await worker.fetch(new Request(base+'/api/health'), ovEnv);
@@ -99,6 +56,37 @@ r=await call('POST','/api/set',{tool:'pyc',code:'ABCD',path:'meta/x',value:'y'.r
 check('oversize value rejected', r.status===400);
 r=await call('GET','/api/state?tool=pyc&code=ZZZZ',null,KH);
 check('unknown session reads as empty, not an error', r.status===200 && r.data.state===null);
+
+// slim reads for big rooms (pair-poll)
+r=await call('POST','/api/create',{tool:'pair-poll',code:'POLL',sk:SK});
+check('pair-poll is gated by the code default', r.data.ok===true);
+r=await call('POST','/api/set',{tool:'pair-poll',code:'POLL',path:'pub/meta',value:{stage:'vote'}});
+check('pair-poll write without key: locked', r.status===401);
+await call('POST','/api/set',{tool:'pair-poll',code:'POLL',path:'pub/meta',value:{stage:'vote',q:0}},KH);
+await call('POST','/api/set',{tool:'pair-poll',code:'POLL',path:'pub/agg/q0',value:{L:13,R:7,n:20}},KH);
+await call('POST','/api/set',{tool:'pair-poll',code:'POLL',path:'ballot/q0/abc123',value:'L'},KH);
+await call('POST','/api/set',{tool:'pair-poll',code:'POLL',path:'roster/r1x2y3',value:{nick:'Priya'}},KH);
+await call('POST','/api/set',{tool:'pair-poll',code:'POLL',path:'public/decoy',value:1},KH);
+r=await call('GET','/api/state?tool=pair-poll&code=POLL&prefix=pub',null,KH);
+check('prefix read returns the pub rows', r.data.state.pub.meta.stage==='vote' && r.data.state.pub.agg.q0.L===13);
+check('prefix read leaves ballots and roster out', r.data.state.ballot===undefined && r.data.state.roster===undefined);
+check('prefix matches the segment, not the substring', r.data.state.public===undefined);
+r=await call('GET','/api/state?tool=pair-poll&code=POLL&prefix=pub');
+check('prefix read without key: locked', r.status===401);
+r=await call('GET','/api/state?tool=pair-poll&code=POLL&prefix=pub',null,{'X-Session-Key':'wrongwrong11'});
+check('prefix read with wrong key: locked', r.status===401);
+r=await call('GET','/api/state?tool=pair-poll&code=POLL&prefix=_sk',null,KH);
+check('underscore prefix rejected', r.status===400);
+r=await call('GET','/api/state?tool=pair-poll&code=POLL&prefix=bad%20prefix',null,KH);
+check('malformed prefix rejected', r.status===400);
+r=await call('GET','/api/state?tool=pair-poll&code=POLL&prefix=nothing',null,KH);
+check('empty prefix on a live session returns an empty object, not null', r.status===200 && r.data.state!==null && Object.keys(r.data.state).length===0);
+r=await call('GET','/api/state?tool=pair-poll&code=NOPE&prefix=pub',null,KH);
+check('prefix read of an unknown session reads as empty', r.status===200 && r.data.state===null);
+r=await call('GET','/api/state?tool=pair-poll&code=POLL',null,KH);
+check('full read still returns everything', r.data.state.ballot.q0.abc123==='L' && r.data.state.roster.r1x2y3.nick==='Priya');
+check('the session key never appears in a full read either', JSON.stringify(r.data.state).indexOf(SK)===-1);
+await call('POST','/api/clear',{tool:'pair-poll',code:'POLL'},KH);
 
 // ungated tools stay frictionless
 r=await call('POST','/api/set',{tool:'open',code:'ABCD',path:'meta/stage',value:'go'});

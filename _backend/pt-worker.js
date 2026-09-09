@@ -3,9 +3,12 @@
   One Cloudflare Worker, one D1 database (bound as "DB"). Tools identify
   themselves with a short id, so their sessions never mix.
 
-  This file lives in the repo at pt/_backend/pt-worker.js and is deployed by
-  pasting it into the Cloudflare dashboard. It contains no secrets and never
-  should. Secrets (future API keys) live in the worker's Settings on Cloudflare.
+  This file lives in the repo at pt/_backend/pt-worker.js. GitHub Actions deploys
+  it automatically (tests first) whenever _backend/ changes on main; the worker's
+  name, database binding, and cron trigger are declared in _backend/wrangler.toml.
+  Never edit this worker in the Cloudflare dashboard: the next push overwrites it.
+  It contains no secrets and never should. Secrets (future API keys) live in the
+  worker's Settings on Cloudflare, or in GitHub Actions secrets, never in a file.
 
   ONE-TIME DATABASE SETUP (paste into the D1 console):
   CREATE TABLE kv (room TEXT, path TEXT, value TEXT, updated INTEGER, PRIMARY KEY (room, path));
@@ -13,6 +16,7 @@
   ENDPOINTS
     GET  /api/health                              -> {ok, gatedTools}
     GET  /api/state?tool=pyc&code=ABCD            -> the whole session as nested JSON
+         ...&prefix=pub                        -> only the rows under one prefix (slim read for big rooms)
     POST /api/create {tool, code, sk}             -> start a session; registers its session key
     POST /api/set    {tool, code, path, value}    -> write one value
     POST /api/claim  {tool, code, path, value}    -> atomic seat claim, {ok:true|false}
@@ -44,9 +48,9 @@
 
 var RETENTION_DAYS = 7;
 
-/* Which tools require a session key. Edit this list and redeploy to change it.
+/* Which tools require a session key. Edit this list and commit to change it.
    A GATED_TOOLS variable in the dashboard, if you ever set one, overrides this. */
-var GATED_TOOLS_DEFAULT = 'pyc';
+var GATED_TOOLS_DEFAULT = 'pyc,pair-poll';
 
 /* Which origins may call this worker. Edit and redeploy to change it.
    An ALLOW_ORIGIN variable in the dashboard, if you ever set one, overrides this.
@@ -107,13 +111,25 @@ export default {
         if (!tool) return json({ error: 'bad tool' }, 400);
         var room = roomOf(tool, url.searchParams.get('code'));
         if (!room) return json({ error: 'bad code' }, 400);
-        var rs = await env.DB.prepare('SELECT path, value FROM kv WHERE room = ?').bind(room).all();
-        if (!rs.results.length) return json({ state: null });
-        if (gatedTools.indexOf(tool) > -1) {
-          var sk = null;
+        /* Optional slim read: ?prefix=pub returns only the rows under that prefix.
+           Phones in a big room fetch a couple dozen small rows instead of every
+           ballot. The gate is enforced the same way; the key row is read separately
+           because it is not under the prefix. */
+        var prefix = url.searchParams.get('prefix') || '';
+        if (prefix && !/^[A-Za-z0-9][A-Za-z0-9_]{0,11}$/.test(prefix)) return json({ error: 'bad prefix' }, 400);
+        var rs, sk = null;
+        if (prefix) {
+          rs = await env.DB.prepare('SELECT path, value FROM kv WHERE room = ? AND (path = ? OR path LIKE ?)').bind(room, prefix, prefix + '/%').all();
+          sk = await storedKey(room);
+          if (sk === null && !rs.results.length) return json({ state: null });
+        } else {
+          rs = await env.DB.prepare('SELECT path, value FROM kv WHERE room = ?').bind(room).all();
+          if (!rs.results.length) return json({ state: null });
           for (var k = 0; k < rs.results.length; k++) {
             if (rs.results[k].path === '_sk') sk = JSON.parse(rs.results[k].value);
           }
+        }
+        if (gatedTools.indexOf(tool) > -1) {
           if (sk && request.headers.get('X-Session-Key') !== sk) return json({ error: 'locked' }, 401);
         }
         var state = {};
