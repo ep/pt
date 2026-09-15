@@ -57,6 +57,47 @@ check('oversize value rejected', r.status===400);
 r=await call('GET','/api/state?tool=pyc&code=ZZZZ',null,KH);
 check('unknown session reads as empty, not an error', r.status===200 && r.data.state===null);
 
+// open sessions: the code opens the participant door, the key stays with the host
+r=await call('POST','/api/create',{tool:'pair-poll',code:'OPEN',sk:SK,open:['roster','ballot']});
+check('create with open prefixes registers a session', r.data.ok===true);
+r=await call('POST','/api/create',{tool:'pair-poll',code:'BADO',sk:SK,open:['Roster!']});
+check('open prefixes are validated', r.status===400);
+r=await call('POST','/api/create',{tool:'pair-poll',code:'BADO',sk:SK,open:[]});
+check('an empty open list is refused', r.status===400);
+await call('POST','/api/set',{tool:'pair-poll',code:'OPEN',path:'pub/meta',value:{stage:'vote',q:0}},KH);
+r=await call('GET','/api/state?tool=pair-poll&code=OPEN&prefix=pub');
+check('open session: read with the code alone works', r.status===200 && r.data.state.pub.meta.stage==='vote');
+r=await call('GET','/api/state?tool=pair-poll&code=OPEN');
+check('open session: full read with the code alone works too', r.status===200 && r.data.state.pub.meta.q===0);
+check('open session: internals never leave the notebook', JSON.stringify(r.data.state).indexOf('_open')===-1 && JSON.stringify(r.data.state).indexOf(SK)===-1);
+r=await call('GET','/api/state?tool=pair-poll&code=OPEN',null,{'X-Session-Key':'wrongwrong11'});
+check('open session: a wrong key is still refused', r.status===401);
+r=await call('POST','/api/set',{tool:'pair-poll',code:'OPEN',path:'roster/r1x2y3',value:{}});
+check('open session: guest writes under an open prefix', r.data.ok===true);
+r=await call('POST','/api/set',{tool:'pair-poll',code:'OPEN',path:'ballot/q0/b1x2y3',value:'L'});
+check('open session: guest writes a ballot', r.data.ok===true);
+r=await call('POST','/api/set',{tool:'pair-poll',code:'OPEN',path:'pub/meta',value:{stage:'recap'}});
+check('open session: guest cannot touch facilitator paths', r.status===401);
+r=await call('POST','/api/set',{tool:'pair-poll',code:'OPEN',path:'rosterx/r1',value:{}});
+check('open prefix matches the whole segment, not a substring', r.status===401);
+r=await call('POST','/api/clear',{tool:'pair-poll',code:'OPEN'});
+check('open session: guest cannot clear', r.status===401);
+r=await call('GET','/api/state?tool=pair-poll&code=OPEN',null,KH);
+check('open session: host reads everything', r.data.state.roster.r1x2y3!==undefined && r.data.state.ballot.q0.b1x2y3==='L');
+r=await call('POST','/api/set',{tool:'pair-poll',code:'OPEN',path:'pub/meta',value:{stage:'recap'}},KH);
+check('open session: host writes facilitator paths', r.data.ok===true);
+r=await call('POST','/api/clear',{tool:'pair-poll',code:'OPEN'},KH);
+check('open session: host clears', r.data.ok===true);
+r=await call('GET','/api/state?tool=pair-poll&code=OPEN');
+check('cleared open session reads as empty', r.status===200 && r.data.state===null);
+r=await call('POST','/api/create',{tool:'pyc',code:'SHUT',sk:SK});
+r=await call('GET','/api/state?tool=pyc&code=SHUT');
+check('closed sessions (chips) still need the key for every read', r.status===401);
+r=await call('POST','/api/set',{tool:'pyc',code:'SHUT',path:'meta/stage',value:'x'});
+check('closed sessions still need the key for every write', r.status===401);
+r=await call('POST','/api/set',{tool:'pair-poll',code:'NOPE',path:'roster/r1',value:{}});
+check('a write to a session that does not exist is refused', r.status===401);
+
 // slim reads for big rooms (pair-poll)
 r=await call('POST','/api/create',{tool:'pair-poll',code:'POLL',sk:SK});
 check('pair-poll is gated by the code default', r.data.ok===true);

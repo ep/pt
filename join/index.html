@@ -1,0 +1,19 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="robots" content="noindex, nofollow">
+<title>Join</title>
+<!-- The short address participants type from the projector: ep.github.io/pt/join
+     It forwards to the poll's join screen. A code after a question mark (pt/join/?ABCD)
+     is carried along so the screen fills it in. -->
+<script>
+  (function(){ var c=(location.search||'').replace(/^\?/,'').replace(/[^A-Za-z]/g,'').slice(0,8); location.replace('/pt/field-tools/pair-poll/?join'+(c?'='+c.toUpperCase():'')); })();
+</script>
+<meta http-equiv="refresh" content="0;url=/pt/field-tools/pair-poll/?join">
+</head>
+<body>
+<p style="font-family:Georgia,serif;padding:24px;color:#293851">Opening the poll. If nothing happens, <a href="/pt/field-tools/pair-poll/?join" style="color:#293851">tap here</a>.</p>
+</body>
+</html>

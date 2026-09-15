@@ -5,6 +5,7 @@ A product testing space for simple, temporary, client-facing assets and tools, p
 There is no homepage at the repo root by design. Each project lives in its own folder and is published at its own URL:
 
 - https://ep.github.io/pt/field-tools/pair-poll/ : Pair Poll, a live paired-statement poll for workshops (field tool).
+- https://ep.github.io/pt/join/ : the short address participants type to join a poll (forwards to Pair Poll's join screen).
 - https://ep.github.io/pt/field-tools/chips/ : Place Your Chips, a live prioritization game (field tool).
 - https://ep.github.io/pt/kc/ : KickstartChange partner enablement hub.
 - https://ep.github.io/pt/wbwai201/ : Work Better with AI 201 partner enablement hub.
@@ -37,9 +38,9 @@ Static pages cannot remember anything or keep a secret, so tools that need share
 
 - The source of truth for the worker is this repo: `_backend/pt-worker.js` is the code and `_backend/wrangler.toml` is the configuration (name, database binding, cron trigger). Deploys are automatic: when a change under `_backend/` lands on `main`, GitHub Actions runs every test suite and, only if all pass, deploys with wrangler. Nobody edits the worker in the Cloudflare dashboard; a dashboard edit is overwritten by the next push.
 - Tests live in `_backend/tests/` and run on every push and pull request. See `_backend/tests/README.md` to run them locally.
-- Some tools are gated: their sessions require a key that is generated when a facilitator starts a session and rides inside the join link. Participants just click the link. The list of gated tools is the `GATED_TOOLS_DEFAULT` line near the top of the worker file. Tools handling anything sensitive belong on that list.
+- Some tools are gated: every session has a key, generated when a facilitator starts it. In a closed session (Place Your Chips) the key rides inside the join link, so participants click and never type, and nobody without the link can touch the session. In an open session (Pair Poll) the facilitator keeps the key and participants join with a four-letter code instead, by typing it, tapping a link, or scanning a QR; the code lets them read the session and write only the paths the tool opened (ballots, a roster), never anything else. Because a four-letter code can be guessed by machine, a tool only opens paths whose contents are harmless to a stranger: anonymous votes yes, notes about colleagues no. The list of gated tools is the `GATED_TOOLS_DEFAULT` line near the top of the worker file. Tools handling anything sensitive belong on that list, as closed sessions.
 - Session data is temporary by design. Ending a session deletes it immediately, and a daily sweep deletes anything untouched for 7 days. Nothing in the backend is an archive; if a session produced something worth keeping, download the report.
 
 ## Adding a tool that needs the backend
 
-Pick a short id for the tool (letters, numbers, hyphens, like `pyc`), point the tool at the worker URL, and send that id with every request. If the tool will hold sensitive content, add its id to `GATED_TOOLS_DEFAULT` in `_backend/pt-worker.js` and commit; the deploy is automatic. If you are unsure whether a tool needs the backend at all, it probably does not: pages that only display things need nothing.
+Pick a short id for the tool (letters, numbers, hyphens, like `pyc`), point the tool at the worker URL, and send that id with every request. If the tool will hold sensitive content, add its id to `GATED_TOOLS_DEFAULT` in `_backend/pt-worker.js` and commit; the deploy is automatic. Decide whether its sessions are closed (key in the join link) or open (code to join, key stays with the facilitator, only harmless paths writable by code); the worker header comment explains both. If you are unsure whether a tool needs the backend at all, it probably does not: pages that only display things need nothing.

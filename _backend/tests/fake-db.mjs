@@ -8,10 +8,12 @@ export function FakeDB(){
           async all(){
             const room=args[0], out=[];
             const prefixed = sql.includes('LIKE');           /* the slim read: path = ? OR path LIKE 'prefix/%' */
+            const pair = !prefixed && sql.includes('(path = ? OR path = ?)'); /* the internals read: _sk and _open */
             const exact = prefixed ? args[1] : null, like = prefixed ? args[2].slice(0,-1) : null;
             rows.forEach((v,k)=>{ const [r,p]=k.split('|');
               if(r!==room) return;
               if(prefixed && !(p===exact || p.startsWith(like))) return;
+              if(pair && p!==args[1] && p!==args[2]) return;
               out.push({path:p, value:v.value}); });
             return { results: out };
           },
