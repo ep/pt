@@ -25,7 +25,7 @@ jobs:
           node-version: 22
 
       - name: Install the test browser
-        run: npm install jsdom
+        run: npm install jsdom jsqr
 
       - name: Run every harness (any failure stops the deploy)
         run: |
