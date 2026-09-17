@@ -87,7 +87,17 @@ function decodeMatrix(q){
   check('participant beat copy is present', /Hang tight\./.test(js) && /picked your sides/.test(js) && /big reveal!/.test(js) && /That\\u2019s all, folks\./.test(js) && /Thanks for weighing in!/.test(js) && /Here we go\./.test(js));
   check('idle delight engine ships room, lean and handful', /K\.room=/.test(js) && /K\.lean=/.test(js) && /K\.handful=/.test(js) && /pp_idle/.test(js));
   check('progress pills replace the strip', /function pillsHtml/.test(js) && !/stripHtml/.test(js) && /\.pills i\.rev/.test(html));
-  check('join info is summonable from the console', /id="btnJoinInfo"/.test(html) && /id="joinModal"/.test(html));
+  check('join info is summonable from the console, with the facilitator link inside', /id="btnJoinInfo"/.test(html) && /id="joinModal"/.test(html) && /id="btnCopyFac2"/.test(html));
+  check('no dot row anywhere on the console', !/voteRoom/.test(html) && !/field2/.test(html) && !/renderField/.test(js));
+  check('console controls are a bar that stays in view', /\.con \.controls\{position:sticky;bottom:0/.test(html));
+  check('test-drive bar sits above the idle canvas and offers a way out', /\.simbar\{position:relative;z-index:2/.test(html) && /id="btnSimExit"/.test(html) && /id="btnSimExit2"/.test(html));
+  check('current pill has no midline, gaps are fixed', !/\.pills i\.on::after/.test(html) && /\.pills i\.on::before/.test(html) && /\.pills em\{flex:0 0 auto;width:16px/.test(html));
+  check('self-list labels take the pill caps', /\.plist \.p \.lab b\{[^}]*text-transform:uppercase/.test(html));
+  check('standby copy faces the room, not the facilitator', /Every answer is in\. Locked\./.test(noscript) && !/Share your screen/.test(noscript) && !/Share your screen/.test(js));
+  check('join panel copy faces participants', /Tap the link\./.test(js) && /Scan the code\./.test(js) && !/Paste it into the chat\. One tap/.test(js) && !/Drop it on a slide, or leave this screen up/.test(js));
+  check('sound unlocks on every gesture and when the tab returns', /\['pointerdown','touchend','keydown'\]/.test(js) && /visibilitychange/.test(js));
+  check('toys take touch events as a fallback', /addEventListener\('touchstart'/.test(js) && /orientationchange/.test(js));
+  check('resume bar exists in the studio', /id="resumeBar"/.test(html) && /function renderResume/.test(js));
   check('no em dashes in copy', !/\u2014/.test(html));
   check('Clarity tag present', /clarity\.ms\/tag\//.test(html));
   check('no summary toggle in the studio', !/id="sumOn"/.test(html) && !/majority/.test(js));
@@ -140,7 +150,7 @@ function decodeMatrix(q){
   check('facilitator URL carries host and key', /\?host=[A-Z]{4}&k=[a-z0-9]{16}$/.test(win.location.search+''));
   check('console pills: two questions and a reveal marker', doc.querySelectorAll('#conPills i').length===3 && doc.querySelectorAll('#conPills i.rev').length===1);
   const ways = doc.getElementById('joinWays');
-  check('lobby offers the link, the code, and the typed backup', ways.querySelectorAll('.way').length===2 && /\?join=[A-Z]{4}$/.test(ways.querySelector('.linkbox').textContent) && /Backup: go to ep\.github\.io\/pt\/join and enter [A-Z]{4}/.test(ways.querySelector('.way3').textContent.replace(/\s+/g,' ')));
+  check('lobby offers the link, the code, and the typed backup', ways.querySelectorAll('.way').length===2 && /\?join=[A-Z]{4}$/.test(ways.querySelector('.linkbox').textContent) && /Or go to ep\.github\.io\/pt\/join and enter [A-Z]{4}/.test(ways.querySelector('.way3').textContent.replace(/\s+/g,' ')));
   check('lobby has one primary (Start the poll)', primaries(doc,'con_lobby')===1 && doc.getElementById('btnStart').textContent==='Start the poll');
   const qrSvg = ways.querySelector('.qr').innerHTML;
   check('lobby QR decodes to the join link', decodeMatrix(svgToMatrix(qrSvg))===HOSTED+'?join='+code);
@@ -158,6 +168,14 @@ function decodeMatrix(q){
   check('phone URL carries me and b', /me=[a-z0-9]{6}/.test(p1.window.location.search) && /b=[a-z0-9]{6}/.test(p1.window.location.search));
   await sleep(200);
   check('console counts three in', doc.getElementById('chipIn').textContent==='3');
+  {
+    const again = load(HOSTED+'?setup='+setupCode, true); again.window.eval(fast); await sleep(60);
+    again.window.localStorage.setItem('pp_host', JSON.stringify({code:code, k:keyv, at:Date.now()})); again.window.initStudio(again.window.decodeSetup(setupCode)); await sleep(200);
+    check('a live session shows a return bar on every studio step, even from a setup link', stepOn(again.window.document)==='st1' && !again.window.document.getElementById('resumeBar').classList.contains('hide') && again.window.document.getElementById('resumeLink').href.indexOf('?host='+code+'&k='+keyv)>0);
+    again.window.localStorage.setItem('pp_host', JSON.stringify({code:'ZZZZ', k:'nokeynokeynokeyx', at:Date.now()})); again.window.initStudio(); await sleep(200);
+    check('a stale session record is verified and hidden', again.window.document.getElementById('resumeBar').classList.contains('hide') && again.window.localStorage.getItem('pp_host')===null);
+    again.window.close();
+  }
 
   click(win, doc.getElementById('btnStart')); await sleep(250);
   check('vote view shows the instruction line and the pair', vis(doc,'con_vote') && doc.getElementById('conInstr').textContent==='Which one is more like your team?' && doc.querySelector('#conL .stmt').textContent==='Our people determine solutions.');
@@ -174,7 +192,6 @@ function decodeMatrix(q){
   await sleep(300);
   check('ballots are written under ballot/q0', requests.some(r=>/\/api\/set$/.test(r.url) && /"path":"ballot\/q0\/[a-z0-9]{6}"/.test(r.body)));
   check('console sees four votes and warms the chip', doc.getElementById('chipDone').textContent==='4' && doc.getElementById('chip').classList.contains('warm'));
-  check('rooms field shows four dots lit', doc.querySelectorAll('#voteField i.on').length===4 && doc.getElementById('voteField').classList.contains('all'));
   click(p1.window, d1.querySelector('#paxBody .opt.R')); await sleep(250);
   check('changing a vote before the reveal is allowed', p1.window.App.myVotes[0]==='R' && win.countBallots(win.App.state,0).R===3);
 
@@ -184,10 +201,25 @@ function decodeMatrix(q){
   check('standby locks the phones without revealing', /Locked in\. Here comes the reveal\./.test(d1.getElementById('paxHelp').textContent) && d1.getElementById('paxResult').classList.contains('hide') && !win.isRevealed(0));
   click(p1.window, d1.querySelector('#paxBody .opt.L')); await sleep(150);
   check('taps during standby are ignored', p1.window.App.myVotes[0]==='R');
+  {
+    const back = load(HOSTED+'?host='+code+'&k='+keyv, true); back.window.eval(fast); await sleep(300);
+    check('a facilitator who reloads during a per-question standby lands back on the standby', back.window.document.getElementById('reveal').classList.contains('on') && !back.window.document.getElementById('rvStandby').classList.contains('hide'));
+    back.window.close();
+  }
   click(win, doc.getElementById('rvBegin')); await sleep(350);
+  {
+    const back = load(HOSTED+'?host='+code+'&k='+keyv, true); back.window.eval(fast); await sleep(300);
+    check('a facilitator who reloads during a per-question slide lands back on the slide', back.window.document.getElementById('reveal').classList.contains('on') && !back.window.document.getElementById('rvSlide').classList.contains('hide') && back.window.document.getElementById('rvNext').textContent==='Finish');
+    back.window.close();
+  }
   check('begin plays the one slide with the instruction and sets the flag', !doc.getElementById('rvSlide').classList.contains('hide') && /Which one is more like your team\?/.test(doc.querySelector('#rvSlide .instr').textContent) && win.isRevealed(0) && doc.getElementById('rvNext').textContent==='Finish');
   check('phone shows its result in place, loser thinned', wingL(d1.getElementById('paxResult'))===25 && wingR(d1.getElementById('paxResult'))===75 && d1.querySelector('#paxBody .opt.L').classList.contains('lose') && d1.querySelector('#paxBody .opt.R').classList.contains('win') && /Locked in\./.test(d1.getElementById('paxHelp').textContent));
   check('YOU tag on the right', /YOU/.test(d1.querySelector('#paxResult .nr').textContent));
+  {
+    const re = load(p1.window.location.href, true); re.window.eval(paxFast+'App.holdMin=400; App.holdMax=400;'); await sleep(300);
+    check('a participant who reloads after voting skips the hold and keeps their pick and result', re.window.document.querySelector('#paxBody .opt.R') && re.window.document.querySelector('#paxBody .opt.R').classList.contains('sel') && !re.window.document.getElementById('paxResult').classList.contains('hide'));
+    re.window.close();
+  }
   click(win, doc.getElementById('rvNext')); await sleep(250);
   check('Finish closes the surface and returns to the console with the result', !doc.getElementById('reveal').classList.contains('on') && vis(doc,'conResult') && win.showOf().k==='done');
   check('after the reveal, Next is the one primary', primaries(doc,'con_vote')===1 && !doc.getElementById('btnNext').classList.contains('hide') && doc.getElementById('btnReveal').classList.contains('hide'));
@@ -217,7 +249,14 @@ function decodeMatrix(q){
   check('replay starts from standby', doc.getElementById('reveal').classList.contains('on') && !doc.getElementById('rvStandby').classList.contains('hide') && win.showOf().k==='standby');
   key(win, 'Escape'); await sleep(250);
   check('Escape from standby pauses: stage stays reveal, Continue is the one primary', !doc.getElementById('reveal').classList.contains('on') && win.meta().stage==='reveal' && primaries(doc,'con_recap')===1 && !doc.getElementById('btnContinue').classList.contains('hide'));
-  click(win, doc.getElementById('btnContinue')); await sleep(250); click(win, doc.getElementById('rvBegin')); await sleep(300); click(win, doc.getElementById('rvNext')); await sleep(300);
+  click(win, doc.getElementById('btnContinue')); await sleep(250); click(win, doc.getElementById('rvBegin')); await sleep(300);
+  check('a replay in each-mode plays every question and the big reveal', win.App.rvSteps.length===3 && win.App.rvSteps[0].k==='grand' && doc.getElementById('rvNext').textContent==='Next');
+  {
+    const late = await openPhone(code); await sleep(200);
+    check('a latecomer during the reveal goes straight to the mirrored slide, no hold', late.window.document.querySelector('#paxBody .sumhero') && !/Here we go/.test(late.window.document.getElementById('paxBody').textContent));
+    late.window.close();
+  }
+  click(win, doc.getElementById('rvNext')); await sleep(200); click(win, doc.getElementById('rvNext')); await sleep(200); click(win, doc.getElementById('rvNext')); await sleep(300);
   check('continue, begin, finish returns to the recap', vis(doc,'con_recap') && win.meta().stage==='recap');
   click(win, doc.getElementById('btnBackRecap')); await sleep(300);
   check('re-open from recap in each-mode reopens only the last question', win.meta().stage==='vote' && win.meta().q===1 && win.isRevealed(0) && !win.isRevealed(1));
@@ -225,8 +264,11 @@ function decodeMatrix(q){
   check('back on the recap', vis(doc,'con_recap'));
   click(win, doc.getElementById('btnJoinInfo')); await sleep(50);
   check('join info modal opens from the console with the three ways', doc.getElementById('joinModal').classList.contains('on') && doc.querySelectorAll('#joinWaysModal .way').length===2 && /\?join=/.test(doc.querySelector('#joinWaysModal .linkbox').textContent));
-  click(win, doc.getElementById('btnJoinClose'));
-  check('modal closes', !doc.getElementById('joinModal').classList.contains('on'));
+  check('modal carries the facilitator link in a live session', vis(doc,'modalFac'));
+  click(win, doc.getElementById('btnCopyFac2'));
+  check('modal facilitator link copies the host link', win.copied[win.copied.length-1]===HOSTED+'?host='+code+'&k='+keyv);
+  key(win, 'Escape');
+  check('Escape closes the modal', !doc.getElementById('joinModal').classList.contains('on'));
 
   /* gates */
   const stranger = load(HOSTED+'?host='+code+'&k=nope', true); stranger.window.eval(fast); await sleep(250);
@@ -316,8 +358,26 @@ function decodeMatrix(q){
   click(win, doc.getElementById('btnReveal')); await sleep(200); click(win, doc.getElementById('rvBegin')); await sleep(250); click(win, doc.getElementById('rvNext')); await sleep(250);
   check('one question: Next reads Show the recap', doc.getElementById('btnNext').textContent==='Show the recap');
   click(win, doc.getElementById('btnNext')); await sleep(300);
-  check('one question goes straight to the recap, no summary, celebrated', vis(doc,'con_recap') && !doc.querySelector('#conSum .sumhero') && win.App.celebrated===true && doc.getElementById('btnReplay').classList.contains('hide'));
+  check('one question goes straight to the recap, no summary, celebrated, replay available', vis(doc,'con_recap') && !doc.querySelector('#conSum .sumhero') && win.App.celebrated===true && !doc.getElementById('btnReplay').classList.contains('hide'));
+  click(win, doc.getElementById('btnReplay')); await sleep(300); click(win, doc.getElementById('rvBegin')); await sleep(300);
+  check('one-question replay plays the question', win.App.rvSteps.length===1 && /Our people/.test(doc.querySelector('#rvSlide .stmt').textContent) && doc.getElementById('rvNext').textContent==='Finish');
+  click(win, doc.getElementById('rvNext')); await sleep(300);
+  check('and returns to the recap', vis(doc,'con_recap'));
   dom.window.close(); s1.window.close();
+
+  /* ---------- one question, self-paced ---------- */
+  dom = load(HOSTED, true); win = dom.window; doc = win.document; await sleep(50); win.eval(fast);
+  buildTwo(win, doc, { one:true, mode:'end' });
+  click(win, doc.getElementById('btnLaunch')); await sleep(300);
+  const code4 = win.App.code; const s2 = await openPhone(code4); await sleep(200);
+  click(win, doc.getElementById('btnStart')); await sleep(250);
+  click(s2.window, s2.window.document.querySelector('#paxBody .opt.R')); await sleep(200);
+  check('one question self-paced lands on the picked page after the tap', /picked your sides/.test(s2.window.document.getElementById('paxBody').textContent));
+  click(win, doc.getElementById('btnRevealAll')); await sleep(300); click(win, doc.getElementById('rvBegin')); await sleep(300);
+  check('one question self-paced reveals the question alone', win.App.rvSteps.length===1 && doc.getElementById('rvNext').textContent==='Finish');
+  click(win, doc.getElementById('rvNext')); await sleep(300);
+  check('and lands on the recap with replay', vis(doc,'con_recap') && !doc.getElementById('btnReplay').classList.contains('hide'));
+  dom.window.close(); s2.window.close();
 
   /* ---------- legacy links ---------- */
   const legacyPax = load(HOSTED+'?session=ABCD&me=abcdef&b=ghijkl', true); legacyPax.window.eval(paxFast); await sleep(250);
@@ -333,12 +393,20 @@ function decodeMatrix(q){
   check('bots vote through both questions in the test drive', doc.getElementById('chipIn').textContent==='12' && parseInt(doc.getElementById('chipDone').textContent,10)>=6);
   click(win, doc.getElementById('segPax')); await sleep(200);
   check('participant view in the test drive shows a question', doc.getElementById('scr_pax').classList.contains('on') && doc.querySelector('#paxBody .opt.L'));
+  check('participant view shows the test-drive bar with the switch and the exit', vis(doc,'simBarP') && !doc.getElementById('btnSimExit2').classList.contains('hide'));
   click(win, doc.getElementById('segCon')); await sleep(100);
+  check('switching back lands on the console', doc.getElementById('scr_console').classList.contains('on'));
   click(win, doc.getElementById('btnRevealAll')); await sleep(300); click(win, doc.getElementById('rvBegin')); await sleep(200);
   for (let i=0;i<3;i++){ click(win, doc.getElementById('rvNext')); await sleep(150); }
   check('test drive reaches the recap', vis(doc,'con_recap'));
   click(win, doc.getElementById('btnEnd')); await sleep(100);
   check('test drive ends on the rehearsal card', vis(doc,'endSim'));
+  click(win, doc.getElementById('btnSimAgain')); await sleep(300);
+  check('run it again restarts the drive', doc.getElementById('scr_console').classList.contains('on') && vis(doc,'con_lobby'));
+  click(win, doc.getElementById('btnSimExit')); await sleep(200);
+  check('Exit test drive returns to the review step with the setup intact', doc.getElementById('scr_studio').classList.contains('on') && stepOn(doc)==='st5' && win.STUDIO.setup.qs.length===2 && win.App.sim===false);
+  await sleep(300);
+  check('nothing keeps polling after the exit', doc.getElementById('scr_studio').classList.contains('on') && !win.App.paxTimer && !win.App.conTimer);
   dom.window.close();
 
   console.log(failures ? ('\n' + failures + ' FAILED') : '\nALL PASS');

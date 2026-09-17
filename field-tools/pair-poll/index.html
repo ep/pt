@@ -67,7 +67,12 @@ h2{font-family:var(--serif);font-weight:400;font-size:clamp(24px,3vw,32px);line-
 /* the controls row: the primary sits at the right end, always */
 .controls{display:flex;gap:10px;flex-wrap:wrap;margin-top:26px;align-items:center;justify-content:flex-end;}
 .controls .hint{margin-right:auto;}
-@media (max-width:640px){.controls{flex-direction:column-reverse;align-items:stretch;} .controls .btn{width:100%;} .controls .hint{margin:0 0 6px;text-align:center;}}
+.controls .grp{display:flex;flex-direction:column;align-items:flex-start;gap:2px;margin-right:auto;}
+.controls .grp .hint{margin:0 0 0 12px;}
+/* on the console the row is a bar that stays in view, so the next action is never below the fold */
+.con .controls{position:sticky;bottom:0;z-index:3;margin:26px -24px 0;padding:14px 24px;background:rgba(251,248,243,.94);backdrop-filter:blur(8px);-webkit-backdrop-filter:blur(8px);border-top:1px solid var(--line);}
+@media (max-width:640px){.controls{flex-direction:column-reverse;align-items:stretch;} .controls .btn{width:100%;} .controls .hint{margin:0 0 6px;text-align:center;} .controls .grp{align-items:center;} .controls .grp .hint{margin:0;}
+  .con .controls{margin:26px -16px 0;padding:12px 16px;flex-direction:row;flex-wrap:wrap;gap:8px;} .con .controls .btn{width:auto;flex:1 1 auto;min-height:42px;font-size:13px;padding:0 14px;} .con .controls .btn.big{flex:1 0 100%;order:-1;min-height:52px;font-size:15px;} .con .controls .grp{flex:1 0 100%;order:2;align-items:center;}}
 
 /* status chip: the one home for counts on the facilitator surface */
 .chip{display:inline-flex;align-items:baseline;gap:10px;font-family:var(--serif);font-size:clamp(18px,2vw,24px);background:var(--paper);border:1.5px solid var(--line);border-radius:999px;padding:8px 18px;white-space:nowrap;transition:box-shadow .2s,border-color .3s;}
@@ -79,16 +84,17 @@ h2{font-family:var(--serif);font-weight:400;font-size:clamp(24px,3vw,32px);line-
 .pulse-once{animation:pulse 1.1s ease-out 1;}
 
 /* progress pills: every question is a pair, so every marker is a tiny pair */
-.pills{display:flex;align-items:center;gap:8px;width:100%;}
+.pills{display:flex;align-items:center;gap:8px;width:auto;}
 .pills i{position:relative;display:block;width:26px;height:12px;border-radius:999px;border:1.5px solid rgba(41,56,81,.35);background:var(--paper);overflow:hidden;flex:0 0 auto;transition:width .3s var(--spring),height .3s var(--spring),box-shadow .3s,border-color .3s;}
 .pills i b{position:absolute;left:0;top:0;bottom:0;width:0;background:linear-gradient(90deg,var(--tealM) 0 50%,var(--clayM) 50% 100%);transition:width .5s var(--ease);}
 .pills i.done{border-color:transparent;}
 .pills i.done b{width:100%;}
 .pills i.on{width:34px;height:16px;border-color:var(--cobalt);box-shadow:0 0 0 3px rgba(255,204,0,.9),0 0 18px rgba(255,204,0,.55);}
-.pills i.on::after{content:'';position:absolute;left:50%;top:2px;bottom:2px;width:1.5px;background:var(--cobalt);opacity:.5;}
+.pills i.on::before{content:'';position:absolute;inset:0;background:linear-gradient(90deg,var(--tealM) 0 50%,var(--clayM) 50% 100%);opacity:.22;}
 .pills i.rev{width:14px;height:14px;border-radius:50%;border:1.5px dashed rgba(41,56,81,.4);}
 .pills i.rev.lit{border:1.5px solid var(--cobalt);background:var(--gold);box-shadow:0 0 14px rgba(255,204,0,.6);}
-.pills em{flex:1;height:1.5px;background:rgba(41,56,81,.14);margin:0 -2px;}
+.pills em{flex:0 0 auto;width:16px;height:1.5px;background:rgba(41,56,81,.14);margin:0 -2px;}
+.pstrip .pills{justify-content:center;}
 .pills.sm i{width:20px;height:9px;} .pills.sm i.on{width:26px;height:12px;} .pills.sm i.rev{width:11px;height:11px;}
 .pills.tap i{cursor:pointer;}
 
@@ -171,12 +177,6 @@ h2{font-family:var(--serif);font-weight:400;font-size:clamp(24px,3vw,32px);line-
 .burst i{position:absolute;left:50%;top:0;width:9px;height:9px;border-radius:50%;transform:translate(-50%,-50%);opacity:0;transition:transform 1s var(--spring),opacity .5s;}
 .burst i.L{background:var(--teal);} .burst i.R{background:var(--clay);}
 
-/* the room as dots, facilitator surface only */
-.field2{display:flex;flex-wrap:wrap;gap:6px;justify-content:flex-start;align-content:center;min-height:24px;}
-.field2 i{width:12px;height:12px;border-radius:50%;background:var(--pigeon);border:2px solid var(--pigeon);transition:background .35s,border-color .35s,transform .35s var(--spring);animation:drop .5s var(--spring) both;}
-.field2 i.on{background:var(--cobalt);border-color:var(--cobalt);}
-.field2.all i.on{background:var(--gold);border-color:var(--cobalt);}
-@keyframes drop{from{transform:scale(0);}to{transform:scale(1);}}
 
 /* frost: one transition language on the participant surface, lighter than before */
 .frost{filter:blur(8px);opacity:0;transform:translateY(6px) scale(.992);transition:filter .16s ease-in,opacity .16s ease-in,transform .16s ease-in;}
@@ -189,6 +189,8 @@ h2{font-family:var(--serif);font-weight:400;font-size:clamp(24px,3vw,32px);line-
 /* studio */
 .stwrap{max-width:1000px;margin:0 auto;padding:0 20px 80px;}
 .topbar{display:flex;align-items:center;justify-content:space-between;gap:12px;padding:14px 0;border-bottom:1px solid var(--line);}
+.resumebar{display:flex;align-items:center;justify-content:space-between;gap:14px;flex-wrap:wrap;margin-top:14px;padding:12px 18px;background:var(--pollen);border:1.5px solid #EAD98C;border-radius:14px;font-size:14px;}
+.resumebar .codeword{font-family:var(--serif);font-size:18px;letter-spacing:.14em;}
 .steps{display:flex;gap:8px;align-items:center;}
 .steps i{width:8px;height:8px;border-radius:50%;background:var(--pigeon);transition:width .25s,background .25s;}
 .steps i.on{background:var(--cobalt);width:22px;border-radius:4px;}
@@ -248,6 +250,7 @@ h2{font-family:var(--serif);font-weight:400;font-size:clamp(24px,3vw,32px);line-
 .way .qr{width:min(100%,380px);aspect-ratio:1;margin:0 auto;}
 .way .qr svg{width:100%;height:100%;display:block;}
 .way .btn{align-self:flex-start;}
+.way.link .linkbox{font-size:15px;line-height:1.7;padding:18px 20px;margin:auto 0;}
 .way3{display:flex;align-items:center;justify-content:space-between;gap:14px;flex-wrap:wrap;margin-top:14px;padding:14px 18px;border:1.5px dashed var(--line);border-radius:14px;font-size:13px;color:var(--aegean);}
 .way3 b{color:var(--cobalt);font-weight:700;}
 .way3 .codeword{font-family:var(--serif);font-size:20px;letter-spacing:.14em;margin-left:2px;}
@@ -255,11 +258,11 @@ h2{font-family:var(--serif);font-weight:400;font-size:clamp(24px,3vw,32px);line-
 .con .side{padding:28px;}
 .con .instr{font-family:var(--serif);font-size:clamp(18px,2vw,24px);line-height:1.3;margin:26px 0 4px;text-wrap:balance;overflow-wrap:anywhere;}
 .con .prompt{font-family:var(--serif);font-size:clamp(16px,1.7vw,20px);color:var(--aegean);margin:0 0 18px;text-wrap:balance;overflow-wrap:anywhere;}
-.roomrow{margin-top:22px;padding:16px 22px;background:var(--paper);border:1.5px solid var(--line);border-radius:16px;}
 .plist{display:grid;gap:10px;margin-top:26px;}
 .plist .p{display:grid;grid-template-columns:34px 1fr auto;gap:14px;align-items:center;padding:12px 0;border-bottom:1px solid var(--line);}
 .plist .p .num{font-family:var(--serif);font-size:22px;color:var(--aegean);}
 .plist .p .lab{font-size:13px;overflow-wrap:anywhere;color:var(--cobalt);}
+.plist .p .lab b{font-size:11px;font-weight:700;letter-spacing:.12em;text-transform:uppercase;}
 .plist .p .lab span{color:var(--aegean);}
 .plist .p .bar{height:6px;background:var(--pigeon);border-radius:3px;overflow:hidden;margin-top:8px;}
 .plist .p .bar i{display:block;height:100%;background:linear-gradient(90deg,var(--tealM),var(--clayM));width:0;transition:width .6s var(--ease);}
@@ -292,7 +295,8 @@ h2{font-family:var(--serif);font-weight:400;font-size:clamp(24px,3vw,32px);line-
 .endcard{background:var(--paper);border:1.5px solid var(--line);border-radius:18px;padding:30px;margin-top:22px;position:relative;overflow:hidden;}
 .endcard h2{margin-bottom:10px;}
 .endcard p{font-size:15px;line-height:1.55;color:var(--aegean);}
-.simbar{display:flex;align-items:center;justify-content:space-between;gap:12px;flex-wrap:wrap;background:var(--pollen);border:1.5px solid #EAD98C;border-radius:14px;padding:10px 14px;margin-top:14px;}
+.simbar{position:relative;z-index:2;display:flex;align-items:center;justify-content:space-between;gap:12px;flex-wrap:wrap;background:var(--pollen);border:1.5px solid #EAD98C;border-radius:14px;padding:10px 14px;margin-top:14px;}
+.simbar .r{display:flex;align-items:center;gap:8px;}
 .simbar .t{font-size:12px;font-weight:800;letter-spacing:.1em;text-transform:uppercase;}
 .seg{display:inline-flex;border:1.5px solid var(--cobalt);border-radius:999px;overflow:hidden;background:var(--paper);}
 .seg button{border:none;background:transparent;color:var(--cobalt);font-weight:700;font-size:12px;padding:9px 14px;}
@@ -351,7 +355,7 @@ h2{font-family:var(--serif);font-weight:400;font-size:clamp(24px,3vw,32px);line-
 .pfill .prompt{font-family:var(--serif);font-size:16px;line-height:1.45;color:var(--aegean);margin-bottom:18px;text-wrap:balance;overflow-wrap:anywhere;}
 .help{font-size:13px;color:var(--aegean);text-align:center;margin-top:26px;min-height:18px;font-weight:600;}
 .pnav{display:flex;justify-content:space-between;align-items:center;gap:12px;margin-top:22px;}
-.pfoot{display:flex;justify-content:center;padding-top:12px;position:relative;z-index:1;}
+.pfoot{display:flex;justify-content:center;padding-top:12px;position:relative;z-index:1;pointer-events:none;}
 .tiny{border:none;background:transparent;color:var(--aegean);font-size:12px;font-weight:600;letter-spacing:.04em;padding:10px 12px;min-height:44px;pointer-events:auto;}
 .tiny::before{content:'♪  ';}
 .tiny.muted::before{content:'♪̸  ';}
@@ -395,12 +399,13 @@ h2{font-family:var(--serif);font-weight:400;font-size:clamp(24px,3vw,32px);line-
 <section id="scr_studio" class="screen on">
   <div class="stwrap">
     <div class="topbar"><span class="mark">Pair Poll <b>SETUP</b></span><div class="row"><div class="steps" id="steps"></div><button class="ibtn" id="btnMuteS" aria-label="Sound">♪</button></div></div>
+    <div class="resumebar hide" id="resumeBar"><span>You have a live session, <b class="codeword" id="resumeCode"></b>.</span><a class="btn sec" id="resumeLink" href="?">Return to it</a></div>
 
     <div class="step" id="st0">
       <div>
         <h1>See where the room stands.</h1>
         <p class="lede">Give participants two contrasting statements. They choose a side. You reveal the split.</p>
-        <div class="row"><button class="btn big" id="btnBuild">Build a poll</button><button class="btn big sec hide" id="btnDraft">Continue your draft</button><a class="btn big sec hide" id="btnResume" href="?">Return to your live session</a></div>
+        <div class="row"><button class="btn big" id="btnBuild">Build a poll</button><button class="btn big sec hide" id="btnDraft">Continue your draft</button></div>
         <p class="hint" style="margin-top:22px">Need a participant link before setup? Use the <a href="?join">join-by-code link</a>.</p>
       </div>
       <svg class="demo" viewBox="0 0 520 300" aria-hidden="true" id="demo"></svg>
@@ -481,6 +486,7 @@ h2{font-family:var(--serif);font-weight:400;font-size:clamp(24px,3vw,32px);line-
     <div class="step" id="st5">
       <h2>Ready?</h2>
       <div class="review" id="review"></div>
+      <p class="hint" style="margin-bottom:18px">Every reveal opens on a standby screen first, so you can share your screen before anything shows.</p>
       <p class="hint warn" id="launchNote"></p>
       <div class="row" style="margin-top:8px"><button class="btn big sec" id="btnTestDrive">Test drive with bots</button><button class="btn big" id="btnLaunch">Start a live session</button></div>
       <div class="row" style="margin-top:22px"><button class="btn ghost" id="btnCopySetup">Copy setup link</button><span class="hint">Reopens this exact setup, any time, any device.</span></div>
@@ -494,12 +500,12 @@ h2{font-family:var(--serif);font-weight:400;font-size:clamp(24px,3vw,32px);line-
   <div class="cwrap">
     <div class="topbar"><span class="mark">Pair Poll</span><div class="chip" id="chip"><span id="chipIn">0</span><small>in</small><span class="sep hide" id="chipSep">·</span><span class="hide" id="chipDone">0</span><small class="hide" id="chipDoneLab">voted</small></div><div class="right"><button class="btn ghost hide" id="btnJoinInfo">Join info</button><button class="ibtn" id="btnMuteC" aria-label="Sound">♪</button></div></div>
     <div class="pills conpills" id="conPills"></div>
-    <div class="simbar hide" id="simBarC"><span class="t">Test drive · facilitator view</span><div class="seg"><button id="segCon" aria-pressed="true">Facilitator</button><button id="segPax" aria-pressed="false">Participant</button></div></div>
+    <div class="simbar hide" id="simBarC"><span class="t">Test drive · facilitator view</span><div class="r"><div class="seg"><button id="segCon" aria-pressed="true">Facilitator</button><button id="segPax" aria-pressed="false">Participant</button></div><button class="btn ghost" id="btnSimExit">Exit test drive</button></div></div>
 
     <div id="con_lobby">
       <div id="joinWays"></div>
       <div class="card hide" id="simNote" style="margin-top:18px"><p class="hint" style="font-size:14px">Twelve bots are joining. Nothing leaves this page. Switch views above to vote as one of them.</p></div>
-      <div class="controls"><span class="hint" id="facHint">Your way back to this console if this tab ever closes.</span><button class="btn ghost" id="btnCopyFac">Copy facilitator link</button><button class="btn big" id="btnStart">Start the poll</button></div>
+      <div class="controls"><div class="grp" id="facGrp"><button class="btn ghost" id="btnCopyFac">Copy facilitator link</button><span class="hint" id="facHint">Your way back if this tab ever closes.</span></div><button class="btn big" id="btnStart">Start the poll</button></div>
     </div>
 
     <div id="con_vote" class="hide">
@@ -507,7 +513,6 @@ h2{font-family:var(--serif);font-weight:400;font-size:clamp(24px,3vw,32px);line-
       <p class="prompt" id="conPrompt"></p>
       <div class="pair" id="conPair"><div class="side L" id="conL"><span class="pill"></span><div class="stmt"></div></div><div class="orpill">or</div><div class="side R" id="conR"><span class="pill"></span><div class="stmt"></div></div></div>
       <div id="conResult" class="hide"><div class="dv" id="conDv"></div><div class="dvn" id="conDvn"></div><div class="tie hide" id="conTie">Split down the middle.</div></div>
-      <div class="roomrow" id="voteRoom"><div class="field2" id="voteField"></div></div>
       <div class="controls"><button class="btn ghost" id="btnBack">Back</button><button class="btn ghost" id="btnReopen">Re-open voting</button><button class="btn big" id="btnReveal">Reveal</button><button class="btn big" id="btnNext">Next question</button></div>
     </div>
 
@@ -532,13 +537,13 @@ h2{font-family:var(--serif);font-weight:400;font-size:clamp(24px,3vw,32px);line-
   </div>
 </section>
 
-<div id="joinModal" role="dialog" aria-modal="true" aria-label="Join info"><div class="modal"><div class="mhead"><span class="mark">How to join</span><button class="btn ghost" id="btnJoinClose">Close</button></div><div id="joinWaysModal"></div></div></div>
+<div id="joinModal" role="dialog" aria-modal="true" aria-label="Join info"><div class="modal"><div class="mhead"><span class="mark">How to join</span><button class="btn ghost" id="btnJoinClose">Close</button></div><div id="joinWaysModal"></div><div class="row" style="margin-top:22px" id="modalFac"><button class="btn ghost" id="btnCopyFac2">Copy facilitator link</button><span class="hint">Your way back if this tab ever closes.</span></div></div></div>
 
 <!-- ================= REVEAL MODE (facilitator drives; the room and participants watch) ================= -->
 <div id="reveal" aria-live="polite">
   <button class="btn ghost rvclose" id="rvClose">Exit reveal</button>
   <div class="rvstage">
-    <div class="standby hide" id="rvStandby"><div class="orb"></div><h1>Enough suspense.</h1><p id="rvStandbyP">Every answer is in and locked. Share your screen, take a breath, and start it when the room is ready.</p><button class="btn big gold" id="rvBegin">Let's see the results</button></div>
+    <div class="standby hide" id="rvStandby"><div class="orb"></div><h1>Enough suspense.</h1><p id="rvStandbyP">Every answer is in. Locked.</p><button class="btn big gold" id="rvBegin">Let's see the results</button></div>
     <div class="rvslide hide" id="rvSlide"></div>
   </div>
   <div class="rvfoot"><button class="btn ghost" id="rvBack">Back</button><div class="rvdots" id="rvDots"></div><button class="btn" id="rvNext">Next</button></div>
@@ -548,7 +553,7 @@ h2{font-family:var(--serif);font-weight:400;font-size:clamp(24px,3vw,32px);line-
 <section id="scr_pax" class="screen">
   <div class="pwrap" id="pwrap">
     <canvas id="idle" aria-hidden="true"></canvas>
-    <div class="simbar hide" id="simBarP"><span class="t">Test drive · participant view</span><div class="seg"><button id="segCon2" aria-pressed="false">Facilitator</button><button id="segPax2" aria-pressed="true">Participant</button></div></div>
+    <div class="simbar hide" id="simBarP"><span class="t">Test drive · participant view</span><div class="r"><div class="seg"><button id="segCon2" aria-pressed="false">Facilitator</button><button id="segPax2" aria-pressed="true">Participant</button></div><button class="btn ghost" id="btnSimExit2">Exit test drive</button></div></div>
     <div class="pstrip hide" id="paxStripWrap"><div class="pills sm" id="paxStrip"></div></div>
     <div class="pfill" id="paxFill">
       <div class="body" id="paxBody"></div>
@@ -843,7 +848,7 @@ var Sfx = (function(){
   function tone(f, t0, dur, vol, kind){
     if (App.muted) return;
     var c=ac(); if (!c) return;
-    if (c.state==='suspended'){ try{ c.resume().then(function(){ voice(c,f,c.currentTime+t0,dur,vol,kind); }).catch(function(){}); }catch(e){} }
+    if (c.state!=='running'){ try{ c.resume().then(function(){ voice(c,f,c.currentTime+t0,dur,vol,kind); }).catch(function(){}); }catch(e){} }
     else voice(c,f,c.currentTime+t0,dur,vol,kind);
   }
   var N={ C2:65.41, G2:98, A2:110, F2:87.31, C4:261.63, D4:293.66, E4:329.63, F4:349.23, G4:392, A4:440, B4:493.88, C5:523.25, D5:587.33, E5:659.25, G5:783.99, A5:880, C6:1046.5, E6:1318.5 };
@@ -851,7 +856,7 @@ var Sfx = (function(){
   return {
     N:N,
     ctx:function(){ return ac(); },
-    unlock:function(){ var c=ac(); if (c && c.state==='suspended'){ try{ c.resume(); }catch(e){} } },
+    unlock:function(){ var c=ac(); if (c && c.state!=='running'){ try{ c.resume(); }catch(e){} } },
     /* four designed moments, plus two tiny ticks for play */
     tick:function(){ tone(N.E5,0,0.16,0.14); },
     join:function(){ tone(N.E5,0,0.35,0.22); },
@@ -919,7 +924,10 @@ function renderQr(el, text){ var q=QR.encode(text, 'Q'); if (!q){ el.innerHTML='
 function bindCommon(){
   var ids=['btnMuteS','btnMuteC','btnMuteP'];
   for (var i=0;i<ids.length;i++){ var b=$(ids[i]); if (b) b.addEventListener('click', toggleMute); }
-  document.addEventListener('pointerdown', function(){ Sfx.unlock(); }, {passive:true});
+  /* browsers only let a page start sound inside a gesture; take every gesture we get, and resume when the tab comes back */
+  ['pointerdown','touchend','keydown'].forEach(function(ev){ document.addEventListener(ev, function(){ Sfx.unlock(); }, {passive:true}); });
+  document.addEventListener('visibilitychange', function(){ if (!document.hidden) Sfx.unlock(); });
+  document.addEventListener('keydown', function(e){ if (e.key==='Escape' && $('joinModal') && $('joinModal').classList.contains('on')) $('joinModal').classList.remove('on'); });
   document.addEventListener('keydown', revealKeys);
 }
 function boot(){
@@ -982,10 +990,19 @@ function initStudio(preloaded){
   STUDIO.setup = preloaded || blankSetup();
   if (!preloaded && draftSetup && draftSetup.qs.some(qValid)) show('btnDraft', true);
   STUDIO.draftSetup = draftSetup;
-  var h=hostRecord(); if (h && !preloaded){ $('btnResume').href = baseUrl()+'?host='+h.code+'&k='+h.k; $('btnResume').textContent='Return to your live session '+h.code; show('btnResume', true); }
+  renderResume();
   if (!STUDIO.bound){ STUDIO.bound=true; bindStudio(); renderDemo(); renderMinis(); }
   renderSteps();
   goStep(preloaded ? 1 : 0);
+}
+/* pick up where you left off: a live session's return link on the hero and on every step, verified so a stale record never shows */
+function renderResume(){
+  var h=hostRecord();
+  function paint(on){ show('resumeBar', on); if (!on) return; $('resumeLink').href=baseUrl()+'?host='+h.code+'&k='+h.k; $('resumeCode').textContent=h.code; }
+  if (!h){ paint(false); return; }
+  paint(true);
+  if (App.sim) return;
+  Net.state('pub', h.code).then(function(st){ if (!st || !st.pub || !st.pub.meta){ unstore('pp_host'); paint(false); } }).catch(function(){});
 }
 /* the hero's living miniature: a room of dots settling into two sides, then the wings drawing */
 function renderDemo(){
@@ -1243,6 +1260,7 @@ function startConsoleLive(){
     if (m.stage==='recap') App.celebrated=true;
     enterConsole();
     if (m.stage==='reveal') resumeReveal();
+    else if (m.stage==='vote' && m.mode==='each'){ var sh=st.pub.show||{}; if (sh.k==='standby' && sh.i===m.q) conReveal(); else if (sh.k==='q' && sh.i===m.q) openReveal([{k:'q', i:m.q}], null, function(){ Net.set('pub/show', {k:'done'}).then(function(){ return pollConsole(); }); }, 0); }
   }).catch(function(e){ gate(e && e.locked ? 'locked' : 'gone'); });
 }
 function seedAgg(st){ var a=(st.pub && st.pub.agg)||{}; for (var k in a) App.lastAgg[parseInt(k.slice(1),10)]=(a[k].L||0)+'/'+(a[k].R||0); App.lastJoined = st.pub && typeof st.pub.joined==='number' ? st.pub.joined : -1; App.lastSum = st.pub && st.pub.sum ? JSON.stringify(st.pub.sum) : ''; }
@@ -1250,7 +1268,8 @@ function enterConsole(){
   applyRoleMute('console'); App.ended=false; App.ending=false;
   setScreen('scr_console');
   if (!CON.bound){ CON.bound=true; bindConsole(); }
-  show('simBarC', App.sim); show('simNote', App.sim); show('btnCopyFac', !App.sim); show('facHint', !App.sim);
+  show('simBarC', App.sim); show('simNote', App.sim); show('facGrp', !App.sim); show('modalFac', !App.sim);
+  $('facHint').textContent = 'Virtual: paste the link into the chat. In the room: leave this page up, or copy the QR onto a slide. Your own link is the way back if this tab closes.';
   show('endLive', false); show('endDone', false); show('endSim', false);
   renderJoinWays($('joinWays')); renderJoinWays($('joinWaysModal'));
   $('btnStart').textContent = App.setup && App.setup.pace==='self' ? 'Open the poll' : 'Start the poll';
@@ -1265,10 +1284,10 @@ function renderJoinWays(host){
   if (!host) return;
   if (App.sim){ host.innerHTML='<div class="way" style="margin-top:22px"><div class="wt">No link in a test drive.</div><div class="wd">Bots are joining on their own. Switch to the participant view above to vote as one of them.</div></div>'; return; }
   host.innerHTML='<div class="ways">'
-    + '<div class="way"><div class="cap">Virtual</div><div class="wt">Share the link.</div><div class="wd">Paste it into the chat. One tap and they are in.</div><div class="linkbox">'+esc(joinLink())+'</div><div class="spacer"></div><button class="btn sec" data-copy="link">Copy link</button></div>'
-    + '<div class="way"><div class="cap">In the room</div><div class="wt">Scan the code.</div><div class="wd">For phones. Drop it on a slide, or leave this screen up.</div><div class="qr"></div><div class="spacer"></div><button class="btn sec" data-copy="qr">Copy QR image</button></div>'
+    + '<div class="way link"><div class="cap">Link</div><div class="wt">Tap the link.</div><div class="linkbox">'+esc(joinLink())+'</div><button class="btn sec" data-copy="link">Copy link</button></div>'
+    + '<div class="way"><div class="cap">Code</div><div class="wt">Scan the code.</div><div class="qr"></div><div class="spacer"></div><button class="btn sec" data-copy="qr">Copy QR image</button></div>'
     + '</div>'
-    + '<div class="way3"><span>Backup: go to <b>'+esc(JOIN_SHORT)+'</b> and enter <b class="codeword">'+esc(App.code)+'</b></span><button class="btn ghost" data-copy="code">Copy instructions</button></div>';
+    + '<div class="way3"><span>Or go to <b>'+esc(JOIN_SHORT)+'</b> and enter <b class="codeword">'+esc(App.code)+'</b></span><button class="btn ghost" data-copy="code">Copy instructions</button></div>';
   renderQr(host.querySelector('.qr'), joinLink());
   Array.prototype.forEach.call(host.querySelectorAll('[data-copy]'), function(b){ b.addEventListener('click', function(){ var k=b.getAttribute('data-copy'); if (k==='link') copyText(joinLink(), b); else if (k==='code') copyText(joinWords(), b); else copyQrImage(host.querySelector('.qr svg'), b); }); });
 }
@@ -1292,6 +1311,9 @@ function copyQrImage(svgEl, btn){
 }
 function bindConsole(){
   $('btnCopyFac').addEventListener('click', function(){ copyText(facLink(), this); });
+  $('btnCopyFac2').addEventListener('click', function(){ copyText(facLink(), this); });
+  $('btnSimExit').addEventListener('click', exitTestDrive);
+  $('btnSimExit2').addEventListener('click', exitTestDrive);
   $('btnStart').addEventListener('click', conStart);
   $('btnReveal').addEventListener('click', conReveal);
   $('btnNext').addEventListener('click', function(){ var m=meta(); if (m.q+1>=m.n) conFinal(); else conNext(); });
@@ -1305,7 +1327,7 @@ function bindConsole(){
   $('btnUndoEnd').addEventListener('click', conUndoEnd);
   $('btnAgainSame').addEventListener('click', function(){ reuseSetup(); });
   $('btnSimAgain').addEventListener('click', function(){ stopConsolePolling(); clearInterval(SIM.timer); testDrive(); });
-  $('btnSimSetup').addEventListener('click', function(){ stopConsolePolling(); clearInterval(SIM.timer); App.sim=false; reuseSetup(); });
+  $('btnSimSetup').addEventListener('click', exitTestDrive);
   $('btnDownload').addEventListener('click', downloadRecap);
   $('btnJoinInfo').addEventListener('click', function(){ $('joinModal').classList.add('on'); });
   $('btnJoinClose').addEventListener('click', function(){ $('joinModal').classList.remove('on'); });
@@ -1317,7 +1339,9 @@ function bindConsole(){
   ['segCon','segCon2'].forEach(function(id){ $(id).addEventListener('click', function(){ simView('con'); }); });
   ['segPax','segPax2'].forEach(function(id){ $(id).addEventListener('click', function(){ simView('pax'); }); });
 }
-function reuseSetup(){ setUrl(baseUrl()); unstore('pp_host'); STUDIO.setup=cleanSetup(App.setup||blankSetup()); STUDIO.qi=0; if (!STUDIO.bound){ STUDIO.bound=true; bindStudio(); renderDemo(); renderMinis(); } applyRoleMute('studio'); setScreen('scr_studio'); goStep(1); }
+function reuseSetup(step){ setUrl(baseUrl()); if (!App.sim) unstore('pp_host'); STUDIO.setup=cleanSetup(App.setup||blankSetup()); STUDIO.qi=0; if (!STUDIO.bound){ STUDIO.bound=true; bindStudio(); renderDemo(); renderMinis(); } applyRoleMute('studio'); setScreen('scr_studio'); Idle.stop(); closeReveal(true); $('joinModal').classList.remove('on'); goStep(step||1); renderResume(); }
+/* a test drive can be left from either view; the setup is kept and the studio reopens on the review step */
+function exitTestDrive(){ stopConsolePolling(); clearInterval(SIM.timer); clearTimeout(App.paxTimer); App.paxTimer=null; App.ended=true; show('simBarP', false); var keep=App.setup; App.sim=false; App.setup=keep; reuseSetup(5); }
 function simView(which){
   ['segCon','segCon2'].forEach(function(id){ $(id).setAttribute('aria-pressed', which==='con'?'true':'false'); });
   ['segPax','segPax2'].forEach(function(id){ $(id).setAttribute('aria-pressed', which==='pax'?'true':'false'); });
@@ -1353,13 +1377,6 @@ function renderChip(joined, done, label){
   if (withDone){ $('chipDone').textContent=done; $('chipDoneLab').textContent=label; }
   $('chip').classList.toggle('warm', withDone && joined>0 && done>=joined);
 }
-function renderField(el, total, on, all){
-  var kids=el.children;
-  while (kids.length>total) el.removeChild(el.lastChild);
-  while (kids.length<total){ var d=document.createElement('i'); el.appendChild(d); }
-  for (var i=0;i<total;i++) kids[i].classList.toggle('on', i<on);
-  el.classList.toggle('all', !!all && total>0);
-}
 /* the console pills: fac pace fills whole questions; self pace fills each pill by the share of the room that answered it */
 function renderConPills(st, m){
   var n=m.n||0, stage=m.stage||'lobby', fill=[], on=-1, rev=1, joined=rosterCount(st);
@@ -1390,7 +1407,6 @@ function renderConsoleVote(st, m, joined){
   $('conInstr').textContent=instrText();
   $('conPrompt').textContent=cfg.p||''; show('conPrompt', !!cfg.p);
   fillSide($('conL'), cfg.l, cfg.ls); fillSide($('conR'), cfg.r, cfg.rs);
-  renderField($('voteField'), Math.min(joined, 400), Math.min(submitted, 400), submitted>=joined && joined>0);
   if (!revealed) stageThreshold(joined, submitted, q);
   var res=$('conResult');
   if (revealed){ var was=res.classList.contains('hide'); show(res, true); if (was || res.getAttribute('data-sig')!==c.L+'/'+c.R){ res.setAttribute('data-sig', c.L+'/'+c.R); paintDv(res, c, null, false); markSides($('conL'), $('conR'), c, false); } }
@@ -1407,7 +1423,7 @@ function renderConsoleSelf(st, m, joined){
   renderChip(joined, done, 'done');
   var h='';
   for (var i=0;i<n;i++){ var c=countBallots(st,i), a=c.L+c.R, cfg=cfgOf(i), w=joined?Math.min(100, Math.round(a*100/joined)):0;
-    h+='<div class="p"><div class="num">'+(i+1)+'</div><div><div class="lab">'+esc(cfg.l)+' <span>or</span> '+esc(cfg.r)+'</div><div class="bar"><i style="width:'+w+'%"></i></div></div><div class="cnt2">'+a+'<small>of '+joined+'</small></div></div>'; }
+    h+='<div class="p"><div class="num">'+(i+1)+'</div><div><div class="lab"><b>'+esc(cfg.l)+'</b> <span>or</span> <b>'+esc(cfg.r)+'</b></div><div class="bar"><i style="width:'+w+'%"></i></div></div><div class="cnt2">'+a+'<small>of '+joined+'</small></div></div>'; }
   if ($('selfList').getAttribute('data-sig')!==h){ $('selfList').setAttribute('data-sig', h); $('selfList').innerHTML=h; }
   stageThreshold(joined, done, 'all');
 }
@@ -1442,22 +1458,23 @@ function conFinal(){
     startRevealSequence(false);
   });
 }
-function revealSteps(){
+/* the sequence: at the end of a reveal-at-the-end poll, or on any replay, every question plus the big reveal; the first final of a reveal-after-each poll plays only the big reveal, since the questions were revealed one by one */
+function revealSteps(full){
   var m=meta(), steps=[], hasSum=!!(m.sum && cfgSum() && App.state.pub.sum && App.state.pub.sum.n);
-  if (m.mode==='each') return hasSum ? [{k:'grand'}] : [];
+  if (m.mode==='each' && !full) return hasSum ? [{k:'grand'}] : [];
   if (hasSum && m.order!=='details') steps.push({k:'grand'});
   for (var i=0;i<m.n;i++) steps.push({k:'q', i:i});
   if (hasSum && m.order==='details') steps.push({k:'grand'});
   return steps;
 }
 function startRevealSequence(replay){
-  var steps=revealSteps(); if (!steps.length) return;
-  App.celebrated=false;
-  metaPatch({stage:'reveal'}).then(function(){ return Net.set('pub/show', {k:'standby'}); }).then(function(){ return pollConsole(); }).then(function(){ openReveal(steps, null, finishReveal); });
+  var steps=revealSteps(!!replay); if (!steps.length) return;
+  App.celebrated=false; App.rvFull=!!replay;
+  metaPatch({stage:'reveal', full:!!replay}).then(function(){ return Net.set('pub/show', {k:'standby'}); }).then(function(){ return pollConsole(); }).then(function(){ openReveal(steps, null, finishReveal); });
 }
 function finishReveal(){ Net.set('pub/show', {k:'done'}).then(function(){ return metaPatch({stage:'recap'}); }).then(function(){ return pollConsole(); }); }
 function resumeReveal(){
-  var sh=showOf(), steps=revealSteps(); if (!steps.length){ finishReveal(); return; }
+  var sh=showOf(), steps=revealSteps(!!meta().full); if (!steps.length){ finishReveal(); return; }
   if (App.rvOpen) return;
   if (sh.k==='standby'){ openReveal(steps, null, finishReveal); return; }
   var idx=0; for (var i=0;i<steps.length;i++) if (steps[i].k===sh.k && steps[i].i===sh.i) idx=i;
@@ -1482,7 +1499,7 @@ function openReveal(steps, onBegin, onExit, idx){
 }
 function rvRenderStandby(){
   show('rvStandby', true); show('rvSlide', false); $('rvBack').classList.add('hide'); $('rvNext').classList.add('hide'); $('rvDots').innerHTML='';
-  var m=meta(); $('rvStandbyP').textContent = m.mode==='each' && m.stage==='vote' ? 'Answers are locked. Share your screen if you have not yet, then start it when the room is ready.' : 'Every answer is in and locked. Share your screen, take a breath, and start it when the room is ready.';
+  var m=meta(); $('rvStandbyP').textContent = m.mode==='each' && m.stage==='vote' ? 'Answers are in. Locked.' : 'Every answer is in. Locked.';
 }
 function rvBegin(){
   if (!App.rvOpen || !App.rvStandby) return;
@@ -1559,7 +1576,7 @@ function renderRecap(){
   var m=meta(), paused = m.stage==='reveal' && !App.rvOpen;
   renderSummaryInto($('conSum')); renderRecapInto($('recapList'), App.myVotes, 'recapSig');
   $('btnBackRecap').textContent = m.pace==='self' || m.mode==='each' ? 'Re-open voting' : 'Back to the last question';
-  show('btnContinue', paused); show('btnReplay', !paused && revealSteps().length>0); show('btnEnd', !paused); show('btnDownload', !paused && isHosted()); show('btnBackRecap', !paused);
+  show('btnContinue', paused); show('btnReplay', !paused); show('btnEnd', !paused); show('btnDownload', !paused && isHosted()); show('btnBackRecap', !paused);
 }
 
 /* ---------- recap download (hosted pages only) ---------- */
@@ -1591,14 +1608,21 @@ var Idle=(function(){
   function resize(){ if (!cv) return; DPR=Math.min(2, window.devicePixelRatio||1); W=cv.clientWidth||window.innerWidth; H=cv.clientHeight||window.innerHeight; cv.width=W*DPR; cv.height=H*DPR; ctx.setTransform(DPR,0,0,DPR,0,0); measure(); }
   function measure(){ var b=$('paxBody'); if (!b) return; var r=b.getBoundingClientRect(); rect={x:r.left-24,y:r.top-24,w:r.width+48,h:r.height+48}; }
   function pos(e){ var r=cv.getBoundingClientRect(); return {x:e.clientX-r.left, y:e.clientY-r.top}; }
+  /* pointer events first; touch events as a fallback for browsers that route touches past the canvas. One gesture is never handled twice: a touch that already came through as a pointer is ignored. */
+  function down(x,y){ P.x=x; P.y=y; P.down=true; P.inside=true; P.vx=0; P.touched=true; if (K[kind] && K[kind].down) K[kind].down(x,y); }
+  function move(x,y){ P.vx=x-P.x; P.x=x; P.y=y; P.inside=true; if (K[kind] && K[kind].move) K[kind].move(x,y); }
+  function up(){ if (K[kind] && K[kind].up) K[kind].up(); P.down=false; if (matchMedia('(pointer:coarse)').matches){ P.inside=false; P.x=-9999; P.y=-9999; } }
   function bind(){
     if (bound) return; bound=true;
-    cv.addEventListener('pointerdown', function(e){ var p=pos(e); P.x=p.x; P.y=p.y; P.down=true; P.inside=true; P.vx=0; if (K[kind] && K[kind].down) K[kind].down(p.x,p.y); try{ cv.setPointerCapture(e.pointerId); }catch(er){} });
-    cv.addEventListener('pointermove', function(e){ var p=pos(e); P.vx=p.x-P.x; P.x=p.x; P.y=p.y; P.inside=true; if (K[kind] && K[kind].move) K[kind].move(p.x,p.y); });
-    function up(){ if (K[kind] && K[kind].up) K[kind].up(); P.down=false; if (matchMedia('(pointer:coarse)').matches){ P.inside=false; P.x=-9999; P.y=-9999; } }
+    var viaPointer=false;
+    cv.addEventListener('pointerdown', function(e){ viaPointer=true; var p=pos(e); down(p.x,p.y); try{ cv.setPointerCapture(e.pointerId); }catch(er){} });
+    cv.addEventListener('pointermove', function(e){ var p=pos(e); move(p.x,p.y); });
     cv.addEventListener('pointerup', up); cv.addEventListener('pointercancel', up);
     cv.addEventListener('pointerleave', function(){ P.inside=false; P.x=-9999; P.y=-9999; if (P.down && K[kind] && K[kind].up) K[kind].up(); P.down=false; });
-    window.addEventListener('resize', resize);
+    cv.addEventListener('touchstart', function(e){ if (viaPointer){ e.preventDefault(); return; } var t=e.changedTouches[0], p=pos(t); down(p.x,p.y); e.preventDefault(); }, {passive:false});
+    cv.addEventListener('touchmove', function(e){ e.preventDefault(); if (viaPointer) return; var t=e.changedTouches[0], p=pos(t); move(p.x,p.y); }, {passive:false});
+    cv.addEventListener('touchend', function(e){ if (viaPointer) return; up(); }, {passive:true});
+    window.addEventListener('resize', resize); window.addEventListener('orientationchange', function(){ setTimeout(resize, 300); });
   }
   var K={};
   /* the room: brand circles drift and keep clear of the words; the pointer nudges them; a tap sends a pulse through the room */
@@ -1614,16 +1638,21 @@ var Idle=(function(){
   };
   /* lean: a rubber-band bar under the words. Pull a side and it stretches with rising resistance; let go and it snaps back and knocks the other wing */
   K.lean={
-    init:function(){ state.lean=0; state.vel=0; state.pull=0; state.cap=0; state.anchor=null; },
-    down:function(x,y){ state.anchor=x; state.pull=0; },
+    init:function(){ state.lean=0; state.vel=0; state.pull=0; state.cap=0; state.anchor=null; state.nudgeAt=2200; state.t=0; },
+    down:function(x,y){ state.anchor=x; state.pull=0; state.nudgeAt=Infinity; },
     move:function(x,y){ if (P.down && state.anchor!==null){ var dx=x-state.anchor, s=dx<0?-1:1, k=Math.abs(dx)/120; state.pull = s*(1-Math.exp(-k))*1.1; } },
     up:function(){ if (state.anchor===null) return; var p=state.pull; state.anchor=null; state.pull=0; state.vel += -p*0.42 + (P.vx||0)*0.004; if (Math.abs(p)>.15){ state.cap=1; Sfx.tick(); } },
-    tick:function(dt){ var s=dt/16, target = P.down ? state.pull : 0; var stiff = P.down ? .18 : .05, damp = P.down ? .35 : .09; var accel=(target-state.lean)*stiff - state.vel*damp; state.vel+=accel*s; state.lean+=state.vel*s; if (state.lean>1.4) state.lean=1.4; if (state.lean<-1.4) state.lean=-1.4; state.cap=Math.max(0,state.cap-dt/900); },
+    tick:function(dt){ var s=dt/16; state.t+=dt;
+      /* hover: the bar leans a little toward whichever half the pointer is on, so a passing mouse discovers it */
+      var hover = (!P.down && P.inside && P.x>-9000) ? Math.max(-.32, Math.min(.32, (P.x-W/2)/(W/2)*.4)) : 0;
+      /* ambient nudge: until the first touch, a small push every few seconds says "I move" */
+      if (state.t>state.nudgeAt){ state.vel += (Math.random()<.5?-1:1)*.16; state.nudgeAt=state.t+4200+Math.random()*2200; }
+      var target = P.down ? state.pull : hover; var stiff = P.down ? .18 : .05, damp = P.down ? .35 : .09; var accel=(target-state.lean)*stiff - state.vel*damp; state.vel+=accel*s; state.lean+=state.vel*s; if (state.lean>1.4) state.lean=1.4; if (state.lean<-1.4) state.lean=-1.4; state.cap=Math.max(0,state.cap-dt/900); },
     draw:function(){ var cy=Math.min(H-96, (rect?rect.y+rect.h:H/2)+34), half=Math.min(170, W*.3), mid=W/2, h=14, t=performance.now()/1000, breathe=.5+.5*Math.sin(t*1.4);
       var l=Math.max(0,-state.lean), r=Math.max(0,state.lean), base=.26+breathe*.1, stretch=Math.min(1.6, 1+Math.abs(state.lean)*.45);
       var wl=half*(base+l*(1.25-base)), wr=half*(base+r*(1.25-base)), hl=h*(l>0?1/Math.sqrt(stretch):1), hr=h*(r>0?1/Math.sqrt(stretch):1);
       ctx.save(); ctx.setLineDash([4,5]); ctx.strokeStyle=hex(C.cobalt,.35); ctx.lineWidth=1.5; ctx.beginPath(); ctx.moveTo(mid,cy-h); ctx.lineTo(mid,cy+h); ctx.stroke(); ctx.restore();
-      function pill(x0,x1,hh,c,a){ ctx.fillStyle=hex(c,a); ctx.beginPath(); ctx.roundRect(Math.min(x0,x1),cy-hh/2,Math.abs(x1-x0),hh,hh/2); ctx.fill(); }
+      function pill(x0,x1,hh,c,a){ var x=Math.min(x0,x1), w=Math.abs(x1-x0), y=cy-hh/2, r=hh/2; ctx.fillStyle=hex(c,a); ctx.beginPath(); if (ctx.roundRect) ctx.roundRect(x,y,w,hh,r); else { ctx.moveTo(x+r,y); ctx.lineTo(x+w-r,y); ctx.arc(x+w-r,y+r,r,-Math.PI/2,Math.PI/2); ctx.lineTo(x+r,y+hh); ctx.arc(x+r,y+r,r,Math.PI/2,Math.PI*1.5); } ctx.fill(); }
       pill(mid-6,mid-wl,hl,C.teal,.42+l*.5); pill(mid+6,mid+wr,hr,C.clay,.42+r*.5);
       var lead = l>r ? mid-wl : r>l ? mid+wr : null;
       if (lead!==null && Math.abs(state.lean)>.28){ ctx.beginPath(); ctx.arc(lead,cy,6+state.cap*4,0,Math.PI*2); ctx.fillStyle=C.gold; ctx.fill(); ctx.lineWidth=2; ctx.strokeStyle=C.cobalt; ctx.stroke(); } }
@@ -1639,7 +1668,8 @@ var Idle=(function(){
   return {
     start:function(k){ if (!animOn()) return; if (kind===k) return; cv=$('idle'); if (!cv || !cv.getContext) return; ctx=cv.getContext('2d'); if (!ctx) return; kind=k; bind(); resize(); state={}; K[k].init(); $('pwrap').classList.add('idle'); cancelAnimationFrame(raf); last=0; raf=requestAnimationFrame(loop); },
     stop:function(){ if (!kind) return; kind=''; cancelAnimationFrame(raf); if (ctx) ctx.clearRect(0,0,W,H); var w=$('pwrap'); if (w) w.classList.remove('idle'); },
-    kind:function(){ return kind; }
+    kind:function(){ return kind; },
+    debug:function(){ return {kind:kind, state:state, P:P, W:W, H:H}; }
   };
 })();
 function idleKind(){ if (App.idleKind) return App.idleKind; var k=read('pp_idle'); if (k!=='room' && k!=='lean'){ k=Math.random()<.5?'room':'lean'; store('pp_idle', k); } App.idleKind=k; return k; }
@@ -1706,9 +1736,10 @@ function paxInterval(){
   else { base = stage==='vote' || stage==='reveal' ? App.paxBase : stage==='recap' ? App.paxBase*2 : App.paxBase*1.2; }
   return Math.round(base*(0.8+Math.random()*0.4));
 }
-function schedulePax(){ clearTimeout(App.paxTimer); App.paxTimer=setTimeout(pollPax, paxInterval()); }
+function schedulePax(){ clearTimeout(App.paxTimer); if (App.role!=='pax') return; App.paxTimer=setTimeout(pollPax, paxInterval()); }
 function pollPax(){
   return Net.state('pub').then(function(st){
+    if (App.role!=='pax') return;
     if (st===null || !st.pub || !st.pub.meta){ paxEnded(); return; }
     App.state=Object.assign({}, App.state||{}, {pub:(st && st.pub)||{}});
     renderPax(); schedulePax();
