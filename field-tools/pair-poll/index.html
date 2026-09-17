@@ -289,6 +289,7 @@ h2{font-family:var(--serif);font-weight:400;font-size:clamp(24px,3vw,32px);line-
 .plist .p .cnt2 small{font-family:var(--sans);font-size:10px;font-weight:700;letter-spacing:.1em;color:var(--aegean);margin-left:4px;}
 .sumhero{background:var(--cobalt);color:var(--paper);border-radius:22px;padding:28px;margin-top:22px;position:relative;z-index:1;}
 .sumhero .cap{color:var(--pollen);}
+.sumhero .tienote{font-size:13px;font-weight:700;letter-spacing:.1em;word-spacing:.1em;text-transform:uppercase;opacity:.65;margin-top:14px;}
 .sumhero .lean{font-family:var(--serif);font-size:clamp(24px,3.6vw,44px);line-height:1.15;margin:10px 0 8px;text-wrap:balance;overflow-wrap:anywhere;}
 .sumhero .dv .mid{border-color:var(--pollen);}
 .sumhero .dv .wing.win i::after{border-color:var(--paper);}
@@ -413,7 +414,7 @@ h2{font-family:var(--serif);font-weight:400;font-size:clamp(24px,3vw,32px);line-
 </style>
 </head>
 <body>
-<script>if(/[?&]join(=|&|$)/.test(location.search)) document.documentElement.classList.add('paxpre');</script>
+<script>if(/[?&]join(=|&|$)/.test(location.search)){document.documentElement.classList.add('paxpre');setTimeout(function(){document.documentElement.classList.remove('paxpre')},1600);}</script>
 
 <!-- ================= STUDIO (facilitator only) ================= -->
 <section id="scr_studio" class="screen on">
@@ -746,7 +747,7 @@ var App = {
 function $(id){ return document.getElementById(id); }
 function esc(s){ return String(s==null?'':s).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;').replace(/\n/g,'<br>'); }
 function show(el, on){ if (typeof el==='string') el=$(el); if (el) el.classList.toggle('hide', !on); }
-function setScreen(id){ var s=document.querySelectorAll('.screen'); for (var i=0;i<s.length;i++) s[i].classList.toggle('on', s[i].id===id); }
+function setScreen(id){ document.documentElement.classList.remove('paxpre'); var s=document.querySelectorAll('.screen'); for (var i=0;i<s.length;i++) s[i].classList.toggle('on', s[i].id===id); }
 function store(k,v){ try{ localStorage.setItem(k,v); }catch(e){} }
 function read(k){ try{ return localStorage.getItem(k); }catch(e){ return null; } }
 function unstore(k){ try{ localStorage.removeItem(k); }catch(e){} }
@@ -818,9 +819,11 @@ function summaryHeadline(cfg, sum){
   var Ll=cfg.l||'Left', Rl=cfg.r||'Right';
   if (!sum.n) return 'Nothing to summarize yet.';
   if (sum.calc==='avg'){ if (sum.pl===50) return 'Split down the middle'; return sum.pl>50 ? (sum.pl+'% toward '+Ll) : ((100-sum.pl)+'% toward '+Rl); }
+  /* people: one sentence, counts only, nothing hidden; the wings, the numerals and the words all use the same numbers */
   if (sum.L===sum.R) return 'Split down the middle';
-  if (sum.L>sum.R) return sum.L+' of '+sum.n+' '+(sum.n===1?'person':'people')+' leaned '+Ll;
-  return sum.R+' of '+sum.n+' '+(sum.n===1?'person':'people')+' leaned '+Rl;
+  var W=Math.max(sum.L,sum.R), Lo=Math.min(sum.L,sum.R), Wl=sum.L>sum.R?Ll:Rl, Lol=sum.L>sum.R?Rl:Ll;
+  if (!Lo) return W+' '+(W===1?'person':'people')+' leaned '+Wl;
+  return W+' leaned '+Wl+', '+Lo+' leaned '+Lol;
 }
 
 /* ---------- network adapter: live worker or in-memory test drive ---------- */
@@ -1047,15 +1050,13 @@ function miniSvg(kind){
   function bar(x,y,pl,c1,c2,w){ w=w||60; var m=x+w/2; return '<line x1="'+m+'" y1="'+(y-4)+'" x2="'+m+'" y2="'+(y+10)+'" stroke="'+K+'" stroke-width="1" stroke-dasharray="2 2" opacity=".5"/><rect x="'+(m-w/2*pl)+'" y="'+y+'" width="'+(w/2*pl)+'" height="6" rx="3" fill="'+c1+'"/><rect x="'+m+'" y="'+y+'" width="'+(w/2*(1-pl))+'" height="6" rx="3" fill="'+c2+'" opacity=".45"/>'; }
   function dot(x,y,c){ return '<circle cx="'+x+'" cy="'+y+'" r="3" fill="'+c+'"/>'; }
   var s='';
-  /* the two reveal tiles read as sequences: a pair, then its bar; or every pair, then every bar */
+  /* the two reveal tiles: pairs in a row; the dashed line is the reveal, between the pairs or after the last one */
   function pair(x,y){ return card(x,y,20,12,'#CFEBEA')+card(x+23,y,20,12,'#F3D9C8'); }
-  function sbar(x,y,pl,w){ w=w||43; return '<rect x="'+x+'" y="'+y+'" width="'+(w*pl)+'" height="6" rx="3" fill="'+T+'"/><rect x="'+(x+w*pl+1.5)+'" y="'+y+'" width="'+(w*(1-pl)-1.5)+'" height="6" rx="3" fill="'+C+'" opacity=".38"/>'; }
-  /* after each: every pair sits tight on its own bar (vote, see, move on) */
-  if (kind==='each'){ var pls=[0.7,0.45,0.6]; for (var i=0;i<3;i++){ var x=16+i*62; s+=pair(x,20)+sbar(x,36,pls[i]); } }
-  /* at the end: all the pairs first, a breath, then all the bars together */
-  if (kind==='end'){ var pls2=[0.7,0.45,0.6]; for (var j=0;j<3;j++){ var x2=16+j*62; s+=pair(x2,10); } for (var j2=0;j2<3;j2++){ s+=sbar(16+j2*62,48,pls2[j2]); } }
-  if (kind==='self'){ s+=dot(30,22,K)+dot(30,42,K)+dot(30,32,K); for (var k=0;k<3;k++){ s+='<rect x="'+(50+k*40)+'" y="16" width="28" height="10" rx="5" fill="'+(k===0?'url(#pp)':'#fff')+'" stroke="'+(k===0?'none':P)+'"/>'; s+='<rect x="'+(50+k*40)+'" y="30" width="28" height="10" rx="5" fill="'+(k<2?'url(#pp)':'#fff')+'" stroke="'+(k<2?'none':P)+'"/>'; s+='<rect x="'+(50+k*40)+'" y="44" width="28" height="10" rx="5" fill="'+(k<1?'url(#pp)':'#fff')+'" stroke="'+(k<1?'none':P)+'"/>'; } }
-  if (kind==='fac'){ s+=dot(30,22,K)+dot(30,42,K)+dot(30,32,K); for (var f=0;f<3;f++){ s+='<rect x="'+(50+f*40)+'" y="16" width="28" height="10" rx="5" fill="'+(f===0?'url(#pp)':'#fff')+'" stroke="'+(f===0?'none':P)+'"/>'; s+='<rect x="'+(50+f*40)+'" y="30" width="28" height="10" rx="5" fill="'+(f===0?'url(#pp)':'#fff')+'" stroke="'+(f===0?'none':P)+'"/>'; s+='<rect x="'+(50+f*40)+'" y="44" width="28" height="10" rx="5" fill="'+(f===0?'url(#pp)':'#fff')+'" stroke="'+(f===0?'none':P)+'"/>'; } s+='<rect x="49" y="13" width="30" height="44" rx="6" fill="none" stroke="'+G+'" stroke-width="2"/>'; }
+  function rline(x){ return '<path d="M'+x+' 18 L'+x+' 46" stroke="'+K+'" stroke-width="1.5" stroke-dasharray="2.5 3.5" opacity=".55"/>'; }
+  if (kind==='each'){ s+=pair(18,26)+rline(69)+pair(77,26)+rline(128)+pair(136,26)+rline(187); }
+  if (kind==='end'){ s+=pair(28,26)+pair(77,26)+pair(126,26)+rline(179); }
+  if (kind==='self'){ for (var k=0;k<3;k++){ s+='<rect x="'+(38+k*46)+'" y="16" width="28" height="10" rx="5" fill="'+(k===0?'url(#pp)':'#fff')+'" stroke="'+(k===0?'none':P)+'"/>'; s+='<rect x="'+(38+k*46)+'" y="30" width="28" height="10" rx="5" fill="'+(k<2?'url(#pp)':'#fff')+'" stroke="'+(k<2?'none':P)+'"/>'; s+='<rect x="'+(38+k*46)+'" y="44" width="28" height="10" rx="5" fill="'+(k<1?'url(#pp)':'#fff')+'" stroke="'+(k<1?'none':P)+'"/>'; } }
+  if (kind==='fac'){ for (var f=0;f<3;f++){ s+='<rect x="'+(38+f*46)+'" y="16" width="28" height="10" rx="5" fill="'+(f===0?'url(#pp)':'#fff')+'" stroke="'+(f===0?'none':P)+'"/>'; s+='<rect x="'+(38+f*46)+'" y="30" width="28" height="10" rx="5" fill="'+(f===0?'url(#pp)':'#fff')+'" stroke="'+(f===0?'none':P)+'"/>'; s+='<rect x="'+(38+f*46)+'" y="44" width="28" height="10" rx="5" fill="'+(f===0?'url(#pp)':'#fff')+'" stroke="'+(f===0?'none':P)+'"/>'; } s+='<rect x="37" y="13" width="30" height="44" rx="6" fill="none" stroke="'+G+'" stroke-width="2"/>'; }
   if (kind==='avg'){ s+=bar(14,12,0.7,T,C,50)+bar(14,26,0.5,T,C,50)+bar(14,40,0.6,T,C,50)+'<path d="M72 30 L96 30" stroke="'+K+'" stroke-width="1.5"/><path d="M92 26 L96 30 L92 34" fill="none" stroke="'+K+'" stroke-width="1.5"/>'+bar(104,27,0.6,T,C,80)+'<circle cx="120" cy="30" r="4" fill="'+G+'" stroke="'+K+'"/>'; }
   if (kind==='people'){ for (var p=0;p<8;p++){ var cx=22+p*18; s+=dot(cx,24,p<5?T:C); } s+='<path d="M22 44 L96 44" stroke="'+T+'" stroke-width="5" stroke-linecap="round"/><path d="M104 44 L152 44" stroke="'+C+'" stroke-width="5" stroke-linecap="round" opacity=".45"/><circle cx="22" cy="44" r="3.5" fill="'+G+'" stroke="'+K+'"/>'; }
   if (kind==='grand'){ s+='<rect x="14" y="12" width="70" height="40" rx="6" fill="'+K+'"/><rect x="24" y="28" width="30" height="5" rx="2.5" fill="'+T+'"/><rect x="54" y="28" width="16" height="5" rx="2.5" fill="#F0A57D" opacity=".6"/>'; for (var g=0;g<3;g++) s+=card(96+g*32,18,12,10,'#E4F4F4')+card(110+g*32,18,12,10,'#F6E2D5')+bar(94+g*32,38,0.6,T,C,28); }
@@ -1218,10 +1219,11 @@ function botTick(){
 }
 /* ================= THE DIVERGING BAR ================= */
 function dvHtml(){ return '<div class="wing L"><i></i></div><div class="mid"></div><div class="wing R"><i></i></div>'; }
-function dvnHtml(agg, mine, labels, counts){
+function dvnHtml(agg, mine, labels, counts, unit){
   var p=pct(agg.L, agg.R), w=winner(agg);
   function small(side){ var c=side==='L'?agg.L:agg.R; var lab = labels ? esc(side==='L'?labels.l:labels.r)+(counts?' · '+c+(c===1?' person':' people'):'') : (c+(c===1?' vote':' votes')); return '<small>'+lab+(mine===side?'<span class="you">YOU</span>':'')+'</small>'; }
-  return '<div class="n nl'+(w==='R'?' lose':'')+'">'+p.pl+'%'+small('L')+'</div><div class="n nr'+(w==='L'?' lose':'')+'">'+p.pr+'%'+small('R')+'</div>';
+  var bl = unit==='people' ? agg.L : p.pl+'%', br = unit==='people' ? agg.R : p.pr+'%';
+  return '<div class="n nl'+(w==='R'?' lose':'')+'">'+bl+small('L')+'</div><div class="n nr'+(w==='L'?' lose':'')+'">'+br+small('R')+'</div>';
 }
 function paintDv(root, agg, mine, animate, opts){
   opts=opts||{};
@@ -1229,13 +1231,14 @@ function paintDv(root, agg, mine, animate, opts){
   if (!dv.firstChild) dv.innerHTML=dvHtml();
   var p=pct(agg.L, agg.R), w=winner(agg), wl=dv.querySelector('.wing.L'), wr=dv.querySelector('.wing.R');
   wl.classList.toggle('win', w==='L'); wl.classList.toggle('lose', w==='R'); wr.classList.toggle('win', w==='R'); wr.classList.toggle('lose', w==='L');
-  dvn.innerHTML=dvnHtml(agg, mine, opts.labels, opts.counts);
+  dvn.innerHTML=dvnHtml(agg, mine, opts.labels, opts.counts, opts.unit);
   if (tie) show(tie, !w && (agg.L+agg.R)>0);
   var il=wl.querySelector('i'), ir=wr.querySelector('i');
   if (animate && animOn()){
     il.style.transition='none'; ir.style.transition='none'; il.style.width='0%'; ir.style.width='0%'; void dv.offsetWidth; il.style.transition=''; ir.style.transition='';
     setTimeout(function(){ il.style.width=p.pl+'%'; ir.style.width=p.pr+'%'; }, 30);
-    countUp(dvn.querySelector('.nl'), p.pl, '%'); countUp(dvn.querySelector('.nr'), p.pr, '%');
+    if (opts.unit==='people'){ countUp(dvn.querySelector('.nl'), agg.L, ''); countUp(dvn.querySelector('.nr'), agg.R, ''); }
+    else { countUp(dvn.querySelector('.nl'), p.pl, '%'); countUp(dvn.querySelector('.nr'), p.pr, '%'); }
     if (opts.burst) burst(dv, agg);
   } else { il.style.width=p.pl+'%'; ir.style.width=p.pr+'%'; }
 }
@@ -1263,7 +1266,7 @@ function qSlideHtml(i, cfg, withInstr){
     + '<div class="dv"></div><div class="dvn"></div><div class="tie hide">Split down the middle.</div>';
 }
 function grandSlideHtml(cfg, sum){
-  return '<div class="sumhero"><div class="cap">'+esc(cfg.t||'Where this room leans')+'</div><div class="lean">'+esc(summaryHeadline(cfg, sum))+'</div><div class="dv"></div><div class="dvn"></div></div>';
+  return '<div class="sumhero"><div class="cap">'+esc(cfg.t||'Where this room leans')+'</div><div class="lean">'+esc(summaryHeadline(cfg, sum))+'</div><div class="dv"></div><div class="dvn"></div><div class="tienote hide"></div></div>';
 }
 function playQSlide(root, i, mine, animate, opts){
   var agg=aggOf(i), pair=root.querySelector('.pair'), L=pair.querySelector('.side.L'), R=pair.querySelector('.side.R');
@@ -1272,6 +1275,13 @@ function playQSlide(root, i, mine, animate, opts){
 }
 function playGrandSlide(root, lean, animate, opts){
   var cfg=cfgSum()||{}, sum=(App.state.pub&&App.state.pub.sum)||{n:0,pl:0};
+  /* people mode paints counts: the wings, the numerals and the headline all say the same numbers, and an even split is named, never dropped */
+  if (sum.calc==='people'){
+    paintDv(root, {L:sum.L||0, R:sum.R||0}, lean, animate, Object.assign({labels:cfg, counts:false, unit:'people'}, opts||{}));
+    var tn=root.querySelector('.tienote');
+    if (tn){ var t=sum.T||0; show(tn, t>0); tn.textContent = t ? (t+(t===1?' person':' people')+' split their answers evenly'+(lean==='T'?', you among them':'')) : ''; }
+    return;
+  }
   paintDv(root, {L:sum.pl, R:100-sum.pl}, lean, animate, Object.assign({labels:cfg, counts:false}, opts||{}));
 }
 function celebrateOnce(){ if (App.celebrated) return; App.celebrated=true; Sfx.celebrate(); confetti(); }
@@ -1632,7 +1642,10 @@ function renderRecap(){
 function buildReport(){
   var m=meta(), n=m.n||0, rows='', cfgS=cfgSum(), sum=App.state.pub.sum, sumHtml='';
   function bar(pl, pr, w){ return '<div class="dv"><div class="wing L'+(w==='L'?' win':w==='R'?' lose':'')+'"><i style="width:'+pl+'%"></i></div><div class="mid"></div><div class="wing R'+(w==='R'?' win':w==='L'?' lose':'')+'"><i style="width:'+pr+'%"></i></div></div>'; }
-  if (m.sum && cfgS && sum){ var ps={pl:sum.pl, pr:100-sum.pl}, ws=ps.pl>50?'L':ps.pl<50?'R':''; sumHtml='<div class="hero"><div class="cap">'+esc(cfgS.t||'Where this room leans')+'</div><div class="lean">'+esc(summaryHeadline(cfgS, sum))+'</div>'+bar(ps.pl, ps.pr, ws)+'<div class="nums"><div class="nl'+(ws==='R'?' lose':'')+'">'+ps.pl+'% <small>'+esc(cfgS.l)+'</small></div><div class="nr'+(ws==='L'?' lose':'')+'">'+ps.pr+'% <small>'+esc(cfgS.r)+'</small></div></div></div>'; }
+  if (m.sum && cfgS && sum){ var ps, tline='';
+    if (sum.calc==='people'){ var pp=pct(sum.L||0,sum.R||0); ps={pl:pp.pl, pr:pp.pr, nl:(sum.L||0), nr:(sum.R||0)}; if (sum.T) tline='<div class="cap" style="margin-top:10px;opacity:.7">'+sum.T+(sum.T===1?' person':' people')+' split their answers evenly</div>'; }
+    else ps={pl:sum.pl, pr:100-sum.pl, nl:sum.pl+'%', nr:(100-sum.pl)+'%'};
+    var ws=ps.pl>50?'L':ps.pl<50?'R':''; sumHtml='<div class="hero"><div class="cap">'+esc(cfgS.t||'Where this room leans')+'</div><div class="lean">'+esc(summaryHeadline(cfgS, sum))+'</div>'+bar(ps.pl, ps.pr, ws)+'<div class="nums"><div class="nl'+(ws==='R'?' lose':'')+'">'+ps.nl+' <small>'+esc(cfgS.l)+'</small></div><div class="nr'+(ws==='L'?' lose':'')+'">'+ps.nr+' <small>'+esc(cfgS.r)+'</small></div></div>'+tline+'</div>'; }
   for (var i=0;i<n;i++){
     var cfg=cfgOf(i), a=aggOf(i), p=pct(a.L,a.R), w=winner(a);
     rows+='<div class="row"><div class="rq">Question '+(i+1)+'</div>'+(cfg.p?'<div class="rp">'+esc(cfg.p)+'</div>':'')

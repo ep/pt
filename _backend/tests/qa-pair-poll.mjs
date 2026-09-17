@@ -105,7 +105,10 @@ function decodeMatrix(q){
   check('remove-question is quiet', /\.qtools \.btn\.ghost\{font-weight:500/.test(html));
   check('review rows are edit buttons', /class="rw" data-step="/.test(js) && /'review'\)\.addEventListener\('click'/.test(js));
   check('the big QR overlay exists with a way in, out, and on', /id="qrBig"/.test(html) && /data-act="qrbig"/.test(js) && /id="btnStart2"/.test(html) && /id="qrBigClose"/.test(html));
-  check('participant links boot behind a veil', /paxpre/.test(html) && /html\.paxpre \.screen\{opacity:0/.test(html) && /classList\.remove\('paxpre'\)/.test(js));
+  check('participant links boot behind a veil that always lifts', /paxpre/.test(html) && /html\.paxpre \.screen\{opacity:0/.test(html) && /function setScreen\(id\)\{ document\.documentElement\.classList\.remove\('paxpre'\)/.test(js) && /setTimeout\(function\(\)\{document\.documentElement\.classList\.remove\('paxpre'\)\},1600\)/.test(html));
+  check('flow tiles: pairs with dashed reveal lines between or at the end', /stroke-dasharray="2\.5 3\.5"/.test(js) && /rline\(69\)/.test(js) && /pair\(126,26\)\+rline\(179\)/.test(js) && !/function sbar/.test(js));
+  check('pace tiles lost their dot column', !/dot\(30,22,K\)/.test(js));
+  check('people mode renders counts and names the even splits', /unit:'people'/.test(js) && /tienote/.test(js) && /split their answers evenly/.test(js));
   check('nervous double-taps are guarded', /function oneFlight/.test(js) && /function throttleMs/.test(js) && /oneFlight\(conFinal\)/.test(js) && /throttleMs\(function\(\)\{ rvGo\(1\); \}, 160\)/.test(js));
   check('the waiting toy re-rolls per session', /'pp_idle_'\+\(App\.code/.test(js));
   check('lean hover is mouse-only, small, and smoothed', /pointer:fine/.test(js) && /Math\.min\(\.12,/.test(js) && /state\.hov \+= \(want-state\.hov\)/.test(js));
@@ -294,9 +297,9 @@ function decodeMatrix(q){
   const stranger = load(HOSTED+'?host='+code+'&k=nope', true); stranger.window.eval(fast); await sleep(250);
   check('wrong key is refused', stranger.window.document.getElementById('scr_gate').classList.contains('on'));
   const cold = load(HOSTED+'?join=ZZZZ', true); cold.window.eval(paxFast); await sleep(250);
-  check('unknown code is refused', cold.window.document.getElementById('scr_gate').classList.contains('on'));
+  check('unknown code is refused on a designed page, veil lifted', cold.window.document.getElementById('scr_gate').classList.contains('on') && !cold.window.document.documentElement.classList.contains('paxpre') && /This session is over/.test(cold.window.document.getElementById('gateHead').textContent));
   const joiner = load(HOSTED+'?join', true); joiner.window.eval(paxFast); await sleep(100);
-  check('join screen opens on ?join', joiner.window.document.getElementById('scr_join').classList.contains('on'));
+  check('join screen opens on ?join with the veil lifted', joiner.window.document.getElementById('scr_join').classList.contains('on') && !joiner.window.document.documentElement.classList.contains('paxpre'));
   type(joiner.window, joiner.window.document.getElementById('codeIn'), code.toLowerCase()); await sleep(300);
   check('typing the code joins the poll', joiner.window.document.getElementById('scr_pax').classList.contains('on') && joiner.window.location.search.indexOf('?join='+code)===0);
 
@@ -349,6 +352,12 @@ function decodeMatrix(q){
   check('phone mirrors slide one with its own pick marked', da.querySelector('#paxBody .side.L').classList.contains('sel'));
   click(win, doc.getElementById('rvNext')); await sleep(250); click(win, doc.getElementById('rvNext')); await sleep(300);
   check('grand slide last, in people terms', doc.querySelector('#rvSlide .sumhero') && /people|person|Split/.test(doc.querySelector('#rvSlide .sumhero .lean').textContent) && doc.getElementById('rvNext').textContent==='Finish');
+  {
+    const hero=doc.querySelector('#rvSlide .sumhero'), sum=win.App.state.pub.sum;
+    check('people mode: the numerals are the counts, no percent anywhere on the hero', hero.querySelector('.dvn .nl').textContent.indexOf('%')<0 && hero.querySelector('.dvn .nl').textContent.indexOf(String(sum.L))===0 && hero.querySelector('.dvn .nr').textContent.indexOf(String(sum.R))===0);
+    check('people mode: the headline and the numerals carry the same numbers', sum.L===sum.R ? /Split down the middle/.test(hero.querySelector('.lean').textContent) : (new RegExp('^'+Math.max(sum.L,sum.R)+' ')).test(hero.querySelector('.lean').textContent));
+    check('an even split is named on the hero, never dropped', sum.T>0 ? new RegExp(sum.T+' (person|people) split their answers evenly').test(hero.querySelector('.tienote').textContent) : hero.querySelector('.tienote').classList.contains('hide'));
+  }
   click(win, doc.getElementById('rvNext')); await sleep(350);
   check('recap with the summary hero, celebrated', vis(doc,'con_recap') && doc.querySelector('#conSum .sumhero') && win.App.celebrated===true);
   click(win, doc.getElementById('btnReplay')); await sleep(300);
@@ -366,7 +375,10 @@ function decodeMatrix(q){
   click(win, doc.getElementById('btnRevealAll')); await sleep(300); click(win, doc.getElementById('rvBegin')); await sleep(250);
   for (let i=0;i<3;i++){ click(win, doc.getElementById('rvNext')); await sleep(200); }
   check('second reveal lands on the recap again', vis(doc,'con_recap'));
-  check('report builds with the people headline', /Poll recap/.test(win.buildReport()) && /leaned|Split/.test(win.buildReport()));
+  {
+    const rep=win.buildReport(), sumR=win.App.state.pub.sum;
+    check('report builds with the people headline in counts', /Poll recap/.test(rep) && /leaned|Split/.test(rep) && rep.indexOf('>'+sumR.L+' <small>')>0 && rep.indexOf('>'+sumR.R+' <small>')>0 && (sumR.T ? /split their answers evenly/.test(rep) : true));
+  }
   for (const d of [dom, a, b, c]) d.window.close();
 
   /* ---------- one question: no big reveal, straight to the recap ---------- */
