@@ -21,7 +21,7 @@ There is no homepage at the repo root by design. Each project lives in its own f
 
 Pages deploys from the root of `main`. Any folder with an `index.html` is published at `https://ep.github.io/pt/<folder>/`. The empty `.nojekyll` file stops Pages from rendering this README as a root homepage, so `https://ep.github.io/pt/` returns 404 on purpose.
 
-Folder conventions: interactive field tools (games, diagnostics, workshop tools) live under `field-tools/`, one folder per tool. Other kinds of test tools get their own top-level folders.
+Folder conventions: interactive field tools (games, diagnostics, workshop tools) live under `field-tools/`, one folder per tool. Other kinds of test tools get their own top-level folders. Shared assets that more than one project uses (the favicon set, for now) live under `assets/`; a page links them by absolute path, `/pt/assets/favicon/favicon.svg`.
 
 To add a project: create a folder, add an `index.html`, commit. 
 
