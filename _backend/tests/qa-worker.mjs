@@ -170,6 +170,38 @@ await worker.scheduled(null,renv,null);
 check('7-day sweep removes stale sessions whole', ![...db2._rows.keys()].some(k=>k.startsWith('pyc:OLDD')));
 check('7-day sweep keeps live sessions', [...db2._rows.keys()].some(k=>k.startsWith('pyc:NEWW')));
 
+
+/* ---------- the room row ceiling and the body cap ---------- */
+{
+  const cenv = { DB: FakeDB(), ROOM_ROWS_MAX: '12' };
+  const capApi = async (path, bodyObj, key) => {
+    const req = new Request(base+path, { method:'POST', headers: Object.assign({'Content-Type':'application/json'}, key?{'X-Session-Key':key}:{}), body: JSON.stringify(bodyObj) });
+    const res = await worker.fetch(req, cenv);
+    return { status: res.status, body: await res.json() };
+  };
+  const ck = 'roomcapkey12345x';
+  let r = await capApi('/api/create', { tool:'pair-poll', code:'CAPX', sk:ck, open:['roster','ballot'] });
+  check('cap session creates', r.body.ok === true);
+  let refusedAt = -1;
+  for (let i=0; i<14; i++){
+    r = await capApi('/api/set', { tool:'pair-poll', code:'CAPX', path:'roster/g'+i, value:{} });
+    if (r.status===409){ refusedAt=i; break; }
+  }
+  check('a guest filling the room is refused at the ceiling with 409 room full', refusedAt===10 && r.body.error==='room full');
+  r = await capApi('/api/set', { tool:'pair-poll', code:'CAPX', path:'roster/g3', value:{ back:true } });
+  check('updating an existing row is still allowed at the ceiling', r.status===200 && r.body.ok===true);
+  r = await capApi('/api/set', { tool:'pair-poll', code:'CAPX', path:'ballot/q0/newrow', value:'L', }, ck);
+  check('the ceiling holds for the key holder too', r.status===409);
+  /* browsers always send content-length; undici does not set it on constructed Requests, so state it */
+  const bigBody = JSON.stringify({ tool:'pair-poll', code:'CAPX', path:'roster/g3', value:'x'.repeat(20000) });
+  const bigReq = new Request(base+'/api/set', { method:'POST', headers:{'Content-Type':'application/json','content-length':String(bigBody.length)}, body: bigBody });
+  const bigRes = await worker.fetch(bigReq, cenv);
+  check('an outsized body is refused before parsing', bigRes.status===413);
+  r = await capApi('/api/create', { tool:'pair-poll', code:'CAPY', sk:ck, open:['roster','ballot'] });
+  r = await capApi('/api/set', { tool:'pair-poll', code:'CAPY', path:'pub/meta', value:{ stage:'lobby' } }, ck);
+  check('a room under the ceiling writes normally in the same environment', r.status===200 && r.body.ok===true);
+}
+
 console.log(failures===0?'\nWORKER TESTS PASSED':'\n'+failures+' FAILURES');
 process.exit(failures===0?0:1);
 })();

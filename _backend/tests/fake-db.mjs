@@ -18,8 +18,12 @@ export function FakeDB(){
             return { results: out };
           },
           async first(){
+            if (sql.includes('COUNT')){
+              let n=0; rows.forEach((v,k)=>{ if (k.split('|')[0]===args[0]) n++; });
+              return { c: n };
+            }
             const key=args[0]+'|'+args[1];
-            return rows.has(key) ? { value: rows.get(key).value } : null;
+            return rows.has(key) ? { value: rows.get(key).value, x: 1 } : null;
           },
           async run(){
             if (sql.includes('HAVING MAX')){

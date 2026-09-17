@@ -38,7 +38,9 @@
       key with one read.
     A code is easy to guess by machine (about 280,000 four-letter codes), so a tool
     only opens paths whose contents are harmless if a stranger reads or adds to
-    them: anonymous ballots, yes; notes about colleagues, no.
+    them: anonymous ballots, yes; notes about colleagues, no. Anyone with the code
+    can also overwrite rows under the open prefixes, so results you would defend
+    forensically call for a closed session too.
 
   CONFIGURATION lives in the constants below and in wrangler.toml. Dashboard
   variables GATED_TOOLS and ALLOW_ORIGIN override the constants if ever set, but
@@ -58,6 +60,13 @@
 */
 
 var RETENTION_DAYS = 7;
+
+/* The most rows one session may hold. Stops a scripted code-holder from burning
+   the free tier's daily write budget or bloating a session; the biggest honest
+   room (400 people, ten ballots each) stays well under it. A ROOM_ROWS_MAX
+   dashboard variable overrides if ever set. Updating an existing row is always
+   allowed, so a full room can still change its answers. */
+var ROOM_ROWS_MAX = 6000;
 
 /* Which tools require a session key. Edit this list and commit to change it.
    A GATED_TOOLS variable in the dashboard, if you ever set one, overrides this. */
@@ -175,6 +184,9 @@ export default {
       }
 
       if (request.method === 'POST') {
+        /* the largest honest body is an AI prompt of 4,000 characters; refuse anything outsized before parsing */
+        var clen = parseInt(request.headers.get('content-length') || '0', 10);
+        if (clen > 16384) return json({ error: 'too big' }, 413);
         var body = await request.json();
         var ptool = parseTool(body.tool);
         if (!ptool) return json({ error: 'bad tool' }, 400);
@@ -224,6 +236,12 @@ export default {
           if (/^(seats|pax)\//.test(body.path)) return json({ error: 'use claim' }, 400);
           var value = JSON.stringify(body.value === undefined ? null : body.value);
           if (value.length > 4000) return json({ error: 'too big' }, 400);
+          var cap = parseInt(env.ROOM_ROWS_MAX || '', 10) || ROOM_ROWS_MAX;
+          var cnt = await env.DB.prepare('SELECT COUNT(*) AS c FROM kv WHERE room = ?').bind(proom).first();
+          if (cnt && cnt.c >= cap) {
+            var existing = await env.DB.prepare('SELECT 1 AS x FROM kv WHERE room = ? AND path = ?').bind(proom, body.path).first();
+            if (!existing) return json({ error: 'room full' }, 409);
+          }
           await env.DB.prepare(
             'INSERT INTO kv (room, path, value, updated) VALUES (?,?,?,?) ' +
             'ON CONFLICT(room, path) DO UPDATE SET value = excluded.value, updated = excluded.updated'
