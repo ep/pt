@@ -1,0 +1,338 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="robots" content="noindex, nofollow">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Room Pulse Sketchbook</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;500;600&display=swap">
+<style>
+:root{
+  color-scheme: light;
+  --paper:#FFFFFF; --ink:#293851; --soft:#586A90; --line:rgba(41,56,81,.12);
+  --gold:#FFCC00; --shadow:0 1px 0 rgba(41,56,81,.06), 0 24px 48px -28px rgba(41,56,81,.35);
+  --serif: Georgia, 'Gelasio', 'Times New Roman', serif;
+  --sans: 'Montserrat', Arial, sans-serif;
+}
+*{box-sizing:border-box}
+body{margin:0;background:var(--paper);color:var(--ink);font-family:var(--sans);font-size:16px;line-height:1.45;-webkit-font-smoothing:antialiased;}
+a{color:inherit}
+:focus-visible{outline:3px solid var(--gold);outline-offset:4px;border-radius:8px;}
+.page{max-width:1320px;margin:0 auto;padding-inline:max(16px,4vw);padding-block:clamp(40px,7vw,96px) 72px;}
+
+/* ===== Cover ===== */
+.cover{display:grid;grid-template-columns:minmax(0,1.35fr) minmax(0,1fr);gap:clamp(28px,5vw,72px);align-items:center;}
+.cover h1{font-family:var(--serif);font-weight:400;font-size:clamp(56px,9.4vw,138px);line-height:.92;letter-spacing:-.02em;margin:0;text-wrap:balance;}
+.dot{display:inline-block;width:.15em;height:.15em;border-radius:50%;background:var(--gold);margin-left:.04em;vertical-align:baseline;}
+.lede{font-family:var(--serif);font-style:italic;font-size:clamp(19px,1.9vw,25px);line-height:1.4;color:var(--soft);max-width:34ch;margin:clamp(20px,2.4vw,30px) 0 0;text-wrap:balance;}
+.hint{font-size:14px;color:var(--soft);margin:18px 0 0;text-wrap:balance;}
+.emblem{position:relative;width:min(100%,380px);aspect-ratio:1;justify-self:end;}
+.emblem canvas{position:absolute;inset:0;width:100%;height:100%;display:block;}
+
+/* ===== Concepts ===== */
+.rule{height:1px;background:var(--line);border:0;margin:clamp(48px,7vw,96px) 0 clamp(28px,3.5vw,44px);}
+h2{font-family:var(--serif);font-weight:400;font-size:clamp(28px,3vw,40px);line-height:1.1;margin:0 0 clamp(22px,2.6vw,34px);}
+.grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:clamp(36px,4.4vw,64px) clamp(24px,3.4vw,48px);}
+.card{display:grid;gap:16px;text-decoration:none;align-content:start;}
+.card .img{display:block;border-radius:12px;overflow:hidden;box-shadow:0 0 0 1px var(--line), var(--shadow);transition:transform .45s cubic-bezier(.22,1,.36,1), box-shadow .45s;background:#f4f5f7;}
+.card img{display:block;width:100%;height:auto;aspect-ratio:16/9;object-fit:cover;object-position:center top;}
+.card:hover .img{transform:translateY(-4px);box-shadow:0 0 0 1px var(--line), 0 36px 60px -30px rgba(41,56,81,.45);}
+.card h3{font-family:var(--serif);font-weight:400;font-size:clamp(26px,2.4vw,34px);line-height:1.1;margin:4px 0 0;}
+.card p{margin:0;color:var(--soft);font-size:15.5px;max-width:46ch;text-wrap:pretty;}
+.card.hero{grid-column:1 / -1;grid-template-columns:minmax(0,1.6fr) minmax(0,1fr);align-items:center;gap:clamp(24px,4vw,56px);}
+.card.hero h3{font-size:clamp(34px,3.6vw,52px);}
+.card.hero p{font-size:17px;}
+
+.parts{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:clamp(24px,3vw,40px);}
+.parts .card h3{font-size:24px;}
+.parts .card p{font-size:14.5px;}
+
+.foot{margin-top:clamp(56px,8vw,104px);padding-top:22px;border-top:1px solid var(--line);display:flex;flex-wrap:wrap;gap:8px 28px;justify-content:space-between;color:var(--soft);font-size:14px;}
+
+@media (max-width:980px){
+  .parts{grid-template-columns:repeat(2,minmax(0,1fr));}
+}
+@media (max-width:760px){
+  .cover{grid-template-columns:1fr;}
+  .emblem{justify-self:start;width:min(100%,320px);}
+  .grid{grid-template-columns:1fr;}
+  .card.hero{grid-template-columns:1fr;}
+}
+@media (max-width:460px){
+  .parts{grid-template-columns:1fr;}
+}
+@media (prefers-reduced-motion: reduce){
+  .card .img{transition:none;}
+}
+</style>
+</head>
+<body>
+
+
+<div class="page">
+  <header class="cover">
+    <div>
+      <h1>Room Pulse<span class="dot" aria-hidden="true"></span></h1>
+      <p class="lede">A check-in that bookends a session: how a room arrives, how it leaves, and the moment it sees the difference.</p>
+      <p class="hint">Every frame is live. Tap, drag, and listen.</p>
+    </div>
+    <div class="emblem" role="img" aria-label="Thirty-two dots drift from where a room arrived to where it left, with one gold dot among them">
+      <canvas id="emblem"></canvas>
+    </div>
+  </header>
+
+  <hr class="rule">
+  <h2>Five ways to run it</h2>
+  <div class="grid">
+    <a class="card hero" href="field.html">
+      <span class="img"><img src="thumbs/field.jpg" alt="The Field projector view: dots on a contour map and the number 26 of 32" width="1200" height="674"></span>
+      <span>
+        <h3>Field</h3>
+        <p>Everyone places one dot. The room reads as terrain, then watches itself move.</p>
+      </span>
+    </a>
+    <a class="card" href="arrivals.html">
+      <span class="img"><img src="thumbs/arrivals.jpg" alt="A split-flap arrivals board listing feelings and counts" width="1200" height="676" loading="lazy"></span>
+      <h3>Arrivals</h3>
+      <p>Check in like a trip. A board that flips, a boarding pass, and a route map of the room.</p>
+    </a>
+    <a class="card" href="chord.html">
+      <span class="img"><img src="thumbs/chord.jpg" alt="A composition of red and blue triangles and circles" width="1200" height="676" loading="lazy"></span>
+      <h3>Chord</h3>
+      <p>Every feeling has a shape and a note. At the end, you hear the room resolve.</p>
+    </a>
+    <a class="card" href="cover-story.html">
+      <span class="img"><img src="thumbs/cover-story.jpg" alt="A magazine cover titled The Room with feeling words set at different sizes" width="1200" height="676" loading="lazy"></span>
+      <h3>Cover Story</h3>
+      <p>The room writes its own magazine cover. How strongly you feel sets the type.</p>
+    </a>
+    <a class="card" href="tune-in.html">
+      <span class="img"><img src="thumbs/tune-in.jpg" alt="A brass sunburst on a dark dial, one ray per person" width="1200" height="676" loading="lazy"></span>
+      <h3>Tune In</h3>
+      <p>Turn a dial until it sounds like you. Every ray of the sunburst is a person.</p>
+    </a>
+  </div>
+
+  <hr class="rule">
+  <h2>Parts to borrow</h2>
+  <div class="parts">
+    <a class="card" href="toys.html">
+      <span class="img"><img src="thumbs/toys.jpg" alt="Four pastel toy tiles" width="1200" height="675" loading="lazy"></span>
+      <h3>Toys</h3>
+      <p>Fourteen small things to touch.</p>
+    </a>
+    <a class="card" href="waiting.html">
+      <span class="img"><img src="thumbs/waiting.jpg" alt="A breathing circle with arrivals around it and the join code" width="1200" height="675" loading="lazy"></span>
+      <h3>Waiting rooms</h3>
+      <p>Eight ways to make arriving worth it.</p>
+    </a>
+    <a class="card" href="reveals.html">
+      <span class="img"><img src="thumbs/reveals.jpg" alt="A river of colored streams labeled with feelings" width="1200" height="676" loading="lazy"></span>
+      <h3>Reveals</h3>
+      <p>Ten ways for a room to see itself move.</p>
+    </a>
+    <a class="card" href="setup.html">
+      <span class="img"><img src="thumbs/setup.jpg" alt="A hardware-style console with a dial, sliders and a start button" width="1200" height="750" loading="lazy"></span>
+      <h3>Setup</h3>
+      <p>Six ways to set it up without a form.</p>
+    </a>
+  </div>
+
+  <footer class="foot">
+    <span>Static prototypes. Everyone else in these rooms is simulated.</span>
+    <span>Your own mark is always gold.</span>
+  </footer>
+</div>
+
+<script>
+/* ===== ROOM: shared simulated room for every Room Pulse prototype =====
+   Paste this whole block into a <script> in your page. It defines one global: ROOM.
+   Everything is deterministic, so every page tells the same story with the same 32 people.
+
+   The map: x = pleasantness (-1 unpleasant .. +1 pleasant), y = energy (-1 low .. +1 high).
+   Eight word slots, two per quadrant, mirrored in energy:
+     0 high energy pleasant, outer     4 high energy unpleasant, outer
+     1 high energy pleasant, inner     5 high energy unpleasant, inner
+     2 low energy pleasant, inner      6 low energy unpleasant, inner
+     3 low energy pleasant, outer      7 low energy unpleasant, outer
+*/
+var ROOM = (function(){
+  function mulberry32(a){ return function(){ a|=0; a=a+0x6D2B79F5|0; var t=Math.imul(a^a>>>15,1|a); t=t+Math.imul(t^t>>>7,61|t)^t; return ((t^t>>>14)>>>0)/4294967296; }; }
+
+  var SLOTS = [
+    {x: .62, y: .70}, {x: .48, y: .28}, {x: .48, y:-.28}, {x: .62, y:-.70},
+    {x:-.62, y: .70}, {x:-.48, y: .28}, {x:-.48, y:-.28}, {x:-.62, y:-.70}
+  ];
+  // quadrant of each slot: 'hp' high+pleasant, 'lp' low+pleasant, 'hu' high+unpleasant, 'lu' low+unpleasant
+  var QUAD = ['hp','hp','lp','lp','hu','hu','lu','lu'];
+
+  var SETS = {
+    ai: {
+      key:'ai', topic:'AI', prompt:'How are you feeling about AI?',
+      words:['Excited','Curious','Confident','Calm','Overwhelmed','Anxious','Skeptical','Indifferent'],
+      codes:['EXC','CUR','CNF','CLM','OVW','ANX','SKP','IND'],
+      headIn:'Mostly curious. Some anxious. A few skeptics.',
+      headOut:'Mostly excited. Still curious. The skeptics held.'
+    },
+    change: {
+      key:'change', topic:'the change ahead', prompt:'How do you feel about the change ahead?',
+      words:['Energized','Hopeful','Ready','Settled','Frustrated','Uneasy','Doubtful','Weary'],
+      codes:['ENG','HOP','RDY','STL','FRU','UNE','DBT','WRY'],
+      headIn:'Mostly hopeful. Some uneasy. A few doubters.',
+      headOut:'Mostly energized. Still hopeful. The doubters held.'
+    },
+    today: {
+      key:'today', topic:'today', prompt:'How are you arriving today?',
+      words:['Buzzing','Open','Focused','Relaxed','Stretched','Distracted','Tired','Flat'],
+      codes:['BZZ','OPN','FCS','RLX','STR','DST','TRD','FLT'],
+      headIn:'Mostly open. Some distracted. A few tired.',
+      headOut:'Mostly buzzing. Still open. A few still tired.'
+    }
+  };
+
+  // 32 people: [inSlot, outSlot, inSecond or -1, outSecond or -1]
+  var PLAN = [
+    [5,1,1,-1],[5,1,-1,-1],[5,0,1,5],[5,0,-1,-1],[5,5,4,-1],[5,2,-1,5],
+    [4,1,0,-1],[4,5,-1,-1],[4,0,5,4],[4,4,-1,-1],
+    [6,1,1,6],[6,1,-1,-1],[6,6,7,-1],[6,6,-1,-1],[6,2,-1,-1],
+    [7,1,6,-1],[7,6,-1,-1],
+    [1,0,5,5],[1,0,5,-1],[1,0,-1,-1],[1,0,5,-1],[1,1,-1,6],[1,1,5,-1],[1,2,-1,-1],
+    [0,0,-1,-1],[0,0,5,5],[0,2,-1,-1],
+    [2,2,-1,-1],[2,2,6,-1],[2,0,-1,-1],
+    [3,3,-1,-1],[3,3,-1,-1]
+  ];
+  var WHY = ['Trying it myself','Hearing the others','Less scary now','A clear next step','Real examples',
+    'Permission to play','Still unsure','My own work','The conversation','Seeing it work',
+    'Time to practice','Good questions','Not alone in this','Small wins'];
+
+  var rnd = mulberry32(20261002);
+  function jitter(s){ return (rnd()*2-1)*s; }
+  function place(slot, inten){
+    // jittered spot around the word, always closer to its own word than to any other
+    var p = SLOTS[slot], k = .7 + .3*inten, q;
+    for (var t = 0; t < 40; t++){
+      q = { x: clamp(p.x*k + jitter(.1), -.97, .97), y: clamp(p.y*k + jitter(.1), -.97, .97) };
+      if (nearest(q.x, q.y) === slot) return q;
+    }
+    return { x: p.x, y: p.y };
+  }
+  function nearest(x, y){
+    var best = 0, bd = 1e9;
+    for (var i = 0; i < SLOTS.length; i++){ var s = SLOTS[i], d = (s.x-x)*(s.x-x) + (s.y-y)*(s.y-y); if (d < bd){ bd = d; best = i; } }
+    return best;
+  }
+  function clamp(v,a,b){ return Math.max(a, Math.min(b, v)); }
+
+  var people = PLAN.map(function(r, i){
+    var iIn = .35 + rnd()*.65, iOut = .35 + rnd()*.65;
+    var pIn = place(r[0], iIn), pOut = place(r[1], iOut);
+    var seatRow = 3 + Math.floor(rnd()*28), seatCol = 'ABCDEF'.charAt(Math.floor(rnd()*6));
+    return {
+      id: i,
+      inSlot: r[0], outSlot: r[1], in2: r[2], out2: r[3],
+      inX: pIn.x, inY: pIn.y, outX: pOut.x, outY: pOut.y,
+      inIntensity: iIn, outIntensity: iOut,
+      joinDelay: Math.round(400 + rnd()*9000),      // ms after the waiting room opens
+      checkInDelay: Math.round(300 + rnd()*6000),   // ms after check-in opens
+      seat: seatRow + seatCol,
+      why: (i % 3 === 1) ? WHY[i % WHY.length] : ''  // about a third leave a one-word why
+    };
+  });
+
+  function counts(which){ // which: 'in' | 'out'
+    var c = [0,0,0,0,0,0,0,0];
+    people.forEach(function(p){ c[which==='out' ? p.outSlot : p.inSlot]++; });
+    return c;
+  }
+  function nearestSlot(x, y){ return nearest(x, y); }
+  function intensityWord(x, y){ // how far from the middle, in plain words
+    var r = Math.sqrt(x*x + y*y);
+    return r < .38 ? 'a little' : r < .72 ? 'clearly' : 'strongly';
+  }
+  function pleasantShare(which){
+    var c = counts(which); return (c[0]+c[1]+c[2]+c[3]) / people.length;
+  }
+  // flows between slots, for route maps and sankeys: [{from, to, n}]
+  function flows(){
+    var m = {};
+    people.forEach(function(p){ var k = p.inSlot + '>' + p.outSlot; m[k] = (m[k]||0) + 1; });
+    return Object.keys(m).map(function(k){ var a = k.split('>'); return { from:+a[0], to:+a[1], n:m[k] }; })
+      .sort(function(a,b){ return b.n - a.n; });
+  }
+  // FM-style frequency for a slot or a point, 88.0 to 108.0, by angle clockwise from "high energy"
+  function freq(x, y){
+    var ang = Math.atan2(x, y); if (ang < 0) ang += Math.PI*2;
+    return Math.round((88 + ang/(Math.PI*2)*20)*10)/10;
+  }
+
+  return {
+    SLOTS: SLOTS, QUAD: QUAD, SETS: SETS, people: people, WHY: WHY,
+    counts: counts, nearestSlot: nearestSlot, intensityWord: intensityWord,
+    pleasantShare: pleasantShare, flows: flows, freq: freq, rng: mulberry32
+  };
+})();
+
+</script>
+<script>
+(() => {
+  const cv = document.getElementById('emblem'); if (!cv) return;
+  const RM = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+  const P = ROOM.people.map(p => ({ ax: p.inX, ay: p.inY, bx: p.outX, by: p.outY, d: (p.inX + 1) * 0.18 + ((p.id * 37) % 11) / 60 }));
+  const you = { ax: .30, ay: .26, bx: .56, by: .62, d: .2 };
+  let g, W = 0, dpr = 1;
+  function fit(){
+    const r = cv.getBoundingClientRect(); dpr = Math.min(2, window.devicePixelRatio || 1);
+    W = r.width; cv.width = Math.round(r.width * dpr); cv.height = Math.round(r.height * dpr);
+    g = cv.getContext('2d'); g.setTransform(dpr, 0, 0, dpr, 0, 0);
+  }
+  const ease = t => t < .5 ? 4*t*t*t : 1 - Math.pow(-2*t + 2, 3) / 2;
+  const X = v => W * (.5 + v * .44), Y = v => W * (.5 - v * .44);
+  function pos(o, k){ const t = ease(Math.max(0, Math.min(1, (k - o.d * .5) / .73))); return [o.ax + (o.bx - o.ax) * t, o.ay + (o.by - o.ay) * t]; }
+  function draw(k, trail, alpha){
+    g.clearRect(0, 0, W, W);
+    g.globalAlpha = 1;
+    g.strokeStyle = 'rgba(41,56,81,.14)'; g.lineWidth = 1;
+    g.beginPath(); g.moveTo(X(-1), Y(0)); g.lineTo(X(1), Y(0)); g.moveTo(X(0), Y(1)); g.lineTo(X(0), Y(-1)); g.stroke();
+    g.strokeStyle = 'rgba(41,56,81,.10)'; g.strokeRect(X(-1) + .5, Y(1) + .5, W * .88, W * .88);
+    const r = Math.max(2.6, W * .0105);
+    g.globalAlpha = alpha == null ? 1 : alpha;
+    P.forEach(o => {
+      if (trail){
+        g.strokeStyle = 'rgba(41,56,81,.10)'; g.beginPath();
+        for (let s = 0; s <= 8; s++){ const [x, y] = pos(o, Math.max(0, k - s * .018)); s ? g.lineTo(X(x), Y(y)) : g.moveTo(X(x), Y(y)); }
+        g.stroke();
+      }
+      const [x, y] = pos(o, k);
+      g.fillStyle = 'rgba(41,56,81,.82)'; g.beginPath(); g.arc(X(x), Y(y), r, 0, Math.PI * 2); g.fill();
+    });
+    const [yx, yy] = pos(you, k);
+    g.fillStyle = '#FFCC00'; g.strokeStyle = '#293851'; g.lineWidth = 1.2;
+    g.beginPath(); g.arc(X(yx), Y(yy), r * 1.45, 0, Math.PI * 2); g.fill(); g.stroke();
+    g.globalAlpha = 1;
+  }
+  let k = 1;
+  fit(); draw(1, false, 1);
+  if ('ResizeObserver' in window) new ResizeObserver(() => { fit(); draw(k, false, 1); }).observe(cv);
+  if (RM) return;
+  /* the room arrives, drifts to where it left, rests, then fades back to arrival and does it again */
+  const HOLD_IN = 2200, MOVE = 3800, HOLD_OUT = 3400, FADE = 1400, CYCLE = HOLD_IN + MOVE + HOLD_OUT + FADE;
+  let t0 = performance.now() - (HOLD_IN + MOVE), visible = true;
+  new IntersectionObserver(es => { visible = es[0].isIntersecting; if (visible) requestAnimationFrame(tick); }).observe(cv);
+  function tick(now){
+    if (!visible) return;
+    const c = (now - t0) % CYCLE; let moving = false, a = 1;
+    if (c < HOLD_IN) k = 0;
+    else if (c < HOLD_IN + MOVE){ k = (c - HOLD_IN) / MOVE; moving = true; }
+    else if (c < HOLD_IN + MOVE + HOLD_OUT) k = 1;
+    else { const f = (c - HOLD_IN - MOVE - HOLD_OUT) / FADE; if (f < .5){ k = 1; a = 1 - f * 2; } else { k = 0; a = (f - .5) * 2; } }
+    draw(k, moving, a);
+    requestAnimationFrame(tick);
+  }
+  requestAnimationFrame(tick);
+})();
+</script>
+
+</body>
+</html>

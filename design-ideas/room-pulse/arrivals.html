@@ -1,0 +1,1490 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="robots" content="noindex, nofollow">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Arrivals</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Barlow+Condensed:wght@500;600;700&family=Barlow:ital,wght@0,400;0,500;0,600;1,400;1,500&family=IBM+Plex+Mono:wght@500&display=swap">
+<style>
+/* ===== Tokens: transit modernism ===== */
+:root{
+  color-scheme: light;
+  --paper:#F4F4F1; --ink:#16181B; --soft:#5A5F66; --faint:#8A8F96; --hair:rgba(22,24,27,.12);
+  --board:#15171A; --hall:#101215; --flapT:#25282D; --flapB:#1E2125; --split:#0B0C0E;
+  --btext:#F2EEE4; --bdim:#7D828A;
+  --hp:#E0662A; --lp:#9BBE22; --hu:#B38BE8; --lu:#2FA8A5;
+  --you:#FFCC00;
+  --sheet:#FFFFFF;
+  --cond:'Barlow Condensed','Roboto Condensed','Arial Narrow','Helvetica Neue',Arial,sans-serif;
+  --sans:'Barlow','Helvetica Neue',Helvetica,Arial,sans-serif;
+  --mono:'IBM Plex Mono',ui-monospace,'SF Mono',Menlo,Consolas,monospace;
+  --frame:#101318;
+}
+*{box-sizing:border-box}
+html{-webkit-text-size-adjust:100%}
+body{margin:0;background:var(--paper);color:var(--ink);font-family:var(--sans);font-size:17px;line-height:1.45;}
+button{font:inherit;color:inherit;cursor:pointer;background:none;border:0;padding:0;touch-action:manipulation;}
+:focus-visible{outline:3px solid var(--you);outline-offset:3px;border-radius:6px;box-shadow:0 0 0 1px var(--ink);}
+.sr{position:absolute;width:1px;height:1px;overflow:hidden;clip:rect(0 0 0 0);clip-path:inset(50%);white-space:nowrap;}
+
+/* ===== Page shell ===== */
+.page{max-width:1360px;margin:0 auto;padding-inline:max(16px,4vw);padding-block:0 120px;}
+.top{display:flex;align-items:center;justify-content:space-between;gap:16px;padding-block:18px;}
+.back{color:var(--soft);text-decoration:none;font-size:14px;min-height:44px;display:inline-flex;align-items:center;}
+@media (hover:hover){.back:hover{color:var(--ink);}}
+.soundbtn{min-height:44px;min-width:44px;display:inline-flex;align-items:center;justify-content:center;color:var(--soft);font-size:14px;}
+.intro{padding-block:clamp(36px,7vw,104px) clamp(40px,6vw,88px);}
+.intro h1{font-family:var(--cond);font-weight:600;font-size:clamp(84px,14vw,196px);line-height:.84;letter-spacing:-.015em;margin:0 0 0 -.03em;}
+.intro p{font-size:clamp(18px,1.75vw,23px);line-height:1.4;max-width:36ch;text-wrap:balance;margin:clamp(18px,2.2vw,30px) 0 0;color:var(--soft);}
+
+section.moment{padding-block:clamp(52px,7vw,104px);border-top:1px solid var(--hair);display:grid;gap:clamp(26px,3.4vw,44px);}
+.head{display:flex;flex-wrap:wrap;align-items:flex-end;justify-content:space-between;gap:16px 32px;}
+.head h2{font-family:var(--cond);font-weight:600;font-size:clamp(36px,3.8vw,56px);line-height:1;margin:0;letter-spacing:-.005em;}
+.head p{margin:12px 0 0;color:var(--soft);font-size:clamp(16px,1.3vw,18px);max-width:44ch;}
+
+.btn{display:inline-flex;align-items:center;justify-content:center;min-height:44px;padding:0 20px;border-radius:4px;font:500 16px/1 var(--sans);white-space:nowrap;transition:background .2s,box-shadow .2s,transform .12s;}
+.btn:active{transform:translateY(1px);}
+.btn.primary{background:var(--ink);color:#fff;}
+@media (hover:hover){.btn.primary:hover{background:#2B2F35;}.btn.ghost:hover{box-shadow:inset 0 0 0 1.5px rgba(22,24,27,.55);}.stb:hover{background:rgba(22,24,27,.035);}.brow:hover{background:rgba(255,255,255,.05);}}
+.btn.ghost{box-shadow:inset 0 0 0 1.5px rgba(22,24,27,.22);color:var(--ink);}
+
+/* ===== Devices ===== */
+.stage{display:flex;flex-wrap:wrap;align-items:center;justify-content:center;gap:clamp(24px,4.6vw,68px);}
+.device{position:relative;flex:none;max-width:100%;}
+.projector{width:min(100%,820px);aspect-ratio:16/9;container-type:inline-size;overflow:hidden;border-radius:10px;background:var(--hall);box-shadow:0 0 0 1px rgba(0,0,0,.55),0 34px 64px -32px rgba(0,0,0,.5);}
+.projector.wide{width:min(100%,1060px);}
+@media (min-width:761px){ .stage > .projector:not(.wide){flex:1 1 540px;width:auto;max-width:820px;} }
+.laptop{width:min(calc(100% - 20px),880px);aspect-ratio:16/10;container-type:inline-size;overflow:hidden;border-radius:14px;background:#FBFBF9;box-shadow:0 0 0 10px var(--frame),0 40px 70px -35px rgba(0,0,0,.45);margin:10px;}
+.phone{width:clamp(262px,24vw,312px);aspect-ratio:9/19;container-type:inline-size;overflow:hidden;border-radius:44px;background:#F8F8F5;box-shadow:0 0 0 9px var(--frame),0 40px 60px -30px rgba(0,0,0,.45);margin:9px;}
+
+/* ===== Split-flap ===== */
+.fr{display:block;}
+.frc{display:flex;gap:var(--fgap,.2cqw);}
+.fc{position:relative;flex:none;width:var(--fw);height:var(--fh);perspective:calc(var(--fh) * 5);font-family:var(--cond);font-weight:600;font-size:calc(var(--fh) * .7);line-height:1;color:var(--fc,var(--btext));}
+.fc .h,.fc .lf{position:absolute;left:0;right:0;height:50%;overflow:hidden;}
+.fc .t{top:0;background:var(--flapT);border-radius:var(--fr,2px) var(--fr,2px) 0 0;}
+.fc .b{top:50%;background:var(--flapB);border-radius:0 0 var(--fr,2px) var(--fr,2px);}
+.fc i{position:absolute;left:0;right:0;height:200%;display:flex;align-items:center;justify-content:center;font-style:normal;padding-bottom:.1em;}
+.fc .t i{top:0;}
+.fc .b i{top:-100%;}
+.fc .lf{visibility:hidden;z-index:2;backface-visibility:hidden;-webkit-backface-visibility:hidden;}
+.fc .lf.t{transform-origin:50% 100%;}
+.fc .lf.b{transform-origin:50% 0;}
+.fc .lf::after{content:'';position:absolute;inset:0;background:#000;opacity:var(--sh,0);pointer-events:none;}
+.fc::after{content:'';position:absolute;left:0;right:0;top:50%;height:1px;margin-top:-.5px;background:var(--split);z-index:3;}
+.fc.m{font-family:var(--mono);font-weight:500;font-size:calc(var(--fh) * .58);}
+.fc.m i{padding-bottom:.05em;}
+.fc.dim{--fc:var(--bdim);}
+
+.lbl{font-family:var(--cond);font-weight:600;text-transform:uppercase;letter-spacing:.16em;color:var(--bdim);}
+
+/* ===== Transit map ===== */
+.tmap{position:relative;}
+.tmap svg{display:block;width:100%;height:auto;overflow:visible;}
+.tmap .hub{fill:#fff;stroke:var(--ink);stroke-width:3;}
+.tmap.dark .hub{stroke:#0C0D0F;}
+.tmap .ring{fill:#fff;stroke:var(--c);stroke-width:3;transition:stroke .25s;}
+.tmap .halo{fill:none;stroke:var(--ink);stroke-width:1.1;opacity:0;transition:opacity .25s;}
+.tmap .lab{font-family:var(--cond);font-weight:600;font-size:15.5px;fill:var(--ink);}
+.tmap.dark .lab{fill:var(--btext);}
+.tmap .st.you .ring{stroke:var(--you);stroke-width:4.4;}
+.tmap .st.you .halo{opacity:.7;}
+.tmap .st.ghost .ring{stroke:var(--you);stroke-width:3;stroke-dasharray:2.4 2.1;}
+.tmap .st.ghost .halo{opacity:.28;}
+.tmap .m-lines > *{transition:opacity .6s;}
+.tmap .routed .m-lines > *{opacity:.24;}
+.tmap.dark .routed .m-lines > *{opacity:.2;}
+.tmap .dot{fill:var(--btext);}
+.stb{position:absolute;transform:translateY(-50%);min-height:44px;border-radius:10px;}
+.stb:focus-visible{outline-offset:0;}
+
+/* ===== Boarding pass ===== */
+.slot{position:absolute;top:5.4cqw;left:4.4cqw;right:4.4cqw;height:7.6cqw;background:linear-gradient(180deg,#3A3D43,#26292E 55%,#1E2024);border-radius:3.8cqw;z-index:3;box-shadow:inset 0 .35cqw 0 rgba(255,255,255,.08),0 1.6cqw 2.8cqw -1.6cqw rgba(0,0,0,.45);}
+.slot::after{content:'';position:absolute;left:3.6cqw;right:3.6cqw;top:3.4cqw;height:1.4cqw;border-radius:1cqw;background:#050506;box-shadow:inset 0 .3cqw .4cqw rgba(0,0,0,.9);}
+.feed{position:relative;margin-top:9.5cqw;overflow:hidden;padding:0 8cqw 5.5cqw;z-index:4;flex:none;}
+.pass{position:relative;background:var(--sheet);border-radius:0 0 2.8cqw 2.8cqw;padding:5.4cqw 5.6cqw 0;box-shadow:0 .3cqw .9cqw rgba(0,0,0,.07),0 3.6cqw 5.4cqw -3.6cqw rgba(0,0,0,.32);--sy:0%;}
+.pass::after{content:'';position:absolute;inset:0;pointer-events:none;opacity:0;border-radius:inherit;background:linear-gradient(180deg,transparent calc(var(--sy) - 12%),rgba(255,255,255,.95) calc(var(--sy) - 3%),rgba(22,24,27,.08) calc(var(--sy) - .5%),transparent calc(var(--sy) + 6%));}
+.pass.printing::after{opacity:1;}
+.pass::before{content:'';position:absolute;left:0;right:0;top:0;height:2.6cqw;pointer-events:none;background:linear-gradient(180deg,rgba(22,24,27,.16),rgba(22,24,27,0));}
+.pm{display:grid;grid-template-columns:1fr 22cqw 1fr;align-items:start;}
+.pass .k,.kp .k{display:block;font-family:var(--cond);font-weight:600;letter-spacing:.02em;color:var(--faint);}
+.pass .k{font-size:3.7cqw;line-height:1;}
+.pass .code{display:block;font-family:var(--cond);font-weight:700;font-size:15.6cqw;line-height:.9;height:14cqw;margin-top:1.5cqw;letter-spacing:.005em;color:rgba(22,24,27,.94);transform-origin:50% 60%;white-space:nowrap;}
+.pf-from .code{transform:rotate(-2deg);}
+.pf-to .code{transform:rotate(1.5deg);}
+.pass .code:empty::after{content:'';display:block;width:18cqw;height:12.4cqw;border-bottom:1.5px dashed rgba(22,24,27,.24);}
+.pf-to{text-align:right;}
+.pf-to .code:empty::after{margin-left:auto;}
+.pass .w{display:block;font:500 3.9cqw/1.2 var(--sans);color:var(--soft);min-height:4.7cqw;margin-top:1.3cqw;}
+.pass .via{display:block;font-family:var(--cond);font-weight:600;font-size:4.2cqw;line-height:1;min-height:4.6cqw;margin-top:.9cqw;color:var(--ink);transform-origin:0 50%;}
+.pr{position:relative;margin-top:5.8cqw;height:11cqw;}
+.pr svg{position:absolute;inset:0;width:100%;height:100%;overflow:visible;}
+.pr .arrow path{fill:none;stroke:#B4B8BE;stroke-width:2.2;stroke-linecap:round;stroke-linejoin:round;}
+.arcp{fill:none;stroke:var(--you);stroke-width:4.6;stroke-linecap:round;}
+.arcend{fill:#fff;stroke:var(--you);stroke-width:3;}
+.rdot{fill:var(--you);stroke:var(--ink);stroke-width:1.3;}
+.pr .arc{opacity:0;}
+.pass.routed .pr .arc{opacity:1;}
+.pass.routed .pr .arrow{opacity:0;}
+.pfoot{display:flex;gap:7cqw;align-items:baseline;border-top:1.5px dashed rgba(22,24,27,.16);margin:3.2cqw -5.6cqw 0;padding:3.4cqw 5.6cqw 3.8cqw;}
+.pfoot > span{display:flex;align-items:baseline;gap:1.9cqw;}
+.pfoot .k{display:inline;}
+.pfoot b{font:500 4.3cqw/1 var(--mono);color:var(--ink);}
+
+/* ===== Phone screens ===== */
+.ph{position:absolute;inset:0;display:flex;flex-direction:column;}
+.ph-body{flex:1;display:flex;flex-direction:column;justify-content:center;padding-bottom:4cqw;}
+.ask{font:500 5.4cqw/1.2 var(--sans);margin:0 7cqw;min-height:6.5cqw;}
+.ask .a2{display:none;}
+.ask.done .a1{display:none;}
+.ask.done .a2{display:inline;animation:rise .5s both;}
+@keyframes rise{from{opacity:0;transform:translateY(1.2cqw)}to{opacity:1;transform:none}}
+.ph-map{margin:3cqw 3.4cqw 0;}
+.linkbtn{align-self:flex-start;margin:2cqw 5.4cqw 0;padding:0 1.6cqw;min-height:44px;font:500 4.3cqw/1 var(--sans);text-decoration:underline;text-decoration-thickness:1px;text-underline-offset:.32em;border-radius:6px;}
+.quiet{margin:0 7cqw;padding-bottom:10cqw;font:400 3.7cqw/1.3 var(--sans);color:var(--soft);}
+.trip{margin:4cqw 7cqw 0;min-height:44px;border:0;border-bottom:1.5px solid rgba(22,24,27,.2);border-radius:0;background:transparent;font:500 4.5cqw/1.2 var(--sans);padding:2.6cqw 0;color:var(--ink);outline:none;}
+.trip::placeholder{color:var(--faint);}
+.trip:focus{border-bottom-color:var(--ink);}
+.trip:focus-visible{outline:3px solid var(--you);outline-offset:2px;border-radius:4px;}
+.one{margin:0 7cqw;font-family:var(--cond);font-weight:600;font-size:12cqw;line-height:1;letter-spacing:-.003em;text-wrap:balance;}
+.one b{font-weight:700;}
+.myseats{display:flex;flex-wrap:wrap;gap:2cqw;margin:6cqw 7cqw 0;}
+.myseats i{width:6cqw;height:6cqw;border-radius:1cqw;background:var(--c);transform:scale(1);transition:transform .3s cubic-bezier(.3,1.6,.5,1);}
+.myseats i.me{background:var(--you);box-shadow:inset 0 0 0 1px rgba(22,24,27,.35);}
+.myseats.pre i{transform:scale(0);transition:none;}
+.one.pre{opacity:0;}
+.one{transition:opacity .6s;}
+
+/* ===== Projector: departure hall ===== */
+.hall{position:absolute;inset:0;padding:4.8cqw 5.2cqw 5cqw;display:flex;flex-direction:column;}
+.hall-top{display:flex;align-items:center;justify-content:space-between;}
+.h-status,.h-gate{--fw:2.45cqw;--fh:3.6cqw;--fgap:.18cqw;--fr:.3cqw;}
+.h-q{margin-top:auto;display:grid;gap:.6cqw;--fw:3.62cqw;--fh:5.3cqw;--fgap:.28cqw;--fr:.45cqw;}
+.h-count{margin-top:auto;display:flex;align-items:center;gap:2.8cqw;--fw:7cqw;--fh:10.2cqw;--fgap:.45cqw;--fr:.7cqw;}
+.h-count .lbl{font-size:2.9cqw;color:#A3A7AD;}
+
+/* ===== Boards of rows ===== */
+.board{background:var(--board);border-radius:1cqw;}
+.tb{display:grid;gap:var(--rg);}
+.tb-row{display:flex;align-items:center;gap:var(--cg);}
+.tb-row .code{--fc:var(--c);}
+.tb-row.zero .word{--fc:var(--bdim);}
+.tb-row .seats{flex:1;display:flex;gap:var(--sg);align-items:center;min-width:0;}
+.seat{flex:none;width:var(--ss);height:var(--ss);background:var(--c);border-radius:calc(var(--ss) * .16);transform:scale(1);transition:transform .3s cubic-bezier(.3,1.5,.5,1);}
+.seat.off{transform:scale(0);transition:none;}
+.hl{font-family:var(--cond);font-weight:600;color:var(--btext);font-size:4.1cqw;line-height:1.05;margin:0;transition:opacity .7s,transform .7s;}
+.hl.pre{opacity:0;transform:translateY(.8cqw);}
+.boardwrap{position:absolute;inset:0;padding:4.4cqw 5.2cqw;display:flex;flex-direction:column;gap:3.1cqw;}
+.proj-tb{--fw:2.84cqw;--fh:4cqw;--fgap:.2cqw;--fr:.32cqw;--rg:.78cqw;--cg:2.3cqw;--sg:.55cqw;--ss:2.05cqw;}
+
+/* Departures: board, then the route map */
+.dep .hl{position:absolute;left:5.2cqw;right:5.2cqw;top:4.6cqw;}
+.dep-board{position:absolute;left:5.2cqw;right:5.2cqw;top:12.6cqw;transition:opacity .65s ease;}
+.dep-map{position:absolute;left:0;right:0;top:11.2cqw;bottom:3.2cqw;display:flex;justify-content:center;opacity:0;transition:opacity .9s ease .25s;}
+.dep-map svg{height:100%;width:auto;max-width:100%;}
+.dep.show-map .dep-board{opacity:0;}
+.dep.show-map .dep-map{opacity:1;}
+.dep-n{position:absolute;left:5.2cqw;bottom:4.2cqw;font-size:1.7cqw;margin:0;opacity:0;transition:opacity 1s;}
+.dep.show-map .dep-n{opacity:1;}
+
+/* ===== Laptop screens ===== */
+.lap{position:absolute;inset:0;display:grid;align-items:center;gap:3.6cqw;padding:4.4cqw 4.6cqw;}
+.lap-setup{grid-template-columns:auto 1fr;}
+.tt{padding:2.5cqw 2.4cqw;display:grid;gap:.6cqw;--fw:2.3cqw;--fh:3.5cqw;--fgap:.19cqw;--fr:.3cqw;}
+.brow{display:grid;gap:.6cqw;border-radius:.5cqw;padding:.4cqw;margin:-.4cqw;transition:background .2s;text-align:left;}
+.brow.stop.off .stc{--fc:var(--bdim);}
+.tt-gap{height:2cqw;}
+.tt-gate{margin-bottom:1.2cqw;}
+.lap-side{display:grid;gap:3.4cqw;justify-items:start;align-content:center;}
+.map-setup{width:100%;}
+.lap .btn{font-size:max(15px,1.8cqw);min-height:max(44px,5.2cqw);padding:0 2.9cqw;}
+.lap-read{grid-template-columns:auto 1fr;}
+.rr{padding:2.6cqw 2.6cqw 2.8cqw;display:grid;gap:2.4cqw;--fw:1.92cqw;--fh:2.8cqw;--fgap:.15cqw;--fr:.24cqw;--rg:.6cqw;--cg:1.5cqw;--sg:.42cqw;--ss:1.42cqw;}
+.rr-hl{font-family:var(--cond);font-weight:600;color:var(--btext);font-size:2.7cqw;line-height:1.1;margin:0;}
+.say{font:italic 400 2.75cqw/1.34 var(--sans);margin:0;color:var(--ink);}
+
+/* One device alone: the heading sits beside it on wide screens */
+@media (min-width:1180px){
+  section.moment.side{grid-template-columns:minmax(200px,1fr) minmax(0,880px);align-items:center;column-gap:clamp(32px,4vw,64px);}
+  section.moment.side .stage{justify-content:flex-end;}
+  section.moment.side.solo .stage{justify-content:center;}
+  section.moment.side .laptop{width:min(calc(100% - 20px),860px);}
+}
+
+/* ===== Keep ===== */
+.stage.keep{gap:clamp(36px,5.4vw,80px);}
+.kpw{width:min(100%,640px);container-type:inline-size;}
+.pow{width:min(100%,420px);container-type:inline-size;}
+.kp{position:relative;display:grid;grid-template-columns:1fr 23cqw;background:var(--sheet);border-radius:2.2cqw;box-shadow:0 1px 2px rgba(0,0,0,.06),0 30px 60px -34px rgba(0,0,0,.4);}
+.kp::before,.kp::after{content:'';position:absolute;right:23cqw;width:3.4cqw;height:3.4cqw;border-radius:50%;background:var(--paper);transform:translateX(50%);}
+.kp::before{top:-1.7cqw;}
+.kp::after{bottom:-1.7cqw;}
+.kp-main{padding:5.4cqw 5.4cqw 4.6cqw;}
+.kp .k{font-size:2.35cqw;line-height:1;}
+.kp-codes{display:grid;grid-template-columns:auto 1fr auto;align-items:start;gap:2cqw;}
+.kp .code{display:block;font-family:var(--cond);font-weight:700;font-size:14.4cqw;line-height:.9;height:13cqw;margin-top:1.2cqw;color:rgba(22,24,27,.94);}
+.kp .kf .code{transform:rotate(-2deg);}
+.kp .kt{text-align:right;}
+.kp .kt .code{transform:rotate(1.5deg);}
+.kp .w{display:block;font:500 2.7cqw/1.2 var(--sans);color:var(--soft);margin-top:1.3cqw;}
+.kp .via{display:block;font-family:var(--cond);font-weight:600;font-size:2.7cqw;line-height:1.2;color:var(--ink);min-height:3.2cqw;}
+.kp-r{position:relative;height:12cqw;margin-top:4.2cqw;}
+.kp-r svg{position:absolute;inset:0;width:100%;height:100%;overflow:visible;}
+.kp-foot{display:flex;justify-content:space-between;align-items:baseline;border-top:1.5px dashed rgba(22,24,27,.14);margin-top:3.2cqw;padding-top:3.2cqw;}
+.kp-foot .today{font:500 2.9cqw/1 var(--sans);}
+.kp-foot .word{font:italic 500 2.9cqw/1 var(--sans);color:var(--soft);}
+.kp-stub{border-left:1.5px dashed rgba(22,24,27,.2);padding:5.4cqw 3.4cqw 4.6cqw 3.8cqw;display:flex;flex-direction:column;min-width:0;}
+.kp-stub b{font:500 6.4cqw/1 var(--mono);margin-top:1.4cqw;}
+.kp-stub b.sm{font-size:3.4cqw;}
+.kp-stub .k + b{margin-bottom:4cqw;}
+.kp-stub .stubto{margin-top:auto;font-family:var(--cond);font-weight:700;font-size:3.7cqw;line-height:1;display:flex;align-items:center;gap:1cqw;white-space:nowrap;}
+.kp-stub .stubto svg{flex:none;width:3.2cqw;height:1.6cqw;}
+.kp-stub .stubto path{fill:none;stroke:var(--ink);stroke-width:2.2;stroke-linecap:round;stroke-linejoin:round;}
+
+.poster{margin:0;width:100%;aspect-ratio:4/5;background:#FCFBF8;box-shadow:0 1px 2px rgba(0,0,0,.06),0 30px 60px -34px rgba(0,0,0,.38);padding:7.4cqw 7.4cqw 6.8cqw;display:flex;flex-direction:column;}
+.po-q{font-family:var(--cond);font-weight:600;font-size:6.9cqw;line-height:1.02;margin:0;}
+.po-sub{font:500 3.3cqw/1.2 var(--sans);color:var(--soft);margin:1.8cqw 0 0;}
+.po-map{width:70cqw;margin:2.6cqw auto 0;}
+.po-map .lab{font-size:16.5px;}
+.po-t{display:grid;grid-template-columns:1fr 1fr;gap:7cqw;margin-top:auto;}
+.po-t h4{font-family:var(--cond);font-weight:600;font-size:3.9cqw;line-height:1;margin:0 0 2.2cqw;}
+.po-t ol{list-style:none;margin:0;padding:0;display:grid;gap:1.25cqw;}
+.po-t li{display:grid;grid-template-columns:6.6cqw 1fr auto;align-items:center;gap:1.2cqw;font-family:var(--cond);font-weight:600;font-size:3.1cqw;line-height:1;}
+.po-t li b{color:var(--c);font-weight:700;}
+.po-t li .bl{display:flex;gap:.45cqw;}
+.po-t li .bl i{width:1.45cqw;height:1.45cqw;border-radius:.25cqw;background:var(--c);}
+.po-t li.zero{color:var(--faint);}
+
+/* Small projectors and passes keep their text readable */
+@container (max-width:560px){
+  .h-status,.h-gate{--fw:3.3cqw;--fh:4.8cqw;}
+  .hall{padding:4cqw 4.4cqw 4.4cqw;}
+  .proj-tb{--fw:3.05cqw;--fh:4.3cqw;--rg:.7cqw;--cg:2.2cqw;--sg:.5cqw;--ss:2.2cqw;}
+  .boardwrap{padding:3.8cqw 4.2cqw;gap:2.6cqw;}
+  .hl{font-size:4.6cqw;}
+  .dep .hl{left:4.2cqw;right:4.2cqw;top:3.8cqw;}
+  .dep-board{left:4.2cqw;right:4.2cqw;top:11.4cqw;}
+  .dep-map{top:9.4cqw;bottom:1.4cqw;}
+  .dep-n{display:none;}
+}
+@container (max-width:480px){
+  .kp .k{font-size:3.1cqw;}
+  .kp .w,.kp .via{font-size:3.4cqw;}
+  .kp-foot .today,.kp-foot .word{font-size:3.6cqw;}
+  .kp-stub b.sm{font-size:4cqw;}
+  .kp-stub .stubto{font-size:4cqw;}
+}
+@media (max-width:760px){
+  .stage{flex-direction:column;}
+  .phone{width:min(82vw,330px);}
+  .laptop{width:calc(100% - 12px);margin:6px;box-shadow:0 0 0 6px var(--frame),0 30px 50px -30px rgba(0,0,0,.4);aspect-ratio:auto;}
+  .lap{position:relative;inset:auto;grid-template-columns:1fr!important;padding:5cqw;gap:6cqw;}
+  .tt{--fw:3.72cqw;--fh:5.5cqw;--fgap:.3cqw;--fr:.5cqw;padding:3cqw;}
+  .tt-gap{height:3cqw;}
+  .lap-side{justify-items:stretch;gap:5cqw;}
+  .map-setup{width:86%;justify-self:center;}
+  .lap .btn{font-size:16px;min-height:48px;}
+  .rr{--fw:2.95cqw;--fh:4.4cqw;--fgap:.24cqw;--fr:.4cqw;--rg:1cqw;--cg:2.2cqw;--sg:.6cqw;--ss:2cqw;padding:3.4cqw;gap:3.4cqw;}
+  .rr-hl{font-size:4.8cqw;}
+  .say{font-size:5.4cqw;max-width:none;}
+  .kp{grid-template-columns:1fr 25cqw;}
+  .kp::before,.kp::after{right:25cqw;}
+}
+@media (prefers-reduced-motion: reduce){
+  *,*::before,*::after{animation-duration:.001ms!important;animation-iteration-count:1!important;transition-duration:.001ms!important;scroll-behavior:auto!important;}
+}
+</style>
+</head>
+<body>
+<div class="page">
+  <div class="top">
+    <a class="back" href="index.html">&larr; Sketchbook</a>
+    <button class="soundbtn" id="soundBtn" aria-pressed="true" aria-label="Sound is on. Turn it off">Sound on</button>
+  </div>
+
+  <header class="intro">
+    <h1>Arrivals</h1>
+    <p>Every session is a trip. Check in as you arrive, and see where the room is headed.</p>
+  </header>
+
+  <section class="moment side" id="setup">
+    <div class="head"><div><h2>Set up</h2><p>Tap the board to change the question or a stop.</p></div></div>
+    <div class="stage">
+      <div class="device laptop" aria-label="The facilitator's screen">
+        <div class="lap lap-setup">
+          <div class="board tt" id="tt">
+            <div class="tt-gate" id="ttGate"></div>
+            <button class="brow q" id="ttQ" type="button"></button>
+            <div class="tt-gap" aria-hidden="true"></div>
+            <button class="brow stop" type="button"></button>
+            <button class="brow stop" type="button"></button>
+            <button class="brow stop" type="button"></button>
+          </div>
+          <div class="lap-side">
+            <div class="map-setup" id="mapSetup"></div>
+            <button class="btn primary" id="openGate" type="button">Open the gate</button>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section class="moment" id="arrive">
+    <div class="head"><div><h2>Arrive</h2><p>Passes print as people join.</p></div><button class="btn ghost" id="rpArrive" type="button">Replay</button></div>
+    <div class="stage">
+      <div class="device projector" id="hallA" aria-label="What the room sees"></div>
+      <div class="device phone" id="phA" aria-label="A participant's screen">
+        <div class="ph">
+          <div class="slot" aria-hidden="true"></div>
+          <div class="feed"></div>
+          <div class="ph-body">
+            <p class="ask">Where are you arriving from?</p>
+            <div class="ph-map"></div>
+          </div>
+          <p class="quiet">No names on the board.</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section class="moment" id="checkin">
+    <div class="head"><div><h2>Check in</h2><p>Tap where you&rsquo;re arriving from.</p></div></div>
+    <div class="stage">
+      <div class="device phone" id="phC" aria-label="Your screen">
+        <div class="ph">
+          <div class="slot" aria-hidden="true"></div>
+          <div class="feed"></div>
+          <div class="ph-body">
+            <p class="ask" id="askC">Where are you arriving from?</p>
+            <div class="ph-map"></div>
+            <button class="linkbtn" id="viaBtn" type="button">Add a connection</button>
+          </div>
+        </div>
+      </div>
+      <div class="device projector" id="hallC" aria-label="What the room sees"></div>
+    </div>
+  </section>
+
+  <section class="moment side" id="read">
+    <div class="head"><div><h2>Read the room</h2><p>Only you see this, until you show it.</p></div></div>
+    <div class="stage">
+      <div class="device laptop" aria-label="The facilitator's screen">
+        <div class="lap lap-read">
+          <div class="board rr">
+            <p class="rr-hl" id="rrHl"></p>
+            <div id="rrBoard"></div>
+          </div>
+          <div class="lap-side">
+            <p class="say" id="say"></p>
+            <button class="btn primary" id="showBoard" type="button">Show the board</button>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section class="moment" id="arrivals">
+    <div class="head"><div><h2>Arrivals</h2><p>The room sees where it came from.</p></div><button class="btn ghost" id="rpArr" type="button">Replay</button></div>
+    <div class="stage">
+      <div class="device projector" id="arrProj" aria-label="What the room sees">
+        <div class="boardwrap">
+          <p class="hl" id="arrHl"></p>
+          <div class="proj-tb" id="arrBoard"></div>
+        </div>
+      </div>
+      <div class="device phone" id="phM" aria-label="Your screen">
+        <div class="ph">
+          <div class="slot" aria-hidden="true"></div>
+          <div class="feed"></div>
+          <div class="ph-body">
+            <p class="one" id="oneLine"></p>
+            <div class="myseats" id="mySeats" aria-hidden="true"></div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section class="moment side solo" id="depart">
+    <div class="head"><div><h2>Depart</h2><p>Tap where you&rsquo;re headed.</p></div></div>
+    <div class="stage">
+      <div class="device phone" id="phD" aria-label="Your screen">
+        <div class="ph">
+          <div class="slot" aria-hidden="true"></div>
+          <div class="feed"></div>
+          <div class="ph-body">
+            <p class="ask done" id="askD" aria-live="polite"><span class="a1">Where are you headed?</span><span class="a2">Safe travels.</span></p>
+            <div class="ph-map"></div>
+            <input class="trip" id="trip" type="text" maxlength="18" placeholder="One word for the trip" aria-label="One word for the trip" autocomplete="off" spellcheck="false" enterkeyhint="done">
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section class="moment" id="departures">
+    <div class="head"><div><h2>Departures</h2><p>The room watches itself move.</p></div><button class="btn ghost" id="rpDep" type="button">Replay</button></div>
+    <div class="stage">
+      <div class="device projector wide dep show-map" id="depProj" aria-label="What the room sees">
+        <p class="hl" id="depHl"></p>
+        <div class="dep-board proj-tb" id="depBoard"></div>
+        <div class="dep-map" id="depMap"></div>
+        <p class="dep-n lbl" id="depN"></p>
+      </div>
+    </div>
+  </section>
+
+  <section class="moment" id="keep">
+    <div class="head"><div><h2>Keep</h2><p>A pass for each traveler. One clean poster for the sponsor.</p></div></div>
+    <div class="stage keep">
+      <div class="kpw"><div class="kp" id="kp" role="img"></div></div>
+      <div class="pow"><figure class="poster" id="poster" role="img"></figure></div>
+    </div>
+  </section>
+</div>
+
+<script>
+/* ===== ROOM: shared simulated room for every Room Pulse prototype =====
+   Paste this whole block into a <script> in your page. It defines one global: ROOM.
+   Everything is deterministic, so every page tells the same story with the same 32 people.
+
+   The map: x = pleasantness (-1 unpleasant .. +1 pleasant), y = energy (-1 low .. +1 high).
+   Eight word slots, two per quadrant, mirrored in energy:
+     0 high energy pleasant, outer     4 high energy unpleasant, outer
+     1 high energy pleasant, inner     5 high energy unpleasant, inner
+     2 low energy pleasant, inner      6 low energy unpleasant, inner
+     3 low energy pleasant, outer      7 low energy unpleasant, outer
+*/
+var ROOM = (function(){
+  function mulberry32(a){ return function(){ a|=0; a=a+0x6D2B79F5|0; var t=Math.imul(a^a>>>15,1|a); t=t+Math.imul(t^t>>>7,61|t)^t; return ((t^t>>>14)>>>0)/4294967296; }; }
+
+  var SLOTS = [
+    {x: .62, y: .70}, {x: .48, y: .28}, {x: .48, y:-.28}, {x: .62, y:-.70},
+    {x:-.62, y: .70}, {x:-.48, y: .28}, {x:-.48, y:-.28}, {x:-.62, y:-.70}
+  ];
+  // quadrant of each slot: 'hp' high+pleasant, 'lp' low+pleasant, 'hu' high+unpleasant, 'lu' low+unpleasant
+  var QUAD = ['hp','hp','lp','lp','hu','hu','lu','lu'];
+
+  var SETS = {
+    ai: {
+      key:'ai', topic:'AI', prompt:'How are you feeling about AI?',
+      words:['Excited','Curious','Confident','Calm','Overwhelmed','Anxious','Skeptical','Indifferent'],
+      codes:['EXC','CUR','CNF','CLM','OVW','ANX','SKP','IND'],
+      headIn:'Mostly curious. Some anxious. A few skeptics.',
+      headOut:'Mostly excited. Still curious. The skeptics held.'
+    },
+    change: {
+      key:'change', topic:'the change ahead', prompt:'How do you feel about the change ahead?',
+      words:['Energized','Hopeful','Ready','Settled','Frustrated','Uneasy','Doubtful','Weary'],
+      codes:['ENG','HOP','RDY','STL','FRU','UNE','DBT','WRY'],
+      headIn:'Mostly hopeful. Some uneasy. A few doubters.',
+      headOut:'Mostly energized. Still hopeful. The doubters held.'
+    },
+    today: {
+      key:'today', topic:'today', prompt:'How are you arriving today?',
+      words:['Buzzing','Open','Focused','Relaxed','Stretched','Distracted','Tired','Flat'],
+      codes:['BZZ','OPN','FCS','RLX','STR','DST','TRD','FLT'],
+      headIn:'Mostly open. Some distracted. A few tired.',
+      headOut:'Mostly buzzing. Still open. A few still tired.'
+    }
+  };
+
+  // 32 people: [inSlot, outSlot, inSecond or -1, outSecond or -1]
+  var PLAN = [
+    [5,1,1,-1],[5,1,-1,-1],[5,0,1,5],[5,0,-1,-1],[5,5,4,-1],[5,2,-1,5],
+    [4,1,0,-1],[4,5,-1,-1],[4,0,5,4],[4,4,-1,-1],
+    [6,1,1,6],[6,1,-1,-1],[6,6,7,-1],[6,6,-1,-1],[6,2,-1,-1],
+    [7,1,6,-1],[7,6,-1,-1],
+    [1,0,5,5],[1,0,5,-1],[1,0,-1,-1],[1,0,5,-1],[1,1,-1,6],[1,1,5,-1],[1,2,-1,-1],
+    [0,0,-1,-1],[0,0,5,5],[0,2,-1,-1],
+    [2,2,-1,-1],[2,2,6,-1],[2,0,-1,-1],
+    [3,3,-1,-1],[3,3,-1,-1]
+  ];
+  var WHY = ['Trying it myself','Hearing the others','Less scary now','A clear next step','Real examples',
+    'Permission to play','Still unsure','My own work','The conversation','Seeing it work',
+    'Time to practice','Good questions','Not alone in this','Small wins'];
+
+  var rnd = mulberry32(20261002);
+  function jitter(s){ return (rnd()*2-1)*s; }
+  function place(slot, inten){
+    // jittered spot around the word, always closer to its own word than to any other
+    var p = SLOTS[slot], k = .7 + .3*inten, q;
+    for (var t = 0; t < 40; t++){
+      q = { x: clamp(p.x*k + jitter(.1), -.97, .97), y: clamp(p.y*k + jitter(.1), -.97, .97) };
+      if (nearest(q.x, q.y) === slot) return q;
+    }
+    return { x: p.x, y: p.y };
+  }
+  function nearest(x, y){
+    var best = 0, bd = 1e9;
+    for (var i = 0; i < SLOTS.length; i++){ var s = SLOTS[i], d = (s.x-x)*(s.x-x) + (s.y-y)*(s.y-y); if (d < bd){ bd = d; best = i; } }
+    return best;
+  }
+  function clamp(v,a,b){ return Math.max(a, Math.min(b, v)); }
+
+  var people = PLAN.map(function(r, i){
+    var iIn = .35 + rnd()*.65, iOut = .35 + rnd()*.65;
+    var pIn = place(r[0], iIn), pOut = place(r[1], iOut);
+    var seatRow = 3 + Math.floor(rnd()*28), seatCol = 'ABCDEF'.charAt(Math.floor(rnd()*6));
+    return {
+      id: i,
+      inSlot: r[0], outSlot: r[1], in2: r[2], out2: r[3],
+      inX: pIn.x, inY: pIn.y, outX: pOut.x, outY: pOut.y,
+      inIntensity: iIn, outIntensity: iOut,
+      joinDelay: Math.round(400 + rnd()*9000),      // ms after the waiting room opens
+      checkInDelay: Math.round(300 + rnd()*6000),   // ms after check-in opens
+      seat: seatRow + seatCol,
+      why: (i % 3 === 1) ? WHY[i % WHY.length] : ''  // about a third leave a one-word why
+    };
+  });
+
+  function counts(which){ // which: 'in' | 'out'
+    var c = [0,0,0,0,0,0,0,0];
+    people.forEach(function(p){ c[which==='out' ? p.outSlot : p.inSlot]++; });
+    return c;
+  }
+  function nearestSlot(x, y){ return nearest(x, y); }
+  function intensityWord(x, y){ // how far from the middle, in plain words
+    var r = Math.sqrt(x*x + y*y);
+    return r < .38 ? 'a little' : r < .72 ? 'clearly' : 'strongly';
+  }
+  function pleasantShare(which){
+    var c = counts(which); return (c[0]+c[1]+c[2]+c[3]) / people.length;
+  }
+  // flows between slots, for route maps and sankeys: [{from, to, n}]
+  function flows(){
+    var m = {};
+    people.forEach(function(p){ var k = p.inSlot + '>' + p.outSlot; m[k] = (m[k]||0) + 1; });
+    return Object.keys(m).map(function(k){ var a = k.split('>'); return { from:+a[0], to:+a[1], n:m[k] }; })
+      .sort(function(a,b){ return b.n - a.n; });
+  }
+  // FM-style frequency for a slot or a point, 88.0 to 108.0, by angle clockwise from "high energy"
+  function freq(x, y){
+    var ang = Math.atan2(x, y); if (ang < 0) ang += Math.PI*2;
+    return Math.round((88 + ang/(Math.PI*2)*20)*10)/10;
+  }
+
+  return {
+    SLOTS: SLOTS, QUAD: QUAD, SETS: SETS, people: people, WHY: WHY,
+    counts: counts, nearestSlot: nearestSlot, intensityWord: intensityWord,
+    pleasantShare: pleasantShare, flows: flows, freq: freq, rng: mulberry32
+  };
+})();
+</script>
+<script>
+/* ===== Shared helpers ===== */
+const RM = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+
+/* Run a moment only while it is on screen. */
+function whenVisible(el, onEnter, onLeave, threshold){
+  const io = new IntersectionObserver(es => es.forEach(e => {
+    if (e.isIntersecting) onEnter && onEnter(); else onLeave && onLeave();
+  }), { threshold: threshold == null ? 0.2 : threshold });
+  io.observe(el); return io;
+}
+
+/* One requestAnimationFrame loop for the whole page. Loop.add(fn) where fn(dt, now). */
+const Loop = (() => {
+  const tasks = new Set(); let running = false, last = 0;
+  function tick(t){
+    const dt = Math.min(50, t - (last || t)); last = t;
+    tasks.forEach(f => { try { f(dt, t); } catch (e) { console.error(e); } });
+    if (tasks.size) requestAnimationFrame(tick); else { running = false; last = 0; }
+  }
+  return {
+    add(f){ tasks.add(f); if (!running){ running = true; requestAnimationFrame(tick); } },
+    remove(f){ tasks.delete(f); }
+  };
+})();
+
+const Ease = {
+  linear: t => t,
+  outCubic: t => 1 - Math.pow(1 - t, 3),
+  inOutCubic: t => t < .5 ? 4*t*t*t : 1 - Math.pow(-2*t + 2, 3) / 2,
+  outBack: t => { const c1 = 1.70158, c3 = c1 + 1; return 1 + c3*Math.pow(t - 1, 3) + c1*Math.pow(t - 1, 2); },
+  outExpo: t => t === 1 ? 1 : 1 - Math.pow(2, -10*t)
+};
+/* tween(ms, t => ..., ease, done) returns a cancel function. Reduced motion jumps to the end. */
+function tween(ms, fn, ease, done){
+  ease = ease || Ease.outCubic;
+  if (RM){ fn(1); done && done(); return () => {}; }
+  const start = performance.now(); let dead = false;
+  const step = (dt, now) => {
+    if (dead) return;
+    const t = Math.min(1, (now - start) / ms); fn(ease(t));
+    if (t >= 1){ Loop.remove(step); done && done(); }
+  };
+  Loop.add(step);
+  return () => { dead = true; Loop.remove(step); };
+}
+
+/* Canvas sized to its CSS box at device pixel ratio. Returns the 2d context; call again on resize. */
+function fitCanvas(cv){
+  const r = cv.getBoundingClientRect(), d = Math.min(2, window.devicePixelRatio || 1);
+  cv.width = Math.max(1, Math.round(r.width * d)); cv.height = Math.max(1, Math.round(r.height * d));
+  const c = cv.getContext('2d'); c.setTransform(d, 0, 0, d, 0, 0); return c;
+}
+
+/* Sound: WebAudio only, created on the first gesture, one master mute. */
+const Sound = (() => {
+  let ctx = null, master = null, on = true;
+  function ac(){
+    if (!on) return null;
+    if (!ctx){
+      try {
+        ctx = new (window.AudioContext || window.webkitAudioContext)();
+        const comp = ctx.createDynamicsCompressor();
+        master = ctx.createGain(); master.gain.value = .55;
+        master.connect(comp); comp.connect(ctx.destination);
+      } catch (e){ return null; }
+    }
+    if (ctx.state === 'suspended') ctx.resume();
+    return ctx;
+  }
+  /* A short enveloped note. opts: {type:'sine'|'triangle'|..., gain, attack, release, when, detune} */
+  function tone(freq, dur, opts){
+    const c = ac(); if (!c) return;
+    opts = opts || {};
+    const t0 = c.currentTime + (opts.when || 0), a = opts.attack || .01, r = opts.release || .25;
+    const o = c.createOscillator(), g = c.createGain();
+    o.type = opts.type || 'sine'; o.frequency.value = freq; if (opts.detune) o.detune.value = opts.detune;
+    g.gain.setValueAtTime(0, t0);
+    g.gain.linearRampToValueAtTime(opts.gain == null ? .18 : opts.gain, t0 + a);
+    g.gain.exponentialRampToValueAtTime(.0001, t0 + a + dur + r);
+    o.connect(g); g.connect(master); o.start(t0); o.stop(t0 + a + dur + r + .05);
+  }
+  function setOn(v){ on = v; if (!v && ctx) ctx.suspend(); }
+  return { ac, tone, setOn, get on(){ return on; }, get ctx(){ return ctx; }, get out(){ return master; } };
+})();
+['pointerdown','keydown','touchend'].forEach(ev => document.addEventListener(ev, () => Sound.ac(), { passive: true }));
+(() => {
+  const b = document.getElementById('soundBtn'); if (!b) return;
+  b.addEventListener('click', () => {
+    const next = !Sound.on; Sound.setOn(next);
+    b.setAttribute('aria-pressed', String(next));
+    b.textContent = next ? 'Sound on' : 'Sound off';
+    b.setAttribute('aria-label', next ? 'Sound is on. Turn it off' : 'Sound is off. Turn it on');
+    if (next) Sound.ac();
+  });
+})();
+
+function esc(s){ return String(s).replace(/[&<>"]/g, c => ({ '&':'&amp;', '<':'&lt;', '>':'&gt;', '"':'&quot;' }[c])); }
+
+/* The viewer is one participant. Their answers carry from moment to moment. */
+const You = {
+  inX: .44, inY: .30, inSlot: 1, in2: -1,         // a sensible default so every moment renders at rest
+  outX: null, outY: null, outSlot: null, out2: -1, why: '',
+  _fns: [],
+  set(patch){ Object.assign(this, patch); this._fns.forEach(f => f(patch)); },
+  on(f){ this._fns.push(f); }
+};
+</script>
+<script>
+/* ===== Arrivals: shared pieces ===== */
+const $ = (s, r) => (r || document).querySelector(s);
+const $$ = (s, r) => Array.from((r || document).querySelectorAll(s));
+const QUAD = ROOM.QUAD;
+const COL = { hp:'#E0662A', lp:'#9BBE22', hu:'#B38BE8', lu:'#2FA8A5' };      /* on the dark boards */
+const COLD = { hp:'#D2561B', lp:'#6E8F0E', hu:'#8E62D6', lu:'#1F8C89' };     /* deepened for light paper */
+const colOf = (s, dark) => (dark ? COL : COLD)[QUAD[s]];
+const SEAT = '14C', GATE = 'K7QP';
+
+let SET = ROOM.SETS.today;
+const setFns = [];
+const onSet = f => setFns.push(f);
+function useSet(key){ SET = ROOM.SETS[key]; setFns.forEach(f => { try { f(); } catch (e){ console.error(e); } }); }
+
+/* The viewer: arrives Open by default and heads for Buzzing, so every moment renders at rest. */
+You.outSlot = 0; You.touchedIn = false; You.touchedOut = false;
+const youFns = [];
+You.on(p => youFns.forEach(f => { try { f(p); } catch (e){ console.error(e); } }));
+const onYou = f => youFns.push(f);
+/* Answers changed (a trip word alone does not move anyone on a board or a map). */
+const onMove = f => onYou(p => { if (p && Object.keys(p).length === 1 && 'why' in p) return; f(p); });
+
+const TRAVELERS = ROOM.people.length + 1;
+function tally(which){
+  const c = ROOM.counts(which), s = which === 'out' ? You.outSlot : You.inSlot;
+  if (s != null && s >= 0) c[s]++;
+  return c;
+}
+function ranked(c){ return c.map((n, s) => ({ s, n })).sort((a, b) => b.n - a.n || a.s - b.s); }
+function flowsYou(){
+  const f = ROOM.flows().map(o => Object.assign({}, o));
+  const k = f.find(o => o.from === You.inSlot && o.to === You.outSlot);
+  if (k) k.n++; else f.push({ from: You.inSlot, to: You.outSlot, n: 1 });
+  return f.sort((a, b) => b.n - a.n);
+}
+function Timeline(){
+  let ids = [];
+  return {
+    at(ms, f){ ids.push(setTimeout(() => { try { f(); } catch (e){ console.error(e); } }, ms)); },
+    clear(){ ids.forEach(clearTimeout); ids = []; }
+  };
+}
+/* Start a sequence once a device is well in view; settle it to rest once it has fully left. */
+function watch(el, enter, leave, th){
+  th = th == null ? .45 : th; let on = false;
+  const io = new IntersectionObserver(es => es.forEach(e => {
+    if (e.isIntersecting && e.intersectionRatio >= th * .98){ if (!on){ on = true; enter && enter(); } }
+    else if (!e.isIntersecting && on){ on = false; leave && leave(); }
+  }), { threshold: [0, th] });
+  io.observe(el);
+  return { get on(){ return on; } };
+}
+function buzz(){ try { if (navigator.vibrate) navigator.vibrate(10); } catch (e){} }
+const pad2 = n => String(n).padStart(2, '0');
+function wrapWords(s, w){
+  const out = [''];
+  s.toUpperCase().split(' ').forEach(word => {
+    const cur = out[out.length - 1];
+    if (!cur) out[out.length - 1] = word;
+    else if (cur.length + 1 + word.length <= w) out[out.length - 1] = cur + ' ' + word;
+    else out.push(word);
+  });
+  return out;
+}
+
+/* ===== Sound: throttled clacks, a two-note chime, a stamp thump ===== */
+const Sfx = (() => {
+  let last = 0, noise = null;
+  function ctx(){ return (Sound.on && Sound.ctx) ? Sound.ac() : null; }
+  function buf(c){
+    if (noise) return noise;
+    const n = Math.floor(c.sampleRate * .3); noise = c.createBuffer(1, n, c.sampleRate);
+    const d = noise.getChannelData(0), r = ROOM.rng(99);
+    for (let i = 0; i < n; i++) d[i] = r() * 2 - 1;
+    return noise;
+  }
+  function clack(){
+    const now = performance.now(); if (now - last < 84) return;
+    const c = ctx(); if (!c) return; last = now;
+    const t = c.currentTime, s = c.createBufferSource(), bp = c.createBiquadFilter(), g = c.createGain();
+    s.buffer = buf(c); bp.type = 'bandpass'; bp.frequency.value = 2000 + Math.random() * 1100; bp.Q.value = 1.6;
+    g.gain.setValueAtTime(0, t); g.gain.linearRampToValueAtTime(.2, t + .0015); g.gain.exponentialRampToValueAtTime(.0001, t + .028);
+    s.connect(bp); bp.connect(g); g.connect(Sound.out); s.start(t, Math.random() * .25, .04);
+  }
+  function chime(){
+    if (!ctx()) return;
+    Sound.tone(659.25, .45, { gain: .09, attack: .014, release: 1.2 });
+    Sound.tone(1318.5, .2, { gain: .014, attack: .01, release: .6 });
+    Sound.tone(523.25, .6, { gain: .09, attack: .014, release: 1.5, when: .38 });
+    Sound.tone(1046.5, .2, { gain: .012, attack: .01, release: .7, when: .38 });
+  }
+  function thump(){
+    const c = ctx(); if (!c) return;
+    const t = c.currentTime, o = c.createOscillator(), g = c.createGain();
+    o.type = 'sine'; o.frequency.setValueAtTime(150, t); o.frequency.exponentialRampToValueAtTime(52, t + .13);
+    g.gain.setValueAtTime(0, t); g.gain.linearRampToValueAtTime(.42, t + .004); g.gain.exponentialRampToValueAtTime(.0001, t + .2);
+    o.connect(g); g.connect(Sound.out); o.start(t); o.stop(t + .24);
+    const s = c.createBufferSource(), lp = c.createBiquadFilter(), g2 = c.createGain();
+    s.buffer = buf(c); lp.type = 'lowpass'; lp.frequency.value = 1400;
+    g2.gain.setValueAtTime(0, t); g2.gain.linearRampToValueAtTime(.16, t + .002); g2.gain.exponentialRampToValueAtTime(.0001, t + .045);
+    s.connect(lp); lp.connect(g2); g2.connect(Sound.out); s.start(t, .05, .07);
+  }
+  return { clack, chime, thump };
+})();
+
+/* ===== Split-flap: each cell has a top and bottom half; the top leaf folds down to show the next character ===== */
+const DRUM = ' ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789?.,';
+const DIG = '0123456789';
+const FAST = 74, SLOW = 150;
+const FlapLoop = (() => {
+  const act = new Set(); let on = false;
+  function tick(dt, now){
+    act.forEach(c => { if (c.step(now)) act.delete(c); });
+    if (!act.size){ Loop.remove(tick); on = false; }
+  }
+  return { add(c){ act.add(c); if (!on){ on = true; Loop.add(tick); } }, del(c){ act.delete(c); } };
+})();
+class Cell {
+  constructor(parent, cls){
+    const el = this.el = document.createElement('span');
+    el.className = 'fc' + (cls ? ' ' + cls : '');
+    el.innerHTML = '<span class="h t"><i></i></span><span class="h b"><i></i></span><span class="lf t"><i></i></span><span class="lf b"><i></i></span>';
+    parent.appendChild(el);
+    const i = el.getElementsByTagName('i');
+    this.hT = i[0]; this.hB = i[1]; this.lT = i[2]; this.lB = i[3];
+    this.fT = i[2].parentNode; this.fB = i[3].parentNode;
+    this.cur = this.tail = ' '; this.q = []; this.st = null; this.busy = false; this.at = 0;
+  }
+  show(ch){
+    this.q.length = 0; this.st = null;
+    if (this.busy){ this.busy = false; FlapLoop.del(this); }
+    this.cur = this.tail = ch; this.hT.textContent = ch; this.hB.textContent = ch;
+    this.fT.style.visibility = 'hidden'; this.fB.style.visibility = 'hidden';
+  }
+  queue(seq, at){
+    if (!seq.length) return;
+    if (RM){ this.show(seq[seq.length - 1]); return; }
+    this.q.push(...seq); this.tail = seq[seq.length - 1];
+    if (!this.busy){ this.busy = true; this.at = at; FlapLoop.add(this); }
+  }
+  step(now){
+    if (now < this.at) return false;
+    let s = this.st;
+    if (!s){
+      if (!this.q.length){ this.busy = false; return true; }
+      const to = this.q.shift();
+      s = this.st = { from: this.cur, to, t0: now, dur: this.q.length ? FAST : SLOW, half: false };
+      this.hT.textContent = to; this.hB.textContent = s.from; this.lT.textContent = s.from; this.lB.textContent = to;
+      this.fT.style.transform = 'rotateX(0deg)'; this.fT.style.setProperty('--sh', '0');
+      this.fT.style.visibility = 'visible'; this.fB.style.visibility = 'hidden';
+    }
+    const p = Math.min(1, (now - s.t0) / s.dur);
+    if (p < .5){
+      const e = Math.pow(p / .5, 2);
+      this.fT.style.transform = 'rotateX(' + (-90 * e).toFixed(1) + 'deg)';
+      this.fT.style.setProperty('--sh', (.55 * e).toFixed(2));
+    } else {
+      if (!s.half){ s.half = true; this.fT.style.visibility = 'hidden'; this.fB.style.visibility = 'visible'; }
+      const q = (p - .5) / .5, e = 1 - (1 - q) * (1 - q);
+      this.fB.style.transform = 'rotateX(' + (90 * (1 - e)).toFixed(1) + 'deg)';
+      this.fB.style.setProperty('--sh', (.42 * (1 - e)).toFixed(2));
+    }
+    if (p >= 1){
+      this.hB.textContent = s.to; this.fB.style.visibility = 'hidden'; this.cur = s.to; this.st = null;
+      if (!this.q.length){ Sfx.clack(); this.busy = false; return true; }
+      this.at = now;
+    }
+    return false;
+  }
+}
+function cycSeq(to, k){
+  const L = DRUM.length, j = Math.max(0, DRUM.indexOf(to)), out = [];
+  for (let m = k; m >= 1; m--) out.push(DRUM[(j - m + L) % L]);
+  out.push(to); return out;
+}
+function drumSeq(drum, from, to){
+  const L = drum.length; let a = drum.indexOf(from); const b = drum.indexOf(to);
+  if (a < 0 || b < 0) return [to];
+  const out = []; while (a !== b && out.length < L){ a = (a + 1) % L; out.push(drum[a]); }
+  return out;
+}
+/* A row of n cells. set() flips with a stagger and returns how long it takes; jump() sets at once. */
+function FlapRow(n, o){
+  o = o || {};
+  const el = document.createElement('span'); el.className = 'fr' + (o.cls ? ' ' + o.cls : '');
+  const sr = document.createElement('span'); sr.className = 'sr';
+  const w = document.createElement('span'); w.className = 'frc'; w.setAttribute('aria-hidden', 'true');
+  el.append(sr, w);
+  const cells = []; for (let i = 0; i < n; i++) cells.push(new Cell(w, o.cellCls ? o.cellCls(i) : ''));
+  const fit = t => { t = String(t).toUpperCase().slice(0, n); return o.align === 'right' ? t.padStart(n) : t.padEnd(n); };
+  const api = {
+    el, cells, text: '',
+    jump(t){ const s = fit(t); api.text = s; sr.textContent = String(t).trim(); cells.forEach((c, i) => c.show(s[i])); },
+    set(t, so){
+      so = so || {}; const s = fit(t); api.text = s; sr.textContent = String(t).trim();
+      if (RM){ cells.forEach((c, i) => c.show(s[i])); return 0; }
+      const now = performance.now(), d0 = so.delay || 0, st = so.stagger == null ? 26 : so.stagger;
+      const mn = so.min == null ? 2 : so.min, mx = so.max == null ? 6 : so.max;
+      let end = 0;
+      cells.forEach((c, i) => {
+        const to = s[i], from = c.tail; if (to === from) return;
+        let seq;
+        if (o.digits) seq = drumSeq(DIG, from, to);
+        else if (to === ' ') seq = [' '];
+        else seq = cycSeq(to, mn + ((i * 7 + (so.seed || 0) * 5 + 3) % (mx - mn + 1)));
+        const at = d0 + i * st;
+        c.queue(seq, now + at);
+        end = Math.max(end, at + (seq.length - 1) * FAST + SLOW);
+      });
+      return end;
+    }
+  };
+  if (o.text != null) api.jump(o.text);
+  return api;
+}
+
+/* ===== The transit map: four lines leave the interchange at 45 degrees, then turn toward more energy ===== */
+const NS = 'http://www.w3.org/2000/svg';
+function sv(tag, attrs, parent){ const e = document.createElementNS(NS, tag); for (const k in attrs) e.setAttribute(k, attrs[k]); if (parent) parent.appendChild(e); return e; }
+const TM = { D: 40, V: 58, R: 7.2, LINE: 8, GAP: 12.5 };
+const ST = [];
+ST[1] = [TM.D, -TM.D]; ST[0] = [TM.D, -TM.D - TM.V];
+ST[2] = [TM.D, TM.D];  ST[3] = [TM.D, TM.D + TM.V];
+ST[5] = [-TM.D, -TM.D]; ST[4] = [-TM.D, -TM.D - TM.V];
+ST[6] = [-TM.D, TM.D];  ST[7] = [-TM.D, TM.D + TM.V];
+const LINES = { hp: [1, 0], lp: [2, 3], hu: [5, 4], lu: [6, 7] };
+const VB = { x: -150, y: -120, w: 300, h: 240 };
+let mapSeq = 0;
+function TransitMap(host, o){
+  o = o || {};
+  const dark = !!o.dark, id = 'tm' + (++mapSeq), pal = dark ? COL : COLD;
+  host.classList.add('tmap'); if (dark) host.classList.add('dark');
+  const svg = sv('svg', { viewBox: VB.x + ' ' + VB.y + ' ' + VB.w + ' ' + VB.h, 'aria-hidden': 'true', focusable: 'false' }, host);
+  const defs = sv('defs', {}, svg), gL = sv('g', { class: 'm-lines' }, svg), gA = sv('g', { class: 'm-arcs' }, svg);
+  const gD = sv('g', { class: 'm-dots' }, svg), gS = sv('g', { class: 'm-st' }, svg), gT = sv('g', { class: 'm-lab' }, svg);
+  for (const q in LINES){
+    const [a, b] = LINES[q];
+    sv('path', { d: 'M0 0L' + ST[a][0] + ' ' + ST[a][1] + 'L' + ST[b][0] + ' ' + ST[b][1], stroke: pal[q], 'stroke-width': TM.LINE, fill: 'none', 'stroke-linecap': 'round', 'stroke-linejoin': 'round' }, gL);
+  }
+  sv('circle', { cx: 0, cy: 0, r: 8.6, class: 'hub' }, gL);
+  const st = [], rings = [], labels = [], btns = [];
+  for (let s = 0; s < 8; s++){
+    const [x, y] = ST[s], right = x > 0;
+    const g = sv('g', { class: 'st', style: '--c:' + pal[QUAD[s]] }, gS);
+    sv('circle', { cx: x, cy: y, r: TM.R + 4.4, class: 'halo' }, g);
+    rings.push(sv('circle', { cx: x, cy: y, r: TM.R, class: 'ring' }, g));
+    const t = sv('text', { x: right ? x + TM.R + TM.GAP : x - TM.R - TM.GAP, y: y + .5, 'text-anchor': right ? 'start' : 'end', 'dominant-baseline': 'central', class: 'lab' }, gT);
+    t.textContent = SET.words[s];
+    st.push(g); labels.push(t);
+    if (o.onTap){
+      const b = document.createElement('button'); b.type = 'button'; b.className = 'stb';
+      const x0 = right ? x - 26 : x - TM.R - TM.GAP - 88, x1 = right ? x + TM.R + TM.GAP + 88 : x + 26;
+      b.style.left = ((x0 - VB.x) / VB.w * 100) + '%'; b.style.width = ((x1 - x0) / VB.w * 100) + '%';
+      b.style.top = ((y - VB.y) / VB.h * 100) + '%'; b.style.height = (54 / VB.h * 100) + '%';
+      b.setAttribute('aria-label', SET.words[s]);
+      b.addEventListener('pointerdown', () => api.pulse(s));
+      b.addEventListener('click', () => o.onTap(s));
+      host.appendChild(b); btns.push(b);
+    }
+  }
+  let routes = null;
+  const api = {
+    svg,
+    relabel(fade){
+      labels.forEach((t, s) => { t.textContent = SET.words[s]; });
+      btns.forEach((b, s) => b.setAttribute('aria-label', SET.words[s]));
+      if (fade && !RM){ gT.style.opacity = 0; tween(380, e => { gT.style.opacity = e; }); }
+    },
+    mark(cls){ st.forEach((g, s) => g.setAttribute('class', 'st' + (cls[s] ? ' ' + cls[s] : ''))); },
+    pulse(s){ const r = rings[s]; tween(300, t => r.setAttribute('r', (TM.R * (1 + .42 * Math.sin(Math.PI * t))).toFixed(2)), Ease.linear); },
+    /* Arcs from each origin station to each destination; people who stayed circle their station. */
+    routes(flows){
+      gA.textContent = ''; gD.textContent = ''; defs.textContent = '';
+      const W = n => .8 + n * 1.45, P = [];
+      /* Every route leaves its station toward the interchange. At each station the routes are stacked
+         by where their other end sits, so they fan out in order and cross as little as possible. */
+      const touch = {};
+      flows.forEach(f => {
+        f.oa = 0; f.ob = 0; if (f.from === f.to) return;
+        (touch[f.from] = touch[f.from] || []).push({ f, end: 'oa', oy: ST[f.to][1] });
+        (touch[f.to] = touch[f.to] || []).push({ f, end: 'ob', oy: ST[f.from][1] });
+      });
+      for (const s in touch){
+        const L = touch[s].sort((p, q) => p.oy - q.oy || (p.end < q.end ? -1 : 1));
+        let y = -L.reduce((a, t) => a + W(t.f.n) * .8, 0) / 2;
+        L.forEach(t => { const w = W(t.f.n) * .8; t.f[t.end] = y + w / 2; y += w; });
+      }
+      flows.forEach((f, i) => {
+        const c1 = pal[QUAD[f.from]], c2 = pal[QUAD[f.to]], w = W(f.n);
+        if (f.from === f.to){
+          const [x, y] = ST[f.from], lw = dark ? 1.5 : .6 + f.n * 1.1, r = TM.R + 5.2 + lw / 2;
+          const el = sv('circle', { cx: x, cy: y, r: r.toFixed(2), fill: 'none', stroke: c1, 'stroke-width': lw.toFixed(2), 'stroke-opacity': dark ? .6 : .8 }, gA);
+          P.push({ loop: true, x, y, r, n: f.n, el, len: 2 * Math.PI * r });
+          return;
+        }
+        const [x1, y1] = ST[f.from], [x2, y2] = ST[f.to], ay = y1 + f.oa, by = y2 + f.ob;
+        let k1, k2;
+        if (Math.sign(x1) !== Math.sign(x2)){ const m = (x2 - x1) * .56; k1 = x1 + m; k2 = x2 - m; }
+        else { const sg = Math.sign(x1), dy = Math.abs(y2 - y1), c = y2 > y1 ? 20 + dy * .06 : 15 + dy * .05; k1 = x1 - sg * c; k2 = x2 - sg * c; }
+        const g = { x1, y1: ay, k1, k2, x2, y2: by };
+        const gid = id + 'g' + i;
+        const lg = sv('linearGradient', { id: gid, gradientUnits: 'userSpaceOnUse', x1, y1: ay.toFixed(2), x2, y2: by.toFixed(2) }, defs);
+        sv('stop', { offset: '0', 'stop-color': c1 }, lg); sv('stop', { offset: '1', 'stop-color': c2 }, lg);
+        if (x1 === x2 && Math.abs(by - ay) < .01) lg.setAttribute('x2', x2 + .01);
+        const el = sv('path', { d: 'M' + x1 + ' ' + ay.toFixed(2) + 'C' + k1.toFixed(2) + ' ' + ay.toFixed(2) + ' ' + k2.toFixed(2) + ' ' + by.toFixed(2) + ' ' + x2 + ' ' + by.toFixed(2), fill: 'none', stroke: 'url(#' + gid + ')', 'stroke-width': w.toFixed(2), 'stroke-linecap': 'round' }, gA);
+        P.push(Object.assign(g, { n: f.n, el, len: el.getTotalLength ? el.getTotalLength() : 120 }));
+      });
+      P.forEach(p => { p.dots = []; if (dark) for (let k = 0; k < p.n; k++) p.dots.push(sv('circle', { r: 2.4, class: 'dot' }, gD)); });
+      svg.classList.add('routed');
+      let drawing = null;
+      routes = {
+        P,
+        place(now){
+          P.forEach((p, i) => {
+            const per = p.loop ? 3600 : 2200 + p.len * 12;
+            p.dots.forEach((d, k) => {
+              const t = ((now / per) + k / p.n + i * .173) % 1;
+              let x, y, op = 1;
+              if (p.loop){ const a = t * Math.PI * 2 - Math.PI / 2; x = p.x + p.r * Math.cos(a); y = p.y + p.r * Math.sin(a); }
+              else {
+                const u = 1 - t, A = u * u * u, B = 3 * u * u * t, C = 3 * u * t * t, D = t * t * t;
+                x = A * p.x1 + B * p.k1 + C * p.k2 + D * p.x2; y = (A + B) * p.y1 + (C + D) * p.y2;
+                op = Math.max(0, Math.min(1, t / .08, (1 - t) / .08));
+              }
+              d.setAttribute('cx', x.toFixed(2)); d.setAttribute('cy', y.toFixed(2)); d.setAttribute('opacity', op.toFixed(2));
+            });
+          });
+        },
+        draw(ms){
+          routes.settle();
+          if (RM) return;
+          P.forEach(p => { p.el.style.strokeDasharray = p.len + ' ' + p.len; p.el.style.strokeDashoffset = p.len; });
+          gD.style.opacity = 0;
+          const t0 = performance.now(), gap = 70, total = ms + P.length * gap;
+          drawing = (dt, now) => {
+            P.forEach((p, i) => { const t = Math.min(1, Math.max(0, (now - t0 - i * gap) / ms)); p.el.style.strokeDashoffset = (p.len * (1 - Ease.inOutCubic(t))).toFixed(1); });
+            gD.style.opacity = Math.min(1, Math.max(0, (now - t0 - total * .7) / 600)).toFixed(2);
+            if (now - t0 > total + 700) routes.settle();
+          };
+          Loop.add(drawing);
+        },
+        settle(){
+          if (drawing){ Loop.remove(drawing); drawing = null; }
+          P.forEach(p => { p.el.style.strokeDasharray = ''; p.el.style.strokeDashoffset = ''; });
+          gD.style.opacity = '';
+        }
+      };
+      routes.place(1234);
+      return routes;
+    }
+  };
+  return api;
+}
+
+/* ===== The boarding pass ===== */
+const ARC = { x1: 5, y1: 38, cx: 50, cy: -6, x2: 95, y2: 38 };
+function arcSvg(){
+  return '<svg class="arc" viewBox="0 0 100 44" aria-hidden="true"><path class="arcp" d="M5 38Q50 -6 95 38"/>' +
+    '<circle class="arcend" cx="5" cy="38" r="3"/><circle class="arcend" cx="95" cy="38" r="3"/><circle class="rdot" r="4.4" cx="50" cy="16"/></svg>';
+}
+/* A small gold traveler that loops along the pass route while it is on screen. */
+function RouteDot(svg){
+  const dot = svg.querySelector('.rdot'); let on = false;
+  const f = (dt, now) => {
+    const t = (now % 2900) / 2900, u = 1 - t;
+    dot.setAttribute('cx', (u * u * ARC.x1 + 2 * u * t * ARC.cx + t * t * ARC.x2).toFixed(2));
+    dot.setAttribute('cy', (u * u * ARC.y1 + 2 * u * t * ARC.cy + t * t * ARC.y2).toFixed(2));
+    dot.setAttribute('opacity', Math.max(0, Math.min(1, t / .07, (1 - t) / .07)).toFixed(2));
+  };
+  const api = {
+    start(){ if (on || RM) return; on = true; Loop.add(f); },
+    stop(){ on = false; Loop.remove(f); dot.setAttribute('cx', 50); dot.setAttribute('cy', 16); dot.setAttribute('opacity', 1); }
+  };
+  whenVisible(svg, () => { if (api.wanted) api.start(); }, () => api.stop(), 0);
+  return api;
+}
+/* Draw a route in, then let the dot travel. */
+function drawArc(svg, done){
+  const p = svg.querySelector('.arcp'), ends = svg.querySelectorAll('.arcend'), dot = svg.querySelector('.rdot');
+  if (RM){ done && done(); return () => {}; }
+  const L = p.getTotalLength ? p.getTotalLength() : 110;
+  p.style.strokeDasharray = L + ' ' + L; p.style.strokeDashoffset = L; dot.setAttribute('opacity', 0); ends[1].style.opacity = 0;
+  return tween(760, t => { p.style.strokeDashoffset = (L * (1 - t)).toFixed(1); if (t > .96) ends[1].style.opacity = 1; }, Ease.inOutCubic, () => {
+    p.style.strokeDasharray = ''; p.style.strokeDashoffset = ''; ends[1].style.opacity = ''; dot.setAttribute('opacity', 1); done && done();
+  });
+}
+/* The stamp: the code drops in from 1.3x, turns a little, lands with a thump and a small ink spread. */
+function stampEl(el, rot){
+  el.style.textShadow = '';
+  if (RM){ el.style.opacity = ''; el.style.transform = 'rotate(' + rot + 'deg)'; return; }
+  const r0 = rot - 7, sheet = el.closest('.pass, .kp');
+  el.style.opacity = 0;
+  tween(190, t => {
+    el.style.opacity = Math.min(1, t * 3).toFixed(2);
+    el.style.transform = 'scale(' + (1.3 - .3 * t).toFixed(3) + ') rotate(' + (r0 + (rot - r0) * t).toFixed(2) + 'deg)';
+  }, t => t * t, () => {
+    Sfx.thump();
+    tween(560, t => { el.style.textShadow = '0 0 ' + (.02 + .11 * t).toFixed(3) + 'em rgba(22,24,27,' + (.38 * (1 - t)).toFixed(3) + ')'; }, Ease.outCubic, () => { el.style.textShadow = ''; });
+    if (sheet) tween(260, t => { sheet.style.transform = 'scale(' + (1 - .012 * Math.sin(Math.PI * t)).toFixed(4) + ')'; }, Ease.linear, () => { sheet.style.transform = ''; });
+  });
+}
+function Pass(host, o){
+  o = o || {};
+  host.insertAdjacentHTML('beforeend',
+    '<div class="pass"><div class="pm">' +
+      '<div class="pf pf-from"><span class="k">From</span><b class="code"></b><span class="w"></span><span class="via"></span></div>' +
+      '<div class="pr"><svg class="arrow" viewBox="0 0 48 16" aria-hidden="true"><path d="M4 8H43M36.5 2.5L43 8L36.5 13.5"/></svg>' + arcSvg() + '</div>' +
+      '<div class="pf pf-to"><span class="k">To</span><b class="code"></b><span class="w"></span></div>' +
+    '</div><div class="pfoot"><span><span class="k">Seat</span><b>' + SEAT + '</b></span><span><span class="k">Gate</span><b>' + GATE + '</b></span></div></div>');
+  const el = host.lastElementChild;
+  const codeF = $('.pf-from .code', el), wF = $('.pf-from .w', el), via = $('.via', el);
+  const codeT = $('.pf-to .code', el), wT = $('.pf-to .w', el), arc = $('.arc', el);
+  const dot = o.route ? RouteDot(arc) : null;
+  let cancelPrint = null;
+  function put(code, w, s){ code.textContent = s >= 0 ? SET.codes[s] : ''; w.textContent = s >= 0 ? SET.words[s] : ''; code.style.opacity = ''; code.style.transform = ''; code.style.textShadow = ''; }
+  const api = {
+    el,
+    from(s, anim){ put(codeF, wF, s); if (anim) stampEl(codeF, -2); api.routed(); },
+    via(s, anim){ via.textContent = s >= 0 ? 'via ' + SET.codes[s] : ''; via.style.transform = ''; if (anim && s >= 0) stampEl(via, -1.5); },
+    to(s, anim){ put(codeT, wT, s); if (anim) stampEl(codeT, 1.5); api.routed(); },
+    routed(){
+      const on = !!(o.route && codeF.textContent && codeT.textContent);
+      el.classList.toggle('routed', on);
+      if (dot){ dot.wanted = on; if (!on) dot.stop(); }
+    },
+    drawRoute(){ if (!o.route) return; el.classList.add('routed'); if (dot) dot.stop(); drawArc(arc, () => { if (dot){ dot.wanted = true; dot.start(); } }); },
+    print(){
+      if (cancelPrint) cancelPrint();
+      if (RM){ el.style.transform = ''; return; }
+      const n = 7, feed = t => { const x = t * n, k = Math.floor(x), f = x - k; return Math.min(1, (k + f * f * (3 - 2 * f)) / n); };
+      el.classList.add('printing');
+      cancelPrint = tween(1800, t => {
+        const e = feed(t); el.style.transform = 'translateY(' + (-101 * (1 - e)).toFixed(2) + '%)'; el.style.setProperty('--sy', (101 * (1 - e)).toFixed(1) + '%');
+      }, Ease.linear, () => {
+        el.classList.remove('printing');
+        cancelPrint = tween(460, t => { el.style.transform = 'translateY(' + (Math.sin(Math.PI * t) * 1.6).toFixed(2) + '%)'; }, Ease.linear, () => { el.style.transform = ''; cancelPrint = null; });
+      });
+    },
+    printed(){ if (cancelPrint){ cancelPrint(); cancelPrint = null; } el.classList.remove('printing'); el.style.transform = ''; }
+  };
+  return api;
+}
+</script>
+<script>
+/* ===== The moments ===== */
+const ORDER = ['today', 'ai', 'change'];
+const joins = ROOM.people.map(p => p.joinDelay).sort((a, b) => a - b);
+
+/* ----- Departure hall board, for Arrive and Check in ----- */
+function Hall(el){
+  el.innerHTML = '<div class="hall"><div class="hall-top"><div class="h-status"></div><div class="h-gate"></div></div><div class="h-q"></div><div class="h-count"></div></div>';
+  const status = FlapRow(12), gate = FlapRow(9, { cellCls: i => i < 4 ? 'dim' : i > 4 ? 'm' : '' });
+  const q1 = FlapRow(21), q2 = FlapRow(21), count = FlapRow(2, { digits: true });
+  $('.h-status', el).appendChild(status.el); $('.h-gate', el).appendChild(gate.el);
+  $('.h-q', el).append(q1.el, q2.el);
+  const c = $('.h-count', el); c.appendChild(count.el);
+  c.insertAdjacentHTML('beforeend', '<span class="lbl" aria-hidden="true">Checked in</span>');
+  const api = {
+    status, gate, q1, q2, count,
+    question(anim, d){
+      const L = wrapWords(SET.prompt, 21);
+      if (anim){ q1.set(L[0] || '', { delay: d || 0, stagger: 24 }); return q2.set(L[1] || '', { delay: (d || 0) + 260, stagger: 24 }); }
+      q1.jump(L[0] || ''); q2.jump(L[1] || ''); return 0;
+    },
+    rest(st, n){ status.jump(st); gate.jump('GATE ' + GATE); api.question(false); count.jump(pad2(n)); }
+  };
+  onSet(() => api.question(false));
+  return api;
+}
+
+/* ----- A board of eight rows: code, word, one seat per traveler, count ----- */
+function TallyBoard(host, which){
+  host.classList.add('tb');
+  const rows = [];
+  for (let r = 0; r < 8; r++){
+    const row = document.createElement('div'); row.className = 'tb-row';
+    const code = FlapRow(3, { cls: 'code' }), word = FlapRow(11, { cls: 'word' }), count = FlapRow(2, { cls: 'cnt', align: 'right' });
+    const seats = document.createElement('span'); seats.className = 'seats'; seats.setAttribute('aria-hidden', 'true');
+    row.append(code.el, word.el, seats, count.el); host.appendChild(row);
+    rows.push({ row, code, word, seats, count });
+  }
+  const tl = Timeline();
+  function fill(R, it, on){
+    R.row.style.setProperty('--c', colOf(it.s, true)); R.row.classList.toggle('zero', !it.n);
+    R.seats.textContent = '';
+    for (let k = 0; k < it.n; k++){ const i = document.createElement('i'); i.className = 'seat' + (on ? '' : ' off'); R.seats.appendChild(i); }
+  }
+  const api = {
+    render(){
+      tl.clear();
+      ranked(tally(which)).forEach((it, r) => { const R = rows[r]; fill(R, it, true); R.code.jump(SET.codes[it.s]); R.word.jump(SET.words[it.s]); R.count.jump(String(it.n)); });
+    },
+    flip(){
+      tl.clear(); if (RM){ api.render(); return 0; }
+      const d = ranked(tally(which)); let end = 0;
+      d.forEach((it, r) => { const R = rows[r]; fill(R, it, false); R.code.jump(''); R.word.jump(''); R.count.jump(''); });
+      d.forEach((it, r) => {
+        const R = rows[r], b = 160 + r * 210;
+        const done = Math.max(
+          R.code.set(SET.codes[it.s], { delay: b, stagger: 36, seed: r }),
+          R.word.set(SET.words[it.s], { delay: b + 90, stagger: 24, seed: r + 3 }),
+          R.count.set(String(it.n), { delay: b + 180, stagger: 40, seed: r }));
+        tl.at(done + 40, () => { $$('.seat', R.seats).forEach((s, k) => { s.style.transitionDelay = (k * 42) + 'ms'; s.classList.remove('off'); }); });
+        end = Math.max(end, done + it.n * 42 + 360);
+      });
+      return end;
+    },
+    stop(){ tl.clear(); }
+  };
+  api.render();
+  onSet(api.render); onMove(() => api.render());
+  return api;
+}
+
+/* ----- The viewer's maps: gold for their stations, a dashed ghost for where they started ----- */
+function markMap(map, mode){
+  const c = [];
+  if (mode === 'arrive'){ if (You.touchedIn) c[You.inSlot] = 'you'; }
+  if (mode === 'check'){ c[You.inSlot] = 'you'; if (You.in2 >= 0) c[You.in2] = 'you'; }
+  if (mode === 'depart'){ c[You.inSlot] = 'ghost'; if (You.outSlot != null) c[You.outSlot] = 'you'; }
+  map.mark(c);
+}
+function syncPass(p, cfg){
+  const f = cfg.from === 'touched' ? (You.touchedIn ? You.inSlot : -1) : You.inSlot;
+  p.from(f); p.via(f >= 0 ? You.in2 : -1); p.to(cfg.to ? You.outSlot : -1);
+}
+function checkInTap(s, pass, anim){
+  You.touchedIn = true;
+  const in2 = You.in2 === s ? -1 : You.in2;
+  You.set({ inSlot: s, in2 });
+  pass.from(s, anim); pass.via(in2);
+  buzz();
+}
+
+/* ----- 1. Set up ----- */
+const Setup = (() => {
+  const board = $('#tt'), qBtn = $('#ttQ');
+  const gate = FlapRow(21, { cellCls: i => i < 4 ? 'dim' : (i > 4 && i < 9) ? 'm' : '' });
+  $('#ttGate').appendChild(gate.el); gate.jump('GATE ' + GATE);
+  const q1 = FlapRow(21), q2 = FlapRow(21); qBtn.append(q1.el, q2.el);
+  const stops = [['Arrive', 'Start', true], ['Layover', 'Middle', false], ['Depart', 'End', true]];
+  const rowText = s => ((s[0].padEnd(8) + s[1]).padEnd(18) + (s[2] ? ' ON' : 'OFF'));
+  $$('.stop', board).forEach((b, i) => {
+    const s = stops[i], r = FlapRow(21, { cellCls: k => k >= 18 ? 'stc' : '' });
+    b.appendChild(r.el); r.jump(rowText(s));
+    const label = () => { b.setAttribute('aria-pressed', String(s[2])); b.setAttribute('aria-label', s[0] + ' at the ' + s[1].toLowerCase() + ': ' + (s[2] ? 'on' : 'off')); b.classList.toggle('off', !s[2]); };
+    label();
+    b.addEventListener('click', () => { s[2] = !s[2]; label(); r.set(rowText(s), { stagger: 40, min: 2, max: 4 }); buzz(); });
+  });
+  const map = TransitMap($('#mapSetup'), {});
+  function showQ(anim){
+    const L = wrapWords(SET.prompt, 21);
+    if (anim){ q1.set(L[0] || '', { stagger: 22 }); q2.set(L[1] || '', { delay: 220, stagger: 22 }); }
+    else { q1.jump(L[0] || ''); q2.jump(L[1] || ''); }
+    qBtn.setAttribute('aria-label', 'Question: ' + SET.prompt + ' Tap for the next question.');
+  }
+  showQ(false);
+  qBtn.addEventListener('click', () => { useSet(ORDER[(ORDER.indexOf(SET.key) + 1) % ORDER.length]); showQ(true); map.relabel(true); buzz(); });
+  let first = true;
+  watch(board, () => {
+    if (!first || RM) return; first = false;
+    gate.jump(''); q1.jump(''); q2.jump('');
+    gate.set('GATE ' + GATE, { stagger: 30 }); setTimeout(() => showQ(true), 320);
+  }, null, .5);
+  /* The gate opens on the board first, then the page glides to the hall. */
+  let going = null;
+  $('#openGate').addEventListener('click', () => {
+    Sfx.chime(); buzz();
+    gate.set('GATE ' + GATE + '        OPEN', { stagger: 26, min: 2, max: 4 });
+    clearTimeout(going);
+    going = setTimeout(() => { $('#arrive').scrollIntoView({ behavior: RM ? 'auto' : 'smooth', block: 'start' }); Arrive.show(); }, RM ? 0 : 750);
+  });
+  return { map };
+})();
+
+/* ----- 2. Arrive ----- */
+const Arrive = (() => {
+  const H = Hall($('#hallA')), phone = $('#phA');
+  const pass = Pass($('.feed', phone), {});
+  const map = TransitMap($('.ph-map', phone), { onTap: s => { checkInTap(s, pass, true); } });
+  const tl = Timeline(); let started = 0;
+  const cfg = { from: 'touched' };
+  function rest(){ tl.clear(); H.rest('NOW BOARDING', ROOM.people.length); }
+  function run(force){
+    const now = performance.now(); if (!force && now - started < 600) return; started = now;
+    if (RM) return rest();
+    tl.clear();
+    H.status.jump(''); H.gate.jump(''); H.q1.jump(''); H.q2.jump(''); H.count.jump('00');
+    tl.at(120, () => H.status.set('NOW BOARDING', { stagger: 30 }));
+    tl.at(260, () => Sfx.chime());
+    tl.at(420, () => H.gate.set('GATE ' + GATE, { stagger: 34 }));
+    tl.at(700, () => H.question(true));
+    const k = 9000 / joins[joins.length - 1];
+    joins.forEach((t, i) => tl.at(1500 + t * k, () => H.count.set(pad2(i + 1))));
+  }
+  rest(); syncPass(pass, cfg); markMap(map, 'arrive');
+  const wP = watch($('#hallA'), () => run(false), rest), wF = watch(phone, () => pass.print(), () => pass.printed(), .5);
+  $('#rpArrive').addEventListener('click', () => { run(true); pass.print(); });
+  onMove(() => { syncPass(pass, cfg); markMap(map, 'arrive'); });
+  onSet(() => { syncPass(pass, cfg); map.relabel(false); });
+  return { show(){ if (wP.on) run(true); if (wF.on) pass.print(); } };
+})();
+
+/* ----- 3. Check in ----- */
+const CheckIn = (() => {
+  const H = Hall($('#hallC')), phone = $('#phC');
+  const pass = Pass($('.feed', phone), {});
+  const ask = $('#askC'), viaBtn = $('#viaBtn');
+  let mode = 'from';
+  const tl = Timeline(), tlp = Timeline();
+  function setMode(m){
+    mode = m;
+    ask.textContent = m === 'via' ? 'Anything else?' : 'Where are you arriving from?';
+    viaBtn.textContent = m === 'via' ? 'Cancel' : You.in2 >= 0 ? 'Remove the connection' : 'Add a connection';
+  }
+  const map = TransitMap($('.ph-map', phone), { onTap: s => {
+    tlp.clear();
+    if (mode === 'via'){
+      if (s !== You.inSlot){ You.touchedIn = true; You.set({ in2: s }); pass.via(s, true); buzz(); }
+      setMode('from'); return;
+    }
+    checkInTap(s, pass, true); setMode('from'); countMe();
+  } });
+  viaBtn.addEventListener('click', () => {
+    if (mode === 'via') return setMode('from');
+    if (You.in2 >= 0){ You.set({ in2: -1 }); pass.via(-1); return setMode('from'); }
+    setMode('via');
+  });
+  /* The room keeps checking in: a few late arrivals, and the viewer ticks the count when their stamp lands. */
+  let late = 6, me = 1;
+  const show = () => H.count.set(pad2(26 + late + me));
+  function countMe(){ if (me) return; me = 1; if (wP && wP.on) show(); }
+  function rest(){ tl.clear(); late = 6; me = 1; H.rest('FINAL CALL', TRAVELERS); }
+  function run(){
+    if (RM) return rest();
+    tl.clear(); late = 0; me = You.touchedIn ? 1 : 0;
+    H.status.jump('NOW BOARDING'); H.gate.jump('GATE ' + GATE); H.question(false); H.count.jump(pad2(26 + me));
+    tl.at(500, () => H.status.set('FINAL CALL', { stagger: 32 }));
+    for (let i = 0; i < 6; i++) tl.at(1500 + i * 700 + (joins[26 + i] % 170), () => { late++; show(); });
+    tl.at(6200, () => countMe());
+  }
+  /* On arrival, the default answer stamps itself once so the moment shows its motion. */
+  function demo(){
+    if (RM || You.touchedIn) return;
+    tlp.clear(); pass.from(-1); pass.via(-1); map.mark([]);
+    tlp.at(950, () => { if (You.touchedIn) return; pass.from(You.inSlot, true); markMap(map, 'check'); setTimeout(countMe, 200); });
+  }
+  function settle(){ tlp.clear(); if (!You.touchedIn){ syncPass(pass, {}); markMap(map, 'check'); } }
+  rest(); syncPass(pass, {}); markMap(map, 'check');
+  const wP = watch($('#hallC'), run, rest);
+  watch(phone, demo, settle, .55);
+  onMove(() => { syncPass(pass, {}); markMap(map, 'check'); if (mode === 'from') setMode('from'); });
+  onSet(() => { syncPass(pass, {}); map.relabel(false); });
+})();
+
+/* ----- 4. Read the room ----- */
+const Read = (() => {
+  const board = TallyBoard($('#rrBoard'), 'in');
+  function text(){
+    const r = ranked(tally('in'));
+    $('#rrHl').textContent = SET.headIn;
+    $('#say').textContent = 'Lots of you came in ' + SET.words[r[0].s] + ', and a good few ' + SET.words[r[1].s] + '. Let’s land.';
+  }
+  text(); onSet(text); onMove(text);
+  $('#showBoard').addEventListener('click', () => {
+    buzz();
+    $('#arrivals').scrollIntoView({ behavior: RM ? 'auto' : 'smooth', block: 'start' });
+    Arrivals.show();
+  });
+  return { board };
+})();
+
+/* ----- 5. Arrivals ----- */
+const Arrivals = (() => {
+  const board = TallyBoard($('#arrBoard'), 'in'), hl = $('#arrHl'), phone = $('#phM');
+  const pass = Pass($('.feed', phone), {});
+  const one = $('#oneLine'), mine = $('#mySeats');
+  const tl = Timeline(), tlp = Timeline(); let started = 0;
+  function mirror(){
+    const n = tally('in')[You.inSlot], code = SET.codes[You.inSlot];
+    one.innerHTML = 'You’re one of <b>' + n + '</b> from <b>' + esc(code) + '</b>.';
+    mine.style.setProperty('--c', colOf(You.inSlot, false));
+    mine.textContent = '';
+    for (let k = 0; k < n; k++){ const i = document.createElement('i'); if (k === n - 1) i.className = 'me'; mine.appendChild(i); }
+    syncPass(pass, {});
+  }
+  function rest(){ tl.clear(); board.render(); hl.textContent = SET.headIn; hl.classList.remove('pre'); }
+  function run(force){
+    const now = performance.now(); if (!force && now - started < 600) return; started = now;
+    if (RM) return rest();
+    tl.clear(); hl.textContent = SET.headIn; hl.classList.add('pre');
+    const d = board.flip();
+    tl.at(Math.min(d, 2300), () => hl.classList.remove('pre'));
+  }
+  function phoneRun(){
+    if (RM) return;
+    tlp.clear(); one.classList.add('pre'); mine.classList.add('pre');
+    tlp.at(300, () => one.classList.remove('pre'));
+    tlp.at(700, () => { mine.classList.remove('pre'); $$('i', mine).forEach((i, k) => { i.style.transitionDelay = (k * 70 + (i.classList.contains('me') ? 220 : 0)) + 'ms'; }); });
+  }
+  function phoneRest(){ tlp.clear(); one.classList.remove('pre'); mine.classList.remove('pre'); }
+  mirror(); rest();
+  const wP = watch($('#arrProj'), () => run(false), rest), wF = watch(phone, phoneRun, phoneRest, .5);
+  $('#rpArr').addEventListener('click', () => { run(true); phoneRun(); });
+  onMove(mirror); onSet(() => { mirror(); if (!hl.classList.contains('pre')) hl.textContent = SET.headIn; });
+  return { show(){ if (wP.on) run(true); if (wF.on) phoneRun(); } };
+})();
+
+/* ----- 6. Depart ----- */
+const Depart = (() => {
+  const phone = $('#phD'), ask = $('#askD');
+  const pass = Pass($('.feed', phone), { route: true });
+  const tl = Timeline();
+  const map = TransitMap($('.ph-map', phone), { onTap: s => {
+    tl.clear(); You.touchedOut = true;
+    You.set({ outSlot: s });
+    pass.to(s, true); tl.at(RM ? 0 : 240, () => pass.drawRoute());
+    ask.classList.remove('done'); tl.at(RM ? 0 : 900, () => ask.classList.add('done'));
+    buzz();
+  } });
+  function demo(){
+    if (RM || You.touchedOut) return;
+    tl.clear(); pass.to(-1); ask.classList.remove('done');
+    map.mark(Object.assign([], { [You.inSlot]: 'ghost' }));
+    tl.at(1000, () => {
+      if (You.touchedOut) return;
+      pass.to(You.outSlot, true); markMap(map, 'depart');
+      tl.at(240, () => pass.drawRoute());
+      tl.at(1000, () => ask.classList.add('done'));
+    });
+  }
+  function settle(){ tl.clear(); syncPass(pass, { to: true }); markMap(map, 'depart'); ask.classList.add('done'); }
+  syncPass(pass, { to: true }); markMap(map, 'depart');
+  watch(phone, demo, settle, .55);
+  const trip = $('#trip');
+  trip.addEventListener('input', () => { const w = trip.value.trim().split(/\s+/)[0] || ''; if (trip.value !== trip.value.replace(/\s+/g, '')) trip.value = w; You.set({ why: w }); });
+  trip.addEventListener('keydown', e => { if (e.key === 'Enter') trip.blur(); });
+  onMove(() => { syncPass(pass, { to: true }); markMap(map, 'depart'); });
+  onSet(() => { syncPass(pass, { to: true }); map.relabel(false); });
+})();
+
+/* ----- 7. Departures ----- */
+const Departures = (() => {
+  const el = $('#depProj'), hl = $('#depHl');
+  const board = TallyBoard($('#depBoard'), 'out');
+  const map = TransitMap($('#depMap'), { dark: true });
+  let routes = map.routes(flowsYou());
+  const tl = Timeline(); let started = 0, seen = false;
+  const dots = (dt, now) => routes.place(now);
+  function text(){ hl.textContent = SET.headOut; $('#depN').textContent = TRAVELERS + ' travelers'; }
+  function rest(){ tl.clear(); board.render(); routes.settle(); el.classList.add('show-map'); }
+  function run(force){
+    const now = performance.now(); if (!force && now - started < 600) return; started = now;
+    if (RM) return rest();
+    tl.clear(); routes.settle(); el.classList.remove('show-map');
+    const d = board.flip();
+    tl.at(d + 1500, () => { el.classList.add('show-map'); routes.draw(1500); });
+  }
+  text(); rest();
+  watch(el, () => run(false), rest);
+  whenVisible(el, () => { if (!RM) Loop.add(dots); }, () => Loop.remove(dots), 0);
+  $('#rpDep').addEventListener('click', () => run(true));
+  const redo = () => { routes.settle(); routes = map.routes(flowsYou()); };
+  onMove(redo); onSet(() => { text(); map.relabel(false); });
+})();
+
+/* ----- 8. Keep ----- */
+const Keep = (() => {
+  const kp = $('#kp');
+  kp.innerHTML =
+    '<div class="kp-main"><div class="kp-codes">' +
+      '<div class="kf"><span class="k">From</span><b class="code" id="kpF"></b><span class="w" id="kpFw"></span><span class="via" id="kpV"></span></div>' +
+      '<div class="kp-r">' + arcSvg() + '</div>' +
+      '<div class="kt"><span class="k">To</span><b class="code" id="kpT"></b><span class="w" id="kpTw"></span></div>' +
+    '</div><div class="kp-foot"><span class="today">Today</span><span class="word" id="kpWord"></span></div></div>' +
+    '<div class="kp-stub"><span class="k">Seat</span><b>' + SEAT + '</b><span class="k">Gate</span><b class="sm">' + GATE + '</b>' +
+      '<span class="stubto"><span id="kpSF"></span><svg viewBox="0 0 22 11" aria-hidden="true"><path d="M1.5 5.5H20M15.5 1.5L20 5.5L15.5 9.5"/></svg><span id="kpST"></span></span></div>';
+  const dot = RouteDot($('.kp-r svg', kp)); dot.wanted = true;
+  const poster = $('#poster');
+  poster.innerHTML = '<h3 class="po-q" id="poQ"></h3><p class="po-sub" id="poN"></p><div class="po-map" id="poMap"></div>' +
+    '<div class="po-t"><div><h4>Arrivals</h4><ol id="poIn"></ol></div><div><h4>Departures</h4><ol id="poOut"></ol></div></div>';
+  const pmap = TransitMap($('#poMap'), {});
+  function list(ol, which){
+    ol.innerHTML = ranked(tally(which)).map(it =>
+      '<li class="' + (it.n ? '' : 'zero') + '" style="--c:' + colOf(it.s, false) + '"><b>' + esc(SET.codes[it.s]) + '</b><span class="bl">' +
+      '<i></i>'.repeat(it.n) + '</span><span>' + it.n + '</span></li>').join('');
+  }
+  function sync(){
+    const f = You.inSlot, t = You.outSlot;
+    $('#kpF').textContent = SET.codes[f]; $('#kpFw').textContent = SET.words[f];
+    $('#kpT').textContent = SET.codes[t]; $('#kpTw').textContent = SET.words[t];
+    $('#kpV').textContent = You.in2 >= 0 ? 'via ' + SET.codes[You.in2] : '';
+    $('#kpSF').textContent = SET.codes[f]; $('#kpST').textContent = SET.codes[t];
+    $('#kpWord').textContent = You.why ? '“' + You.why + '”' : '';
+    kp.setAttribute('aria-label', 'Your pass: from ' + SET.words[f] + ' to ' + SET.words[t] + ', seat ' + SEAT + ', today.');
+    $('#poQ').textContent = SET.prompt; $('#poN').textContent = TRAVELERS + ' travelers';
+    list($('#poIn'), 'in'); list($('#poOut'), 'out');
+    pmap.relabel(false); pmap.routes(flowsYou());
+    poster.setAttribute('aria-label', 'Trip report: ' + SET.prompt + ' ' + TRAVELERS + ' travelers. ' + SET.headIn + ' ' + SET.headOut);
+  }
+  sync(); onYou(sync); onSet(sync);
+})();
+</script>
+</body>
+</html>

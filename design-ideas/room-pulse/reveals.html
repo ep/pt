@@ -1,0 +1,1409 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="robots" content="noindex, nofollow">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Reveals</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<!-- One Google Fonts link. Every family gets a real fallback stack in the tokens below. -->
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Archivo:wght@400;600&family=Barlow+Condensed:wght@500;600&family=Bodoni+Moda:ital,opsz,wght@0,6..96,400;0,6..96,500;1,6..96,400;1,6..96,500&family=Jost:wght@400;500&family=Montserrat:wght@400;500;600;700&family=Newsreader:ital,opsz,wght@0,6..72,400;0,6..72,500;1,6..72,400;1,6..72,500&display=swap">
+<style>
+/* ===== Tokens: the quiet specimen shell ===== */
+:root{
+  color-scheme: light;
+  --bg:#FFFFFF; --ink:#293851; --soft:#586A90; --line:rgba(41,56,81,.12);
+  --you:#FFCC00;                 /* EP Gold: here only the terminal dot, the projector never marks a person */
+  --serif: Georgia, 'Times New Roman', serif;
+  --sans: 'Montserrat', Arial, sans-serif;
+  --news: 'Newsreader', Georgia, 'Times New Roman', serif;
+  --bodoni: 'Bodoni Moda', 'Bodoni 72', Didot, Georgia, serif;
+  --archivo: 'Archivo', 'Helvetica Neue', Arial, sans-serif;
+  --jost: 'Jost', Futura, 'Century Gothic', 'Avenir Next', Arial, sans-serif;
+  --barlowc: 'Barlow Condensed', 'Arial Narrow', 'Helvetica Neue', Arial, sans-serif;
+}
+*{box-sizing:border-box}
+html{-webkit-text-size-adjust:100%}
+body{margin:0;background:var(--bg);color:var(--ink);font-family:var(--sans);font-size:16px;line-height:1.4;}
+button{font:inherit;color:inherit;cursor:pointer;background:none;border:0;padding:0;}
+:focus-visible{outline:3px solid var(--you);outline-offset:3px;border-radius:6px;}
+
+/* ===== Page shell ===== */
+.page{max-width:1360px;margin:0 auto;padding-inline:max(16px,4vw);padding-block:0 112px;}
+.top{display:flex;align-items:center;justify-content:space-between;gap:16px;padding-block:18px;}
+.back{color:var(--soft);text-decoration:none;font-size:14px;min-height:44px;display:inline-flex;align-items:center;}
+.back:hover{color:var(--ink);}
+.soundbtn{min-height:44px;min-width:44px;display:inline-flex;align-items:center;justify-content:center;color:var(--soft);font-size:14px;}
+.soundbtn:hover{color:var(--ink);}
+
+.intro{padding-block:clamp(28px,6vw,88px) clamp(36px,5vw,72px);}
+.intro h1{font-family:var(--serif);font-weight:400;font-size:clamp(44px,7vw,96px);line-height:1;margin:0;color:var(--ink);letter-spacing:-.01em;}
+.tdot{display:inline-block;width:.16em;height:.16em;border-radius:50%;background:var(--you);margin-left:.04em;vertical-align:baseline;}
+.intro p{font-family:var(--serif);font-style:italic;font-size:clamp(18px,1.8vw,22px);line-height:1.4;color:var(--soft);max-width:44ch;margin:16px 0 0;}
+
+/* ===== The wall of specimens ===== */
+.wall{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));column-gap:clamp(28px,3.6vw,56px);row-gap:clamp(56px,6.5vw,96px);}
+@media (max-width:860px){ .wall{grid-template-columns:minmax(0,1fr);} }
+.spec{min-width:0;margin:0;}
+.frame{position:relative;aspect-ratio:16/9;container-type:inline-size;overflow:hidden;border-radius:8px;background:#fff;
+  box-shadow:0 0 0 1px var(--line),0 22px 44px -30px rgba(41,56,81,.42);isolation:isolate;}
+.frame canvas{position:absolute;inset:0;width:100%;height:100%;display:block;}
+.cap{display:flex;align-items:flex-start;justify-content:space-between;gap:16px;margin-top:16px;}
+.cap h2{font-family:var(--serif);font-weight:400;font-size:22px;line-height:1.25;margin:0;color:var(--ink);}
+.cap p{font-family:var(--sans);font-size:13.5px;line-height:1.45;margin:4px 0 0;color:var(--soft);}
+.replay{flex:none;width:44px;height:44px;border-radius:50%;display:inline-grid;place-items:center;color:var(--soft);
+  box-shadow:inset 0 0 0 1px rgba(41,56,81,.16);transition:color .2s,box-shadow .2s,transform .15s;margin-top:-3px;}
+.replay:hover{color:var(--ink);box-shadow:inset 0 0 0 1px rgba(41,56,81,.34);}
+.replay:active{transform:scale(.93);}
+.replay:focus-visible{border-radius:50%;}
+.replay svg{width:18px;height:18px;display:block;}
+
+/* ===== Waffle ===== */
+.waf{position:absolute;inset:0;background:#FFFFFF;}
+.waf-grid{position:absolute;left:6.2cqw;top:15cqw;display:grid;grid-template-columns:repeat(8,6.2cqw);grid-template-rows:repeat(4,6.2cqw);gap:.8cqw;}
+.wc{position:relative;perspective:44cqw;}
+.wc-in{position:absolute;inset:0;transform-style:preserve-3d;}
+.wc-in span{position:absolute;inset:0;border-radius:.6cqw;backface-visibility:hidden;-webkit-backface-visibility:hidden;}
+.wc-in .b{transform:rotateY(180deg);}
+.wc-in span::after{content:'';position:absolute;inset:0;border-radius:inherit;background:#101620;opacity:var(--sh,0);}
+.waf-key{position:absolute;left:67.5cqw;top:50%;transform:translateY(-50%);}
+.wk{display:grid;grid-template-columns:2cqw 5cqw auto;column-gap:1.4cqw;align-items:start;}
+.wk + .wk{margin-top:2.1cqw;}
+.wk.gap{margin-top:4.2cqw;}
+.wk .sw{width:2cqw;height:2cqw;border-radius:.45cqw;margin-top:.7cqw;}
+.wk .n{font:600 4.4cqw/1 var(--archivo);color:var(--ink);text-align:right;font-variant-numeric:tabular-nums;letter-spacing:-.01em;}
+.wk .w{font:400 2.8cqw/1.2 var(--archivo);color:var(--ink);}
+.wk .w span{color:var(--soft);}
+
+/* ===== Curtain ===== */
+.cur{position:absolute;inset:0;background:#12161F;overflow:hidden;}
+.cur-light{position:absolute;inset:0;background:radial-gradient(60% 72% at 50% 66%,rgba(255,232,204,.17),rgba(255,232,204,0) 72%);}
+.cur-floor{position:absolute;left:0;right:0;top:42.5cqw;bottom:0;background:linear-gradient(180deg,#27211F,#161211);}
+.cur-floor::before{content:'';position:absolute;left:0;right:0;top:0;height:1px;background:rgba(255,236,214,.18);}
+.cur-bar{position:absolute;bottom:13.75cqw;width:3.1cqw;height:0;border-radius:.45cqw .45cqw 0 0;}
+.cur-bar.t{background:linear-gradient(180deg,#FFFBF4,#E9E0D0);}
+.cur-bar.g{background:rgba(246,240,230,.07);box-shadow:inset 0 0 0 max(1px,.2cqw) rgba(246,240,230,.9);}
+.cur-curtain{position:absolute;left:0;right:0;top:0;height:42.6cqw;will-change:transform;
+  background:
+    linear-gradient(180deg,rgba(0,0,0,.44) 0,rgba(0,0,0,0) 28%,rgba(0,0,0,0) 80%,rgba(0,0,0,.3) 100%),
+    repeating-linear-gradient(90deg,#4A0C15 0,#681520 1.4cqw,#7E1D29 2.5cqw,#681520 3.6cqw,#4A0C15 5cqw);}
+.cur-curtain::after{content:'';position:absolute;left:0;right:0;bottom:0;height:1.3cqw;background:linear-gradient(180deg,rgba(0,0,0,.05),rgba(0,0,0,.42));}
+.cur-shadow{position:absolute;left:0;right:0;top:42.5cqw;height:3.2cqw;background:linear-gradient(180deg,rgba(0,0,0,.5),rgba(0,0,0,0));}
+.cur-valance{position:absolute;left:0;right:0;top:0;height:5.6cqw;
+  background:
+    linear-gradient(180deg,rgba(0,0,0,.4),rgba(0,0,0,0) 55%,rgba(0,0,0,.3)),
+    repeating-linear-gradient(90deg,#4A0C15 0,#6C1722 2.6cqw,#4A0C15 5.2cqw);
+  box-shadow:0 .5cqw 1.3cqw rgba(0,0,0,.5);}
+.cur-title{position:absolute;left:0;right:0;top:8.4cqw;height:4.4cqw;}
+.cur-title span{position:absolute;left:0;right:0;top:0;text-align:center;font:italic 400 3.5cqw/1.2 var(--bodoni);color:#F4EDE2;}
+.cur-word{position:absolute;transform:translateX(-50%);font:italic 400 2.8cqw/1 var(--bodoni);color:rgba(246,240,230,.9);white-space:nowrap;}
+
+/* ===== Slope ===== */
+.slope{position:absolute;inset:0;background:#FFFFFF;}
+.slope svg{position:absolute;inset:0;width:100%;height:100%;display:block;}
+.slope text{font-family:var(--news);font-weight:400;fill:#293851;font-optical-sizing:auto;}
+
+/* ===== Wipe ===== */
+.fr-wipe{touch-action:pan-y;cursor:ew-resize;-webkit-user-select:none;user-select:none;}
+.wipe-grip{position:absolute;top:50%;left:50%;width:max(44px,7cqw);height:max(44px,7cqw);transform:translate(-50%,-50%);border-radius:50%;
+  touch-action:none;display:grid;place-items:center;cursor:ew-resize;z-index:2;}
+.wipe-grip span{width:max(28px,5cqw);height:max(28px,5cqw);border-radius:50%;background:#FFFFFF;color:#293851;display:grid;place-items:center;
+  box-shadow:0 0 0 1.5px #293851,0 .6cqw 1.6cqw rgba(16,22,34,.28);transition:transform .15s;}
+.wipe-grip:active span{transform:scale(1.08);}
+.wipe-grip svg{width:62%;height:62%;display:block;}
+.wipe-grip:focus-visible{border-radius:50%;}
+
+/* ===== Deal ===== */
+.deal{position:absolute;inset:0;overflow:hidden;perspective:120cqw;
+  background:radial-gradient(95% 115% at 50% 40%,#2A5A52 0%,#20473F 58%,#193A34 100%);}
+.slot{position:absolute;width:17.4cqw;height:11cqw;border-radius:1cqw;box-shadow:inset 0 0 0 max(1px,.16cqw) rgba(247,244,236,.14);
+  display:grid;place-items:center;font:italic 400 2.6cqw/1 var(--bodoni);color:rgba(247,244,236,.36);}
+.card{position:absolute;left:0;top:0;width:17.4cqw;height:11cqw;transform-style:preserve-3d;will-change:transform;}
+.card > div{position:absolute;inset:0;border-radius:1cqw;backface-visibility:hidden;-webkit-backface-visibility:hidden;}
+.card .cf{display:grid;place-items:center;background:#FBF9F4;color:#293851;font:italic 500 2.55cqw/1 var(--bodoni);
+  box-shadow:inset 0 0 0 .45cqw #FBF9F4,inset 0 0 0 .55cqw rgba(41,56,81,.13),0 .2cqw .6cqw rgba(0,0,0,.28);}
+.card .cb{transform:rotateY(180deg);background:#293851;
+  box-shadow:inset 0 0 0 .6cqw #293851,inset 0 0 0 .72cqw rgba(213,217,227,.42),0 .2cqw .6cqw rgba(0,0,0,.3);}
+.card .cb::before{content:'';position:absolute;inset:1.1cqw;border-radius:.4cqw;
+  background:repeating-linear-gradient(45deg,rgba(213,217,227,.17) 0 .12cqw,transparent .12cqw .85cqw),
+             repeating-linear-gradient(-45deg,rgba(213,217,227,.17) 0 .12cqw,transparent .12cqw .85cqw);}
+
+@media (prefers-reduced-motion: reduce){
+  *,*::before,*::after{animation-duration:.001ms!important;animation-iteration-count:1!important;transition-duration:.001ms!important;scroll-behavior:auto!important;}
+}
+</style>
+</head>
+<body>
+<div class="page">
+  <div class="top">
+    <a class="back" href="index.html">&larr; Sketchbook</a>
+    <button class="soundbtn" id="soundBtn" aria-pressed="true" aria-label="Sound is on. Turn it off">Sound on</button>
+  </div>
+
+  <header class="intro">
+    <h1>Reveals<span class="tdot" aria-hidden="true"></span></h1>
+    <p>Ways a room can see itself, and see itself move.</p>
+  </header>
+
+  <main class="wall">
+    <section class="spec" id="s-contours" aria-labelledby="h-contours">
+      <div class="frame" role="img" aria-label="A contour map of the room. It arrives with hills at Curious and Anxious, then the terrain shifts until the highest hill stands at Excited."><canvas></canvas></div>
+      <div class="cap"><div><h2 id="h-contours">Contours</h2><p>The room as terrain.</p></div><button class="replay" type="button" aria-label="Replay"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M4.6 14.8A7.6 7.6 0 1 0 6.3 6.9L3.8 9.3" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/><path d="M3.6 4.6v4.9h4.9" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/></svg></button></div>
+    </section>
+
+    <section class="spec" id="s-murmur" aria-labelledby="h-murmur">
+      <div class="frame" role="img" aria-label="Thirty-two birds, one per person, lift off from where the room arrived, swirl as a flock, and land where the room ended: mostly Excited and Curious. Faint rings mark where they started."><canvas></canvas></div>
+      <div class="cap"><div><h2 id="h-murmur">Murmuration</h2><p>A flock that lands where the room is.</p></div><button class="replay" type="button" aria-label="Replay"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M4.6 14.8A7.6 7.6 0 1 0 6.3 6.9L3.8 9.3" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/><path d="M3.6 4.6v4.9h4.9" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/></svg></button></div>
+    </section>
+
+    <section class="spec" id="s-waffle" aria-labelledby="h-waffle">
+      <div class="frame" role="img" aria-label="Thirty-two squares, one per person, colored by the feeling they arrived with, flip one by one to the feeling they left with. Excited or curious goes from 10 to 18. Overwhelmed or anxious goes from 10 to 3."><div class="waf"><div class="waf-grid"></div><div class="waf-key"></div></div></div>
+      <div class="cap"><div><h2 id="h-waffle">Waffle</h2><p>Thirty-two squares, flipping.</p></div><button class="replay" type="button" aria-label="Replay"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M4.6 14.8A7.6 7.6 0 1 0 6.3 6.9L3.8 9.3" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/><path d="M3.6 4.6v4.9h4.9" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/></svg></button></div>
+    </section>
+
+    <section class="spec" id="s-vessels" aria-labelledby="h-vessels">
+      <div class="frame" role="img" aria-label="Eight glass vessels, one per word. Each starts at the count the room arrived with, marked by a fine line, and pours to the count it left with. Excited rises from 3 to 10."><canvas></canvas></div>
+      <div class="cap"><div><h2 id="h-vessels">Vessels</h2><p>Pouring from before to after.</p></div><button class="replay" type="button" aria-label="Replay"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M4.6 14.8A7.6 7.6 0 1 0 6.3 6.9L3.8 9.3" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/><path d="M3.6 4.6v4.9h4.9" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/></svg></button></div>
+    </section>
+
+    <section class="spec" id="s-ridge" aria-labelledby="h-ridge">
+      <div class="frame" role="img" aria-label="Thirty-two ink lines, one per person, trace energy from arrival to the end of the session, stacked like mountain ridges and grouped by the word each person left with."><canvas></canvas></div>
+      <div class="cap"><div><h2 id="h-ridge">Ridgeline</h2><p>Everyone&rsquo;s session, stacked.</p></div><button class="replay" type="button" aria-label="Replay"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M4.6 14.8A7.6 7.6 0 1 0 6.3 6.9L3.8 9.3" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/><path d="M3.6 4.6v4.9h4.9" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/></svg></button></div>
+    </section>
+
+    <section class="spec" id="s-curtain" aria-labelledby="h-curtain">
+      <div class="frame" role="img" aria-label="On a stage, outlined bars show what the room guessed: mostly anxious. A red curtain rises on solid bars showing what was true: 6 anxious and 7 curious."><div class="cur"></div></div>
+      <div class="cap"><div><h2 id="h-curtain">Curtain</h2><p>What we guessed, then what was true.</p></div><button class="replay" type="button" aria-label="Replay"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M4.6 14.8A7.6 7.6 0 1 0 6.3 6.9L3.8 9.3" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/><path d="M3.6 4.6v4.9h4.9" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/></svg></button></div>
+    </section>
+
+    <section class="spec" id="s-tide" aria-labelledby="h-tide">
+      <div class="frame" role="img" aria-label="A river of eight streams, one per word, across three pulses: arrival, midway and the end. Curious swells at midway, Excited widens at the end, Anxious narrows."><canvas></canvas></div>
+      <div class="cap"><div><h2 id="h-tide">Tide</h2><p>Three pulses, one river.</p></div><button class="replay" type="button" aria-label="Replay"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M4.6 14.8A7.6 7.6 0 1 0 6.3 6.9L3.8 9.3" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/><path d="M3.6 4.6v4.9h4.9" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/></svg></button></div>
+    </section>
+
+    <section class="spec" id="s-wipe" aria-labelledby="h-wipe">
+      <div class="frame fr-wipe" role="group" aria-label="The room at arrival on the left of the handle, and at the end on the right. Drag the handle or use the arrow keys to compare.">
+        <canvas aria-hidden="true"></canvas>
+        <div class="wipe-grip" role="slider" tabindex="0" aria-label="Compare In and Out" aria-valuemin="0" aria-valuemax="100" aria-valuenow="50" aria-valuetext="Half In, half Out"><span><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M9.5 7.5 5 12l4.5 4.5M14.5 7.5 19 12l-4.5 4.5" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg></span></div>
+      </div>
+      <div class="cap"><div><h2 id="h-wipe">Wipe</h2><p>Drag to compare before and after.</p></div><button class="replay" type="button" aria-label="Replay"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M4.6 14.8A7.6 7.6 0 1 0 6.3 6.9L3.8 9.3" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/><path d="M3.6 4.6v4.9h4.9" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/></svg></button></div>
+    </section>
+
+    <section class="spec" id="s-slope" aria-labelledby="h-slope">
+      <div class="frame" role="img" aria-label="Each word set at the size of its count when the room arrived, joined by a fine line to the same word at the end. Excited grows from 3 to 10. Anxious shrinks from 6 to 2. Indifferent goes to none."><div class="slope"><svg viewBox="0 0 1600 900" preserveAspectRatio="xMidYMid meet" aria-hidden="true"></svg></div></div>
+      <div class="cap"><div><h2 id="h-slope">Slope</h2><p>Words that grew, words that shrank.</p></div><button class="replay" type="button" aria-label="Replay"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M4.6 14.8A7.6 7.6 0 1 0 6.3 6.9L3.8 9.3" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/><path d="M3.6 4.6v4.9h4.9" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/></svg></button></div>
+    </section>
+
+    <section class="spec" id="s-deal" aria-labelledby="h-deal">
+      <div class="frame" role="img" aria-label="Thirty-two cards, one per person, are shuffled and dealt into eight piles by the word they arrived with, then gathered and dealt again by the word they left with. Excited ends as the tallest pile."><div class="deal"></div></div>
+      <div class="cap"><div><h2 id="h-deal">Deal</h2><p>The room, dealt out twice.</p></div><button class="replay" type="button" aria-label="Replay"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M4.6 14.8A7.6 7.6 0 1 0 6.3 6.9L3.8 9.3" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/><path d="M3.6 4.6v4.9h4.9" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/></svg></button></div>
+    </section>
+  </main>
+</div>
+
+<script>
+/* ===== ROOM: shared simulated room for every Room Pulse prototype =====
+   Paste this whole block into a <script> in your page. It defines one global: ROOM.
+   Everything is deterministic, so every page tells the same story with the same 32 people.
+
+   The map: x = pleasantness (-1 unpleasant .. +1 pleasant), y = energy (-1 low .. +1 high).
+   Eight word slots, two per quadrant, mirrored in energy:
+     0 high energy pleasant, outer     4 high energy unpleasant, outer
+     1 high energy pleasant, inner     5 high energy unpleasant, inner
+     2 low energy pleasant, inner      6 low energy unpleasant, inner
+     3 low energy pleasant, outer      7 low energy unpleasant, outer
+*/
+var ROOM = (function(){
+  function mulberry32(a){ return function(){ a|=0; a=a+0x6D2B79F5|0; var t=Math.imul(a^a>>>15,1|a); t=t+Math.imul(t^t>>>7,61|t)^t; return ((t^t>>>14)>>>0)/4294967296; }; }
+
+  var SLOTS = [
+    {x: .62, y: .70}, {x: .48, y: .28}, {x: .48, y:-.28}, {x: .62, y:-.70},
+    {x:-.62, y: .70}, {x:-.48, y: .28}, {x:-.48, y:-.28}, {x:-.62, y:-.70}
+  ];
+  // quadrant of each slot: 'hp' high+pleasant, 'lp' low+pleasant, 'hu' high+unpleasant, 'lu' low+unpleasant
+  var QUAD = ['hp','hp','lp','lp','hu','hu','lu','lu'];
+
+  var SETS = {
+    ai: {
+      key:'ai', topic:'AI', prompt:'How are you feeling about AI?',
+      words:['Excited','Curious','Confident','Calm','Overwhelmed','Anxious','Skeptical','Indifferent'],
+      codes:['EXC','CUR','CNF','CLM','OVW','ANX','SKP','IND'],
+      headIn:'Mostly curious. Some anxious. A few skeptics.',
+      headOut:'Mostly excited. Still curious. The skeptics held.'
+    },
+    change: {
+      key:'change', topic:'the change ahead', prompt:'How do you feel about the change ahead?',
+      words:['Energized','Hopeful','Ready','Settled','Frustrated','Uneasy','Doubtful','Weary'],
+      codes:['ENG','HOP','RDY','STL','FRU','UNE','DBT','WRY'],
+      headIn:'Mostly hopeful. Some uneasy. A few doubters.',
+      headOut:'Mostly energized. Still hopeful. The doubters held.'
+    },
+    today: {
+      key:'today', topic:'today', prompt:'How are you arriving today?',
+      words:['Buzzing','Open','Focused','Relaxed','Stretched','Distracted','Tired','Flat'],
+      codes:['BZZ','OPN','FCS','RLX','STR','DST','TRD','FLT'],
+      headIn:'Mostly open. Some distracted. A few tired.',
+      headOut:'Mostly buzzing. Still open. A few still tired.'
+    }
+  };
+
+  // 32 people: [inSlot, outSlot, inSecond or -1, outSecond or -1]
+  var PLAN = [
+    [5,1,1,-1],[5,1,-1,-1],[5,0,1,5],[5,0,-1,-1],[5,5,4,-1],[5,2,-1,5],
+    [4,1,0,-1],[4,5,-1,-1],[4,0,5,4],[4,4,-1,-1],
+    [6,1,1,6],[6,1,-1,-1],[6,6,7,-1],[6,6,-1,-1],[6,2,-1,-1],
+    [7,1,6,-1],[7,6,-1,-1],
+    [1,0,5,5],[1,0,5,-1],[1,0,-1,-1],[1,0,5,-1],[1,1,-1,6],[1,1,5,-1],[1,2,-1,-1],
+    [0,0,-1,-1],[0,0,5,5],[0,2,-1,-1],
+    [2,2,-1,-1],[2,2,6,-1],[2,0,-1,-1],
+    [3,3,-1,-1],[3,3,-1,-1]
+  ];
+  var WHY = ['Trying it myself','Hearing the others','Less scary now','A clear next step','Real examples',
+    'Permission to play','Still unsure','My own work','The conversation','Seeing it work',
+    'Time to practice','Good questions','Not alone in this','Small wins'];
+
+  var rnd = mulberry32(20261002);
+  function jitter(s){ return (rnd()*2-1)*s; }
+  function place(slot, inten){
+    // jittered spot around the word, always closer to its own word than to any other
+    var p = SLOTS[slot], k = .7 + .3*inten, q;
+    for (var t = 0; t < 40; t++){
+      q = { x: clamp(p.x*k + jitter(.1), -.97, .97), y: clamp(p.y*k + jitter(.1), -.97, .97) };
+      if (nearest(q.x, q.y) === slot) return q;
+    }
+    return { x: p.x, y: p.y };
+  }
+  function nearest(x, y){
+    var best = 0, bd = 1e9;
+    for (var i = 0; i < SLOTS.length; i++){ var s = SLOTS[i], d = (s.x-x)*(s.x-x) + (s.y-y)*(s.y-y); if (d < bd){ bd = d; best = i; } }
+    return best;
+  }
+  function clamp(v,a,b){ return Math.max(a, Math.min(b, v)); }
+
+  var people = PLAN.map(function(r, i){
+    var iIn = .35 + rnd()*.65, iOut = .35 + rnd()*.65;
+    var pIn = place(r[0], iIn), pOut = place(r[1], iOut);
+    var seatRow = 3 + Math.floor(rnd()*28), seatCol = 'ABCDEF'.charAt(Math.floor(rnd()*6));
+    return {
+      id: i,
+      inSlot: r[0], outSlot: r[1], in2: r[2], out2: r[3],
+      inX: pIn.x, inY: pIn.y, outX: pOut.x, outY: pOut.y,
+      inIntensity: iIn, outIntensity: iOut,
+      joinDelay: Math.round(400 + rnd()*9000),      // ms after the waiting room opens
+      checkInDelay: Math.round(300 + rnd()*6000),   // ms after check-in opens
+      seat: seatRow + seatCol,
+      why: (i % 3 === 1) ? WHY[i % WHY.length] : ''  // about a third leave a one-word why
+    };
+  });
+
+  function counts(which){ // which: 'in' | 'out'
+    var c = [0,0,0,0,0,0,0,0];
+    people.forEach(function(p){ c[which==='out' ? p.outSlot : p.inSlot]++; });
+    return c;
+  }
+  function nearestSlot(x, y){ return nearest(x, y); }
+  function intensityWord(x, y){ // how far from the middle, in plain words
+    var r = Math.sqrt(x*x + y*y);
+    return r < .38 ? 'a little' : r < .72 ? 'clearly' : 'strongly';
+  }
+  function pleasantShare(which){
+    var c = counts(which); return (c[0]+c[1]+c[2]+c[3]) / people.length;
+  }
+  // flows between slots, for route maps and sankeys: [{from, to, n}]
+  function flows(){
+    var m = {};
+    people.forEach(function(p){ var k = p.inSlot + '>' + p.outSlot; m[k] = (m[k]||0) + 1; });
+    return Object.keys(m).map(function(k){ var a = k.split('>'); return { from:+a[0], to:+a[1], n:m[k] }; })
+      .sort(function(a,b){ return b.n - a.n; });
+  }
+  // FM-style frequency for a slot or a point, 88.0 to 108.0, by angle clockwise from "high energy"
+  function freq(x, y){
+    var ang = Math.atan2(x, y); if (ang < 0) ang += Math.PI*2;
+    return Math.round((88 + ang/(Math.PI*2)*20)*10)/10;
+  }
+
+  return {
+    SLOTS: SLOTS, QUAD: QUAD, SETS: SETS, people: people, WHY: WHY,
+    counts: counts, nearestSlot: nearestSlot, intensityWord: intensityWord,
+    pleasantShare: pleasantShare, flows: flows, freq: freq, rng: mulberry32
+  };
+})();
+</script>
+<script>
+/* ===== Shared helpers ===== */
+const RM = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+
+/* Run a moment only while it is on screen. */
+function whenVisible(el, onEnter, onLeave, threshold){
+  const io = new IntersectionObserver(es => es.forEach(e => {
+    if (e.isIntersecting) onEnter && onEnter(); else onLeave && onLeave();
+  }), { threshold: threshold == null ? 0.2 : threshold });
+  io.observe(el); return io;
+}
+
+/* One requestAnimationFrame loop for the whole page. Loop.add(fn) where fn(dt, now). */
+const Loop = (() => {
+  const tasks = new Set(); let running = false, last = 0;
+  function tick(t){
+    const dt = Math.min(50, t - (last || t)); last = t;
+    tasks.forEach(f => { try { f(dt, t); } catch (e) { console.error(e); } });
+    if (tasks.size) requestAnimationFrame(tick); else { running = false; last = 0; }
+  }
+  return {
+    add(f){ tasks.add(f); if (!running){ running = true; requestAnimationFrame(tick); } },
+    remove(f){ tasks.delete(f); }
+  };
+})();
+
+const Ease = {
+  linear: t => t,
+  outCubic: t => 1 - Math.pow(1 - t, 3),
+  inOutCubic: t => t < .5 ? 4*t*t*t : 1 - Math.pow(-2*t + 2, 3) / 2,
+  outBack: t => { const c1 = 1.70158, c3 = c1 + 1; return 1 + c3*Math.pow(t - 1, 3) + c1*Math.pow(t - 1, 2); },
+  outExpo: t => t === 1 ? 1 : 1 - Math.pow(2, -10*t)
+};
+/* tween(ms, t => ..., ease, done) returns a cancel function. Reduced motion jumps to the end. */
+function tween(ms, fn, ease, done){
+  ease = ease || Ease.outCubic;
+  if (RM){ fn(1); done && done(); return () => {}; }
+  const start = performance.now(); let dead = false;
+  const step = (dt, now) => {
+    if (dead) return;
+    const t = Math.min(1, (now - start) / ms); fn(ease(t));
+    if (t >= 1){ Loop.remove(step); done && done(); }
+  };
+  Loop.add(step);
+  return () => { dead = true; Loop.remove(step); };
+}
+
+/* Canvas sized to its CSS box at device pixel ratio. Returns the 2d context; call again on resize. */
+function fitCanvas(cv){
+  const r = cv.getBoundingClientRect(), d = Math.min(2, window.devicePixelRatio || 1);
+  cv.width = Math.max(1, Math.round(r.width * d)); cv.height = Math.max(1, Math.round(r.height * d));
+  const c = cv.getContext('2d'); c.setTransform(d, 0, 0, d, 0, 0); return c;
+}
+
+/* Sound: WebAudio only, created on the first gesture, one master mute. */
+const Sound = (() => {
+  let ctx = null, master = null, on = true;
+  function ac(){
+    if (!on) return null;
+    if (!ctx){
+      try {
+        ctx = new (window.AudioContext || window.webkitAudioContext)();
+        const comp = ctx.createDynamicsCompressor();
+        master = ctx.createGain(); master.gain.value = .55;
+        master.connect(comp); comp.connect(ctx.destination);
+      } catch (e){ return null; }
+    }
+    if (ctx.state === 'suspended') ctx.resume();
+    return ctx;
+  }
+  /* A short enveloped note. opts: {type:'sine'|'triangle'|..., gain, attack, release, when, detune} */
+  function tone(freq, dur, opts){
+    const c = ac(); if (!c) return;
+    opts = opts || {};
+    const t0 = c.currentTime + (opts.when || 0), a = opts.attack || .01, r = opts.release || .25;
+    const o = c.createOscillator(), g = c.createGain();
+    o.type = opts.type || 'sine'; o.frequency.value = freq; if (opts.detune) o.detune.value = opts.detune;
+    g.gain.setValueAtTime(0, t0);
+    g.gain.linearRampToValueAtTime(opts.gain == null ? .18 : opts.gain, t0 + a);
+    g.gain.exponentialRampToValueAtTime(.0001, t0 + a + dur + r);
+    o.connect(g); g.connect(master); o.start(t0); o.stop(t0 + a + dur + r + .05);
+  }
+  function setOn(v){ on = v; if (!v && ctx) ctx.suspend(); }
+  return { ac, tone, setOn, get on(){ return on; }, get ctx(){ return ctx; }, get out(){ return master; } };
+})();
+['pointerdown','keydown','touchend'].forEach(ev => document.addEventListener(ev, () => Sound.ac(), { passive: true }));
+(() => {
+  const b = document.getElementById('soundBtn'); if (!b) return;
+  b.addEventListener('click', () => {
+    const next = !Sound.on; Sound.setOn(next);
+    b.setAttribute('aria-pressed', String(next));
+    b.textContent = next ? 'Sound on' : 'Sound off';
+    b.setAttribute('aria-label', next ? 'Sound is on. Turn it off' : 'Sound is off. Turn it on');
+    if (next) Sound.ac();
+  });
+})();
+
+function esc(s){ return String(s).replace(/[&<>"]/g, c => ({ '&':'&amp;', '<':'&lt;', '>':'&gt;', '"':'&quot;' }[c])); }
+
+/* The viewer is one participant. On this page every frame is the projector, so You is never drawn:
+   the projector never singles out a person. Kept so the page shares the sketchbook's helpers. */
+const You = {
+  inX: .44, inY: .30, inSlot: 1, in2: -1,
+  outX: null, outY: null, outSlot: null, out2: -1, why: '',
+  _fns: [],
+  set(patch){ Object.assign(this, patch); this._fns.forEach(f => f(patch)); },
+  on(f){ this._fns.push(f); }
+};
+</script>
+<script>
+/* ===== Reveals: ten specimens on one shared room ===== */
+const clamp = (v, a, b) => Math.max(a, Math.min(b, v));
+const lerp = (a, b, t) => a + (b - a) * t;
+const span = (t, a, b) => clamp((t - a) / (b - a), 0, 1);
+const smooth = t => t * t * (3 - 2 * t);
+const WORDS = ROOM.SETS.ai.words, PEOPLE = ROOM.people;
+const CIN = ROOM.counts('in'), COUT = ROOM.counts('out');
+const QIDX = { hp: 0, lp: 1, hu: 2, lu: 3 };
+const quad = s => QIDX[ROOM.QUAD[s]];
+const QCOL = ['#E0662A', '#9BBE22', '#B38BE8', '#2FA8A5'];   /* validated quadrant colors */
+const INK = '#293851', SOFT = '#586A90';
+const AR = 9 / 16;
+const F_NEWS = 'Newsreader, Georgia, "Times New Roman", serif';
+const F_JOST = 'Jost, Futura, "Century Gothic", "Avenir Next", Arial, sans-serif';
+const F_BARLOW = '"Barlow Condensed", "Arial Narrow", "Helvetica Neue", Arial, sans-serif';
+const F_ARCHIVO = 'Archivo, "Helvetica Neue", Arial, sans-serif';
+const F_MONT = 'Montserrat, Arial, sans-serif';
+
+/* The middle pulse: each person partway between their In and Out spot, with a little noise. */
+const MID = (() => {
+  const r = ROOM.rng(42);
+  return PEOPLE.map(p => {
+    const f = .3 + r() * .4;
+    const x = p.inX + (p.outX - p.inX) * f + (r() * 2 - 1) * .06;
+    const y = p.inY + (p.outY - p.inY) * f + (r() * 2 - 1) * .08;
+    return { x, y, slot: ROOM.nearestSlot(x, y) };
+  });
+})();
+const CMID = [0, 0, 0, 0, 0, 0, 0, 0]; MID.forEach(m => CMID[m.slot]++);
+/* The room's guesses before the reveal, skewed toward Anxious. Sums to 32. */
+const GUESS = [2, 4, 1, 1, 7, 11, 5, 1];
+
+function hexRgb(h){ const n = parseInt(h.slice(1), 16); return [n >> 16 & 255, n >> 8 & 255, n & 255]; }
+function mixHex(a, b, t){ const A = hexRgb(a), B = hexRgb(b); return '#' + A.map((v, i) => Math.round(v + (B[i] - v) * t).toString(16).padStart(2, '0')).join(''); }
+function rgba(h, a){ const c = hexRgb(h); return `rgba(${c[0]},${c[1]},${c[2]},${a})`; }
+
+/* The feeling map inside a 16:9 frame. x is pleasantness, y is energy. */
+function mapPt(mx, my, w, h){ return { x: w * (.5 + mx * .36), y: h * (.5 - my * .40) }; }
+/* Where each word sits: outer words above or below their people, inner words beside them, set clear of the dots. */
+function wordPt(s, w, h){
+  const S = ROOM.SLOTS[s];
+  if (Math.abs(S.y) > .5){ const p = mapPt(S.x * 1.12, S.y * 1.27, w, h); p.align = 'center'; return p; }
+  const p = mapPt(S.x < 0 ? -.63 : .6, S.y, w, h); p.align = S.x < 0 ? 'right' : 'left'; return p;
+}
+
+/* A timeline in seconds. Reduced motion jumps to the end. */
+function timeline(total, frame, done){
+  if (RM){ frame(total); done && done(); return () => {}; }
+  let t0 = null, dead = false;
+  const step = (dt, now) => {
+    if (dead) return;
+    if (t0 === null) t0 = now;
+    const t = Math.min(total, (now - t0) / 1000);
+    frame(t);
+    if (t >= total){ dead = true; Loop.remove(step); done && done(); }
+  };
+  Loop.add(step);
+  return () => { dead = true; Loop.remove(step); };
+}
+
+let gestured = false;
+['pointerdown', 'keydown'].forEach(ev => document.addEventListener(ev, () => { gestured = true; }, { capture: true, passive: true }));
+function buzz(){ try { if (navigator.vibrate) navigator.vibrate(10); } catch (e){} }
+
+/* Sound effects on top of Sound: nothing plays until the viewer has touched the page. */
+const Sfx = (() => {
+  let buf = null;
+  function c(){ return (gestured && Sound.on) ? Sound.ac() : null; }
+  function noiseBuf(ctx){
+    if (!buf){
+      buf = ctx.createBuffer(1, ctx.sampleRate * 2, ctx.sampleRate);
+      const d = buf.getChannelData(0), r = ROOM.rng(5);
+      for (let i = 0; i < d.length; i++) d[i] = r() * 2 - 1;
+    }
+    return buf;
+  }
+  function noise(dur, o){
+    const ctx = c(); if (!ctx || !Sound.out) return;
+    o = o || {};
+    const t0 = ctx.currentTime + (o.when || 0), a = o.attack == null ? .02 : o.attack, rel = o.release == null ? .2 : o.release;
+    const g0 = o.gain == null ? .05 : o.gain;
+    const src = ctx.createBufferSource(); src.buffer = noiseBuf(ctx); src.loop = true;
+    const f = ctx.createBiquadFilter(); f.type = o.type || 'bandpass'; f.Q.value = o.q == null ? .9 : o.q;
+    f.frequency.setValueAtTime(o.freq || 1000, t0);
+    if (o.to) f.frequency.exponentialRampToValueAtTime(o.to, t0 + a + dur);
+    const g = ctx.createGain();
+    g.gain.setValueAtTime(0, t0); g.gain.linearRampToValueAtTime(g0, t0 + a);
+    g.gain.setValueAtTime(g0, t0 + a + dur); g.gain.exponentialRampToValueAtTime(.0001, t0 + a + dur + rel);
+    src.connect(f); f.connect(g); g.connect(Sound.out);
+    src.start(t0, Math.random() * 1.5); src.stop(t0 + a + dur + rel + .05);
+  }
+  function tone(f, d, o){ if (!c()) return; Sound.tone(f, d, o); }
+  return { noise, tone, get ok(){ return !!(gestured && Sound.on); } };
+})();
+
+/* ===== Specimen shell: first play when it scrolls into view, Replay any time, finish when it leaves ===== */
+const SPECS = [];
+function specimen(id, api){
+  const sec = document.getElementById(id);
+  const frame = sec.querySelector('.frame'), btn = sec.querySelector('.replay');
+  api.frame = frame; api.seen = false; api.on = false;
+  SPECS.push(api);
+  try { api.init(); } catch (e){ console.error(e); }
+  if (btn) btn.addEventListener('click', () => { buzz(); api.play(); });
+  whenVisible(frame, () => {
+    api.on = true;
+    if (api.seen) return;
+    const r = frame.getBoundingClientRect(), vh = window.innerHeight || document.documentElement.clientHeight;
+    const vis = (Math.min(r.bottom, vh) - Math.max(r.top, 0)) / Math.max(1, r.height);
+    if (vis >= .45){ api.seen = true; api.play(); }
+  }, () => { if (api.on){ api.on = false; api.finish(); } }, [0, .5, 1]);
+  if ('ResizeObserver' in window){
+    let last = -1;
+    new ResizeObserver(es => {
+      const w = Math.round(es[0].contentRect.width);
+      if (w !== last){ last = w; if (api.resize) api.resize(); }
+    }).observe(frame);
+  }
+  return api;
+}
+/* A canvas specimen drawn as a pure function of time. */
+function canvasSpec(id, o){
+  const cv = document.querySelector('#' + id + ' canvas');
+  let ctx = null, w = 0, h = 0, t = o.total, cancel = null;
+  const api = {
+    init(){ api.resize(); },
+    resize(){
+      ctx = fitCanvas(cv); const r = cv.getBoundingClientRect(); w = r.width; h = r.height;
+      if (o.setup && w > 0) o.setup(w, h);
+      api.redraw();
+    },
+    redraw(){ if (ctx && w > 0) o.draw(ctx, w, h, t); },
+    play(){
+      if (cancel) cancel();
+      t = 0; if (o.start) o.start();
+      if (!RM && o.sound) o.sound();
+      cancel = timeline(o.total, tt => { t = tt; api.redraw(); }, () => { cancel = null; });
+    },
+    finish(){ if (cancel){ cancel(); cancel = null; } t = o.total; api.redraw(); }
+  };
+  return specimen(id, api);
+}
+/* A DOM specimen: render(t) sets the state at time t. */
+function domSpec(id, o){
+  let cancel = null;
+  const api = {
+    init(){ o.build(); o.render(o.total); },
+    play(){
+      if (cancel) cancel();
+      if (!RM && o.sound) o.sound();
+      cancel = timeline(o.total, o.render, () => { cancel = null; });
+    },
+    finish(){ if (cancel){ cancel(); cancel = null; } o.render(o.total); },
+    resize(){}
+  };
+  return specimen(id, api);
+}
+
+/* ===== 1. Contours: kernel density as terrain, isolines by marching squares ===== */
+(() => {
+  const PAPER = '#F1F4F7', HOLD = .7, MORPH = 3.1, TOTAL = HOLD + MORPH + .3, LEVELS = 17;
+  let nx = 0, ny = 0, cell = 1, fIn = null, fOut = null, fMix = null, M = 1, tint = null, tctx = null, timg = null;
+  function build(w, h){
+    cell = Math.max(3, w / 104);
+    nx = Math.ceil(w / cell) + 2; ny = Math.ceil(h / cell) + 2;
+    tint = document.createElement('canvas'); tint.width = nx; tint.height = ny;
+    tctx = tint.getContext('2d'); timg = tctx.createImageData(nx, ny);
+    eA = new Int32Array(2 * nx * ny).fill(-1); eB = new Int32Array(2 * nx * ny).fill(-1);
+    const sig = w * .06, k = 1 / (2 * sig * sig);
+    const make = key => {
+      const pts = PEOPLE.map(p => key === 'in' ? mapPt(p.inX, p.inY, w, h) : mapPt(p.outX, p.outY, w, h));
+      const f = new Float32Array(nx * ny);
+      for (let j = 0; j < ny; j++){
+        const y = j * cell;
+        for (let i = 0; i < nx; i++){
+          const x = i * cell; let s = 0;
+          for (let q = 0; q < pts.length; q++){ const dx = x - pts[q].x, dy = y - pts[q].y; s += Math.exp(-(dx * dx + dy * dy) * k); }
+          f[j * nx + i] = s;
+        }
+      }
+      return f;
+    };
+    fIn = make('in'); fOut = make('out'); fMix = new Float32Array(nx * ny);
+    M = 0; for (let i = 0; i < fIn.length; i++){ if (fIn[i] > M) M = fIn[i]; if (fOut[i] > M) M = fOut[i]; }
+  }
+  /* Marching squares. Segments meet on shared cell edges, so they are chained into
+     whole isolines and drawn as smooth curves instead of loose pieces. */
+  let eA = null, eB = null;
+  function march(f, lv, path){
+    const P = [], E = [], H = nx * ny;
+    for (let j = 0; j < ny - 1; j++){
+      const y = j * cell;
+      for (let i = 0; i < nx - 1; i++){
+        const a = f[j * nx + i], b = f[j * nx + i + 1], c = f[(j + 1) * nx + i + 1], d = f[(j + 1) * nx + i];
+        const idx = (a > lv ? 8 : 0) | (b > lv ? 4 : 0) | (c > lv ? 2 : 0) | (d > lv ? 1 : 0);
+        if (idx === 0 || idx === 15) continue;
+        const x = i * cell;
+        const T = () => [x + cell * (lv - a) / (b - a), y, j * nx + i];
+        const R = () => [x + cell, y + cell * (lv - b) / (c - b), H + j * nx + i + 1];
+        const B = () => [x + cell * (lv - d) / (c - d), y + cell, (j + 1) * nx + i];
+        const L = () => [x, y + cell * (lv - a) / (d - a), H + j * nx + i];
+        const s = (p, q) => { P.push(p[0], p[1], q[0], q[1]); E.push(p[2], q[2]); };
+        switch (idx){
+          case 1: case 14: s(L(), B()); break;
+          case 2: case 13: s(B(), R()); break;
+          case 3: case 12: s(L(), R()); break;
+          case 4: case 11: s(T(), R()); break;
+          case 6: case 9: s(T(), B()); break;
+          case 7: case 8: s(L(), T()); break;
+          case 5: { const m = (a + b + c + d) / 4; if (m > lv){ s(L(), T()); s(B(), R()); } else { s(T(), R()); s(L(), B()); } break; }
+          case 10: { const m = (a + b + c + d) / 4; if (m > lv){ s(T(), R()); s(L(), B()); } else { s(L(), T()); s(B(), R()); } break; }
+        }
+      }
+    }
+    const n = E.length / 2, seen = new Uint8Array(n);
+    for (let k = 0; k < E.length; k++){ const e = E[k], sg = k >> 1; if (eA[e] < 0) eA[e] = sg; else eB[e] = sg; }
+    const walk = (sg, end, out) => {
+      let cur = sg, e = E[sg * 2 + end];
+      for (;;){
+        const o = eA[e] === cur ? eB[e] : eA[e];
+        if (o < 0 || seen[o]) return e;
+        seen[o] = 1;
+        const far = E[o * 2] === e ? 1 : 0;
+        out.push(P[o * 4 + far * 2], P[o * 4 + far * 2 + 1]);
+        e = E[o * 2 + far]; cur = o;
+      }
+    };
+    for (let sg = 0; sg < n; sg++){
+      if (seen[sg]) continue; seen[sg] = 1;
+      const fw = [], bw = [];
+      const lastE = walk(sg, 1, fw);
+      const closed = lastE === E[sg * 2];
+      if (!closed) walk(sg, 0, bw);
+      const pts = [];
+      for (let k = bw.length - 2; k >= 0; k -= 2) pts.push(bw[k], bw[k + 1]);
+      pts.push(P[sg * 4], P[sg * 4 + 1], P[sg * 4 + 2], P[sg * 4 + 3]);
+      for (let k = 0; k < fw.length; k++) pts.push(fw[k]);
+      if (closed) pts.length -= 2;   /* the loop ends where it began */
+      smoothPoly(path, pts, closed);
+    }
+    for (let k = 0; k < E.length; k++){ eA[E[k]] = -1; eB[E[k]] = -1; }
+  }
+  function smoothPoly(path, p, closed){
+    const n = p.length / 2; if (n < 2) return;
+    if (closed && n > 2){
+      path.moveTo((p[0] + p[2]) / 2, (p[1] + p[3]) / 2);
+      for (let k = 1; k <= n; k++){
+        const a = k % n, b = (k + 1) % n;
+        path.quadraticCurveTo(p[a * 2], p[a * 2 + 1], (p[a * 2] + p[b * 2]) / 2, (p[a * 2 + 1] + p[b * 2 + 1]) / 2);
+      }
+      path.closePath(); return;
+    }
+    path.moveTo(p[0], p[1]);
+    for (let k = 1; k < n - 1; k++) path.quadraticCurveTo(p[k * 2], p[k * 2 + 1], (p[k * 2] + p[k * 2 + 2]) / 2, (p[k * 2 + 1] + p[k * 2 + 3]) / 2);
+    path.lineTo(p[n * 2 - 2], p[n * 2 - 1]);
+  }
+  canvasSpec('s-contours', {
+    total: TOTAL,
+    setup: build,
+    sound(){
+      Sfx.tone(98, 2.6, { type: 'sine', gain: .07, attack: 1.3, release: 1.4, when: .5 });
+      Sfx.tone(146.8, 2.3, { type: 'sine', gain: .045, attack: 1.5, release: 1.4, when: .8 });
+      Sfx.tone(196, 1.6, { type: 'sine', gain: .03, attack: 1.2, release: 1.6, when: 2.1 });
+    },
+    draw(ctx, w, h, t){
+      const e = Ease.inOutCubic(span(t, HOLD, HOLD + MORPH));
+      const px = timg.data;
+      for (let i = 0; i < fMix.length; i++){
+        const v = fIn[i] + (fOut[i] - fIn[i]) * e; fMix[i] = v;
+        px[i * 4] = 41; px[i * 4 + 1] = 56; px[i * 4 + 2] = 81; px[i * 4 + 3] = Math.round(255 * .11 * Math.pow(Math.min(1, v / M), .75));
+      }
+      ctx.fillStyle = PAPER; ctx.fillRect(0, 0, w, h);
+      /* a faint elevation tint under the lines, like a printed survey map */
+      tctx.putImageData(timg, 0, 0);
+      ctx.imageSmoothingEnabled = true; ctx.drawImage(tint, -cell / 2, -cell / 2, nx * cell, ny * cell);
+      const thin = new Path2D(), bold = new Path2D();
+      for (let l = 1; l <= LEVELS; l++) march(fMix, M * Math.pow(l / (LEVELS + 1), 1.5), l % 4 === 0 ? bold : thin);
+      ctx.lineCap = 'round'; ctx.lineJoin = 'round';
+      ctx.strokeStyle = 'rgba(41,56,81,.46)'; ctx.lineWidth = Math.max(.75, w / 720); ctx.stroke(thin);
+      ctx.strokeStyle = 'rgba(41,56,81,.88)'; ctx.lineWidth = Math.max(1.1, w / 420); ctx.stroke(bold);
+      ctx.textBaseline = 'middle';
+      for (let s = 0; s < 8; s++){
+        const p = wordPt(s, w, h), c = lerp(CIN[s], COUT[s], e), fs = w * (.027 + .0017 * c);
+        ctx.textAlign = p.align;
+        ctx.font = `500 ${fs.toFixed(1)}px ${F_NEWS}`;
+        ctx.lineWidth = fs * .34; ctx.strokeStyle = PAPER; ctx.strokeText(WORDS[s], p.x, p.y);
+        ctx.fillStyle = `rgba(41,56,81,${(.45 + .55 * Math.min(1, c / 2)).toFixed(3)})`;
+        ctx.fillText(WORDS[s], p.x, p.y);
+      }
+    }
+  });
+})();
+
+/* ===== 2. Murmuration: 32 boids swirl, then land on the room's new shape ===== */
+(() => {
+  const TAKE = .7, LAND = 4.2, TOTAL = 7.6, DT = 1 / 120;
+  const START = PEOPLE.map(p => mapPt(p.inX, p.inY, 1, AR)), HOME = PEOPLE.map(p => mapPt(p.outX, p.outY, 1, AR));
+  const LAND_ORDER = [0, 1, 2, 6, 3, 5, 4, 7];   /* the new shape draws itself word by word, biggest first */
+  let B = [], simT = 0, rnd = null, lastT = -1, sky = null, skyH = 0;
+  function reset(){
+    rnd = ROOM.rng(314);
+    B = PEOPLE.map((p, i) => ({ i, x: START[i].x, y: START[i].y, vx: 0, vy: 0, fly: false,
+      tt: TAKE + rnd() * .5, lt: 0, wa: rnd() * 6.283, rx: START[i].x, ry: START[i].y, hx: 0, hy: -1, sp: 0, trail: [] }));
+    let k = 0;
+    LAND_ORDER.forEach(s => B.filter(b => PEOPLE[b.i].outSlot === s).forEach(b => { b.lt = LAND + k * .042; k++; }));
+    simT = 0; lastT = -1;
+  }
+  function step(t){
+    const lx = .5 + .22 * Math.sin(.85 * t + .5), ly = AR * (.5 + .15 * Math.sin(1.55 * t + 1.3));
+    for (const b of B){
+      if (t < b.tt) continue;
+      if (!b.fly){ b.fly = true; b.vx = (rnd() * 2 - 1) * .1; b.vy = -.2 - rnd() * .12; }
+      const lk = smooth(span(t, b.lt, b.lt + .9)), fk = 1 - lk;
+      let ax = 0, ay = 0;
+      if (fk > 0){
+        let n = 0, avx = 0, avy = 0, cx = 0, cy = 0, sx = 0, sy = 0;
+        for (const o of B){
+          if (o === b || !o.fly) continue;
+          const dx = o.x - b.x, dy = o.y - b.y, d2 = dx * dx + dy * dy;
+          if (d2 < .03){
+            n++; avx += o.vx; avy += o.vy; cx += o.x; cy += o.y;
+            if (d2 < .0005){ const d = Math.sqrt(d2) + 1e-4; sx -= dx / (d * d) * .004; sy -= dy / (d * d) * .004; }
+          }
+        }
+        if (n){ ax += (avx / n - b.vx) * 2.1 + (cx / n - b.x) * 2.4; ay += (avy / n - b.vy) * 2.1 + (cy / n - b.y) * 2.4; }
+        ax += sx; ay += sy;
+        ax += (lx - b.x) * 1.2; ay += (ly - b.y) * 1.2;
+        b.wa += (rnd() * 2 - 1) * .45; ax += Math.cos(b.wa) * .22; ay += Math.sin(b.wa) * .22;
+        if (b.x < .1) ax += (.1 - b.x) * 45; if (b.x > .9) ax -= (b.x - .9) * 45;
+        if (b.y < .08) ay += (.08 - b.y) * 45; if (b.y > AR - .08) ay -= (b.y - AR + .08) * 45;
+        ax *= fk; ay *= fk;
+      }
+      if (lk > 0){
+        let dvx = (HOME[b.i].x - b.x) * 3, dvy = (HOME[b.i].y - b.y) * 3;
+        const dm = Math.hypot(dvx, dvy); if (dm > .5){ dvx *= .5 / dm; dvy *= .5 / dm; }
+        ax += (dvx - b.vx) * 5 * lk; ay += (dvy - b.vy) * 5 * lk;
+      }
+      b.vx += ax * DT; b.vy += ay * DT;
+      const sp = Math.hypot(b.vx, b.vy), mx = .46, mn = .14 * fk;
+      if (sp > mx){ b.vx *= mx / sp; b.vy *= mx / sp; }
+      else if (sp < mn && sp > 1e-6){ b.vx *= mn / sp; b.vy *= mn / sp; }
+      b.x += b.vx * DT; b.y += b.vy * DT;
+    }
+  }
+  function drawWords(ctx, w, h){
+    ctx.font = `400 ${(w * .029).toFixed(1)}px ${F_JOST}`; ctx.textBaseline = 'middle';
+    ctx.fillStyle = 'rgba(41,56,81,.58)';
+    for (let s = 0; s < 8; s++){ const p = wordPt(s, w, h); ctx.textAlign = p.align; ctx.fillText(WORDS[s], p.x, p.y); }
+  }
+  function drawBase(ctx, w, h){
+    if (!sky || skyH !== h){ sky = ctx.createLinearGradient(0, 0, 0, h); sky.addColorStop(0, '#E3E8F0'); sky.addColorStop(1, '#F6EDE6'); skyH = h; }
+    ctx.fillStyle = sky; ctx.fillRect(0, 0, w, h);
+    drawWords(ctx, w, h);
+    ctx.lineWidth = Math.max(1, w / 620); ctx.strokeStyle = 'rgba(41,56,81,.36)';
+    const r = w * .0058;
+    START.forEach(p => { ctx.beginPath(); ctx.arc(p.x * w, p.y * w, r, 0, Math.PI * 2); ctx.stroke(); });
+  }
+  function dot(ctx, x, y, r){ ctx.beginPath(); ctx.arc(x, y, r, 0, Math.PI * 2); ctx.fill(); ctx.stroke(); }
+  canvasSpec('s-murmur', {
+    total: TOTAL,
+    start: reset,
+    sound(){
+      Sfx.noise(3.2, { freq: 520, to: 1500, q: .7, gain: .045, attack: 1.1, release: 1.5, when: TAKE });
+      [523.3, 587.3, 659.3, 784, 880].forEach((f, i) => Sfx.tone(f, .05, { type: 'sine', gain: .045, attack: .01, release: .5, when: LAND + .9 + i * .38 }));
+    },
+    draw(ctx, w, h, t){
+      drawBase(ctx, w, h);
+      const r = w * .0074;
+      ctx.fillStyle = INK; ctx.strokeStyle = 'rgba(255,255,255,.75)'; ctx.lineWidth = Math.max(1, w / 520);
+      if (t >= TOTAL || !B.length){ HOME.forEach(p => dot(ctx, p.x * w, p.y * w, r)); return; }
+      if (t < simT - 1e-9 || t < lastT) reset();
+      while (simT + DT <= t){ step(simT); simT += DT; }
+      const dtF = lastT < 0 ? 0 : t - lastT; lastT = t;
+      for (const b of B){
+        let x, y;
+        if (t < b.tt){ x = START[b.i].x; y = START[b.i].y; }
+        else { const k = smooth(span(t, b.lt + .45, b.lt + 1.9)); x = lerp(b.x, HOME[b.i].x, k); y = lerp(b.y, HOME[b.i].y, k); }
+        const dx = x - b.rx, dy = y - b.ry, d = Math.hypot(dx, dy);
+        if (dtF > 0){ b.sp = lerp(b.sp, d / dtF, .35); if (d > 1e-5){ b.hx = dx / d; b.hy = dy / d; } }
+        b.rx = x; b.ry = y;
+        if (b.sp > .02){ b.trail.push(x, y); if (b.trail.length > 16) b.trail.splice(0, 2); } else if (b.trail.length) b.trail.splice(0, 2);
+      }
+      ctx.lineCap = 'round';
+      for (const b of B){
+        const tr = b.trail, n = tr.length / 2;
+        for (let k = 1; k < n; k++){
+          ctx.strokeStyle = `rgba(41,56,81,${(.13 * k / n).toFixed(3)})`; ctx.lineWidth = Math.max(1, w * .0022);
+          ctx.beginPath(); ctx.moveTo(tr[k * 2 - 2] * w, tr[k * 2 - 1] * w); ctx.lineTo(tr[k * 2] * w, tr[k * 2 + 1] * w); ctx.stroke();
+        }
+      }
+      /* a faint ring spreads where each bird touches down */
+      ctx.lineWidth = Math.max(1, w / 700);
+      for (const b of B){
+        const lp = span(t, b.lt + 1.75, b.lt + 2.35);
+        if (lp <= 0 || lp >= 1) continue;
+        ctx.strokeStyle = `rgba(41,56,81,${(.35 * (1 - lp)).toFixed(3)})`;
+        ctx.beginPath(); ctx.arc(HOME[b.i].x * w, HOME[b.i].y * w, r * (1.2 + 2.2 * Ease.outCubic(lp)), 0, Math.PI * 2); ctx.stroke();
+      }
+      ctx.fillStyle = INK; ctx.strokeStyle = 'rgba(255,255,255,.75)'; ctx.lineWidth = Math.max(1, w / 520);
+      for (const b of B){
+        const el = clamp(b.sp / .3, 0, 1);
+        if (el < .05){ dot(ctx, b.rx * w, b.ry * w, r); continue; }
+        const rf = lerp(r, r * .78, el);
+        ctx.save(); ctx.translate(b.rx * w, b.ry * w); ctx.rotate(Math.atan2(b.hy, b.hx));
+        ctx.beginPath(); ctx.ellipse(0, 0, rf * (1 + 1.0 * el), rf * (1 - .4 * el), 0, 0, Math.PI * 2); ctx.fill();
+        ctx.restore();
+      }
+    }
+  });
+})();
+
+/* ===== 3. Waffle: 32 squares flip from In quadrant to Out quadrant ===== */
+(() => {
+  const sec = document.getElementById('s-waffle');
+  const grid = sec.querySelector('.waf-grid'), key = sec.querySelector('.waf-key');
+  const ORDER = PEOPLE.slice().sort((a, b) => quad(a.inSlot) - quad(b.inSlot) || quad(a.outSlot) - quad(b.outSlot) || a.id - b.id);
+  const T0 = .6, ST = .075, DUR = .5, TOTAL = T0 + ST * 31 + DUR + .15;
+  const KEY = [['Excited', 'Curious'], ['Confident', 'Calm'], ['Overwhelmed', 'Anxious'], ['Skeptical', 'Indifferent']];
+  const cells = [], nums = [];
+  domSpec('s-waffle', {
+    total: TOTAL,
+    build(){
+      ORDER.forEach((p, k) => {
+        const c = document.createElement('div'); c.className = 'wc';
+        c.style.gridColumn = String(Math.floor(k / 4) + 1); c.style.gridRow = String(k % 4 + 1);
+        const inn = document.createElement('div'); inn.className = 'wc-in';
+        const f = document.createElement('span'), b = document.createElement('span'); f.className = 'f'; b.className = 'b';
+        f.style.background = QCOL[quad(p.inSlot)]; b.style.background = QCOL[quad(p.outSlot)];
+        inn.append(f, b); c.append(inn); grid.append(c);
+        cells.push({ inner: inn, qi: quad(p.inSlot), qo: quad(p.outSlot), e: -1 });
+      });
+      KEY.forEach((pair, q) => {
+        const row = document.createElement('div'); row.className = 'wk' + (q === 2 ? ' gap' : '');
+        row.innerHTML = `<i class="sw" style="background:${QCOL[q]}"></i><b class="n">0</b><span class="w">${esc(pair[0])}<br>${esc(pair[1])}</span>`;
+        key.append(row); nums.push(row.querySelector('.n'));
+      });
+    },
+    render(t){
+      const tally = [0, 0, 0, 0]; cells.forEach(c => tally[c.qi]++);
+      cells.forEach((c, k) => {
+        const e = Ease.inOutCubic(span(t, T0 + k * ST, T0 + k * ST + DUR));
+        if (e !== c.e){
+          c.e = e;
+          c.inner.style.transform = e <= 0 ? 'none' : `rotateY(${(e * 180).toFixed(2)}deg) translateZ(${(Math.sin(Math.PI * e) * 1.6).toFixed(2)}cqw)`;
+          c.inner.style.setProperty('--sh', (Math.sin(Math.PI * e) * .28).toFixed(3));   /* a face darkens as it turns away from the light */
+        }
+        if (e >= .5){ tally[c.qi]--; tally[c.qo]++; }
+      });
+      nums.forEach((n, q) => { const v = String(tally[q]); if (n.textContent !== v) n.textContent = v; });
+    },
+    sound(){
+      cells.forEach((c, k) => Sfx.tone(c.qo < 2 ? 1568 : 1175, .012, { type: 'triangle', gain: .03, attack: .003, release: .07, when: T0 + k * ST + DUR * .5 }));
+    }
+  });
+})();
+
+/* ===== 4. Vessels: glass fills from In to Out with a damped slosh ===== */
+(() => {
+  const BG = '#F6F8FA', T0 = .55, STG = .11, POUR = 1.5, TOTAL = T0 + STG * 7 + POUR + 2.1;
+  const LIQ = [0, 1, 2, 3, 4, 5, 6, 7].map(s => QCOL[quad(s)]);
+  canvasSpec('s-vessels', {
+    total: TOTAL,
+    sound(){
+      for (let s = 0; s < 8; s++){
+        const d = COUT[s] - CIN[s]; if (!d) continue;
+        const when = T0 + s * STG;
+        if (d > 0){
+          Sfx.noise(POUR * .75, { freq: 650, to: 1100, q: 1.4, gain: .02 + .004 * d, attack: .12, release: .3, when });
+          for (let k = 0; k < Math.min(4, d); k++) Sfx.tone(420 + 90 * k + 40 * s, .03, { type: 'sine', gain: .03, attack: .005, release: .12, when: when + .25 + k * .22 });
+        } else {
+          Sfx.noise(POUR * .5, { freq: 380, to: 260, q: 1.2, gain: .018, attack: .1, release: .3, when });
+        }
+      }
+    },
+    draw(ctx, w, h, t){
+      ctx.fillStyle = BG; ctx.fillRect(0, 0, w, h);
+      const mX = w * .07, slot = (w - 2 * mX) / 8, vw = slot * .58, top = h * .1, bot = h * .8, H = bot - top, per = H * .86 / 10;
+      const rr = vw * .26, lw = Math.max(1, w / 560);
+      ctx.fillStyle = 'rgba(41,56,81,.12)'; ctx.fillRect(mX * .55, bot + lw * 2, w - mX * 1.1, Math.max(1, lw));
+      for (let s = 0; s < 8; s++){
+        const cx = mX + slot * (s + .5), x0 = cx - vw / 2, x1 = cx + vw / 2;
+        const ts = T0 + s * STG, p = span(t, ts, ts + POUR), e = Ease.inOutCubic(p);
+        const cnt = lerp(CIN[s], COUT[s], e), ly = bot - cnt * per, dN = COUT[s] - CIN[s];
+        const env = t < ts ? 0 : (t < ts + POUR ? smooth(span(t, ts, ts + .4)) : Math.exp(-(t - ts - POUR) / .55));
+        const A = Math.min(vw * .2, vw * .035 * Math.abs(dN)) * env;
+        const tilt = A * Math.sin(2 * Math.PI * 1.3 * (t - ts)), rip = A * .3;
+        const glass = new Path2D();
+        glass.moveTo(x0, top); glass.lineTo(x0, bot - rr); glass.quadraticCurveTo(x0, bot, x0 + rr, bot);
+        glass.lineTo(x1 - rr, bot); glass.quadraticCurveTo(x1, bot, x1, bot - rr); glass.lineTo(x1, top);
+        const inner = new Path2D(glass); inner.closePath();
+        ctx.fillStyle = 'rgba(41,56,81,.035)'; ctx.fill(inner);
+        ctx.save(); ctx.clip(inner);
+        const liq = new Path2D(), N = 18, surf = [];
+        for (let k = 0; k <= N; k++){
+          const x = x0 + (x1 - x0) * k / N, u = (x - cx) / (vw / 2);
+          const y = ly + tilt * u + rip * Math.sin(u * 3.2 + t * 8.5);
+          surf.push(x, y); if (k) liq.lineTo(x, y); else liq.moveTo(x, y);
+        }
+        liq.lineTo(x1, bot + 2); liq.lineTo(x0, bot + 2); liq.closePath();
+        ctx.globalAlpha = .82; ctx.fillStyle = LIQ[s]; ctx.fill(liq); ctx.globalAlpha = 1;
+        ctx.strokeStyle = 'rgba(255,255,255,.55)'; ctx.lineWidth = lw * 1.2; ctx.beginPath();
+        for (let k = 0; k <= N; k++){ const X = surf[k * 2], Y = surf[k * 2 + 1] + lw * .6; if (k) ctx.lineTo(X, Y); else ctx.moveTo(X, Y); }
+        ctx.stroke();
+        ctx.restore();
+        if (dN > 0 && p > 0 && p < 1){
+          const head = p < .12 ? p / .12 : 1, tail = p > .82 ? (p - .82) / .18 : 0;
+          const y0 = lerp(0, ly, tail), y1 = lerp(0, ly, head), sw = vw * .11;
+          if (y1 > y0){
+            ctx.fillStyle = LIQ[s]; ctx.globalAlpha = .82; ctx.beginPath();
+            const wob = Math.sin(t * 14) * sw * .15;
+            ctx.moveTo(cx - sw / 2 + wob, y0); ctx.lineTo(cx + sw / 2 + wob, y0); ctx.lineTo(cx + sw * .45, y1); ctx.lineTo(cx - sw * .45, y1); ctx.closePath(); ctx.fill();
+            ctx.globalAlpha = 1;
+          }
+        }
+        /* where this word began: a firm tick outside the glass, a fine line across it */
+        const iy = bot - CIN[s] * per;
+        ctx.lineWidth = lw;
+        ctx.strokeStyle = 'rgba(41,56,81,.85)'; ctx.beginPath(); ctx.moveTo(x0 - vw * .26, iy); ctx.lineTo(x0, iy); ctx.stroke();
+        ctx.strokeStyle = 'rgba(41,56,81,.42)'; ctx.beginPath(); ctx.moveTo(x0, iy); ctx.lineTo(x1, iy); ctx.stroke();
+        ctx.strokeStyle = 'rgba(41,56,81,.46)'; ctx.lineWidth = lw * 1.15; ctx.lineJoin = 'round'; ctx.stroke(glass);
+        ctx.beginPath(); ctx.moveTo(x0, top); ctx.lineTo(x0 - vw * .07, top - vw * .06); ctx.moveTo(x1, top); ctx.lineTo(x1 + vw * .07, top - vw * .06); ctx.stroke();
+        ctx.strokeStyle = 'rgba(255,255,255,.8)'; ctx.lineWidth = Math.max(1, vw * .06); ctx.lineCap = 'round';
+        ctx.beginPath(); ctx.moveTo(x0 + vw * .17, top + H * .08); ctx.lineTo(x0 + vw * .17, bot - H * .14); ctx.stroke();
+        ctx.save(); ctx.translate(cx + vw * .06, bot - H * .06); ctx.rotate(-Math.PI / 2);
+        ctx.font = `600 ${(w * .031).toFixed(1)}px ${F_BARLOW}`; ctx.textAlign = 'left'; ctx.textBaseline = 'middle';
+        ctx.fillStyle = INK; ctx.fillText(WORDS[s], 0, 0); ctx.restore();
+        ctx.font = `600 ${(w * .027).toFixed(1)}px ${F_ARCHIVO}`; ctx.textAlign = 'center'; ctx.textBaseline = 'alphabetic';
+        ctx.fillStyle = SOFT; ctx.fillText(String(Math.round(cnt)), cx, bot + h * .105);
+      }
+    }
+  });
+})();
+
+/* ===== 5. Ridgeline: each person as one line with three pulses (In, midway, Out), stacked like ridges ===== */
+(() => {
+  const BG = '#FFFFFF', GROUPS = [6, 5, 4, 3, 2, 1, 0];
+  const rows = [];
+  GROUPS.forEach(s => PEOPLE.filter(p => p.outSlot === s)
+    .sort((a, b) => (a.outY - a.inY) - (b.outY - b.inY))
+    .forEach(p => rows.push({ p, s, e: [p.inY, MID[p.id].y, p.outY], k: [p.inIntensity, (p.inIntensity + p.outIntensity) / 2, p.outIntensity] })));
+  const N = rows.length, D0 = .25, DS = .04, DD = 1.7, TOTAL = D0 + DS * (N - 1) + DD + .5;
+  const PU = [.18, .5, .82], SIG = .072;
+  const GR = GROUPS.map(s => ({ s, n: rows.filter(r => r.s === s).length })).filter(g => g.n);
+  /* a pulse rises where each check-in happened; its height is that person's energy then */
+  function height(r, u, amp){
+    let hg = 0;
+    for (let j = 0; j < 3; j++){
+      const d = (u - PU[j]) / (SIG * (.8 + .4 * r.k[j]));   /* stronger feelings make broader pulses */
+      if (d > -3.5 && d < 3.5) hg = Math.max(hg, amp * Math.pow(clamp((r.e[j] + 1) / 2, 0, 1), 1.2) * Math.exp(-d * d));
+    }
+    return hg;
+  }
+  function layout(w, h){
+    const x0 = w * .05, x1 = w * .79, amp = h * .3, fs = w * .029, need = fs * 1.25;
+    const topB = h * .05 + amp * .95, botB = h * .86;
+    /* baselines grouped by the word people left with; each group gets room for its own word */
+    const place = step => {
+      const base = [], mids = []; let y = 0, prev = null;
+      GR.forEach((g, gi) => {
+        if (gi) y += step * 1.3;
+        const c = y + (g.n - 1) * step / 2;
+        if (prev !== null && c - prev < need) y += need - (c - prev);
+        for (let k = 0; k < g.n; k++) base.push(y + k * step);
+        prev = y + (g.n - 1) * step / 2; mids.push(prev);
+        y += (g.n - 1) * step;
+      });
+      return { base, mids, total: y };
+    };
+    let lo = .01, hi = h, P = null;
+    for (let it = 0; it < 32; it++){ const m = (lo + hi) / 2; P = place(m); if (P.total > botB - topB) hi = m; else lo = m; }
+    P = place(lo);
+    return { x0, x1, amp, fs, base: P.base.map(v => topB + v), mids: P.mids.map(v => topB + v) };
+  }
+  canvasSpec('s-ridge', {
+    total: TOTAL,
+    sound(){
+      /* one soft pulse per column as the pens cross it */
+      PU.forEach((u, j) => [0, 1, 2].forEach(k => Sfx.tone([196, 220, 261.6][j] * (1 + k * .5), .08, { type: 'sine', gain: .04 - k * .01, attack: .01, release: .6, when: D0 + .35 + u * DD * .8 + k * .45 })));
+    },
+    draw(ctx, w, h, t){
+      const L = layout(w, h), K = Math.max(120, Math.round(w / 2));
+      ctx.fillStyle = BG; ctx.fillRect(0, 0, w, h);
+      ctx.lineJoin = 'round'; ctx.lineCap = 'round';
+      const lw = Math.max(1, w / 540), tipR = Math.max(1.6, w / 360);
+      for (let i = 0; i < N; i++){
+        const r = rows[i], pr = Ease.inOutCubic(span(t, D0 + i * DS, D0 + i * DS + DD));
+        if (pr <= 0) continue;
+        const base = L.base[i], xe = L.x0 + (L.x1 - L.x0) * pr, steps = Math.max(2, Math.ceil(K * pr));
+        const pts = [];
+        for (let k = 0; k <= steps; k++){
+          const x = L.x0 + (xe - L.x0) * k / steps;
+          pts.push(x, base - height(r, (x - L.x0) / (L.x1 - L.x0), L.amp));
+        }
+        ctx.beginPath(); ctx.moveTo(pts[0], base + 1);
+        for (let k = 0; k < pts.length; k += 2) ctx.lineTo(pts[k], pts[k + 1]);
+        ctx.lineTo(xe, base + 1); ctx.closePath(); ctx.fillStyle = BG; ctx.fill();
+        /* farther ridges are paler, like distance */
+        const ink = rgba(INK, (.32 + .68 * i / (N - 1)).toFixed(3));
+        ctx.beginPath(); ctx.moveTo(pts[0], pts[1]);
+        for (let k = 2; k < pts.length; k += 2) ctx.lineTo(pts[k], pts[k + 1]);
+        ctx.strokeStyle = ink; ctx.lineWidth = lw; ctx.stroke();
+        if (pr < 1){ ctx.fillStyle = ink; ctx.beginPath(); ctx.arc(xe, pts[pts.length - 1], tipR, 0, Math.PI * 2); ctx.fill(); }
+      }
+      ctx.font = `italic 400 ${L.fs.toFixed(1)}px ${F_NEWS}`; ctx.textAlign = 'left'; ctx.textBaseline = 'middle';
+      let first = 0;
+      GR.forEach((g, gi) => {
+        const iF = first + g.n - 1; first += g.n;
+        const a = Ease.outCubic(span(t, D0 + iF * DS + DD * .85, D0 + iF * DS + DD * .85 + .45));
+        if (a > 0){ ctx.fillStyle = rgba(INK, a); ctx.fillText(WORDS[g.s], L.x1 + w * .03, L.mids[gi]); }
+      });
+      ctx.font = `500 ${(w * .026).toFixed(1)}px ${F_MONT}`; ctx.textAlign = 'center'; ctx.textBaseline = 'alphabetic';
+      const la = Ease.outCubic(span(t, .1, .8));
+      ctx.fillStyle = rgba(SOFT, la);
+      ['In', 'Midway', 'Out'].forEach((s, j) => ctx.fillText(s, L.x0 + (L.x1 - L.x0) * PU[j], h * .955));
+    }
+  });
+})();
+
+/* ===== 6. Curtain: the guesses stand on the apron, the truth waits upstage ===== */
+(() => {
+  const root = document.querySelector('#s-curtain .cur');
+  const S = 2.55, COLW = 10.5, LEFT = 8, TOTAL = 4.5;
+  let gb = [], curtain, shadow, light, tA, tB;
+  domSpec('s-curtain', {
+    total: TOTAL,
+    build(){
+      root.innerHTML = '<div class="cur-light"></div><div class="cur-floor"></div><div class="cur-tbars"></div><div class="cur-curtain"></div>' +
+        '<div class="cur-shadow"></div><div class="cur-gbars"></div><div class="cur-valance"></div>' +
+        '<div class="cur-title"><span>What we guessed</span><span>What was true</span></div><div class="cur-words"></div>';
+      curtain = root.querySelector('.cur-curtain'); shadow = root.querySelector('.cur-shadow'); light = root.querySelector('.cur-light');
+      [tA, tB] = root.querySelectorAll('.cur-title span');
+      const tbars = root.querySelector('.cur-tbars'), gbars = root.querySelector('.cur-gbars'), words = root.querySelector('.cur-words');
+      for (let i = 0; i < 8; i++){
+        const cx = LEFT + COLW * (i + .5);
+        const g = document.createElement('div'); g.className = 'cur-bar g'; g.style.left = (cx - 3.45) + 'cqw'; gbars.append(g); gb.push(g);
+        const tr = document.createElement('div'); tr.className = 'cur-bar t'; tr.style.left = (cx + .35) + 'cqw'; tr.style.height = (CIN[i] * S) + 'cqw'; tbars.append(tr);
+        const wd = document.createElement('div'); wd.className = 'cur-word'; wd.textContent = WORDS[i];
+        wd.style.left = cx + 'cqw'; wd.style.top = (i % 2 ? 49.4 : 45.4) + 'cqw'; words.append(wd);
+      }
+    },
+    render(t){
+      GUESS.forEach((g, i) => { const e = Ease.outCubic(span(t, .2 + i * .07, .9 + i * .07)); gb[i].style.height = (g * S * e).toFixed(3) + 'cqw'; });
+      const r = Ease.inOutCubic(span(t, 2.0, 3.9));
+      curtain.style.transform = r > 0 ? `translateY(${(-r * 104).toFixed(2)}%)` : 'none';
+      shadow.style.opacity = (1 - r).toFixed(3);
+      light.style.opacity = (.35 + .65 * span(t, 2.5, 3.9)).toFixed(3);
+      tA.style.opacity = (1 - span(t, 2.2, 2.6)).toFixed(3);
+      tB.style.opacity = span(t, 3.0, 3.5).toFixed(3);
+    },
+    sound(){
+      Sfx.noise(1.7, { type: 'lowpass', freq: 380, to: 1900, q: .6, gain: .06, attack: .3, release: .6, when: 2.0 });
+      [261.6, 329.6, 392].forEach((f, k) => Sfx.tone(f, 1.1, { type: 'sine', gain: .035, attack: .08, release: 1.3, when: 3.5 + k * .06 }));
+    }
+  });
+})();
+
+/* ===== 7. Tide: a streamgraph of three pulses, read like a river from above ===== */
+(() => {
+  const BG = '#EDF1EE', ORDER = [3, 2, 1, 0, 4, 5, 6, 7], PX = [.14, .5, .86];
+  const OUTER = [0, 3, 4, 7];
+  const FILL = ORDER.map(s => mixHex(QCOL[quad(s)], '#FFFFFF', OUTER.includes(s) ? .12 : .45));
+  const TOTAL = 3.6;
+  function cnt(s, u){
+    if (u <= PX[0]) return CIN[s]; if (u >= PX[2]) return COUT[s];
+    if (u <= PX[1]) return lerp(CIN[s], CMID[s], smooth((u - PX[0]) / (PX[1] - PX[0])));
+    return lerp(CMID[s], COUT[s], smooth((u - PX[1]) / (PX[2] - PX[1])));
+  }
+  const yc = (u, h) => h * (.5 + .05 * Math.sin(u * Math.PI * 1.6 + .9));
+  function bounds(u, h, k){ let y = yc(u, h) - 16 * k; const b = [y]; for (const s of ORDER){ y += cnt(s, u) * k; b.push(y); } return b; }
+  /* the river itself never changes shape, so it is painted once per size and revealed by the flow */
+  let river = null;
+  function paintRiver(w, h){
+    const d = Math.min(2, window.devicePixelRatio || 1);
+    river = document.createElement('canvas'); river.width = Math.max(1, Math.round(w * d)); river.height = Math.max(1, Math.round(h * d));
+    const c = river.getContext('2d'); c.setTransform(d, 0, 0, d, 0, 0);
+    const k = h * .58 / 32, N = 150, xs = [], bs = [];
+    for (let j = 0; j <= N; j++){ const u = -.02 + 1.04 * j / N; xs.push(u * w); bs.push(bounds(u, h, k)); }
+    const band = (m0, m1) => {
+      c.beginPath();
+      for (let j = 0; j <= N; j++){ if (j) c.lineTo(xs[j], bs[j][m0]); else c.moveTo(xs[j], bs[j][m0]); }
+      for (let j = N; j >= 0; j--) c.lineTo(xs[j], bs[j][m1]);
+      c.closePath();
+    };
+    c.save(); c.shadowColor = 'rgba(41,56,81,.16)'; c.shadowBlur = w * .02; c.shadowOffsetY = w * .004;
+    band(0, 8); c.fillStyle = FILL[3]; c.fill(); c.restore();
+    for (let m = 0; m < 8; m++){ band(m, m + 1); c.fillStyle = FILL[m]; c.fill(); }
+    c.strokeStyle = BG; c.lineWidth = Math.max(1.2, w / 420); c.lineJoin = 'round';
+    for (let m = 1; m < 8; m++){
+      c.beginPath();
+      for (let j = 0; j <= N; j++){ if (j) c.lineTo(xs[j], bs[j][m]); else c.moveTo(xs[j], bs[j][m]); }
+      c.stroke();
+    }
+    /* the three pulses cross the river like fine bridges */
+    c.strokeStyle = 'rgba(255,255,255,.8)'; c.lineWidth = Math.max(1, w / 600);
+    PX.forEach(u => { const b = bounds(u, h, k); c.beginPath(); c.moveTo(u * w, b[0] - h * .012); c.lineTo(u * w, b[8] + h * .012); c.stroke(); });
+  }
+  canvasSpec('s-tide', {
+    total: TOTAL,
+    setup: paintRiver,
+    sound(){ Sfx.noise(2.4, { type: 'lowpass', freq: 420, to: 700, q: .5, gain: .05, attack: .6, release: 1.0, when: .15 }); },
+    draw(ctx, w, h, t){
+      ctx.fillStyle = BG; ctx.fillRect(0, 0, w, h);
+      const k = h * .58 / 32, fx = lerp(-.06, 1.12, Ease.inOutCubic(span(t, .1, 2.9))) * w;
+      if (fx > 0 && river){ ctx.save(); ctx.beginPath(); ctx.rect(0, 0, fx, h); ctx.clip(); ctx.drawImage(river, 0, 0, w, h); ctx.restore(); }
+      if (fx < w * 1.1){
+        const g = ctx.createLinearGradient(fx - w * .07, 0, fx, 0);
+        g.addColorStop(0, rgba(BG, 0)); g.addColorStop(1, rgba(BG, 1));
+        ctx.fillStyle = g; ctx.fillRect(fx - w * .07, 0, w * .07 + 1, h);
+      }
+      const fs = w * .03;
+      ctx.font = `italic 500 ${fs.toFixed(1)}px ${F_NEWS}`; ctx.textAlign = 'center'; ctx.textBaseline = 'middle';
+      ORDER.forEach((s, m) => {
+        const cs = [CIN[s], CMID[s], COUT[s]];
+        let best = 1; if (cs[0] > cs[best]) best = 0; if (cs[2] > cs[best]) best = 2;
+        const u = PX[best] + (best === 2 ? -.075 : .075), x = u * w;
+        const a = clamp((fx - x - w * .06) / (w * .12), 0, 1); if (a <= 0) return;
+        const b0 = bounds(u - .004, h, k), b1 = bounds(u + .004, h, k), b = bounds(u, h, k);
+        const top = b[m], bot = b[m + 1], wpx = bot - top;
+        const cm0 = (b0[m] + b0[m + 1]) / 2, cm1 = (b1[m] + b1[m + 1]) / 2;
+        const ang = Math.atan2(cm1 - cm0, .008 * w);
+        let y = (top + bot) / 2;
+        if (wpx < fs * 1.2){ if (m === 0) y = top - fs * .8; else if (m === 7) y = bot + fs * .8; }
+        ctx.save(); ctx.translate(x, y); ctx.rotate(ang); ctx.fillStyle = rgba(INK, a); ctx.fillText(WORDS[s], 0, 0); ctx.restore();
+      });
+    }
+  });
+})();
+
+/* ===== 8. Wipe: arrival and end in one frame, split by a handle ===== */
+(() => {
+  const sec = document.getElementById('s-wipe'), frame = sec.querySelector('.frame'), cv = frame.querySelector('canvas'), grip = frame.querySelector('.wipe-grip');
+  const NIGHT = '#293851', DAY = '#FBFBFC', TOTAL = 4.0;
+  let ctx = null, w = 0, h = 0, u = .5, cancel = null, drag = null, kbCancel = null;
+  function field(which){
+    const day = which === 'out';
+    ctx.fillStyle = day ? DAY : NIGHT; ctx.fillRect(0, 0, w, h);
+    ctx.strokeStyle = day ? 'rgba(41,56,81,.09)' : 'rgba(213,217,227,.12)'; ctx.lineWidth = 1;
+    ctx.beginPath(); ctx.moveTo(w * .5, h * .07); ctx.lineTo(w * .5, h * .93); ctx.moveTo(w * .1, h * .5); ctx.lineTo(w * .9, h * .5); ctx.stroke();
+    ctx.font = `400 ${(w * .029).toFixed(1)}px ${F_JOST}`; ctx.textBaseline = 'middle';
+    ctx.fillStyle = day ? 'rgba(88,106,144,.95)' : 'rgba(213,217,227,.78)';
+    for (let s = 0; s < 8; s++){ const p = wordPt(s, w, h); ctx.textAlign = p.align; ctx.fillText(WORDS[s], p.x, p.y); }
+    const r = w * .0078;
+    ctx.fillStyle = day ? INK : '#B3DFDE'; ctx.strokeStyle = day ? DAY : NIGHT; ctx.lineWidth = Math.max(1.2, w / 420);
+    PEOPLE.forEach(p => {
+      const q = day ? mapPt(p.outX, p.outY, w, h) : mapPt(p.inX, p.inY, w, h);
+      ctx.beginPath(); ctx.arc(q.x, q.y, r, 0, Math.PI * 2); ctx.fill(); ctx.stroke();
+    });
+  }
+  function draw(){
+    if (!ctx || w <= 0) return;
+    const X = u * w;
+    field('out');
+    if (X > 0){ ctx.save(); ctx.beginPath(); ctx.rect(0, 0, X, h); ctx.clip(); field('in'); ctx.restore(); }
+    ctx.fillStyle = '#FFFFFF'; ctx.fillRect(X - 1, 0, 2, h);
+    const fs = w * .028;
+    ctx.font = `500 ${fs.toFixed(1)}px ${F_JOST}`; ctx.textBaseline = 'middle';
+    const aIn = clamp((X - w * .05) / (w * .05), 0, 1), aOut = clamp((w - X - w * .06) / (w * .05), 0, 1);
+    if (aIn > 0){ ctx.textAlign = 'right'; ctx.fillStyle = `rgba(213,217,227,${aIn})`; ctx.fillText('In', X - w * .02, h * .07); }
+    if (aOut > 0){ ctx.textAlign = 'left'; ctx.fillStyle = rgba(SOFT, aOut); ctx.fillText('Out', X + w * .02, h * .07); }
+  }
+  function setU(v){
+    u = clamp(v, 0, 1);
+    grip.style.left = (u * 100).toFixed(3) + '%';
+    const pc = Math.round(u * 100);
+    grip.setAttribute('aria-valuenow', String(pc));
+    grip.setAttribute('aria-valuetext', pc === 50 ? 'Half In, half Out' : `${pc} percent In`);
+    draw();
+  }
+  function stop(){ if (cancel){ cancel(); cancel = null; } if (kbCancel){ kbCancel(); kbCancel = null; } }
+  function move(e){ const r = frame.getBoundingClientRect(); setU((e.clientX - r.left) / r.width); }
+  frame.addEventListener('pointerdown', e => {
+    if (e.button != null && e.button !== 0) return;
+    stop(); drag = e.pointerId;
+    try { frame.setPointerCapture(e.pointerId); } catch (_){}
+    buzz(); move(e);
+  });
+  frame.addEventListener('pointermove', e => { if (drag === e.pointerId) move(e); });
+  const end = e => { if (drag === e.pointerId){ drag = null; try { frame.releasePointerCapture(e.pointerId); } catch (_){} } };
+  frame.addEventListener('pointerup', end); frame.addEventListener('pointercancel', end);
+  grip.addEventListener('keydown', e => {
+    const k = e.key; let v = null;
+    if (k === 'ArrowLeft' || k === 'ArrowDown') v = u - .05;
+    else if (k === 'ArrowRight' || k === 'ArrowUp') v = u + .05;
+    else if (k === 'PageDown') v = u - .2; else if (k === 'PageUp') v = u + .2;
+    else if (k === 'Home') v = 0; else if (k === 'End') v = 1;
+    if (v === null) return;
+    e.preventDefault(); stop();
+    const from = u, to = clamp(v, 0, 1);
+    kbCancel = tween(180, s => setU(lerp(from, to, s)), Ease.outCubic, () => { kbCancel = null; });
+  });
+  specimen('s-wipe', {
+    init(){ this.resize(); },
+    resize(){ ctx = fitCanvas(cv); const r = cv.getBoundingClientRect(); w = r.width; h = r.height; setU(u); },
+    redraw(){ draw(); },
+    play(){
+      stop(); const u0 = u;
+      if (!RM) Sfx.noise(1.8, { freq: 700, to: 1800, q: .8, gain: .035, attack: .4, release: .6, when: .7 });
+      cancel = timeline(TOTAL, t => {
+        let v;
+        if (t < .45) v = lerp(u0, 1, Ease.outCubic(span(t, 0, .45)));
+        else if (t < 2.75) v = 1 - Ease.inOutCubic(span(t, .7, 2.75));
+        else if (t < 3.0) v = 0;
+        else v = .5 * Ease.outCubic(span(t, 3.0, 3.95));
+        setU(v);
+      }, () => { cancel = null; });
+    },
+    finish(){ if (cancel){ stop(); setU(.5); } }
+  });
+})();
+
+/* ===== 9. Slope: words sized by count at In and at Out, joined by hairlines ===== */
+(() => {
+  const NS = 'http://www.w3.org/2000/svg';
+  const svg = document.querySelector('#s-slope svg');
+  const ids = [0, 1, 2, 3, 4, 5, 6, 7];
+  const byIn = ids.slice().sort((a, b) => CIN[b] - CIN[a] || a - b);
+  const byOut = ids.slice().sort((a, b) => COUT[b] - COUT[a] || a - b);
+  const fsz = c => 50 + 8.8 * c, XL = 580, XR = 1020, GAP = 30, TOTAL = 3.6;
+  function stack(order, counts){
+    const tot = order.reduce((s, k) => s + fsz(counts[k]) * 1.06, 0); let y = (900 - tot) / 2; const out = {};
+    order.forEach(k => { const f = fsz(counts[k]), lh = f * 1.06, base = y + lh * .8; out[k] = { f, base, mid: base - f * .31 }; y += lh; });
+    return out;
+  }
+  const LP = stack(byIn, CIN), RP = stack(byOut, COUT);
+  const Lt = {}, Rt = {}, Ln = {};
+  const mk = (tag, attrs, parent) => { const el = document.createElementNS(NS, tag); for (const a in attrs) el.setAttribute(a, attrs[a]); parent.append(el); return el; };
+  domSpec('s-slope', {
+    total: TOTAL,
+    build(){
+      const gl = mk('g', {}, svg), gw = mk('g', {}, svg);
+      ids.forEach(s => {
+        const d = COUT[s] - CIN[s];
+        const col = d > 0 ? rgba(INK, .9) : d < 0 ? rgba(SOFT, .55) : rgba(SOFT, .35);
+        Ln[s] = mk('line', { x1: XL + GAP, y1: LP[s].mid.toFixed(1), x2: XL + GAP, y2: LP[s].mid.toFixed(1), stroke: col,
+          'stroke-width': (1 + .2 * Math.abs(d)).toFixed(2), 'stroke-linecap': 'round', 'vector-effect': 'non-scaling-stroke' }, gl);
+        Lt[s] = mk('text', { x: XL, y: LP[s].base.toFixed(1), 'text-anchor': 'end', 'font-size': LP[s].f.toFixed(1) }, gw); Lt[s].textContent = WORDS[s];
+        Rt[s] = mk('text', { x: XR, y: RP[s].base.toFixed(1), 'text-anchor': 'start', 'font-size': RP[s].f.toFixed(1) }, gw); Rt[s].textContent = WORDS[s];
+      });
+    },
+    render(t){
+      byIn.forEach((s, r) => {
+        const a = Ease.outCubic(span(t, .1 + r * .06, .6 + r * .06));
+        Lt[s].setAttribute('opacity', a.toFixed(3)); Lt[s].setAttribute('transform', `translate(${((1 - a) * -16).toFixed(2)} 0)`);
+        const st = .75 + r * .09, e = Ease.inOutCubic(span(t, st, st + .95));
+        Ln[s].setAttribute('x2', lerp(XL + GAP, XR - GAP, e).toFixed(1));
+        Ln[s].setAttribute('y2', lerp(LP[s].mid, RP[s].mid, e).toFixed(1));
+        Ln[s].setAttribute('opacity', e > 0 ? '1' : '0');
+        const b = Ease.outCubic(span(t, st + .8, st + 1.25));
+        Rt[s].setAttribute('opacity', (b * (COUT[s] === 0 ? .3 : 1)).toFixed(3));
+        /* a word that grew arrives at its old size and grows into its new one */
+        const g = COUT[s] > CIN[s] ? lerp(LP[s].f / RP[s].f, 1, Ease.outCubic(span(t, st + .8, st + 1.6))) : 1;
+        const ay = RP[s].mid;
+        Rt[s].setAttribute('transform', `translate(${((1 - b) * 16).toFixed(2)} 0) translate(${XR} ${ay.toFixed(1)}) scale(${g.toFixed(4)}) translate(${-XR} ${(-ay).toFixed(1)})`);
+      });
+    },
+    sound(){
+      const scale = [392, 440, 523.3, 587.3, 659.3, 784, 880, 987.8];
+      byIn.forEach((s, r) => {
+        const d = COUT[s] - CIN[s], f = scale[clamp(3 + Math.round(d / 2), 0, 7)];
+        Sfx.tone(f, .04, { type: 'sine', gain: .045, attack: .005, release: .45, when: .75 + r * .09 + .9 });
+      });
+    }
+  });
+})();
+
+/* ===== 10. Deal: 32 cards, dealt by In word, gathered, dealt again by Out word ===== */
+(() => {
+  const root = document.querySelector('#s-deal .deal');
+  const CW = 17.4, CH = 11, OFF = 1.05, COLX = [10.8, 30.4, 69.6, 89.2], ROWY = [8.4, 31.6];
+  /* piles sit where the words sit on the map: energy up, pleasant right, the deck in the middle */
+  const PILE = { 4: [0, 0], 5: [1, 0], 1: [2, 0], 0: [3, 0], 7: [0, 1], 6: [1, 1], 2: [2, 1], 3: [3, 1] };
+  const GATHER = [4, 5, 1, 0, 7, 6, 2, 3];
+  const DECK = { x: 50 - CW / 2, y: (56.25 - CH) / 2 };
+  const pilePos = (s, c) => ({ x: COLX[PILE[s][0]] - CW / 2, y: ROWY[PILE[s][1]] + c * OFF });
+  const deckPos = m => ({ x: DECK.x - m * .03, y: DECK.y - m * .045 });
+  const rnd = ROOM.rng(2718);
+  const A0 = [...Array(32).keys()];
+  for (let i = 31; i > 0; i--){ const j = Math.floor(rnd() * (i + 1)); const tmp = A0[i]; A0[i] = A0[j]; A0[j] = tmp; }
+  const riffle = o => { const out = []; for (let i = 0; i < 16; i++) out.push(o[i], o[16 + i]); return out; };
+  function plan(deck, key){
+    const seq = deck.slice().reverse(), piles = {}, info = {};
+    seq.forEach((id, k) => { const s = PEOPLE[id][key]; (piles[s] = piles[s] || []); info[id] = { k, s, c: piles[s].length }; piles[s].push(id); });
+    return { piles, info };
+  }
+  const A1 = riffle(A0), DA = plan(A1, 'inSlot');
+  const B0 = []; GATHER.forEach(s => (DA.piles[s] || []).forEach(id => B0.push(id)));
+  const B1 = riffle(B0), DB = plan(B1, 'outSlot');
+  const ST = .055, FL = .38, GS = .1, GF = .45;
+  const T = {}; T.rA = .25; T.dA = T.rA + 1.05; T.g = T.dA + 31 * ST + FL + 1.25; T.rB = T.g + 7 * GS + GF + .15; T.dB = T.rB + 1.05; T.end = T.dB + 31 * ST + FL + .1;
+  const jit = (id, k) => (((id * 7919 + k * 104729) % 13) - 6) * .26;
+  const cards = [];
+  function riffleAt(id, t, t0, before, after, face){
+    const iB = before.indexOf(id), half = iB < 16 ? 0 : 1, hi = iB % 16, iA = after.indexOf(id);
+    const sp = Ease.inOutCubic(span(t, t0, t0 + .28));
+    const from = deckPos(iB), hp = { x: DECK.x + (half ? 9.6 : -9.6) - hi * .03, y: DECK.y + .9 - hi * .045 };
+    const ts = t0 + .36 + iA * .018, e = Ease.outCubic(span(t, ts, ts + .13));
+    if (e <= 0) return { x: lerp(from.x, hp.x, sp), y: lerp(from.y, hp.y, sp), rz: (half ? 5 : -5) * sp, ry: 180, z: sp > 0 ? 50 + hi : 100 + iB, lift: 0, face };
+    const to = deckPos(iA);
+    return { x: lerp(hp.x, to.x, e), y: lerp(hp.y, to.y, e) - Math.sin(Math.PI * e) * .8, rz: (half ? 5 : -5) * (1 - e), ry: 180, z: 100 + iA, lift: 0, face };
+  }
+  function dealAt(id, t, t0, D, face, jk){
+    const inf = D.info[id], ts = t0 + inf.k * ST, e = span(t, ts, ts + FL);
+    if (e <= 0){ const d = deckPos(31 - inf.k); return { x: d.x, y: d.y, rz: 0, ry: 180, z: 100 + (31 - inf.k), lift: 0, face }; }
+    const from = deckPos(31 - inf.k), to = pilePos(inf.s, inf.c), q = Ease.outCubic(e), fl = Ease.inOutCubic(e);
+    return { x: lerp(from.x, to.x, q), y: lerp(from.y, to.y, q) - Math.sin(Math.PI * q) * 2.2, rz: jit(id, jk) * q, ry: 180 * (1 - fl),
+      z: e < 1 ? 400 + inf.k : 200 + inf.k, lift: Math.sin(Math.PI * e) * 4, face };
+  }
+  function stateAt(id, t){
+    if (t < T.dA) return riffleAt(id, t, T.rA, A0, A1, 'in');
+    if (t < T.g) return dealAt(id, t, T.dA, DA, 'in', 1);
+    if (t < T.rB){
+      const inf = DA.info[id], j = GATHER.indexOf(inf.s), m = B0.indexOf(id), ts = T.g + j * GS + inf.c * .012, e = span(t, ts, ts + GF);
+      const from = pilePos(inf.s, inf.c), to = deckPos(m), q = Ease.inOutCubic(e);
+      return { x: lerp(from.x, to.x, q), y: lerp(from.y, to.y, q), rz: jit(id, 1) * (1 - q), ry: 180 * q,
+        z: e <= 0 ? 200 + inf.k : 300 + m, lift: Math.sin(Math.PI * e) * 2.5, face: e < .5 ? 'in' : 'out' };
+    }
+    if (t < T.dB) return riffleAt(id, t, T.rB, B0, B1, 'out');
+    return dealAt(id, t, T.dB, DB, 'out', 2);
+  }
+  domSpec('s-deal', {
+    total: T.end,
+    build(){
+      Object.keys(PILE).forEach(s => {
+        const p = pilePos(+s, 0), el = document.createElement('div'); el.className = 'slot';
+        el.style.left = p.x + 'cqw'; el.style.top = p.y + 'cqw'; el.textContent = WORDS[+s]; root.append(el);
+      });
+      for (let id = 0; id < 32; id++){
+        const el = document.createElement('div'); el.className = 'card';
+        const f = document.createElement('div'); f.className = 'cf';
+        const b = document.createElement('div'); b.className = 'cb';
+        el.append(f, b); root.append(el);
+        cards.push({ el, face: f, tr: '', z: -1, word: '' });
+      }
+    },
+    render(t){
+      cards.forEach((c, id) => {
+        const s = stateAt(id, t);
+        const tr = `translate3d(${s.x.toFixed(3)}cqw,${s.y.toFixed(3)}cqw,${s.lift.toFixed(2)}cqw) rotate(${s.rz.toFixed(2)}deg) rotateY(${s.ry.toFixed(1)}deg)`;
+        if (tr !== c.tr){ c.el.style.transform = tr; c.tr = tr; }
+        if (s.z !== c.z){ c.el.style.zIndex = String(s.z); c.z = s.z; }
+        const word = WORDS[s.face === 'out' ? PEOPLE[id].outSlot : PEOPLE[id].inSlot];
+        if (word !== c.word){ c.face.textContent = word; c.word = word; }
+      });
+    },
+    sound(){
+      const tick = when => Sfx.noise(.006, { type: 'highpass', freq: 2600, q: .7, gain: .022, attack: .002, release: .03, when });
+      const snap = when => Sfx.noise(.01, { freq: 1700, q: 1.1, gain: .03, attack: .002, release: .06, when });
+      [T.rA, T.rB].forEach(t0 => { for (let i = 0; i < 32; i++) tick(t0 + .36 + i * .018 + .12); });
+      [T.dA, T.dB].forEach(t0 => { for (let k = 0; k < 32; k++) snap(t0 + k * ST + FL); });
+      for (let j = 0; j < 8; j++) Sfx.noise(.2, { freq: 900, to: 500, q: .8, gain: .02, attack: .05, release: .15, when: T.g + j * GS });
+    }
+  });
+})();
+
+/* Canvas text waits for the display faces, then everything redraws once. */
+(() => {
+  const faces = ['500 20px Newsreader', 'italic 400 20px Newsreader', 'italic 500 20px Newsreader', '400 20px Jost', '500 20px Jost',
+    '600 20px "Barlow Condensed"', '600 20px Archivo', '500 20px Montserrat'];
+  const redraw = () => SPECS.forEach(s => { try { if (s.redraw) s.redraw(); } catch (e){ console.error(e); } });
+  if (document.fonts && document.fonts.load){
+    Promise.all(faces.map(f => document.fonts.load(f).catch(() => null))).then(redraw);
+    if (document.fonts.ready) document.fonts.ready.then(redraw);
+  }
+})();
+</script>
+</body>
+</html>

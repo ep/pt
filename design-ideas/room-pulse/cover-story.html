@@ -1,0 +1,1627 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="robots" content="noindex, nofollow">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Cover Story</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Newsreader:ital,opsz,wght@0,6..72,200..800;1,6..72,200..800&family=Montserrat:wght@400;600&display=swap">
+<style>
+/* ===== Tokens: paper, ink, cobalt rules, one gold highlighter ===== */
+:root{
+  color-scheme: light;
+  --paper:#F9F6F6; --sheet:#FFFFFF; --ink:#151417; --soft:#586A90; --cobalt:#293851;
+  --hair:rgba(21,20,23,.14); --hair2:rgba(21,20,23,.08);
+  --you:#FFCC00;
+  --serif:'Newsreader','Iowan Old Style','Palatino Linotype',Palatino,Georgia,'Times New Roman',serif;
+  --sans:'Montserrat','Helvetica Neue',Arial,sans-serif;
+  --frame:#151417;
+  --out:cubic-bezier(.2,.7,.2,1);
+}
+*{box-sizing:border-box}
+html{-webkit-text-size-adjust:100%}
+body{margin:0;background:var(--paper);color:var(--ink);font-family:var(--serif);font-size:18px;line-height:1.5;-webkit-font-smoothing:antialiased;-moz-osx-font-smoothing:grayscale;font-kerning:normal;}
+button,input{font:inherit;color:inherit;}
+button{cursor:pointer;background:none;border:0;padding:0;-webkit-tap-highlight-color:transparent;}
+:focus-visible{outline:3px solid var(--you);outline-offset:3px;border-radius:3px;}
+p,h1,h2,h3,ol,figure,blockquote{margin:0}
+
+/* ===== Page shell ===== */
+.page{max-width:1360px;margin:0 auto;padding-inline:max(16px,4vw);padding-block:0 120px;}
+.top{display:flex;align-items:center;justify-content:space-between;gap:16px;padding-block:14px;font-family:var(--sans);}
+.back{color:var(--soft);text-decoration:none;font-size:14px;min-height:44px;display:inline-flex;align-items:center;}
+.back:hover,.soundbtn:hover{color:var(--ink);}
+.soundbtn{min-height:44px;min-width:44px;display:inline-flex;align-items:center;justify-content:center;color:var(--soft);font-size:14px;font-family:var(--sans);}
+
+.intro{padding-block:clamp(44px,9vw,136px) clamp(40px,5.5vw,80px);border-bottom:1.5px solid var(--cobalt);}
+.intro h1{font-weight:500;font-size:clamp(68px,13.4vw,200px);line-height:.84;letter-spacing:-.05em;margin-left:-.045em;font-variation-settings:'opsz' 72;text-wrap:balance;}
+.intro h1 em{font-weight:300;letter-spacing:-.04em;}
+.intro p{font-style:italic;font-size:clamp(19px,2vw,26px);line-height:1.34;max-width:31ch;margin-top:clamp(22px,2.8vw,40px);color:var(--soft);font-variation-settings:'opsz' 24;text-wrap:pretty;}
+
+section.moment{padding-block:clamp(56px,7.5vw,112px);border-bottom:1px solid var(--hair);display:grid;gap:clamp(30px,3.8vw,56px);}
+section.moment:last-of-type{border-bottom:0;}
+.head h2{font-weight:500;font-size:clamp(36px,4.6vw,64px);line-height:.98;letter-spacing:-.035em;font-variation-settings:'opsz' 72;}
+.head p{margin-top:12px;font-style:italic;color:var(--soft);font-size:clamp(17px,1.5vw,20px);line-height:1.4;max-width:40ch;font-variation-settings:'opsz' 18;}
+
+/* ===== Devices ===== */
+.stage{display:flex;flex-wrap:wrap;align-items:center;justify-content:center;gap:clamp(32px,5vw,72px);}
+.unit{display:flex;flex-direction:column;align-items:center;min-width:0;max-width:100%;}
+.unit.wide{flex:0 1 800px;}
+.unit.hero{flex:0 1 1060px;}
+.unit.lap{flex:0 1 940px;}
+.device{position:relative;flex:none;max-width:100%;}
+.projector{width:100%;aspect-ratio:16/9;container-type:inline-size;overflow:hidden;border-radius:4px;background:var(--sheet);box-shadow:0 0 0 1px var(--hair),0 34px 70px -38px rgba(21,20,23,.42);}
+.laptop{width:calc(100% - 20px);aspect-ratio:16/10;container-type:inline-size;overflow:hidden;border-radius:10px;background:var(--sheet);box-shadow:0 0 0 10px var(--frame),0 44px 80px -40px rgba(21,20,23,.5);margin:10px;}
+.phone{width:clamp(262px,22.5vw,312px);aspect-ratio:9/19;container-type:inline-size;overflow:hidden;border-radius:40px;background:var(--sheet);box-shadow:0 0 0 8px var(--frame),0 40px 64px -32px rgba(21,20,23,.5);margin:8px;}
+.scr{position:absolute;inset:0;}
+.under{align-self:stretch;display:flex;justify-content:flex-end;margin-top:18px;}
+.replay{min-height:44px;border-radius:999px;display:inline-flex;align-items:center;gap:8px;padding:0 18px 0 14px;box-shadow:inset 0 0 0 1px var(--hair);color:var(--ink);font-family:var(--sans);font-size:14px;font-weight:600;background:var(--sheet);transition:box-shadow .2s;}
+.replay:hover{box-shadow:inset 0 0 0 1px var(--ink);}
+.replay svg{width:15px;height:15px;fill:none;stroke:currentColor;stroke-width:1.8;stroke-linecap:round;stroke-linejoin:round;}
+
+/* primary and quiet buttons, sized inside devices */
+.press{font-family:var(--sans);font-weight:600;background:var(--cobalt);color:#fff;border-radius:3px;letter-spacing:.01em;min-height:44px;display:inline-flex;align-items:center;justify-content:center;transition:background .2s,transform .12s;}
+.press:hover{background:#1d2839;}
+.press:active{transform:translateY(1px);}
+.quiet{font-family:var(--sans);font-weight:600;color:var(--soft);text-decoration:underline;text-decoration-thickness:1px;text-underline-offset:.4em;text-decoration-color:var(--hair);min-height:44px;display:inline-flex;align-items:center;}
+.quiet:hover{color:var(--ink);text-decoration-color:var(--ink);}
+
+/* the gold highlighter: a slightly irregular bar that wipes in left to right */
+.hl{position:absolute;pointer-events:none;overflow:visible;fill:var(--you);clip-path:inset(0 100% 0 0);}
+.hl.on{clip-path:inset(0 -2% 0 0);transition:clip-path .62s cubic-bezier(.55,.06,.3,1);}
+
+@media (max-width:760px){
+  .stage{flex-direction:column;align-items:center;}
+  .unit{width:100%;}
+  .phone{width:min(82vw,330px);}
+  .laptop{aspect-ratio:auto;margin:6px;width:calc(100% - 12px);box-shadow:0 0 0 6px var(--frame),0 30px 50px -30px rgba(21,20,23,.4);}
+  .laptop > .scr{position:relative;}
+}
+
+/* ===== 1 Commission: the editor's brief ===== */
+.brief{display:grid;grid-template-rows:auto 1fr auto;padding:3.6cqw 5cqw 2.4cqw;}
+.mast-sm{font-weight:700;font-variation-settings:'opsz' 72;color:var(--cobalt);font-size:2.7cqw;line-height:1;letter-spacing:-.035em;}
+.brief-top{border-bottom:.14cqw solid var(--cobalt);padding-bottom:1.3cqw;}
+.brief-main{display:grid;grid-template-columns:1.18fr 1fr;gap:6cqw;align-items:start;align-self:center;padding-block:2cqw;}
+.brief-hl{font-style:italic;font-weight:400;font-variation-settings:'opsz' 72;font-size:6.4cqw;line-height:1.05;letter-spacing:-.022em;outline:none;caret-color:var(--cobalt);transition:opacity .22s;min-height:1.05em;cursor:text;overflow-wrap:break-word;}
+.brief-hl:not(:focus)::after{content:'';display:inline-block;width:.05em;height:.8em;margin-left:.12em;background:var(--cobalt);transform:skewX(-9deg) translateY(.1em);animation:blink 1.15s steps(1) infinite;}
+.brief-hl:focus-visible{outline:none;box-shadow:0 .1em 0 0 var(--you);}
+@keyframes blink{50%{opacity:0}}
+.contents h3{font-weight:600;font-variation-settings:'opsz' 36;font-size:2.15cqw;line-height:1;letter-spacing:-.01em;padding-bottom:1.2cqw;border-bottom:1px solid var(--hair);margin-bottom:1.2cqw;}
+.cols{display:grid;grid-template-columns:1fr 1fr;transition:opacity .22s;}
+.cols ol{list-style:none;padding:0;}
+.cols .un{border-left:1px solid var(--hair);padding-left:2.4cqw;}
+.cols li{font-size:2.75cqw;line-height:1.58;font-variation-settings:'opsz' 28;letter-spacing:-.005em;}
+.fade{opacity:0 !important;}
+.brief .quiet{font-size:1.3cqw;margin-top:.6cqw;}
+.brief-foot{display:flex;align-items:center;justify-content:space-between;gap:3cqw;border-top:1px solid var(--hair);padding-top:1.4cqw;}
+.when{display:flex;gap:3.4cqw;flex-wrap:wrap;}
+.tick{display:inline-flex;align-items:center;gap:.8cqw;font-size:1.85cqw;min-height:44px;color:var(--soft);font-variation-settings:'opsz' 20;transition:color .2s;}
+.tick svg{width:1.05em;height:1.05em;overflow:visible;flex:none;}
+.tick .g{fill:none;stroke:var(--hair);stroke-width:1.5;stroke-linecap:round;stroke-linejoin:round;}
+.tick .k{fill:none;stroke:var(--cobalt);stroke-width:2.1;stroke-linecap:round;stroke-linejoin:round;stroke-dasharray:24;stroke-dashoffset:24;transition:stroke-dashoffset .4s var(--out);}
+.tick[aria-pressed="true"]{color:var(--ink);}
+.tick[aria-pressed="true"] .k{stroke-dashoffset:0;}
+.brief .press{font-size:1.5cqw;padding:0 2.6cqw;min-height:max(44px,4.4cqw);}
+@container (max-width:600px){
+  .brief{padding:6cqw 6cqw 5cqw;grid-template-rows:auto;}
+  .mast-sm{font-size:6cqw;}
+  .brief-top{padding-bottom:3cqw;}
+  .brief-main{grid-template-columns:1fr;gap:9cqw;padding-block:8cqw;}
+  .brief-hl{font-size:9.6cqw;}
+  .contents h3{font-size:4.8cqw;padding-bottom:3cqw;margin-bottom:2.4cqw;}
+  .cols li{font-size:5.4cqw;}
+  .cols .un{padding-left:5cqw;}
+  .brief .quiet{font-size:3.6cqw;margin-top:2cqw;}
+  .brief-foot{flex-direction:column;align-items:stretch;gap:3cqw;padding-top:4cqw;}
+  .when{gap:0 6cqw;}
+  .tick{font-size:4.4cqw;}
+  .brief .press{font-size:4cqw;min-height:48px;}
+}
+
+/* ===== 2, 3 The cover being set ===== */
+.cov-a{display:grid;grid-template-columns:1fr auto;grid-template-rows:auto auto minmax(0,1fr);padding:3.4cqw 4.5cqw 4.2cqw;}
+.mast-xl{grid-column:1/-1;font-weight:700;font-variation-settings:'opsz' 72;color:var(--cobalt);font-size:21cqw;line-height:.8;letter-spacing:-.05em;white-space:nowrap;margin:2.4cqw 0 0 -.045em;}
+.issue{grid-column:1/-1;font-family:var(--sans);font-weight:600;font-size:max(1.8cqw,9px);letter-spacing:.02em;color:var(--cobalt);border-top:.26cqw solid var(--cobalt);margin-top:2.6cqw;padding-top:1.2cqw;}
+.cov-line{align-self:end;font-style:italic;font-size:5cqw;line-height:1.05;letter-spacing:-.02em;max-width:50cqw;font-variation-settings:'opsz' 60;}
+.bign{align-self:end;justify-self:end;text-align:right;}
+.num{display:block;font-weight:200;font-variation-settings:'opsz' 72;font-size:23cqw;line-height:.94;margin:0;letter-spacing:-.045em;font-variant-numeric:lining-nums tabular-nums;white-space:nowrap;}
+.num-cap{display:block;font-style:italic;font-size:max(2.3cqw,9.5px);color:var(--soft);margin-top:1.2cqw;font-variation-settings:'opsz' 18;}
+.dg{position:relative;display:inline-block;overflow:hidden;vertical-align:top;height:.94em;padding-top:.08em;}
+.dg .d{display:inline-block;line-height:1;vertical-align:top;}
+.dg .d.in{animation:dIn .62s cubic-bezier(.3,.8,.25,1) both;}
+.dg .d.out{position:absolute;left:0;top:0;animation:dOut .62s cubic-bezier(.3,.8,.25,1) both;}
+@keyframes dIn{from{transform:translateY(1em);opacity:.3}to{transform:none;opacity:1}}
+@keyframes dOut{to{transform:translateY(-1em);opacity:.3}}
+.lp{display:block;width:100%;height:100%;touch-action:none;cursor:pointer;}
+.wait{position:absolute;left:9cqw;right:9cqw;top:17cqw;pointer-events:none;}
+.wait .w1{font-weight:600;font-variation-settings:'opsz' 72;font-size:13cqw;line-height:.95;letter-spacing:-.035em;}
+.wait .w2{font-style:italic;font-size:6.6cqw;line-height:1.2;color:var(--soft);margin-top:3cqw;font-variation-settings:'opsz' 24;}
+
+/* ===== 3, 6 The page you write on ===== */
+.pk{user-select:none;-webkit-user-select:none;--x:8.5cqw;}
+.pk > *{position:absolute;left:var(--x);right:var(--x);}
+.pk-top{top:14cqw;font-style:italic;font-size:5.5cqw;line-height:1.24;color:var(--soft);font-variation-settings:'opsz' 16;}
+.pk-top b{font-weight:inherit;color:var(--ink);}
+.pk-head{top:37cqw;height:26cqw;right:3cqw;display:flex;align-items:flex-end;touch-action:none;cursor:ew-resize;}
+.pk-hw{position:relative;display:inline-block;line-height:1;font-size:16cqw;}
+.pk-word{position:relative;display:inline-block;line-height:1;letter-spacing:-.03em;font-variation-settings:'opsz' 72;white-space:nowrap;transform-origin:0 0;}
+.pk-hw .hl,.by-b .hl{left:-.07em;top:.09em;width:calc(100% + .15em);height:.81em;}
+.pk-slide{top:64cqw;height:max(44px,12cqw);touch-action:none;cursor:pointer;}
+.pk-slide::before{content:'';position:absolute;left:0;right:0;top:50%;height:1px;background:var(--hair);}
+.pk-fill{position:absolute;left:0;top:50%;height:2px;margin-top:-.5px;background:var(--ink);width:50%;}
+.pk-knob{position:absolute;top:50%;left:50%;width:2px;height:6cqw;margin:-3cqw 0 0 -1px;background:var(--ink);}
+.pk-sent{top:80cqw;font-size:6.2cqw;line-height:1.26;font-variation-settings:'opsz' 20;letter-spacing:-.005em;}
+.pk-sent em{font-weight:300;}
+.pk-also{top:97cqw;right:auto;min-height:44px;font-style:italic;font-size:5.8cqw;color:var(--soft);font-variation-settings:'opsz' 20;text-decoration:underline;text-decoration-thickness:1px;text-underline-offset:.22em;text-decoration-color:var(--hair);}
+.pk-also:hover{color:var(--ink);}
+.pk-list{top:40cqw;list-style:none;padding:0;display:grid;grid-template-columns:1fr;font-size:10cqw;transition:opacity .35s;}
+.pk-list li{display:flex;align-items:center;min-height:max(44px,13.2cqw);}
+.pk-list li.sep{min-height:0;height:1px;background:var(--hair);margin:1.4cqw 0;}
+.pk-list button{font-size:1em;line-height:1;letter-spacing:-.022em;font-variation-settings:'opsz' 60;text-align:left;transform-origin:0 0;min-height:44px;}
+.pk-head,.pk-slide,.pk-sent,.pk-also{transition:opacity .4s var(--out);}
+.pk[data-view="list"] .pk-head,.pk[data-view="list"] .pk-slide,.pk[data-view="list"] .pk-sent,.pk[data-view="list"] .pk-also{opacity:0;visibility:hidden;}
+.pk:not([data-view="list"]) .pk-list{top:119cqw;grid-template-columns:1fr 1fr;grid-template-rows:repeat(4,auto);grid-auto-flow:column;font-size:6.2cqw;}
+.pk:not([data-view="list"]) .pk-list li{min-height:max(44px,13.4cqw);}
+.pk:not([data-view="list"]) .pk-list .sep{display:none;}
+.pk:not([data-view="list"]) .pk-list .un{padding-left:5cqw;border-left:1px solid var(--hair);}
+.pk[data-view="picked"] .pk-list{opacity:.36;}
+.pk:not([data-view="list"]) .pk-list li.is-p button{visibility:hidden;}
+.pk-list button.is-2{font-style:italic;}
+.pk[data-view="list"] .pk-list button.is-2{font-style:normal;}
+.pk[data-view="also"] .pk-list button.is-2{text-decoration:underline;text-decoration-thickness:1px;text-underline-offset:.18em;}
+.pk.out .pk-top{top:13cqw;font-size:5.2cqw;}
+.pk.out .pk-head{top:37cqw;}
+.pk.out .pk-slide{top:64cqw;}
+.pk.out .pk-sent{top:79cqw;}
+.pk.out .pk-list{top:42cqw;}
+.pk.out:not([data-view="list"]) .pk-list{top:95cqw;}
+.pk-why{top:161cqw;display:block;}
+.pk-why span{display:block;font-style:italic;font-size:5.6cqw;font-variation-settings:'opsz' 20;}
+.pk-why input{display:block;width:100%;margin-top:1.6cqw;border:0;border-bottom:1.5px solid var(--ink);border-radius:0;background:transparent;font-size:7cqw;padding:1.2cqw 0;outline:none;font-variation-settings:'opsz' 36;min-height:44px;caret-color:var(--cobalt);}
+.pk-why input:focus-visible{box-shadow:0 2px 0 var(--you);}
+
+/* ===== 4, 5, 7 Covers ===== */
+.cv{position:absolute;inset:0;display:flex;flex-direction:column;padding:3.4cqw 4.5cqw 3.4cqw;}
+.cv-top{display:flex;align-items:baseline;justify-content:space-between;gap:4cqw;border-bottom:.24cqw solid var(--cobalt);padding-bottom:1.3cqw;}
+.cv-mast{font-weight:700;font-variation-settings:'opsz' 72;color:var(--cobalt);font-size:7.4cqw;line-height:.78;letter-spacing:-.045em;white-space:nowrap;}
+.cv-q{font-style:italic;font-size:max(2.3cqw,10px);line-height:1.2;color:var(--soft);text-align:right;max-width:34cqw;font-variation-settings:'opsz' 16;}
+.cv-hl{margin-top:2.3cqw;font-weight:600;font-variation-settings:'opsz' 72;font-size:4.1cqw;line-height:1.04;letter-spacing:-.028em;}
+.cv-hl .w{display:inline-block;}
+.cv-hl.set .w{animation:wSet .7s var(--out) both;animation-delay:calc(var(--i) * 95ms + var(--d, 0ms));}
+@keyframes wSet{from{opacity:0;transform:translateY(.26em);filter:blur(.09em);font-weight:780}to{opacity:1;transform:none;filter:blur(0);font-weight:600}}
+.blk{display:block;overflow:visible;margin-top:auto;flex:none;}
+.blk text{font-family:var(--serif);letter-spacing:-.02em;fill:var(--ink);}
+.blk .hlp{fill:var(--you);}
+.cv .blk{width:91cqw;height:31cqw;}
+.cv.port{padding:13cqw 8cqw 11cqw;}
+.cv.port .cv-top,.by .cv-top{flex-direction:column;align-items:flex-start;gap:3cqw;border-bottom-width:.5cqw;padding-bottom:4cqw;}
+.cv.port .cv-mast{font-size:24cqw;}
+.cv.port .cv-q,.by .cv-q{text-align:left;max-width:none;font-size:5.2cqw;}
+.cv.port .cv-hl{order:3;font-size:9cqw;margin-top:0;line-height:1.04;}
+.cv.port .blk{order:2;width:84cqw;height:74cqw;margin-block:auto;}
+
+.proof{background:#F0EDED;display:grid;grid-template-columns:1.9fr 1fr;gap:5.5cqw;align-items:center;padding:5cqw 5.5cqw;}
+.sheet{position:relative;--g:1.3cqw;--l:2.6cqw;--c:linear-gradient(var(--ink),var(--ink));}
+.sheet::before{content:'';position:absolute;inset:calc(-1 * (var(--g) + var(--l)));pointer-events:none;opacity:.45;background:
+  var(--c) left 0 top calc(var(--g) + var(--l)) / var(--l) 1px no-repeat,
+  var(--c) left calc(var(--g) + var(--l)) top 0 / 1px var(--l) no-repeat,
+  var(--c) right 0 top calc(var(--g) + var(--l)) / var(--l) 1px no-repeat,
+  var(--c) right calc(var(--g) + var(--l)) top 0 / 1px var(--l) no-repeat,
+  var(--c) left 0 bottom calc(var(--g) + var(--l)) / var(--l) 1px no-repeat,
+  var(--c) left calc(var(--g) + var(--l)) bottom 0 / 1px var(--l) no-repeat,
+  var(--c) right 0 bottom calc(var(--g) + var(--l)) / var(--l) 1px no-repeat,
+  var(--c) right calc(var(--g) + var(--l)) bottom 0 / 1px var(--l) no-repeat;}
+.mini{position:relative;aspect-ratio:16/9;container-type:inline-size;background:#fff;box-shadow:0 1px 2px rgba(21,20,23,.06),0 18px 36px -22px rgba(21,20,23,.4);}
+.say{font-style:italic;font-size:2.7cqw;line-height:1.26;letter-spacing:-.008em;text-indent:-.4em;font-variation-settings:'opsz' 30;margin-bottom:3.4cqw;text-wrap:pretty;}
+.proof .press{font-size:1.5cqw;padding:0 2.6cqw;min-height:max(44px,4.4cqw);}
+@container (max-width:600px){
+  .proof{grid-template-columns:1fr;padding:10cqw 8cqw 9cqw;gap:10cqw;}
+  .sheet{--g:2.4cqw;--l:4cqw;}
+  .say{font-size:6cqw;margin-bottom:6cqw;}
+  .proof .press{font-size:4cqw;min-height:48px;padding:0 6cqw;}
+}
+
+.nx-hls{display:grid;margin-top:2.3cqw;}
+.nx-hls > .cv-hl{grid-area:1/1;margin:0;font-size:3.6cqw;}
+.nx-body{margin-top:auto;display:grid;grid-template-columns:55cqw 1fr;gap:5.5cqw;align-items:end;}
+.nx .blk{width:55cqw;height:32.5cqw;}
+.pqs{display:grid;gap:2.2cqw;align-content:end;}
+.nx .pqs{align-self:stretch;align-content:center;gap:3.4cqw;padding-top:2cqw;}
+.pq{font-style:italic;font-size:3.5cqw;line-height:1.12;letter-spacing:-.012em;font-variation-settings:'opsz' 48;text-indent:-.42em;}
+.pq .qm{color:var(--cobalt);}
+.slope{overflow:visible;display:block;}
+.slope text{font-family:var(--serif);letter-spacing:-.012em;fill:var(--ink);}
+.slope .then{fill:var(--soft);}
+.slope .cnt{font-variant-numeric:lining-nums tabular-nums;fill:var(--soft);}
+.slope .hd{font-style:italic;fill:var(--soft);}
+.slope line{stroke:var(--ink);stroke-opacity:.32;stroke-width:1px;vector-effect:non-scaling-stroke;}
+
+/* ===== 8 Keep ===== */
+.keep-stage{align-items:flex-start;}
+.unit.spr{flex:0 1 820px;}
+.by{display:flex;flex-direction:column;padding:13cqw 9cqw 12cqw;}
+.by .cv-mast{font-size:11cqw;}
+.by-body{margin-block:auto;padding-top:6cqw;}
+.by-l{font-style:italic;color:var(--soft);font-size:5.4cqw;font-variation-settings:'opsz' 18;margin-bottom:1.4cqw;}
+.by-a{font-size:10.6cqw;line-height:1.05;letter-spacing:-.024em;font-variation-settings:'opsz' 60;margin-bottom:10cqw;text-wrap:pretty;}
+.by-b{font-size:18cqw;line-height:1;letter-spacing:-.03em;font-variation-settings:'opsz' 72;}
+.by-b .hw{position:relative;display:inline-block;}
+.by-b .t{position:relative;}
+.by-why{font-style:italic;font-size:5.6cqw;line-height:1.2;margin-top:8cqw;text-indent:-.4em;font-variation-settings:'opsz' 24;}
+.spread{width:100%;display:grid;grid-template-columns:1fr 1fr;background:var(--sheet);border-radius:3px;box-shadow:0 0 0 1px var(--hair),0 34px 70px -38px rgba(21,20,23,.42);}
+.pg{position:relative;aspect-ratio:3/4;container-type:inline-size;overflow:hidden;}
+.pg-l::after,.pg-r::before{content:'';position:absolute;top:0;bottom:0;width:8cqw;pointer-events:none;}
+.pg-l::after{right:0;background:linear-gradient(to left,rgba(21,20,23,.06),rgba(21,20,23,0));box-shadow:inset -1px 0 0 var(--hair2);}
+.pg-r::before{left:0;background:linear-gradient(to right,rgba(21,20,23,.045),rgba(21,20,23,0));}
+.sp{position:absolute;inset:0;display:flex;flex-direction:column;padding:10cqw 10cqw 9cqw;}
+.sp .cv-top{border-bottom-width:.45cqw;padding-bottom:2.4cqw;}
+.sp .cv-mast{font-size:13cqw;}
+.sp-q{font-style:italic;font-size:4.4cqw;line-height:1.24;color:var(--soft);margin-top:5cqw;font-variation-settings:'opsz' 18;}
+.sp-hl{font-weight:600;font-size:8.6cqw;line-height:1.02;letter-spacing:-.03em;font-variation-settings:'opsz' 72;margin-top:3cqw;}
+.sp-big{margin-top:auto;}
+.sp-num{font-weight:200;font-size:44cqw;line-height:.74;letter-spacing:-.05em;font-variation-settings:'opsz' 72;font-variant-numeric:lining-nums;margin-left:-.05em;}
+.sp-cap{font-style:italic;font-size:5.4cqw;line-height:1.22;margin-top:4cqw;max-width:20em;font-variation-settings:'opsz' 24;text-wrap:balance;}
+.sp .slope{width:80cqw;height:80cqw;}
+.sp .pqs{margin-top:auto;gap:3.6cqw;}
+.sp .pq{font-size:5.6cqw;}
+@media (max-width:760px){
+  .spread{grid-template-columns:1fr;}
+  .pg-l::after,.pg-r::before{display:none;}
+  .pg-l{border-bottom:1px solid var(--hair2);}
+}
+@media (max-width:760px){
+  .stage .unit{flex:0 0 auto;}
+  #nextProj{aspect-ratio:auto;}
+  #nextProj .cv{position:relative;inset:auto;}
+  .nx-hls > .cv-hl{font-size:5.2cqw;line-height:1.08;}
+  .nx-body{grid-template-columns:1fr;gap:7cqw;margin-top:6cqw;}
+  .nx .blk{width:91cqw;height:53.8cqw;}
+  .nx .pqs{padding:0;gap:3.4cqw;align-content:start;}
+  .nx .pq{font-size:5.4cqw;}
+}
+@media (prefers-reduced-motion: reduce){
+  *,*::before,*::after{animation-duration:.001ms!important;animation-iteration-count:1!important;transition-duration:.001ms!important;scroll-behavior:auto!important;}
+}
+</style>
+</head>
+<body>
+<div class="page">
+  <div class="top">
+    <a class="back" href="index.html">&larr; Sketchbook</a>
+    <button class="soundbtn" id="soundBtn" aria-pressed="true" aria-label="Sound is on. Turn it off">Sound on</button>
+  </div>
+
+  <header class="intro">
+    <h1>Cover <em>Story</em></h1>
+    <p>Every room writes its own cover. Today&rsquo;s issue is about how you feel.</p>
+  </header>
+
+  <section class="moment" id="commission">
+    <div class="head"><h2>Commission</h2><p>Write the question. Choose the words.</p></div>
+    <div class="stage">
+      <div class="unit lap">
+        <div class="device laptop" aria-label="The facilitator's brief">
+          <div class="scr brief">
+            <div class="brief-top"><span class="mast-sm">The Room</span></div>
+            <div class="brief-main">
+              <div class="brief-hl" id="qEdit" contenteditable="true" spellcheck="false" role="textbox" aria-label="The question">How are you feeling about AI in your work?</div>
+              <div class="contents">
+                <h3>In this issue</h3>
+                <div class="cols" id="contents"></div>
+                <button class="quiet" id="changeWords" type="button">Change the words</button>
+              </div>
+            </div>
+            <div class="brief-foot">
+              <div class="when" role="group" aria-label="When to ask">
+                <button class="tick" type="button" aria-pressed="true"><svg viewBox="0 0 20 20" aria-hidden="true"><path class="g" d="M3.5 10.8l4.6 4.6L16.8 4.6"/><path class="k" d="M3.5 10.8l4.6 4.6L16.8 4.6"/></svg>When people arrive</button>
+                <button class="tick" type="button" aria-pressed="false"><svg viewBox="0 0 20 20" aria-hidden="true"><path class="g" d="M3.5 10.8l4.6 4.6L16.8 4.6"/><path class="k" d="M3.5 10.8l4.6 4.6L16.8 4.6"/></svg>Halfway</button>
+                <button class="tick" type="button" aria-pressed="true"><svg viewBox="0 0 20 20" aria-hidden="true"><path class="g" d="M3.5 10.8l4.6 4.6L16.8 4.6"/><path class="k" d="M3.5 10.8l4.6 4.6L16.8 4.6"/></svg>Before they leave</button>
+              </div>
+              <button class="press" id="goPress" type="button">Go to press</button>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section class="moment" id="arrive">
+    <div class="head"><h2>Arrive</h2><p>The room fills. The cover waits.</p></div>
+    <div class="stage">
+      <div class="unit wide">
+        <div class="device projector" id="arriveProj" aria-label="What the room sees">
+          <div class="scr cov-a">
+            <div class="mast-xl">The Room</div>
+            <div class="issue">No. K7QP, join at ep.github.io/pt/join</div>
+            <p class="cov-line" data-q>How are you feeling about AI in your work?</p>
+            <div class="bign"><span class="num" id="arriveNum">32</span><span class="num-cap">in the room</span></div>
+          </div>
+        </div>
+        <div class="under"><button class="replay" type="button" data-replay><svg viewBox="0 0 16 16" aria-hidden="true"><path d="M13.4 8.6A5.5 5.5 0 1 1 11.8 4"/><path d="M12.4 1.6v2.9H9.5"/></svg>Replay</button></div>
+      </div>
+      <div class="unit">
+        <div class="device phone" aria-label="A participant's screen">
+          <canvas class="lp" id="lpCv" tabindex="0" role="button" aria-label="Drop a letter"></canvas>
+          <div class="wait" aria-hidden="true"><p class="w1">You&rsquo;re in.</p><p class="w2">The cover is being written.</p></div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section class="moment" id="checkin">
+    <div class="head"><h2>Check in</h2><p>Tap a word. Drag across it to say how much.</p></div>
+    <div class="stage">
+      <div class="unit">
+        <div class="device phone" aria-label="Your screen"><div class="scr pk" id="pkIn"></div></div>
+      </div>
+      <div class="unit wide">
+        <div class="device projector" id="checkProj" aria-label="What the room sees">
+          <div class="scr cov-a">
+            <div class="mast-xl">The Room</div>
+            <div class="issue">No. K7QP, join at ep.github.io/pt/join</div>
+            <p class="cov-line">The cover is being written.</p>
+            <div class="bign"><span class="num" id="checkNum">32</span><span class="num-cap">of 32</span></div>
+          </div>
+        </div>
+        <div class="under"><button class="replay" type="button" data-replay><svg viewBox="0 0 16 16" aria-hidden="true"><path d="M13.4 8.6A5.5 5.5 0 1 1 11.8 4"/><path d="M12.4 1.6v2.9H9.5"/></svg>Replay</button></div>
+      </div>
+    </div>
+  </section>
+
+  <section class="moment" id="read">
+    <div class="head"><h2>Read the room</h2><p>Only you see the proof.</p></div>
+    <div class="stage">
+      <div class="unit lap">
+        <div class="device laptop" aria-label="The facilitator's proof">
+          <div class="scr proof">
+            <div class="sheet"><div class="mini"><div class="cv" id="proofCv"></div></div></div>
+            <div class="side">
+              <p class="say" id="sayLine"></p>
+              <button class="press" id="printCover" type="button">Print the cover</button>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section class="moment" id="cover">
+    <div class="head"><h2>The cover</h2><p>The room sets its own headline.</p></div>
+    <div class="stage">
+      <div class="unit wide">
+        <div class="device projector" id="coverProj" aria-label="What the room sees"><div class="cv" id="coverCv"></div></div>
+        <div class="under"><button class="replay" type="button" data-replay><svg viewBox="0 0 16 16" aria-hidden="true"><path d="M13.4 8.6A5.5 5.5 0 1 1 11.8 4"/><path d="M12.4 1.6v2.9H9.5"/></svg>Replay</button></div>
+      </div>
+      <div class="unit">
+        <div class="device phone" aria-label="Your screen"><div class="cv port" id="coverPh"></div></div>
+      </div>
+    </div>
+  </section>
+
+  <section class="moment" id="leave">
+    <div class="head"><h2>Leave</h2><p>One more word on the way out.</p></div>
+    <div class="stage">
+      <div class="unit">
+        <div class="device phone" aria-label="Your screen"><div class="scr pk out" id="pkOut"></div></div>
+      </div>
+    </div>
+  </section>
+
+  <section class="moment" id="next">
+    <div class="head"><h2>Next issue</h2><p>Same room, at the end. See what moved.</p></div>
+    <div class="stage">
+      <div class="unit hero">
+        <div class="device projector" id="nextProj" aria-label="What the room sees"><div class="cv nx" id="nextCv"></div></div>
+        <div class="under"><button class="replay" type="button" data-replay><svg viewBox="0 0 16 16" aria-hidden="true"><path d="M13.4 8.6A5.5 5.5 0 1 1 11.8 4"/><path d="M12.4 1.6v2.9H9.5"/></svg>Replay</button></div>
+      </div>
+    </div>
+  </section>
+
+  <section class="moment" id="keep">
+    <div class="head"><h2>Keep</h2><p>A byline for everyone. A spread for the sponsor.</p></div>
+    <div class="stage keep-stage">
+      <div class="unit">
+        <div class="device phone" aria-label="Your card"><div class="scr by" id="byline"></div></div>
+      </div>
+      <div class="unit spr">
+        <div class="spread" id="spread" aria-label="The sponsor's spread">
+          <div class="pg pg-l"><div class="sp" id="spL"></div></div>
+          <div class="pg pg-r"><div class="sp" id="spR"></div></div>
+        </div>
+      </div>
+    </div>
+  </section>
+</div>
+<script>
+/* ===== ROOM: shared simulated room for every Room Pulse prototype =====
+   Paste this whole block into a <script> in your page. It defines one global: ROOM.
+   Everything is deterministic, so every page tells the same story with the same 32 people.
+
+   The map: x = pleasantness (-1 unpleasant .. +1 pleasant), y = energy (-1 low .. +1 high).
+   Eight word slots, two per quadrant, mirrored in energy:
+     0 high energy pleasant, outer     4 high energy unpleasant, outer
+     1 high energy pleasant, inner     5 high energy unpleasant, inner
+     2 low energy pleasant, inner      6 low energy unpleasant, inner
+     3 low energy pleasant, outer      7 low energy unpleasant, outer
+*/
+var ROOM = (function(){
+  function mulberry32(a){ return function(){ a|=0; a=a+0x6D2B79F5|0; var t=Math.imul(a^a>>>15,1|a); t=t+Math.imul(t^t>>>7,61|t)^t; return ((t^t>>>14)>>>0)/4294967296; }; }
+
+  var SLOTS = [
+    {x: .62, y: .70}, {x: .48, y: .28}, {x: .48, y:-.28}, {x: .62, y:-.70},
+    {x:-.62, y: .70}, {x:-.48, y: .28}, {x:-.48, y:-.28}, {x:-.62, y:-.70}
+  ];
+  // quadrant of each slot: 'hp' high+pleasant, 'lp' low+pleasant, 'hu' high+unpleasant, 'lu' low+unpleasant
+  var QUAD = ['hp','hp','lp','lp','hu','hu','lu','lu'];
+
+  var SETS = {
+    ai: {
+      key:'ai', topic:'AI', prompt:'How are you feeling about AI?',
+      words:['Excited','Curious','Confident','Calm','Overwhelmed','Anxious','Skeptical','Indifferent'],
+      codes:['EXC','CUR','CNF','CLM','OVW','ANX','SKP','IND'],
+      headIn:'Mostly curious. Some anxious. A few skeptics.',
+      headOut:'Mostly excited. Still curious. The skeptics held.'
+    },
+    change: {
+      key:'change', topic:'the change ahead', prompt:'How do you feel about the change ahead?',
+      words:['Energized','Hopeful','Ready','Settled','Frustrated','Uneasy','Doubtful','Weary'],
+      codes:['ENG','HOP','RDY','STL','FRU','UNE','DBT','WRY'],
+      headIn:'Mostly hopeful. Some uneasy. A few doubters.',
+      headOut:'Mostly energized. Still hopeful. The doubters held.'
+    },
+    today: {
+      key:'today', topic:'today', prompt:'How are you arriving today?',
+      words:['Buzzing','Open','Focused','Relaxed','Stretched','Distracted','Tired','Flat'],
+      codes:['BZZ','OPN','FCS','RLX','STR','DST','TRD','FLT'],
+      headIn:'Mostly open. Some distracted. A few tired.',
+      headOut:'Mostly buzzing. Still open. A few still tired.'
+    }
+  };
+
+  // 32 people: [inSlot, outSlot, inSecond or -1, outSecond or -1]
+  var PLAN = [
+    [5,1,1,-1],[5,1,-1,-1],[5,0,1,5],[5,0,-1,-1],[5,5,4,-1],[5,2,-1,5],
+    [4,1,0,-1],[4,5,-1,-1],[4,0,5,4],[4,4,-1,-1],
+    [6,1,1,6],[6,1,-1,-1],[6,6,7,-1],[6,6,-1,-1],[6,2,-1,-1],
+    [7,1,6,-1],[7,6,-1,-1],
+    [1,0,5,5],[1,0,5,-1],[1,0,-1,-1],[1,0,5,-1],[1,1,-1,6],[1,1,5,-1],[1,2,-1,-1],
+    [0,0,-1,-1],[0,0,5,5],[0,2,-1,-1],
+    [2,2,-1,-1],[2,2,6,-1],[2,0,-1,-1],
+    [3,3,-1,-1],[3,3,-1,-1]
+  ];
+  var WHY = ['Trying it myself','Hearing the others','Less scary now','A clear next step','Real examples',
+    'Permission to play','Still unsure','My own work','The conversation','Seeing it work',
+    'Time to practice','Good questions','Not alone in this','Small wins'];
+
+  var rnd = mulberry32(20261002);
+  function jitter(s){ return (rnd()*2-1)*s; }
+  function place(slot, inten){
+    // jittered spot around the word, always closer to its own word than to any other
+    var p = SLOTS[slot], k = .7 + .3*inten, q;
+    for (var t = 0; t < 40; t++){
+      q = { x: clamp(p.x*k + jitter(.1), -.97, .97), y: clamp(p.y*k + jitter(.1), -.97, .97) };
+      if (nearest(q.x, q.y) === slot) return q;
+    }
+    return { x: p.x, y: p.y };
+  }
+  function nearest(x, y){
+    var best = 0, bd = 1e9;
+    for (var i = 0; i < SLOTS.length; i++){ var s = SLOTS[i], d = (s.x-x)*(s.x-x) + (s.y-y)*(s.y-y); if (d < bd){ bd = d; best = i; } }
+    return best;
+  }
+  function clamp(v,a,b){ return Math.max(a, Math.min(b, v)); }
+
+  var people = PLAN.map(function(r, i){
+    var iIn = .35 + rnd()*.65, iOut = .35 + rnd()*.65;
+    var pIn = place(r[0], iIn), pOut = place(r[1], iOut);
+    var seatRow = 3 + Math.floor(rnd()*28), seatCol = 'ABCDEF'.charAt(Math.floor(rnd()*6));
+    return {
+      id: i,
+      inSlot: r[0], outSlot: r[1], in2: r[2], out2: r[3],
+      inX: pIn.x, inY: pIn.y, outX: pOut.x, outY: pOut.y,
+      inIntensity: iIn, outIntensity: iOut,
+      joinDelay: Math.round(400 + rnd()*9000),      // ms after the waiting room opens
+      checkInDelay: Math.round(300 + rnd()*6000),   // ms after check-in opens
+      seat: seatRow + seatCol,
+      why: (i % 3 === 1) ? WHY[i % WHY.length] : ''  // about a third leave a one-word why
+    };
+  });
+
+  function counts(which){ // which: 'in' | 'out'
+    var c = [0,0,0,0,0,0,0,0];
+    people.forEach(function(p){ c[which==='out' ? p.outSlot : p.inSlot]++; });
+    return c;
+  }
+  function nearestSlot(x, y){ return nearest(x, y); }
+  function intensityWord(x, y){ // how far from the middle, in plain words
+    var r = Math.sqrt(x*x + y*y);
+    return r < .38 ? 'a little' : r < .72 ? 'clearly' : 'strongly';
+  }
+  function pleasantShare(which){
+    var c = counts(which); return (c[0]+c[1]+c[2]+c[3]) / people.length;
+  }
+  // flows between slots, for route maps and sankeys: [{from, to, n}]
+  function flows(){
+    var m = {};
+    people.forEach(function(p){ var k = p.inSlot + '>' + p.outSlot; m[k] = (m[k]||0) + 1; });
+    return Object.keys(m).map(function(k){ var a = k.split('>'); return { from:+a[0], to:+a[1], n:m[k] }; })
+      .sort(function(a,b){ return b.n - a.n; });
+  }
+  // FM-style frequency for a slot or a point, 88.0 to 108.0, by angle clockwise from "high energy"
+  function freq(x, y){
+    var ang = Math.atan2(x, y); if (ang < 0) ang += Math.PI*2;
+    return Math.round((88 + ang/(Math.PI*2)*20)*10)/10;
+  }
+
+  return {
+    SLOTS: SLOTS, QUAD: QUAD, SETS: SETS, people: people, WHY: WHY,
+    counts: counts, nearestSlot: nearestSlot, intensityWord: intensityWord,
+    pleasantShare: pleasantShare, flows: flows, freq: freq, rng: mulberry32
+  };
+})();
+</script>
+<script>
+/* ===== Shared helpers ===== */
+const RM = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+
+/* Run a moment only while it is on screen. */
+function whenVisible(el, onEnter, onLeave, threshold){
+  const io = new IntersectionObserver(es => es.forEach(e => {
+    if (e.isIntersecting) onEnter && onEnter(); else onLeave && onLeave();
+  }), { threshold: threshold == null ? 0.2 : threshold });
+  io.observe(el); return io;
+}
+
+/* One requestAnimationFrame loop for the whole page. Loop.add(fn) where fn(dt, now). */
+const Loop = (() => {
+  const tasks = new Set(); let running = false, last = 0;
+  function tick(t){
+    const dt = Math.min(50, t - (last || t)); last = t;
+    tasks.forEach(f => { try { f(dt, t); } catch (e) { console.error(e); } });
+    if (tasks.size) requestAnimationFrame(tick); else { running = false; last = 0; }
+  }
+  return {
+    add(f){ tasks.add(f); if (!running){ running = true; requestAnimationFrame(tick); } },
+    remove(f){ tasks.delete(f); }
+  };
+})();
+
+const Ease = {
+  linear: t => t,
+  outCubic: t => 1 - Math.pow(1 - t, 3),
+  inOutCubic: t => t < .5 ? 4*t*t*t : 1 - Math.pow(-2*t + 2, 3) / 2,
+  outBack: t => { const c1 = 1.70158, c3 = c1 + 1; return 1 + c3*Math.pow(t - 1, 3) + c1*Math.pow(t - 1, 2); },
+  outExpo: t => t === 1 ? 1 : 1 - Math.pow(2, -10*t)
+};
+/* tween(ms, t => ..., ease, done) returns a cancel function. Reduced motion jumps to the end. */
+function tween(ms, fn, ease, done){
+  ease = ease || Ease.outCubic;
+  if (RM){ fn(1); done && done(); return () => {}; }
+  const start = performance.now(); let dead = false;
+  const step = (dt, now) => {
+    if (dead) return;
+    const t = Math.min(1, (now - start) / ms); fn(ease(t));
+    if (t >= 1){ Loop.remove(step); done && done(); }
+  };
+  Loop.add(step);
+  return () => { dead = true; Loop.remove(step); };
+}
+
+/* Canvas sized to its CSS box at device pixel ratio. Returns the 2d context; call again on resize. */
+function fitCanvas(cv){
+  const r = cv.getBoundingClientRect(), d = Math.min(2, window.devicePixelRatio || 1);
+  cv.width = Math.max(1, Math.round(r.width * d)); cv.height = Math.max(1, Math.round(r.height * d));
+  const c = cv.getContext('2d'); c.setTransform(d, 0, 0, d, 0, 0); return c;
+}
+
+/* Sound: WebAudio only, created on the first gesture, one master mute. */
+const Sound = (() => {
+  let ctx = null, master = null, on = true;
+  function ac(){
+    if (!on) return null;
+    if (!ctx){
+      try {
+        ctx = new (window.AudioContext || window.webkitAudioContext)();
+        const comp = ctx.createDynamicsCompressor();
+        master = ctx.createGain(); master.gain.value = .55;
+        master.connect(comp); comp.connect(ctx.destination);
+      } catch (e){ return null; }
+    }
+    if (ctx.state === 'suspended') ctx.resume();
+    return ctx;
+  }
+  /* A short enveloped note. opts: {type:'sine'|'triangle'|..., gain, attack, release, when, detune} */
+  function tone(freq, dur, opts){
+    const c = ac(); if (!c) return;
+    opts = opts || {};
+    const t0 = c.currentTime + (opts.when || 0), a = opts.attack || .01, r = opts.release || .25;
+    const o = c.createOscillator(), g = c.createGain();
+    o.type = opts.type || 'sine'; o.frequency.value = freq; if (opts.detune) o.detune.value = opts.detune;
+    g.gain.setValueAtTime(0, t0);
+    g.gain.linearRampToValueAtTime(opts.gain == null ? .18 : opts.gain, t0 + a);
+    g.gain.exponentialRampToValueAtTime(.0001, t0 + a + dur + r);
+    o.connect(g); g.connect(master); o.start(t0); o.stop(t0 + a + dur + r + .05);
+  }
+  function setOn(v){ on = v; if (!v && ctx) ctx.suspend(); }
+  return { ac, tone, setOn, get on(){ return on; }, get ctx(){ return ctx; }, get out(){ return master; } };
+})();
+['pointerdown','keydown','touchend'].forEach(ev => document.addEventListener(ev, () => Sound.ac(), { passive: true }));
+(() => {
+  const b = document.getElementById('soundBtn'); if (!b) return;
+  b.addEventListener('click', () => {
+    const next = !Sound.on; Sound.setOn(next);
+    b.setAttribute('aria-pressed', String(next));
+    b.textContent = next ? 'Sound on' : 'Sound off';
+    b.setAttribute('aria-label', next ? 'Sound is on. Turn it off' : 'Sound is off. Turn it on');
+    if (next) Sound.ac();
+  });
+})();
+
+function esc(s){ return String(s).replace(/[&<>"]/g, c => ({ '&':'&amp;', '<':'&lt;', '>':'&gt;', '"':'&quot;' }[c])); }
+
+/* The viewer is one participant. Their answers carry from moment to moment. */
+const You = {
+  inX: .44, inY: .30, inSlot: 1, in2: -1,         // a sensible default so every moment renders at rest
+  outX: null, outY: null, outSlot: null, out2: -1, why: '',
+  _fns: [],
+  set(patch){ Object.assign(this, patch); this._fns.forEach(f => f(patch)); },
+  on(f){ this._fns.push(f); }
+};
+</script>
+<script>
+/* ===== Cover Story: page code ===== */
+const NS = 'http://www.w3.org/2000/svg';
+const $ = (s, r) => (r || document).querySelector(s);
+const $$ = (s, r) => Array.from((r || document).querySelectorAll(s));
+const clamp = (v, a, b) => Math.max(a, Math.min(b, v));
+const lerp = (a, b, t) => a + (b - a) * t;
+function buzz(){ try { if (navigator.vibrate) navigator.vibrate(10); } catch (e) {} }
+function svgEl(tag, attrs, parent){
+  const e = document.createElementNS(NS, tag);
+  if (attrs) for (const k in attrs) e.setAttribute(k, attrs[k]);
+  if (parent) parent.appendChild(e);
+  return e;
+}
+function later(fn){ let q = false; return () => { if (q) return; q = true; requestAnimationFrame(() => { q = false; fn(); }); }; }
+
+/* The issue: the question and the word set, chosen on the Commission laptop */
+const PROMPTS = { ai: 'How are you feeling about AI in your work?', change: ROOM.SETS.change.prompt, today: ROOM.SETS.today.prompt };
+const START = { ai: 'Let’s start with the skeptics.', change: 'Let’s start with the doubters.', today: 'Let’s start with the tired ones.' };
+const Issue = {
+  key: 'ai', q: PROMPTS.ai, edited: false, _fns: [],
+  set(p){ Object.assign(this, p); this._fns.forEach(f => f(p)); },
+  on(f){ this._fns.push(f); }
+};
+const SET = () => ROOM.SETS[Issue.key];
+const WORDS = () => SET().words;
+
+/* The viewer takes the seat of person 18, who arrived curious and a little anxious and left excited.
+   So the room stays 32 people, and the story holds until the viewer changes it. */
+const YOU_ID = 18;
+Object.assign(You, { inSlot: 1, inI: .5, in2: 5, outSlot: 0, outI: .6, why: '' });
+
+function degree(i){ return i < .3 ? 'a little' : i > .72 ? 'very' : ''; }
+const low = s => s.toLowerCase();
+const capFirst = s => s.charAt(0).toUpperCase() + s.slice(1);
+function phrase(slot, i){ const d = degree(i), w = low(WORDS()[slot]); return d ? d + ' ' + w : w; }
+function sentIn(){
+  let s = capFirst(phrase(You.inSlot, You.inI));
+  if (You.in2 >= 0 && You.in2 !== You.inSlot) s += ', and a little ' + low(WORDS()[You.in2]);
+  return s + '.';
+}
+function sentOut(){ return capFirst(phrase(You.outSlot, You.outI)) + '.'; }
+
+/* Counts and average intensity per word, with the viewer in their seat */
+function tally(which){
+  const n = [0,0,0,0,0,0,0,0], sum = [0,0,0,0,0,0,0,0], out = which === 'out';
+  ROOM.people.forEach((p, k) => {
+    const me = k === YOU_ID;
+    const slot = out ? (me ? You.outSlot : p.outSlot) : (me ? You.inSlot : p.inSlot);
+    const v = me ? .35 + .65 * (out ? You.outI : You.inI) : (out ? p.outIntensity : p.inIntensity);
+    n[slot]++; sum[slot] += v;
+  });
+  return { n, avg: n.map((c, i) => c ? sum[i] / c : 0), good: n[0] + n[1] + n[2] + n[3], all: ROOM.people.length };
+}
+function weightOf(c, avg){ return c ? Math.round(300 + 480 * clamp((avg - .42) / .5, 0, 1)) : 200; }
+
+/* Measure words in the real font: width per unit of font size */
+const Meas = (() => {
+  let txt = null; const cache = new Map();
+  function init(){
+    const s = svgEl('svg', { 'aria-hidden': 'true', class: 'blk' });
+    s.style.cssText = 'position:absolute;left:-9999px;top:0;width:10px;height:10px;visibility:hidden;margin:0';
+    txt = svgEl('text', null, s); document.body.appendChild(s);
+  }
+  function w(word, wght, opsz){
+    const k = word + '|' + wght + '|' + opsz;
+    if (cache.has(k)) return cache.get(k);
+    if (!txt) init();
+    txt.textContent = word; txt.style.fontSize = '100px'; txt.style.fontWeight = wght;
+    txt.style.fontVariationSettings = "'opsz' " + opsz;
+    const v = (txt.getComputedTextLength() || word.length * 50) / 100;
+    cache.set(k, v); return v;
+  }
+  return { w, clear(){ cache.clear(); if (typeof TS_CACHE !== 'undefined') TS_CACHE.clear(); } };
+})();
+
+/* The highlighter: a chisel-tip swipe, a little irregular, drawn in a 200 by 40 box */
+function hlPath(seed){
+  const r = ROOM.rng(1000 + seed * 97), j = a => (r() - .5) * a, pts = [], N = 7;
+  for (let k = 0; k <= N; k++) pts.push([6 + 188 * k / N + (k && k < N ? j(4) : 0), 5.5 + j(3.4)]);
+  pts.push([198.6, 13 + j(3)], [197.2, 27 + j(3)]);
+  for (let k = N; k >= 0; k--) pts.push([2.5 + 188 * k / N + (k && k < N ? j(4) : 0), 35 + j(3.4)]);
+  pts.push([.4, 26 + j(3)], [1.8, 12.5 + j(3)]);
+  const m = (a, b) => [(a[0] + b[0]) / 2, (a[1] + b[1]) / 2], f = v => v.toFixed(1);
+  const s = m(pts[pts.length - 1], pts[0]);
+  let d = 'M' + f(s[0]) + ',' + f(s[1]);
+  pts.forEach((p, k) => { const q = m(p, pts[(k + 1) % pts.length]); d += 'Q' + f(p[0]) + ',' + f(p[1]) + ' ' + f(q[0]) + ',' + f(q[1]); });
+  return d + 'Z';
+}
+function hlSvg(seed){ return '<svg class="hl" viewBox="0 0 200 40" preserveAspectRatio="none" aria-hidden="true"><path d="' + hlPath(seed) + '"/></svg>'; }
+function wipe(svg, delay){
+  if (!svg) return;
+  svg.classList.remove('on'); void svg.getBoundingClientRect();
+  if (RM || !delay) svg.classList.add('on'); else setTimeout(() => svg.classList.add('on'), delay);
+}
+
+/* Paper sounds. Only after the first gesture has made the audio context. */
+const Fx = (() => {
+  let buf = null;
+  function noise(c){
+    if (!buf){ const n = Math.floor(c.sampleRate * 2); buf = c.createBuffer(1, n, c.sampleRate); const d = buf.getChannelData(0); for (let i = 0; i < n; i++) d[i] = Math.random() * 2 - 1; }
+    return buf;
+  }
+  function burst(o){
+    if (!Sound.ctx || !Sound.on) return;
+    const c = Sound.ac(); if (!c || !Sound.out) return;
+    const t0 = c.currentTime + (o.when || 0), a = o.attack || .002, d = o.dur || .04;
+    const s = c.createBufferSource(); s.buffer = noise(c);
+    const f = c.createBiquadFilter(); f.type = o.type || 'bandpass'; f.Q.value = o.q || 1; f.frequency.setValueAtTime(o.freq || 2000, t0);
+    if (o.to) f.frequency.exponentialRampToValueAtTime(o.to, t0 + a + d);
+    const g = c.createGain(); g.gain.setValueAtTime(.0001, t0); g.gain.linearRampToValueAtTime(o.gain || .2, t0 + a); g.gain.exponentialRampToValueAtTime(.0001, t0 + a + d);
+    s.connect(f); f.connect(g); g.connect(Sound.out);
+    s.start(t0, Math.random() * .6); s.stop(t0 + a + d + .05);
+  }
+  const tone = (fr, d, o) => { if (Sound.ctx && Sound.on) Sound.tone(fr, d, o); };
+  return {
+    paper(){ burst({ freq: 5200, q: .8, gain: .11, dur: .03 }); burst({ freq: 1900, q: 1.4, gain: .05, dur: .02, when: .004 }); },
+    tick(v){ const k = clamp(v == null ? 1 : v, .25, 1); burst({ freq: 1500 + Math.random() * 700, q: 7, gain: .3 * k, dur: .045, attack: .001 }); tone(820 + Math.random() * 160, .006, { type: 'triangle', gain: .05 * k, attack: .001, release: .05 }); },
+    whoosh(){ burst({ freq: 420, to: 2600, q: .6, gain: .09, dur: .55, attack: .14 }); },
+    press(){ burst({ freq: 300, q: .9, gain: .18, dur: .08, type: 'lowpass' }); tone(96, .03, { gain: .09, release: .14 }); }
+  };
+})();
+
+/* A small timeline on the shared Loop. Tracks: {at, dur, fn(t), ease, init:false, sound:true} */
+function timeline(tracks){
+  let dead = false, t0 = 0; const fin = new Set();
+  tracks.sort((a, b) => a.at - b.at);
+  function step(dt, now){
+    if (dead) return;
+    const el = now - t0;
+    tracks.forEach((tr, k) => {
+      if (fin.has(k) || el < tr.at) return;
+      const p = tr.dur ? Math.min(1, (el - tr.at) / tr.dur) : 1;
+      tr.fn((tr.ease || Ease.outCubic)(p));
+      if (p >= 1) fin.add(k);
+    });
+    if (fin.size === tracks.length){ dead = true; Loop.remove(step); }
+  }
+  function finish(){
+    if (dead) return; dead = true; Loop.remove(step);
+    tracks.forEach((tr, k) => { if (!fin.has(k) && !tr.sound) tr.fn(1); });
+  }
+  if (RM){ finish(); return { stop(){}, finish(){} }; }
+  tracks.forEach(tr => { if (tr.init !== false && !tr.sound) tr.fn(0); });
+  t0 = performance.now(); Loop.add(step);
+  return { stop(){ dead = true; Loop.remove(step); }, finish };
+}
+
+/* Big light numerals that roll in, digit by digit */
+function Roller(el){
+  let cur = el.textContent.trim();
+  function build(s, anim){ el.innerHTML = s.split('').map(d => '<span class="dg"><span class="d' + (anim ? ' in' : '') + '">' + d + '</span></span>').join(''); }
+  build(cur, false);
+  return {
+    set(v, anim){
+      const s = String(v);
+      if (s === cur) return;
+      if (!anim || RM || s.length !== cur.length){ build(s, anim && !RM); cur = s; return; }
+      const boxes = el.querySelectorAll('.dg');
+      s.split('').forEach((d, k) => {
+        if (d === cur[k]) return;
+        const box = boxes[k], old = box.querySelector('.d:not(.out)');
+        if (old){ old.classList.remove('in'); old.classList.add('out'); setTimeout(() => old.remove(), 480); }
+        const nd = document.createElement('span'); nd.className = 'd in'; nd.textContent = d; box.appendChild(nd);
+      });
+      cur = s;
+    }
+  };
+}
+
+/* ===== The typeset block: eight words, justified, size by count, weight by feeling =====
+   Several tallies can share one line structure, so issue one and issue two keep the same lines. */
+const TS_CACHE = new Map();
+function typeset(t, box, o){ return typesetAll([t], box, o)[0]; }
+function typesetAll(ts, box, o){
+  o = o || {};
+  const key = JSON.stringify([Issue.key, box, o.ref || 80, ts.map(t => [t.n, t.avg.map(v => Math.round(v * 1000))])]);
+  if (TS_CACHE.has(key)) return TS_CACHE.get(key);
+  if (TS_CACHE.size > 120) TS_CACHE.clear();
+  const words = WORDS();
+  const bases = ts.map(t => {
+    const cMax = Math.max(1, ...t.n);
+    return [0,1,2,3,4,5,6,7].map(i => {
+      const c = t.n[i], rel = c ? .3 + .7 * Math.pow(c / cMax, .7) : .26;
+      const b = { i, word: words[i], c, rel, wght: weightOf(c, t.avg[i]), opsz: Math.round(clamp(rel * (o.ref || 80), 14, 72)) };
+      b.u = Meas.w(b.word, b.wght, b.opsz);
+      return b;
+    });
+  });
+  let pick = null, first = 0;
+  let g0 = box.h * .62;
+  bases.forEach(base => base.forEach(b => { g0 = Math.min(g0, box.w * 1.03 / (b.rel * b.u)); }));
+  for (let g = g0; g > .4; g *= .97){
+    const sets = bases.map(base => base.map(b => Object.assign({}, b, { s: b.rel * g, nat: b.rel * g * b.u })));
+    const res = bestSplit(sets, box.w, box.h, g);
+    if (!res) continue;
+    if (!first) first = g;
+    res.score = res.cost / ts.length + (1 - g / first) * 60;
+    if (!pick || res.score < pick.score) pick = res;
+    if (g < first * .8) break;
+  }
+  const out = ts.map((t, k) => {
+    if (!pick) return { items: [], h: 0 };
+    const dy = (box.h - pick.hs[k]) * (o.valign == null ? .5 : o.valign), items = [];
+    pick.order.forEach((j, n) => pick.L[k][j].items.forEach(it => items.push({ i: it.i, word: it.word, c: it.c, x: it.x, y: pick.bases[k][n] + dy, s: it.sz, wght: it.wght, opsz: it.opsz, w: it.sz * it.u })));
+    items.sort((a, b) => a.i - b.i);
+    return { items, h: pick.hs[k] };
+  });
+  TS_CACHE.set(key, out);
+  return out;
+}
+/* every way to split eight words into lines */
+const PARTS = (() => {
+  const out = [], a = [0,0,0,0,0,0,0,0];
+  (function rec(i, m){
+    if (i === 8){ const masks = new Array(m + 1).fill(0); a.forEach((v, k) => { masks[v] |= 1 << k; }); out.push(masks); return; }
+    for (let v = 0; v <= Math.min(m + 1, 7); v++){ a[i] = v; rec(i + 1, Math.max(m, v)); }
+  })(1, 0);
+  return out;
+})();
+function bestSplit(sets, W, H, g){
+  const K = sets.length, cost = [], mx = [], lines = [];
+  for (let k = 0; k < K; k++){ cost.push(new Float64Array(256).fill(NaN)); mx.push(new Float64Array(256)); lines.push(new Array(256)); }
+  function get(k, m){
+    let c = cost[k][m];
+    if (c !== c){
+      const L = fitLine(sets[k].filter(it => m & (1 << it.i)), W);
+      lines[k][m] = L; c = cost[k][m] = L ? L.cost : Infinity; mx[k][m] = L ? L.max : 0;
+    }
+    return c;
+  }
+  const maxLines = W / H > 1.5 ? 5 : 8;
+  let best = null, bestCost = Infinity;
+  for (let p = 0; p < PARTS.length; p++){
+    const masks = PARTS[p], n = masks.length;
+    if (n > maxLines) continue;
+    let c = n * .8 * K;
+    for (let j = 0; j < n && c < bestCost; j++) for (let k = 0; k < K; k++) c += get(k, masks[j]);
+    if (!(c < bestCost)) continue;
+    const order = masks.map((m, j) => j).sort((x, y) => { let d = 0; for (let k = 0; k < K; k++) d += mx[k][masks[y]] - mx[k][masks[x]]; return d; });
+    const bs = [], hs = []; let fits = true;
+    for (let k = 0; k < K && fits; k++){
+      let y = 0, prev = 0; const bk = [];
+      order.forEach((j, q) => { const m = mx[k][masks[j]]; y += q ? .25 * prev + .74 * m + .06 * g : .74 * m; bk.push(y); prev = m; });
+      const h = y + .25 * prev; if (h > H) fits = false; bs.push(bk); hs.push(h);
+    }
+    if (!fits) continue;
+    bestCost = c;
+    best = { cost: c, order, bases: bs, hs, L: lines.map((arr, k) => masks.map(m => arr[m])) };
+  }
+  return best;
+}
+function fitLine(gr, W){
+  const k = gr.length, nat = gr.reduce((a, it) => a + it.nat, 0);
+  const gaps = [];
+  for (let j = 0; j < k - 1; j++) gaps.push(.27 * Math.max(gr[j].s, gr[j + 1].s));
+  const gi = gaps.reduce((a, b) => a + b, 0);
+  let sc, cost, ratio = 1;
+  if (k === 1){
+    sc = clamp(W / nat, .97, 1.03);
+    const fill = nat * sc / W; if (fill > 1.0005) return null;
+    cost = Math.pow((1 - fill) * 10, 2) * .9 + 2.5;
+  } else {
+    sc = clamp((W - gi) / nat, .97, 1.03);
+    ratio = (W - nat * sc) / gi; if (ratio < .62) return null;
+    cost = Math.pow(ratio - 1, 2) * 5 + Math.pow((sc - 1) * 10, 2) * .6;
+  }
+  let x = 0;
+  const out = gr.map((it, j) => { const o = Object.assign({}, it, { sz: it.s * sc, x }); x += it.nat * sc + (j < k - 1 ? gaps[j] * ratio : 0); return o; });
+  return { items: out, cost, max: Math.max(...out.map(it => it.sz)) };
+}
+function setText(t, it, ls){
+  t.setAttribute('x', it.x.toFixed(2)); t.setAttribute('y', it.y.toFixed(2));
+  t.style.fontSize = it.s.toFixed(3) + 'px'; t.style.fontWeight = Math.round(it.wght);
+  t.style.fontVariationSettings = "'opsz' " + Math.round(it.opsz);
+  if (ls != null) t.style.letterSpacing = ls.toFixed(4) + 'em';
+}
+function drawWords(g, lay){
+  const map = {};
+  lay.items.forEach(it => {
+    let t = g.querySelector('text[data-slot="' + it.i + '"]');
+    if (!t) t = svgEl('text', { 'data-slot': it.i }, g);
+    if (t.textContent !== it.word) t.textContent = it.word;
+    setText(t, it); map[it.i] = t;
+  });
+  return map;
+}
+const mix = (a, b, t) => ({ x: lerp(a.x, b.x, t), y: lerp(a.y, b.y, t), s: lerp(a.s, b.s, t), wght: lerp(a.wght, b.wght, t), opsz: lerp(a.opsz, b.opsz, t) });
+
+/* A gold swipe inside an SVG, behind one word, wiped in with a clip */
+function svgSwipe(svg, g, seed){
+  const id = 'clip' + Math.random().toString(36).slice(2, 8);
+  const cp = svgEl('clipPath', { id }, g), rect = svgEl('rect', { x: 0, y: 0, width: 0, height: 0 }, cp);
+  const p = svgEl('path', { class: 'hlp', d: hlPath(seed), 'clip-path': 'url(#' + id + ')' }, g);
+  let w = 0, cancel = null;
+  return {
+    place(it){
+      const x0 = it.x - .07 * it.s, y0 = it.y - .63 * it.s, ww = it.w + .15 * it.s, hh = .81 * it.s;
+      p.setAttribute('transform', 'translate(' + x0.toFixed(2) + ' ' + y0.toFixed(2) + ') scale(' + (ww / 200).toFixed(4) + ' ' + (hh / 40).toFixed(4) + ')');
+      rect.setAttribute('x', 0); rect.setAttribute('y', 0); rect.setAttribute('height', 40); w = 200;
+      rect.setAttribute('width', 200);
+    },
+    hide(){ if (cancel) cancel(); rect.setAttribute('width', 0); },
+    show(){ if (cancel) cancel(); rect.setAttribute('width', w); },
+    wipe(){ if (cancel) cancel(); cancel = tween(640, t => rect.setAttribute('width', (w * t).toFixed(2)), Ease.inOutCubic); }
+  };
+}
+
+/* ===== Then and Now: two narrow columns of type joined by hairlines ===== */
+function slopeLayout(tin, tout, box){
+  const cm = Math.max(1, ...tin.n, ...tout.n);
+  const order = n => [0,1,2,3,4,5,6,7].sort((a, b) => (n[b] - n[a]) || (a - b));
+  const fs = c => box.fMin + (box.fMax - box.fMin) * Math.sqrt(c / cm);
+  function col(tt){
+    let y = 0, prev = 0; const rows = [];
+    order(tt.n).forEach((i, k) => {
+      const f = fs(tt.n[i]);
+      y += k ? .28 * prev + .72 * f + box.gap : .74 * f;
+      rows.push({ i, f, y, c: tt.n[i], wght: weightOf(tt.n[i], tt.avg[i]) });
+      prev = f;
+    });
+    return { rows, h: y + .26 * prev };
+  }
+  const A = col(tin), B = col(tout), avail = box.h - box.head, H = Math.max(A.h, B.h), k = Math.min(1, avail / H);
+  const xL = box.x + box.w * box.split[0], xR = box.x + box.w * box.split[1], cw = box.fMax * 1.1;
+  const op = f => Math.round(clamp(f * (box.opszK || 10), 12, 60));
+  const words = WORDS();
+  const then = A.rows.map(r => ({ i: r.i, word: words[r.i], c: r.c, s: r.f * k, y: box.y + box.head + r.y * k, wght: r.wght, opsz: op(r.f * k), x: xL - cw }));
+  const now = B.rows.map(r => ({ i: r.i, word: words[r.i], c: r.c, s: r.f * k, y: box.y + box.head + r.y * k, wght: r.wght, opsz: op(r.f * k), x: xR + cw }));
+  const byI = arr => { const m = {}; arr.forEach(r => m[r.i] = r); return m; };
+  const T = byI(then), N = byI(now);
+  const lines = [0,1,2,3,4,5,6,7].map(i => ({ i, x1: xL + .7, y1: T[i].y - .3 * T[i].s, x2: xR - .7, y2: N[i].y - .3 * N[i].s }));
+  return { then, now, T, N, lines, xL, xR, headY: box.y + box.fMin * 1.05, headS: box.fMin * .95 };
+}
+function drawSlope(g, L){
+  g.textContent = '';
+  const mk = (cls, txt, x, y, s, w, op, anchor) => { const t = svgEl('text', { class: cls, x: x.toFixed(2), y: y.toFixed(2), 'text-anchor': anchor || 'start' }, g); t.textContent = txt; t.style.fontSize = s.toFixed(3) + 'px'; t.style.fontWeight = w; t.style.fontVariationSettings = "'opsz' " + op; return t; };
+  const refs = { heads: [], then: {}, now: {}, cnt: [], lines: {} };
+  refs.heads.push(mk('hd', 'Then', L.xL, L.headY, L.headS, 400, 16, 'end'));
+  refs.heads.push(mk('hd', 'Now', L.xR, L.headY, L.headS, 400, 16, 'start'));
+  L.lines.forEach(l => { refs.lines[l.i] = svgEl('line', { x1: l.x1.toFixed(2), y1: l.y1.toFixed(2), x2: l.x2.toFixed(2), y2: l.y2.toFixed(2) }, g); });
+  L.then.forEach(r => {
+    refs.then[r.i] = mk('then', r.word, r.x - .35 * r.s, r.y, r.s, r.wght, r.opsz, 'end');
+    refs.cnt.push(mk('cnt', String(r.c), L.xL, r.y, r.s * .8, 400, 14, 'end'));
+  });
+  L.now.forEach(r => {
+    refs.now[r.i] = mk('now', r.word, r.x, r.y, r.s, r.wght, r.opsz, 'start');
+    refs.cnt.push(mk('cnt', String(r.c), L.xR, r.y, r.s * .8, 400, 14, 'start'));
+  });
+  return refs;
+}
+
+/* ===== Moments: each renders a finished state, plays when seen, finishes when it leaves ===== */
+const Moments = [];
+function moment(m){
+  Moments.push(m);
+  if (m.watch) whenVisible(m.watch, () => { m.vis = true; if (m.enter) m.enter(); }, () => { if (m.vis){ m.vis = false; if (m.leave) m.leave(); } }, .45);
+  const rb = m.sec && m.sec.querySelector('[data-replay]');
+  if (rb && m.replay) rb.addEventListener('click', () => m.replay());
+  return m;
+}
+const renderAll = later(() => Moments.forEach(m => { try { if (m.render) m.render(); } catch (e) { console.error(e); } }));
+Issue.on(renderAll); You.on(renderAll);
+
+/* Fit a masthead to a share of its frame: font size in cqw from the measured width */
+function fitText(el, frac){
+  const r = document.createRange(); r.selectNodeContents(el);
+  const w = r.getBoundingClientRect().width, px = parseFloat(getComputedStyle(el).fontSize);
+  if (w > 0 && px > 0) el.style.fontSize = (100 * frac * px / w).toFixed(3) + 'cqw';
+}
+function quotes(n){
+  const list = [16, 19, 1, 28, 31].map(k => ROOM.people[k].why).filter(Boolean);
+  if (You.why) list.unshift(You.why);
+  return list.slice(0, n).map(tidy);
+}
+function tidy(s){ s = capFirst(String(s).trim()); return /[.!?]$/.test(s) ? s : s + '.'; }
+function pqHTML(s){ return '<p class="pq"><span class="qm">“</span>' + esc(s) + '<span class="qm">”</span></p>'; }
+function wordsHTML(text){ return text.split(' ').map((w, i) => '<span class="w" style="--i:' + i + '">' + esc(w) + '</span>').join(' '); }
+
+/* ===== 1 Commission: the editor's brief ===== */
+const Commission = (() => {
+  const hl = $('#qEdit'), cols = $('#contents');
+  function contents(){
+    const w = WORDS();
+    cols.innerHTML = '<ol class="pl">' + [0,1,2,3].map(i => '<li>' + esc(w[i]) + '</li>').join('') + '</ol>' +
+      '<ol class="un">' + [4,5,6,7].map(i => '<li>' + esc(w[i]) + '</li>').join('') + '</ol>';
+  }
+  function caretEnd(){
+    const r = document.createRange(); r.selectNodeContents(hl); r.collapse(false);
+    const s = window.getSelection(); s.removeAllRanges(); s.addRange(r);
+  }
+  hl.addEventListener('keydown', e => { if (e.key === 'Enter'){ e.preventDefault(); hl.blur(); } });
+  hl.addEventListener('input', () => {
+    let t = hl.textContent.replace(/\s+/g, ' ');
+    if (t.length > 80 || hl.children.length){ t = t.slice(0, 80); hl.textContent = t; caretEnd(); }
+    const q = t.trim();
+    Issue.set({ q: q || PROMPTS[Issue.key], edited: !!q });
+  });
+  hl.addEventListener('blur', () => { if (!hl.textContent.trim()) hl.textContent = Issue.q; });
+  $('#changeWords').addEventListener('click', () => {
+    const keys = ['ai', 'change', 'today'], next = keys[(keys.indexOf(Issue.key) + 1) % keys.length];
+    Fx.paper(); buzz();
+    const swap = () => {
+      Issue.set({ key: next, q: Issue.edited ? Issue.q : PROMPTS[next] });
+      contents();
+      if (!Issue.edited) hl.textContent = Issue.q;
+      cols.classList.remove('fade'); hl.classList.remove('fade');
+    };
+    cols.classList.add('fade'); if (!Issue.edited) hl.classList.add('fade');
+    if (RM) swap(); else setTimeout(swap, 240);
+  });
+  $$('.tick').forEach(b => b.addEventListener('click', () => {
+    b.setAttribute('aria-pressed', String(b.getAttribute('aria-pressed') !== 'true')); Fx.paper(); buzz();
+  }));
+  $('#goPress').addEventListener('click', () => {
+    Fx.press(); buzz();
+    setTimeout(() => $('#arrive').scrollIntoView({ behavior: RM ? 'auto' : 'smooth', block: 'start' }), RM ? 0 : 160);
+  });
+  contents();
+  return moment({ render(){} });
+})();
+
+/* ===== 2 Arrive: the cover waits while the room fills ===== */
+const Arrive = (() => {
+  const proj = $('#arriveProj'), roll = Roller($('#arriveNum'));
+  const joins = ROOM.people.map((p, k) => k === YOU_ID ? 250 : Math.round(p.joinDelay * 9000 / 9400)).sort((a, b) => a - b);
+  let task = null;
+  function halt(){ if (task){ Loop.remove(task); task = null; } }
+  function run(){
+    halt();
+    if (RM){ roll.set(joins.length); return; }
+    let shown = 0; const t0 = performance.now(); roll.set(0);
+    task = (dt, now) => {
+      const el = now - t0; let n = 0;
+      while (n < joins.length && joins[n] <= el) n++;
+      if (n !== shown){ shown = n; roll.set(n, true); }
+      if (n >= joins.length) halt();
+    };
+    Loop.add(task);
+  }
+  function render(){ $$('[data-q]', proj).forEach(e => { if (e.textContent !== Issue.q) e.textContent = Issue.q; }); }
+  return moment({ sec: $('#arrive'), watch: proj, enter(){ run(); Press.hint(); }, leave(){ halt(); roll.set(joins.length); }, replay: run, render });
+})();
+
+/* The letterpress toy: tap to drop a metal type sort into the composing tray */
+const Press = (() => {
+  const cv = $('#lpCv'), rng = ROOM.rng(77), ROWS = 4;
+  const GL = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz&';
+  let ctx = null, W = 0, H = 0, sorts = [], task = null, touched = false, hinted = false, hintT = null;
+  function geo(){
+    const pad = W * .085, rowH = W * .19;
+    return { pad, rowH, x0: pad + W * .02, x1: W - pad - W * .02, base: H - pad - rowH * .12, top: H - pad - rowH * (ROWS + .35) };
+  }
+  const font = g => '500 ' + (g.rowH * .56).toFixed(1) + 'px Newsreader, Georgia, serif';
+  const rowTop = (g, r) => g.base - (r + 1) * g.rowH + g.rowH * .08;
+  function size(s, g){ ctx.font = font(g); s.w = s.ch === ' ' ? g.rowH * .34 : Math.max(g.rowH * .44, ctx.measureText(s.ch).width + g.rowH * .26); s.h = g.rowH * .92; }
+  function place(w){
+    const g = geo();
+    for (let r = 0; r < ROWS; r++){
+      const right = sorts.filter(s => !s.out && s.row === r).reduce((a, s) => Math.max(a, s.tx + s.w + 1), g.x0);
+      if (right + w <= g.x1 + .5) return { row: r, x: right, y: rowTop(g, r) };
+    }
+    return null;
+  }
+  function relayout(){
+    if (!W) return;
+    const keep = sorts.filter(s => !s.out), g = geo(); sorts = [];
+    keep.forEach(s => {
+      size(s, g); const sl = place(s.w); if (!sl) return;
+      s.tx = sl.x; s.ty = sl.y; s.row = sl.row;
+      if (s.done){ s.x = s.tx; s.y = s.ty; }
+      sorts.push(s);
+    });
+  }
+  function resize(){
+    ctx = fitCanvas(cv); const r = cv.getBoundingClientRect(); W = r.width; H = r.height;
+    if (!sorts.length) prefill(); else relayout();
+    draw();
+  }
+  function prefill(){
+    'hello '.split('').forEach(ch => {
+      const g = geo(), s = { ch, rot: 0, vy: 0, done: true, hit: true };
+      size(s, g); const sl = place(s.w); if (!sl) return;
+      Object.assign(s, { tx: sl.x, ty: sl.y, row: sl.row, x: sl.x, y: sl.y }); sorts.push(s);
+    });
+  }
+  function rr(x, y, w, h, r){ ctx.beginPath(); ctx.moveTo(x + r, y); ctx.arcTo(x + w, y, x + w, y + h, r); ctx.arcTo(x + w, y + h, x, y + h, r); ctx.arcTo(x, y + h, x, y, r); ctx.arcTo(x, y, x + w, y, r); ctx.closePath(); }
+  function draw(){
+    if (!ctx) return;
+    ctx.clearRect(0, 0, W, H);
+    const g = geo();
+    ctx.lineWidth = 1;
+    ctx.strokeStyle = 'rgba(21,20,23,.07)';
+    for (let r = 1; r < ROWS; r++){ const y = Math.round(rowTop(g, r - 1)) - .5 - g.rowH * .04; ctx.beginPath(); ctx.moveTo(g.pad, y); ctx.lineTo(W - g.pad, y); ctx.stroke(); }
+    ctx.strokeStyle = 'rgba(21,20,23,.4)'; ctx.lineWidth = 1.5;
+    ctx.beginPath(); ctx.moveTo(g.pad, g.top); ctx.lineTo(g.pad, g.base + 1); ctx.lineTo(W - g.pad, g.base + 1); ctx.lineTo(W - g.pad, g.top); ctx.stroke();
+    ctx.textAlign = 'center'; ctx.textBaseline = 'alphabetic'; ctx.font = font(g);
+    sorts.forEach(s => {
+      ctx.save(); ctx.translate(s.x + s.w / 2, s.y + s.h / 2); ctx.rotate(s.rot || 0);
+      const w = s.w, h = s.h, r = Math.min(3, h * .08);
+      ctx.fillStyle = '#DDE0E7'; rr(-w / 2, -h / 2, w, h, r); ctx.fill();
+      ctx.fillStyle = '#C8CDD8'; ctx.fillRect(-w / 2 + r, h / 2 - h * .1, w - 2 * r, h * .1);
+      ctx.fillStyle = 'rgba(21,20,23,.10)'; ctx.fillRect(-w / 2 + 2, -h / 2 + h * .2, w - 4, 1);
+      if (s.ch !== ' '){ ctx.fillStyle = '#151417'; ctx.fillText(s.ch, 0, h * .2); }
+      ctx.restore();
+    });
+  }
+  function step(dt){
+    const G = H * 3.4, k = dt / 1000;
+    let moving = false;
+    sorts.forEach(s => {
+      if (s.out){ s.vy += G * k; s.y += s.vy * k; s.x += s.vx * k; s.rot += s.vr * k; moving = true; return; }
+      if (s.done) return;
+      moving = true;
+      s.vy += G * k; s.y += s.vy * k;
+      s.x += (s.tx - s.x) * (1 - Math.exp(-dt / 70));
+      s.rot += (0 - s.rot) * (1 - Math.exp(-dt / 150));
+      if (s.y >= s.ty){
+        s.y = s.ty;
+        if (s.vy > H * .4){ if (!s.hit){ s.hit = true; Fx.tick(s.vy / (H * 2.4)); } s.vy = -s.vy * .22; }
+        else {
+          s.vy = 0;
+          if (Math.abs(s.tx - s.x) < .4 && Math.abs(s.rot) < .01){ s.x = s.tx; s.rot = 0; s.done = true; }
+        }
+      }
+    });
+    sorts = sorts.filter(s => !s.out || s.y < H + 60);
+    draw();
+    if (!moving && task){ Loop.remove(task); task = null; }
+  }
+  function go(){ if (!task){ task = step; Loop.add(task); } }
+  function spill(){
+    sorts.forEach(s => { s.out = true; s.vy = -H * (.2 + rng() * .3); s.vx = (rng() - .5) * W * .8; s.vr = (rng() - .5) * 6; });
+    Fx.whoosh();
+  }
+  function drop(px, py){
+    if (!ctx) resize();
+    const g = geo(), s = { ch: GL[Math.floor(rng() * GL.length)], vy: 0, rot: (rng() - .5) * .6, hit: false, done: false };
+    size(s, g);
+    let sl = place(s.w);
+    if (!sl){ spill(); sl = place(s.w); if (!sl) return; }
+    Object.assign(s, { tx: sl.x, ty: sl.y, row: sl.row, x: clamp(px - s.w / 2, 0, W - s.w), y: Math.min(py - s.h / 2, sl.y) });
+    if (RM){ s.x = s.tx; s.y = s.ty; s.rot = 0; s.done = true; }
+    sorts.push(s); draw(); go();
+  }
+  cv.addEventListener('pointerdown', e => {
+    touched = true; clearTimeout(hintT);
+    const r = cv.getBoundingClientRect(); drop(e.clientX - r.left, e.clientY - r.top); buzz();
+  });
+  cv.addEventListener('keydown', e => {
+    if (e.key !== 'Enter' && e.key !== ' ') return;
+    e.preventDefault(); touched = true; drop(W * (.2 + rng() * .6), H * .3); buzz();
+  });
+  if ('ResizeObserver' in window) new ResizeObserver(() => resize()).observe(cv); else window.addEventListener('resize', resize);
+  return {
+    hint(){ if (touched || hinted || RM) return; hinted = true; hintT = setTimeout(() => { if (!touched) drop(W * .62, H * .45); }, 1400); },
+    redraw(){ relayout(); draw(); }
+  };
+})();
+
+/* ===== 3 Check in, projector: the cover is being written ===== */
+const CheckProj = (() => {
+  const proj = $('#checkProj'), roll = Roller($('#checkNum'));
+  const times = ROOM.people.filter((p, k) => k !== YOU_ID).map(p => Math.round(p.checkInDelay * .9)).sort((a, b) => a - b);
+  let task = null;
+  const count = el => { let n = 0; while (n < times.length && times[n] <= el) n++; return n + (PkIn.has() ? 1 : 0); };
+  function halt(){ if (task){ Loop.remove(task); task = null; } }
+  function run(){
+    halt();
+    if (RM){ roll.set(count(1e9)); return; }
+    const t0 = performance.now(); let last = count(0); roll.set(last);
+    task = (dt, now) => {
+      const el = now - t0, n = count(el);
+      if (n !== last){ last = n; roll.set(n, true); }
+      if (el > times[times.length - 1] + 400 && n === count(1e9)) halt();
+    };
+    Loop.add(task);
+  }
+  function poke(){
+    if (task) return;
+    const n = count(1e9), el = $('#checkNum'), d = el.querySelector('.dg:last-child .d:not(.out)');
+    roll.set(n, true);
+    if (d && !RM){ d.classList.remove('in'); void d.offsetWidth; d.classList.add('in'); }
+  }
+  return moment({ sec: $('#checkin'), watch: proj, enter(){ run(); PkIn.demo(); }, leave(){ halt(); roll.set(count(1e9)); }, replay(){ run(); PkIn.demo(true); }, poke });
+})();
+
+/* ===== 3, 6 The page you write on: pick a word, drag across it to set how strongly ===== */
+function Picker(root, mode){
+  const IN = mode === 'in';
+  const st = IN ? { slot: You.inSlot, i: You.inI, second: You.in2 } : { slot: You.outSlot, i: You.outI, second: -1 };
+  let view = 'picked', cur = st.i, spring = null, rg = null, lastDeg = degree(st.i), timers = [], demoing = false, touched = false;
+  root.innerHTML =
+    '<p class="pk-top"></p>' +
+    '<div class="pk-head"><span class="pk-hw">' + hlSvg(IN ? 3 : 8) + '<span class="pk-word"></span></span></div>' +
+    '<div class="pk-slide" role="slider" tabindex="0" aria-label="How strongly" aria-valuemin="0" aria-valuemax="100"><span class="pk-fill"></span><span class="pk-knob"></span></div>' +
+    '<p class="pk-sent" aria-live="polite"></p>' +
+    (IN ? '<button class="pk-also" type="button">And also…</button>' : '') +
+    '<ol class="pk-list"></ol>' +
+    (IN ? '' : '<label class="pk-why"><span>In a word, what moved you?</span><input type="text" maxlength="24" autocomplete="off" spellcheck="false"></label>');
+  root.dataset.view = view;
+  const top = $('.pk-top', root), head = $('.pk-head', root), hw = $('.pk-hw', root), word = $('.pk-word', root), hl = $('.hl', root);
+  const slide = $('.pk-slide', root), fill = $('.pk-fill', root), knob = $('.pk-knob', root), sent = $('.pk-sent', root);
+  const also = $('.pk-also', root), list = $('.pk-list', root), why = $('.pk-why input', root);
+  list.innerHTML = [0,1,2,3,-1,4,5,6,7].map(s => s < 0 ? '<li class="sep" aria-hidden="true"></li>' :
+    '<li class="' + (s < 4 ? 'pl' : 'un') + '"><button type="button" data-slot="' + s + '"></button></li>').join('');
+  const btns = $$('button[data-slot]', list);
+  const btnOf = s => btns.find(b => +b.dataset.slot === s);
+
+  /* size range for this word so the heaviest setting still fits the page */
+  function range(){
+    if (!rg){ const r = Meas.w(WORDS()[st.slot], 800, 72) + .02, hi = Math.min(19.5, 84 / r); rg = [Math.min(14, hi * .78), hi]; }
+    return rg;
+  }
+  function apply(c){
+    const r = range();
+    hw.style.fontSize = lerp(r[0], r[1], c).toFixed(3) + 'cqw';
+    word.style.fontWeight = (200 + 600 * c).toFixed(1);
+    fill.style.width = (c * 100).toFixed(2) + '%'; knob.style.left = (c * 100).toFixed(2) + '%';
+  }
+  function springTo(){
+    if (RM){ cur = st.i; apply(cur); return; }
+    if (spring) return;
+    spring = dt => {
+      cur += (st.i - cur) * (1 - Math.exp(-dt / 65));
+      if (Math.abs(st.i - cur) < .002){ cur = st.i; Loop.remove(spring); spring = null; }
+      apply(cur);
+    };
+    Loop.add(spring);
+  }
+  function sentence(){
+    let h = esc(capFirst(phrase(st.slot, st.i)));
+    if (IN && st.second >= 0 && st.second !== st.slot) h += ', and a little <em>' + esc(low(WORDS()[st.second])) + '</em>';
+    sent.innerHTML = h + '.';
+    slide.setAttribute('aria-valuenow', Math.round(st.i * 100));
+    slide.setAttribute('aria-valuetext', degree(st.i) || 'clearly');
+  }
+  function topLine(){ top.innerHTML = IN ? esc(Issue.q) : 'Earlier, you wrote: <b>' + esc(sentIn()) + '</b>'; }
+  function renderList(){
+    const w = WORDS();
+    btns.forEach(b => {
+      const s = +b.dataset.slot; b.textContent = w[s];
+      b.parentNode.classList.toggle('is-p', s === st.slot);
+      b.classList.toggle('is-2', IN && s === st.second);
+      b.setAttribute('aria-pressed', String(view !== 'list' && (s === st.slot || (IN && s === st.second))));
+    });
+  }
+  function setView(v){ view = v; root.dataset.view = v; renderList(); }
+  /* the list glides between one tall column and two faded columns */
+  function flipTo(v){
+    if (RM){ setView(v); return; }
+    const f0 = parseFloat(getComputedStyle(list).fontSize), before = btns.map(b => b.getBoundingClientRect());
+    setView(v);
+    const f1 = parseFloat(getComputedStyle(list).fontSize), s = f0 / f1;
+    btns.forEach((b, k) => {
+      const a = b.getBoundingClientRect(), o = before[k];
+      if (!a.width || !o.width) return;
+      const dx = o.left - a.left, dy = (o.top + o.height / 2) - (a.top + a.height / 2);
+      if (Math.abs(dx) < .5 && Math.abs(dy) < .5 && Math.abs(s - 1) < .01) return;
+      b.style.transformOrigin = '0 50%';
+      b.animate([{ transform: 'translate(' + dx.toFixed(1) + 'px,' + dy.toFixed(1) + 'px) scale(' + s.toFixed(4) + ')' }, { transform: 'none' }], { duration: 620, easing: 'cubic-bezier(.2,.7,.2,1)' });
+    });
+  }
+  function commit(){
+    if (IN) You.set({ inSlot: st.slot, inI: st.i, in2: st.second });
+    else You.set({ outSlot: st.slot, outI: st.i });
+    if (IN) CheckProj.poke();
+  }
+  /* lift a word from the list to the top of the page */
+  function pick(s, btn, quiet){
+    const from = btn.getBoundingClientRect(), f1 = parseFloat(getComputedStyle(btn).fontSize), wasList = view === 'list';
+    if (s !== st.slot || wasList){ st.i = cur = .5; lastDeg = degree(st.i); }
+    st.slot = s; if (st.second === s) st.second = -1;
+    rg = null; word.textContent = WORDS()[s]; hl.classList.remove('on');
+    if (wasList) flipTo('picked'); else setView('picked');
+    apply(cur); sentence();
+    const to = word.getBoundingClientRect(), f2 = parseFloat(getComputedStyle(word).fontSize);
+    if (!RM && to.width){
+      word.style.transformOrigin = '0 50%';
+      word.animate([
+        { transform: 'translate(' + (from.left - to.left).toFixed(1) + 'px,' + ((from.top + from.height / 2) - (to.top + to.height / 2)).toFixed(1) + 'px) scale(' + (f1 / f2).toFixed(4) + ')', opacity: .5 },
+        { transform: 'none', opacity: 1 }
+      ], { duration: 600, easing: 'cubic-bezier(.2,.7,.2,1)' });
+    }
+    wipe(hl, 420);
+    Fx.paper(); if (!quiet){ buzz(); commit(); }
+  }
+  function setI(v){
+    st.i = clamp(v, 0, 1);
+    const d = degree(st.i);
+    if (d !== lastDeg){ lastDeg = d; Fx.paper(); buzz(); }
+    sentence(); springTo();
+  }
+  function touch(){
+    touched = true;
+    if (demoing){ timers.forEach(clearTimeout); timers = []; demoing = false; if (view !== 'list') commit(); }
+  }
+  root.addEventListener('pointerdown', touch, true);
+  btns.forEach(b => b.addEventListener('click', () => {
+    touch();
+    const s = +b.dataset.slot;
+    if (view === 'also'){
+      if (s === st.slot) return;
+      st.second = st.second === s ? -1 : s;
+      setView('picked'); sentence(); Fx.paper(); buzz(); commit();
+      return;
+    }
+    if (view === 'picked' && s === st.slot) return;
+    pick(s, b);
+  }));
+  if (also) also.addEventListener('click', () => { touch(); setView(view === 'also' ? 'picked' : 'also'); Fx.paper(); });
+
+  /* drag across the word itself */
+  let drag = null;
+  head.addEventListener('pointerdown', e => {
+    if (view === 'list') return;
+    drag = { id: e.pointerId, x: e.clientX, i: st.i, w: head.getBoundingClientRect().width };
+    try { head.setPointerCapture(e.pointerId); } catch (err) {}
+    e.preventDefault();
+  });
+  head.addEventListener('pointermove', e => { if (drag && e.pointerId === drag.id) setI(drag.i + (e.clientX - drag.x) / (drag.w * .8)); });
+  const endDrag = e => { if (!drag || e.pointerId !== drag.id) return; drag = null; commit(); };
+  head.addEventListener('pointerup', endDrag); head.addEventListener('pointercancel', endDrag);
+
+  /* or along the hairline beneath it */
+  let sd = null;
+  const atX = x => { const r = slide.getBoundingClientRect(); return (x - r.left) / r.width; };
+  slide.addEventListener('pointerdown', e => {
+    sd = e.pointerId; try { slide.setPointerCapture(e.pointerId); } catch (err) {}
+    setI(atX(e.clientX)); e.preventDefault();
+  });
+  slide.addEventListener('pointermove', e => { if (sd === e.pointerId) setI(atX(e.clientX)); });
+  const endS = e => { if (sd !== e.pointerId) return; sd = null; commit(); };
+  slide.addEventListener('pointerup', endS); slide.addEventListener('pointercancel', endS);
+  slide.addEventListener('keydown', e => {
+    const k = e.key; let v = null;
+    if (k === 'ArrowRight' || k === 'ArrowUp') v = st.i + .05;
+    else if (k === 'ArrowLeft' || k === 'ArrowDown') v = st.i - .05;
+    else if (k === 'Home') v = 0; else if (k === 'End') v = 1;
+    if (v == null) return;
+    e.preventDefault(); touch(); setI(v); commit();
+  });
+  if (why){
+    why.addEventListener('input', () => { touch(); You.set({ why: why.value.replace(/\s+/g, ' ').trim().slice(0, 24) }); });
+    why.addEventListener('keydown', e => { if (e.key === 'Enter') why.blur(); });
+  }
+
+  /* the first time the page is seen, it shows how it works, then lands on the same answer */
+  function demo(force){
+    if (RM || demoing || (touched && !force)) return;
+    const target = { slot: st.slot, i: st.i, second: st.second };
+    timers.forEach(clearTimeout); timers = []; demoing = true;
+    hl.classList.remove('on'); setView('list');
+    const at = (ms, fn) => timers.push(setTimeout(() => { if (demoing) fn(); }, ms));
+    at(1100, () => { st.second = -1; pick(target.slot, btnOf(target.slot), true); st.i = cur = .1; lastDeg = degree(.1); apply(cur); sentence(); });
+    at(2000, () => { tween(1300, t => { st.i = .1 + (.84 - .1) * Math.sin(t * Math.PI / 2); sentence(); cur = st.i; apply(cur); }, Ease.inOutCubic); });
+    at(3500, () => { tween(700, t => { st.i = .84 + (target.i - .84) * t; sentence(); cur = st.i; apply(cur); }, Ease.inOutCubic); });
+    if (IN && target.second >= 0){
+      at(4600, () => { setView('also'); Fx.paper(); });
+      at(5500, () => { st.second = target.second; setView('picked'); sentence(); Fx.paper(); });
+    }
+    at(IN && target.second >= 0 ? 5700 : 4400, () => { demoing = false; st.i = cur = target.i; lastDeg = degree(st.i); apply(cur); sentence(); commit(); });
+  }
+  function render(){
+    rg = null; word.textContent = WORDS()[st.slot];
+    topLine(); renderList(); apply(cur); sentence();
+  }
+  render(); hl.classList.add('on');
+  return { render, demo, has(){ return view !== 'list'; } };
+}
+const PkIn = Picker($('#pkIn'), 'in');
+const PkOut = Picker($('#pkOut'), 'out');
+moment({ render: PkIn.render });
+moment({ sec: $('#leave'), watch: $('#pkOut'), render: PkOut.render, enter(){ PkOut.demo(); } });
+
+/* ===== 4, 5 A cover: masthead, question, headline, and the room typeset as a block ===== */
+function CoverView(root, o){
+  o = o || {};
+  root.innerHTML = '<div class="cv-top"><span class="cv-mast">The Room</span><span class="cv-q"></span></div><h3 class="cv-hl"></h3>';
+  const box = o.port ? { w: 84, h: 74 } : { w: 91, h: 31 };
+  const svg = svgEl('svg', { class: 'blk', viewBox: '0 0 ' + box.w + ' ' + box.h, 'aria-hidden': 'true' }, root);
+  const gh = svgEl('g', null, svg), gw = svgEl('g', null, svg);
+  const sw = o.you ? svgSwipe(svg, gh, 5) : null;
+  const q = $('.cv-q', root), hl = $('.cv-hl', root), mast = $('.cv-mast', root);
+  let lay = null, texts = {}, tl = null;
+  function finish(){ if (tl){ tl.finish(); tl = null; } if (sw) sw.show(); }
+  function render(){
+    finish();
+    q.textContent = Issue.q;
+    hl.classList.remove('set'); hl.innerHTML = wordsHTML(SET().headIn);
+    lay = typeset(tally('in'), box, { ref: o.ref || 90 });
+    texts = drawWords(gw, lay);
+    Object.keys(texts).forEach(k => { texts[k].style.opacity = ''; texts[k].removeAttribute('transform'); });
+    if (sw){ const it = lay.items.find(x => x.i === You.inSlot); if (it){ sw.place(it); sw.show(); } }
+    if (o.port) fitText(mast, .84);
+  }
+  function play(){
+    finish();
+    hl.classList.remove('set'); void hl.offsetWidth; hl.classList.add('set');
+    const base = SET().headIn.split(' ').length * 95 + 450;
+    const seq = lay.items.slice().sort((a, b) => (a.y - b.y) || (a.x - b.x));
+    const tracks = [{ at: 0, dur: 0, sound: true, fn(){ if (!o.quiet) Fx.whoosh(); } }];
+    seq.forEach((it, k) => {
+      const t = texts[it.i];
+      tracks.push({ at: base + k * 140, dur: 760, fn(p){
+        t.style.opacity = p.toFixed(3);
+        t.setAttribute('transform', 'translate(0 ' + ((1 - p) * .16 * it.s).toFixed(3) + ')');
+        t.style.fontWeight = Math.round(it.wght + (1 - p) * 150);
+      } });
+    });
+    if (sw) tracks.push({ at: base + seq.length * 140 + 520, dur: 0, fn(p){ if (p < 1) sw.hide(); else sw.wipe(); } });
+    tl = timeline(tracks);
+  }
+  return { render, play, finish };
+}
+
+/* 4 Read the room: the proof, before it prints */
+const ReadM = (() => {
+  const P = CoverView($('#proofCv'), { ref: 90 }), say = $('#sayLine');
+  function render(){
+    P.render();
+    say.innerHTML = '“' + esc(SET().headIn + ' ' + START[Issue.key]) + '”';
+  }
+  $('#printCover').addEventListener('click', () => {
+    Fx.press(); buzz();
+    if (CoverM.vis) CoverM.replay();
+    else $('#cover').scrollIntoView({ behavior: RM ? 'auto' : 'smooth', block: 'start' });
+  });
+  return moment({ render });
+})();
+
+/* 5 The cover: the room sets its own headline; the phone mirror marks your word */
+const CoverM = (() => {
+  const P = CoverView($('#coverCv'), { ref: 90 }), M = CoverView($('#coverPh'), { port: true, you: true, ref: 60, quiet: true });
+  return moment({
+    sec: $('#cover'), watch: $('#coverProj'),
+    render(){ P.render(); M.render(); },
+    enter(){ P.play(); M.play(); },
+    leave(){ P.finish(); M.finish(); },
+    replay(){ P.play(); M.play(); }
+  });
+})();
+
+/* ===== 7 Next issue: the cover becomes issue two, then the words file into Then and Now ===== */
+const NextM = (() => {
+  const root = $('#nextCv');
+  root.innerHTML = '<div class="cv-top"><span class="cv-mast">The Room</span><span class="cv-q"></span></div>' +
+    '<div class="nx-hls"><h3 class="cv-hl ha"></h3><h3 class="cv-hl hb"></h3></div><div class="nx-body"></div>';
+  const body = $('.nx-body', root), ha = $('.ha', root), hb = $('.hb', root), q = $('.cv-q', root);
+  const box = { w: 55, h: 32.5 };
+  const svg = svgEl('svg', { class: 'blk', viewBox: '0 0 55 32.5', 'aria-hidden': 'true' }, body);
+  const gS = svgEl('g', { class: 'slope' }, svg), gB = svgEl('g', null, svg);
+  const pqs = document.createElement('div'); pqs.className = 'pqs'; body.appendChild(pqs);
+  let tl = null, lin, lout, sl, texts, refs;
+  const byI = lay => { const m = {}; lay.items.forEach(it => m[it.i] = it); return m; };
+  function slopeParts(v){
+    refs.heads.concat(refs.cnt).forEach(t => t.style.opacity = v);
+    Object.keys(refs.then).forEach(k => refs.then[k].style.opacity = v);
+  }
+  function lines(p, k0){
+    sl.lines.forEach((l, k) => {
+      const e = refs.lines[l.i], t = clamp(p * 1.4 - (k0 ? k * .05 : 0), 0, 1);
+      e.setAttribute('x2', lerp(l.x1, l.x2, t).toFixed(2)); e.setAttribute('y2', lerp(l.y1, l.y2, t).toFixed(2));
+      e.style.opacity = t > 0 ? 1 : 0;
+    });
+  }
+  function nowVis(v){ Object.keys(refs.now).forEach(k => refs.now[k].style.opacity = v); }
+  function endState(){
+    ha.style.opacity = 0; hb.style.opacity = 1; ha.style.transform = '';
+    gB.style.opacity = 0; slopeParts(1); nowVis(1); lines(1, false);
+    $$('.pq', pqs).forEach(p => { p.style.opacity = ''; p.style.transform = ''; });
+  }
+  function render(){
+    if (tl){ tl.finish(); tl = null; }
+    q.textContent = Issue.q;
+    ha.innerHTML = wordsHTML(SET().headIn); hb.innerHTML = wordsHTML(SET().headOut); hb.classList.remove('set');
+    const tin = tally('in'), tout = tally('out');
+    lin = typeset(tin, box, { ref: 80 }); lout = typeset(tout, box, { ref: 80 });
+    sl = slopeLayout(tin, tout, { x: 0, y: 0, w: 55, h: 32.5, head: 3.4, fMin: 2.6, fMax: 4.5, gap: .45, split: [.47, .615], opszK: 10 });
+    texts = drawWords(gB, lout);
+    refs = drawSlope(gS, sl);
+    pqs.innerHTML = quotes(3).map(pqHTML).join('');
+    endState();
+  }
+  function play(){
+    if (tl){ tl.finish(); tl = null; }
+    const A = byI(lin), B = byI(lout), N = sl.N, P = $$('.pq', pqs), order = [0,1,2,3,4,5,6,7];
+    if (!RM){
+      ha.style.opacity = 1; ha.style.transform = ''; ha.style.filter = ''; hb.style.opacity = 0; hb.classList.remove('set');
+      gB.style.opacity = 1; order.forEach(i => { setText(texts[i], A[i], -.02); texts[i].style.opacity = 1; });
+      slopeParts(0); nowVis(0); lines(0, false);
+      P.forEach(p => { p.style.opacity = 0; });
+    }
+    const tr = [
+      { at: 600, dur: 0, sound: true, fn(){ Fx.whoosh(); } },
+      { at: 600, dur: 520, init: false, fn(p){ ha.style.opacity = (1 - p).toFixed(3); ha.style.transform = 'translateY(' + (-p * .12).toFixed(3) + 'em)'; } },
+      { at: 900, dur: 0, init: false, fn(){ hb.style.opacity = 1; hb.classList.remove('set'); void hb.offsetWidth; hb.classList.add('set'); } }
+    ];
+    const seqM = order.slice().sort((x, y) => (A[x].y - A[y].y) || (A[x].x - A[y].x));
+    seqM.forEach((i, k) => tr.push({ at: 1150 + k * 110, dur: 1250, init: false, ease: Ease.inOutCubic, fn(p){ setText(texts[i], mix(A[i], B[i], p), -.02); texts[i].style.opacity = (1 - .78 * Math.sin(Math.PI * p)).toFixed(3); } }));
+    P.forEach((el, k) => tr.push({ at: 3300 + k * 420, dur: 800, init: false, fn(p){ el.style.opacity = p.toFixed(3); el.style.transform = 'translateY(' + ((1 - p) * .3).toFixed(3) + 'em)'; } }));
+    tr.push({ at: 7000, dur: 0, sound: true, fn(){ Fx.whoosh(); } });
+    order.forEach((i, k) => tr.push({ at: 7000 + k * 45, dur: 1250, init: false, ease: Ease.inOutCubic, fn(p){ setText(texts[i], mix(B[i], N[i], p), lerp(-.02, -.012, p)); } }));
+    tr.push({ at: 8650, dur: 0, init: false, fn(){ nowVis(1); gB.style.opacity = 0; } });
+    tr.push({ at: 8650, dur: 700, init: false, fn(p){ slopeParts(p.toFixed(3)); } });
+    tr.push({ at: 8700, dur: 1100, init: false, ease: Ease.inOutCubic, fn(p){ lines(p, true); } });
+    tl = timeline(tr);
+  }
+  return moment({
+    sec: $('#next'), watch: $('#nextProj'), render,
+    enter: play, leave(){ if (tl){ tl.finish(); tl = null; } endState(); }, replay: play
+  });
+})();
+
+/* ===== 8 Keep: a byline card for you, a spread for the sponsor ===== */
+const KeepM = (() => {
+  const by = $('#byline'), L = $('#spL'), R = $('#spR');
+  function render(){
+    const d = degree(You.outI), w = WORDS()[You.outSlot];
+    by.innerHTML = '<div class="cv-top"><span class="cv-mast">The Room</span><span class="cv-q">' + esc(Issue.q) + '</span></div>' +
+      '<div class="by-body"><p class="by-l">Arrived:</p><p class="by-a">' + esc(sentIn()) + '</p>' +
+      '<p class="by-l">Left:</p><p class="by-b">' + (d ? esc(capFirst(d)) + ' ' : '') +
+      '<span class="hw">' + hlSvg(11) + '<span class="t">' + esc(d ? low(w) : w) + '</span></span>.</p>' +
+      (You.why ? '<p class="by-why">“' + esc(tidy(You.why)) + '”</p>' : '') + '</div>';
+    wipe($('.hl', by));
+    const tin = tally('in'), tout = tally('out');
+    L.innerHTML = '<div class="cv-top"><span class="cv-mast">The Room</span></div><p class="sp-q">' + esc(Issue.q) + '</p>' +
+      '<h3 class="sp-hl">' + esc(SET().headOut) + '</h3>' +
+      '<div class="sp-big"><p class="sp-num">' + tout.good + '</p><p class="sp-cap">of ' + tout.all + ' left feeling good about it, up from ' + tin.good + '.</p></div>';
+    R.textContent = '';
+    const s = svgEl('svg', { class: 'slope', viewBox: '0 0 80 80', role: 'img', 'aria-label': 'Then and now, word by word' }, R);
+    drawSlope(svgEl('g', null, s), slopeLayout(tin, tout, { x: 0, y: 0, w: 80, h: 80, head: 8, fMin: 4.2, fMax: 6.8, gap: 2.9, split: [.47, .6], opszK: 6 }));
+    const pq = document.createElement('div'); pq.className = 'pqs'; pq.innerHTML = quotes(3).map(pqHTML).join(''); R.appendChild(pq);
+  }
+  return moment({ render });
+})();
+
+/* ===== Boot: render every moment at rest, then again once the fonts are in ===== */
+function boot(){
+  Meas.clear();
+  Moments.forEach(m => { try { if (m.render) m.render(); } catch (e) { console.error(e); } });
+  $$('.mast-xl').forEach(el => fitText(el, .915));
+  Press.redraw();
+}
+boot();
+if (document.fonts && document.fonts.load){
+  Promise.all([
+    document.fonts.load('700 40px Newsreader'), document.fonts.load('italic 400 40px Newsreader'), document.fonts.load('200 40px Newsreader')
+  ]).then(boot).catch(() => {});
+  if (document.fonts.addEventListener) document.fonts.addEventListener('loadingdone', later(boot));
+}
+</script>
+</body>
+</html>

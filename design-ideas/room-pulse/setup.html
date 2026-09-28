@@ -1,0 +1,1750 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="robots" content="noindex, nofollow">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Setup</title>
+<meta name="description" content="Six ways a facilitator could set up Room Pulse without filling in a form.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Archivo:wght@400;500;600&family=Montserrat:wght@400;500;600;700&family=Newsreader:ital,opsz,wght@0,6..72,400;0,6..72,500;0,6..72,600;1,6..72,400;1,6..72,500&display=swap">
+<style>
+/* ===== Tokens ===== */
+:root{
+  color-scheme: light;
+  --bg:#FFFFFF; --ink:#293851; --soft:#586A90; --hair:rgba(41,56,81,.12); --line:rgba(41,56,81,.16);
+  --you:#FFCC00;
+  --coastal:#68BFBD; --glacier:#B3DFDE; --slush:#E4F4F4; --pigeon:#D5D9E3;
+  --serif: Georgia, 'Times New Roman', Times, serif;
+  --sans: 'Montserrat', 'Helvetica Neue', Arial, sans-serif;
+  --news: 'Newsreader', Georgia, 'Times New Roman', serif;
+  --grot: 'Archivo', 'Helvetica Neue', Arial, sans-serif;
+  --display: var(--serif);
+  --frame:#101318;
+}
+*{box-sizing:border-box}
+html{-webkit-text-size-adjust:100%}
+body{margin:0;background:var(--bg);color:var(--ink);font-family:var(--sans);font-size:16px;line-height:1.45;-webkit-font-smoothing:antialiased;}
+button{font:inherit;color:inherit;cursor:pointer;background:none;border:0;padding:0;-webkit-tap-highlight-color:transparent;}
+:focus-visible{outline:3px solid var(--you);outline-offset:3px;border-radius:6px;}
+[contenteditable]:focus-visible{outline:none;}
+
+/* ===== Page shell ===== */
+.page{max-width:1360px;margin:0 auto;padding-inline:max(16px,4vw);padding-block:0 128px;}
+.top{display:flex;align-items:center;justify-content:space-between;gap:16px;padding-block:18px;}
+.back{color:var(--soft);text-decoration:none;font-size:14px;min-height:44px;display:inline-flex;align-items:center;}
+.back:hover{color:var(--ink);}
+.soundbtn{min-height:44px;min-width:44px;display:inline-flex;align-items:center;justify-content:center;color:var(--soft);font-size:14px;}
+.soundbtn:hover{color:var(--ink);}
+.intro{padding-block:clamp(40px,7vw,104px) clamp(52px,6vw,92px);}
+.intro h1{font-family:var(--serif);font-weight:400;font-size:clamp(44px,7vw,96px);line-height:1;margin:0;letter-spacing:-.012em;color:var(--ink);}
+.intro h1 .tdot{display:inline-block;width:.16em;height:.16em;border-radius:50%;background:var(--you);margin-left:.045em;}
+.intro p{font-family:var(--serif);font-style:italic;font-size:clamp(18px,1.8vw,22px);line-height:1.4;color:var(--soft);max-width:44ch;margin:.85em 0 0;text-wrap:pretty;}
+
+.wall{display:grid;grid-template-columns:minmax(0,1fr);gap:76px 56px;}
+@media (min-width:1240px){ .wall{grid-template-columns:repeat(2,minmax(0,1fr));row-gap:92px;} }
+@media (max-width:760px){ .wall{row-gap:60px;} }
+.spec{min-width:0;max-width:880px;}
+.frame{position:relative;aspect-ratio:16/10;container:frame / inline-size;overflow:hidden;overflow:clip;border-radius:14px;border:1px solid var(--hair);background:#fff;box-shadow:0 30px 60px -42px rgba(41,56,81,.55);isolation:isolate;-webkit-tap-highlight-color:transparent;}
+.cap{display:flex;align-items:flex-start;justify-content:space-between;gap:16px;margin-top:20px;}
+.cap h2{font-family:var(--serif);font-weight:400;font-size:22px;line-height:1.2;margin:0;color:var(--ink);}
+.cap p{font-family:var(--sans);font-size:13.5px;line-height:1.4;color:var(--soft);margin:5px 0 0;}
+.replay{flex:none;width:44px;height:44px;margin-top:-4px;border-radius:50%;display:grid;place-items:center;color:var(--soft);box-shadow:inset 0 0 0 1px var(--hair);transition:color .2s ease, box-shadow .2s ease, transform .3s ease;}
+.replay:hover{color:var(--ink);box-shadow:inset 0 0 0 1px rgba(41,56,81,.32);}
+.replay:active svg{transform:rotate(-40deg);}
+.replay svg{transition:transform .3s ease;}
+
+/* The one primary action, lower right of every frame */
+.go{position:absolute;right:5cqw;bottom:4.8cqw;z-index:5;display:inline-flex;align-items:center;justify-content:center;min-height:max(44px,6.6cqw);padding:0 max(18px,3.3cqw);border-radius:999px;background:var(--ink);color:#fff;font-family:var(--sans);font-weight:600;font-size:max(13px,2.2cqw);letter-spacing:.01em;white-space:nowrap;box-shadow:0 .6cqw 1.4cqw -.7cqw rgba(41,56,81,.6);transition:transform .15s ease, background-color .2s ease;touch-action:manipulation;}
+.go:hover{background:#34496C;}
+.go:active{transform:scale(.97);}
+
+/* Room open sheet (shared, themed per specimen) */
+.sheet{position:absolute;inset:0;z-index:40;display:flex;flex-direction:column;justify-content:center;padding:0 7.4cqw 7cqw;background:var(--sh-bg,#FFFFFF);color:var(--sh-ink,var(--ink));transform:translateY(102%);visibility:hidden;transition:transform .55s cubic-bezier(.2,.8,.2,1), visibility 0s linear .55s;}
+.sheet.open{transform:none;visibility:visible;transition:transform .55s cubic-bezier(.2,.8,.2,1), visibility 0s;}
+.sheet-t{margin:0;font-family:var(--sh-font,var(--serif));font-weight:400;font-size:max(24px,6.4cqw);line-height:1.05;letter-spacing:-.01em;}
+.sheet-code{margin:3.4cqw 0 0;font-family:var(--sans);font-weight:700;font-size:max(30px,9cqw);line-height:1;letter-spacing:.2em;color:var(--sh-ink,var(--ink));}
+.sheet-code span{display:inline-block;}
+.sheet-s{margin:1.6cqw 0 0;font-family:var(--sans);font-size:max(13px,2.2cqw);color:var(--sh-soft,var(--soft));}
+.sheet .go{background:var(--sh-btn,var(--ink));color:var(--sh-btn-ink,#fff);}
+
+/* ===== 1. Sentence ===== */
+.sx-sentence{background:#FFFFFF;}
+.st-line{position:absolute;left:7.4cqw;right:7.4cqw;top:7.2cqw;margin:0;font-family:var(--serif);font-weight:400;font-size:4.7cqw;line-height:1.56;color:var(--ink);text-wrap:pretty;transition:font-size .34s cubic-bezier(.2,.8,.2,1);}
+.st-line.st-ghost{visibility:hidden;pointer-events:none;transition:none;}
+.nw{white-space:nowrap;}
+.w{position:relative;display:inline-block;cursor:pointer;touch-action:manipulation;-webkit-user-select:none;user-select:none;-webkit-touch-callout:none;border-radius:.08em;}
+.w::before{content:"";position:absolute;left:.01em;right:.01em;bottom:.23em;height:.075em;min-height:2px;border-radius:2px;background:var(--coastal);transform-origin:0 50%;transition:transform .6s cubic-bezier(.2,.8,.2,1) var(--d,0s), height .2s ease, background-color .2s ease;}
+.w:hover::before{height:.13em;}
+.w::after{content:"";position:absolute;left:-.14em;right:-.14em;top:-.1em;bottom:-.1em;}
+.st-line.pre .w::before{transform:scaleX(0);transition:none;}
+.w-clip{position:relative;display:inline-block;white-space:nowrap;clip-path:inset(0 -.14em);}
+.w-cur{display:inline-block;white-space:nowrap;}
+.w-next{position:absolute;left:0;top:0;white-space:nowrap;}
+.st-line.editing .nw{white-space:normal;}
+.w.editing,.w.editing .w-clip,.w.editing .w-cur{display:inline;white-space:normal;}
+.w.editing{cursor:text;-webkit-user-select:text;user-select:text;}
+.w.editing::before,.w.editing::after{display:none;}
+.w.editing .w-clip{clip-path:none;}
+.w.editing .w-cur{outline:none;font-style:italic;padding-right:.05em;caret-color:var(--ink);-webkit-user-select:text;user-select:text;text-decoration:underline;text-decoration-color:var(--ink);text-decoration-thickness:.05em;text-underline-offset:.24em;}
+.st-prev{position:absolute;left:7.4cqw;bottom:4.8cqw;width:58cqw;min-height:max(44px,6.6cqw);margin:0;display:flex;align-items:center;font-family:var(--sans);font-size:max(11px,1.95cqw);line-height:1.35;color:var(--soft);}
+.st-prev > span{display:block;text-wrap:pretty;}
+.st-prev q{quotes:none;font-family:var(--serif);font-style:italic;font-size:1.3em;color:var(--ink);}
+
+/* ===== 2. Console ===== */
+.sx-console{background:#EBEAE5;--sh-bg:#EBEAE5;--sh-font:var(--grot);}
+.cn{position:absolute;inset:0;font-family:var(--grot);color:#2B2E33;--kx:22cqw;--ky:37.5cqw;--kd:24cqw;--rt:14.8cqw;--rl:18.8cqw;--lab:1.85cqw;}
+.cn-lab{display:block;width:100%;font-family:var(--grot);font-size:var(--lab);font-weight:500;letter-spacing:.03em;line-height:1.15;color:#909398;text-align:center;white-space:normal;transition:color .25s ease;}
+.cn-lab.on{color:#26292E;}
+.cn-lcd{position:absolute;left:44cqw;top:6.6cqw;width:51cqw;height:9.4cqw;padding:.7cqw;border-radius:1.2cqw;background:#2F3237;box-shadow:0 .14cqw 0 rgba(255,255,255,.85);cursor:text;}
+.cn-lcd-in{position:relative;display:block;height:100%;border-radius:.55cqw;overflow:hidden;background:linear-gradient(180deg,#BAC1B0,#C8CEBE);box-shadow:inset 0 .4cqw .8cqw rgba(0,0,0,.3);}
+.cn-lcd-t{position:absolute;left:0;right:0;top:0;height:100%;display:block;padding:0 2.2cqw;line-height:8cqw;font-family:var(--grot);font-weight:500;font-size:2.35cqw;color:#232821;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;text-shadow:.14cqw .14cqw 0 rgba(35,40,33,.13);outline:none;}
+.cn-lcd-t.ph{color:rgba(35,40,33,.42);}
+.cn-lcd.editing .cn-lcd-t{text-overflow:clip;caret-color:#232821;}
+.cn-dial{position:absolute;left:var(--kx);top:var(--ky);width:0;height:0;}
+.cn-tick{position:absolute;left:-.17cqw;top:0;width:.34cqw;height:1.3cqw;border-radius:.2cqw;background:#3A3D42;transform-origin:50% 0;transform:rotate(var(--a)) translateY(calc(-1 * var(--rt)));}
+.cn-dl{position:absolute;left:calc(var(--rl) * sin(var(--a)));top:calc(var(--rl) * -1 * cos(var(--a)));transform:translate(-50%,-50%);padding:.8cqw 1.1cqw;font-family:var(--grot);font-weight:500;font-size:var(--lab);letter-spacing:.03em;color:#909398;white-space:nowrap;border-radius:.6cqw;transition:color .2s ease;}
+.cn-dl::after{content:"";position:absolute;inset:-.8cqw -.4cqw;}
+.cn-dl.on{color:#26292E;}
+.cn-knob{position:absolute;left:calc(var(--kd) / -2);top:calc(var(--kd) / -2);width:var(--kd);height:var(--kd);border-radius:50%;cursor:grab;touch-action:none;}
+.cn-knob.turning{cursor:grabbing;}
+.cn-knob .base{position:absolute;inset:0;border-radius:50%;background:radial-gradient(circle at 50% 40%,#FFFFFF 0,#F6F5F1 52%,#EAE8E3 80%,#DEDCD6 100%);box-shadow:0 .4cqw 0 #C7C5BE, 0 2.4cqw 3cqw -1.4cqw rgba(20,22,26,.5);}
+.cn-knob .rot{position:absolute;inset:0;border-radius:50%;}
+.cn-knob .knurl{position:absolute;inset:0;border-radius:50%;background:repeating-conic-gradient(from 0deg,rgba(43,46,51,.13) 0deg 1.4deg,rgba(255,255,255,0) 1.4deg 4.5deg);-webkit-mask:radial-gradient(closest-side,transparent 84%,#000 85%);mask:radial-gradient(closest-side,transparent 84%,#000 85%);}
+.cn-knob .face{position:absolute;inset:14%;border-radius:50%;background:radial-gradient(circle at 50% 30%,#FFFFFF,#F5F4F0 70%,#EEEDE8);box-shadow:inset 0 .15cqw .3cqw rgba(255,255,255,.9), 0 0 0 .12cqw rgba(0,0,0,.05);}
+.cn-knob .mark{position:absolute;left:50%;top:5%;width:.8cqw;height:25%;margin-left:-.4cqw;border-radius:.4cqw;background:#2B2E33;}
+.cn-bank{position:absolute;left:43cqw;top:21.8cqw;display:flex;align-items:flex-start;}
+.cn-sw,.cn-rk{position:relative;display:flex;flex-direction:column;align-items:center;gap:2.1cqw;width:8cqw;padding:.9cqw 0 .6cqw;touch-action:none;border-radius:1cqw;}
+.cn-slot{position:relative;display:block;width:2.1cqw;height:13cqw;border-radius:1.05cqw;background:#2F3237;box-shadow:inset 0 .35cqw .6cqw rgba(0,0,0,.55), 0 .14cqw 0 rgba(255,255,255,.85);}
+.cn-thumb{position:absolute;left:50%;top:0;display:block;width:5.2cqw;height:3.7cqw;margin-left:-2.6cqw;border-radius:.55cqw;background:linear-gradient(#FFFFFF,#EEEDE8);box-shadow:0 .32cqw 0 #C5C3BC, 0 1cqw 1.3cqw -.5cqw rgba(0,0,0,.45);transform:translateY(-.6cqw);transition:transform .24s cubic-bezier(.3,1.45,.5,1);}
+.cn-thumb::before{content:"";position:absolute;left:1.05cqw;right:1.05cqw;top:1cqw;bottom:1cqw;background:repeating-linear-gradient(180deg,#D3D1CA 0 .16cqw,transparent .16cqw .52cqw);}
+.cn-sw[aria-checked="false"] .cn-thumb{transform:translateY(9.9cqw);}
+.cn-gap{display:block;width:3.4cqw;flex:none;}
+.cn-rk{width:9cqw;}
+.cn-rk-bez{position:relative;display:block;width:5.2cqw;height:10.2cqw;margin-top:1.4cqw;padding:.45cqw;border-radius:.75cqw;background:#2F3237;box-shadow:0 .14cqw 0 rgba(255,255,255,.85);perspective:24cqw;}
+.cn-rk-face{position:relative;display:block;width:100%;height:100%;border-radius:.4cqw;background:linear-gradient(180deg,#CFCDC6 0%,#E0DED8 49.5%,#FFFFFF 50.5%,#F2F1ED 100%);box-shadow:inset 0 -.25cqw 0 rgba(0,0,0,.06);transform:rotateX(20deg);transition:transform .18s cubic-bezier(.3,1.4,.5,1);}
+.cn-rk[aria-checked="false"] .cn-rk-face{transform:rotateX(-20deg);background:linear-gradient(180deg,#F2F1ED 0%,#FFFFFF 49.5%,#E0DED8 50.5%,#CFCDC6 100%);box-shadow:inset 0 .25cqw 0 rgba(255,255,255,.7);}
+.cn-rk-face::before{content:"";position:absolute;left:50%;top:17%;width:.3cqw;height:1.5cqw;margin-left:-.15cqw;border-radius:.15cqw;background:#3A3D42;}
+.cn-rk-face::after{content:"";position:absolute;left:50%;bottom:17%;width:1.35cqw;height:1.35cqw;margin-left:-.675cqw;border:.28cqw solid #3A3D42;border-radius:50%;}
+.cn-keys{position:absolute;left:44cqw;top:47.6cqw;display:flex;gap:1.4cqw;}
+.cn-key{position:relative;display:grid;place-items:center;width:6.8cqw;height:6.8cqw;border-radius:.9cqw;background:linear-gradient(#FEFDFB,#F0EFEB);box-shadow:0 .5cqw 0 #C9C7C0, 0 1.2cqw 1.5cqw -.6cqw rgba(0,0,0,.42);transition:transform .1s ease, box-shadow .1s ease;}
+.cn-key::after{content:"";position:absolute;inset:-.5cqw -.7cqw;}
+.cn-key[aria-checked="true"]{transform:translateY(.42cqw);background:linear-gradient(#EDECE8,#F4F3EF);box-shadow:0 .08cqw 0 #C9C7C0, inset 0 .25cqw .5cqw rgba(0,0,0,.16);}
+.cn-key:active{transform:translateY(.42cqw);}
+.ic{position:relative;display:block;width:3.4cqw;height:3.4cqw;}
+.ic-field{background:
+  radial-gradient(circle at 16% 30%,#34373C 0 .36cqw,transparent .4cqw),
+  radial-gradient(circle at 50% 12%,#34373C 0 .36cqw,transparent .4cqw),
+  radial-gradient(circle at 84% 38%,#34373C 0 .36cqw,transparent .4cqw),
+  radial-gradient(circle at 38% 60%,#34373C 0 .36cqw,transparent .4cqw),
+  radial-gradient(circle at 70% 82%,#34373C 0 .36cqw,transparent .4cqw),
+  radial-gradient(circle at 18% 88%,#34373C 0 .36cqw,transparent .4cqw);}
+.ic-board::before{content:"";position:absolute;left:0;top:.35cqw;width:.92cqw;height:1.15cqw;border-radius:.12cqw;background:#34373C;box-shadow:1.24cqw 0 0 #34373C,2.48cqw 0 0 #34373C,0 1.55cqw 0 #34373C,1.24cqw 1.55cqw 0 #34373C,2.48cqw 1.55cqw 0 #34373C;}
+.ic-board::after{content:"";position:absolute;left:0;right:0;top:.88cqw;height:.12cqw;background:#F4F3EF;box-shadow:0 1.55cqw 0 #F4F3EF;}
+.ic-sun::before{content:"";position:absolute;inset:0;border-radius:50%;background:repeating-conic-gradient(from -6deg,#34373C 0deg 12deg,transparent 12deg 45deg);-webkit-mask:radial-gradient(closest-side,transparent 42%,#000 44%);mask:radial-gradient(closest-side,transparent 42%,#000 44%);}
+.ic-sun b{position:absolute;inset:36%;border-radius:50%;background:#34373C;}
+.ic-cover{width:2.7cqw;border:.26cqw solid #34373C;border-radius:.2cqw;background:linear-gradient(#34373C,#34373C) .3cqw .35cqw/1.5cqw .5cqw no-repeat,linear-gradient(#34373C,#34373C) .3cqw 1.1cqw/1.1cqw .5cqw no-repeat,linear-gradient(#34373C,#34373C) .3cqw 2.1cqw/1.3cqw .18cqw no-repeat;}
+.cn-start{position:absolute;right:5.8cqw;bottom:5.4cqw;width:13.4cqw;height:13.4cqw;border-radius:50%;background:radial-gradient(circle at 50% 34%,#F29460 0,#EA7438 46%,#DE6428 100%);box-shadow:0 .6cqw 0 #B6521D, 0 1.8cqw 2.6cqw -1.2cqw rgba(0,0,0,.5);font-family:var(--grot);font-weight:600;font-size:2.4cqw;letter-spacing:.04em;color:#2A1A10;transition:transform .12s ease, box-shadow .12s ease;touch-action:manipulation;}
+.cn-start:active{transform:translateY(.5cqw);box-shadow:0 .1cqw 0 #B6521D, 0 .8cqw 1.4cqw -1cqw rgba(0,0,0,.4);}
+.cn-start[aria-pressed="true"]{transform:translateY(.5cqw);box-shadow:0 .1cqw 0 #B6521D, inset 0 .35cqw .8cqw rgba(0,0,0,.22), 0 .8cqw 1.4cqw -1cqw rgba(0,0,0,.4);}
+
+/* ===== 3. Timeline ===== */
+.sx-timeline{background:#FFFFFF;}
+.tl{position:absolute;inset:0;--x0:6cqw;--tw:88cqw;--tabTop:29cqw;--tabH:4.8cqw;--ribTop:36.8cqw;--ribH:8.2cqw;}
+.tl-q{position:absolute;left:6cqw;top:6.4cqw;right:30cqw;margin:0;font-family:var(--serif);font-size:3.5cqw;line-height:1.2;color:var(--ink);}
+.tl-rib{position:absolute;left:var(--x0);width:var(--tw);top:var(--ribTop);height:var(--ribH);display:flex;gap:.35cqw;}
+.tl-b{position:relative;min-width:0;display:flex;align-items:center;justify-content:center;background:var(--bg);font-family:var(--sans);font-weight:500;font-size:1.72cqw;color:var(--ink);}
+.tl-b:first-child{border-radius:1.1cqw 0 0 1.1cqw;}
+.tl-b:last-child{border-radius:0 1.1cqw 1.1cqw 0;}
+.tl-b span{white-space:nowrap;}
+.tl-m{position:absolute;left:0;top:0;width:0;height:0;z-index:3;}
+.tl-m.drag{z-index:5;}
+.tl-stem{position:absolute;left:-.13cqw;top:var(--tabH);width:.26cqw;height:calc(var(--ribTop) + var(--ribH) - var(--tabTop) - var(--tabH));border-radius:.13cqw;background:var(--ink);transition:opacity .15s ease;}
+.tl-tab{position:absolute;left:0;top:0;height:var(--tabH);padding:0 1.6cqw;display:flex;align-items:center;border-radius:.8cqw;background:var(--ink);color:#fff;font-family:var(--sans);font-weight:600;font-size:1.85cqw;letter-spacing:.01em;white-space:nowrap;cursor:grab;touch-action:none;-webkit-user-select:none;user-select:none;box-shadow:0 .5cqw 1.1cqw -.5cqw rgba(41,56,81,.55);transition:box-shadow .2s ease, background-color .2s ease, color .2s ease, transform .15s ease;}
+.tl-tab::after{content:"";position:absolute;left:-.4cqw;right:-.4cqw;top:-1.2cqw;bottom:-1.2cqw;}
+.tl-tab:hover{transform:translateY(-.2cqw);}
+.tl-m.parked .tl-stem{opacity:0;transition:none;}
+.tl-m.parked .tl-tab{background:#FFFFFF;color:var(--ink);box-shadow:inset 0 0 0 .2cqw rgba(41,56,81,.2);}
+.tl-m.drag .tl-tab{cursor:grabbing;transform:translateY(-.3cqw);box-shadow:0 1cqw 2cqw -.6cqw rgba(41,56,81,.5);}
+.tl-m.drag.parked .tl-tab{box-shadow:inset 0 0 0 .2cqw rgba(41,56,81,.2), 0 1cqw 2cqw -.6cqw rgba(41,56,81,.35);}
+.tl-pop{position:absolute;left:0;top:0;z-index:6;display:flex;align-items:center;gap:1.6cqw;width:33cqw;padding:1.2cqw 1.8cqw 1.2cqw 1.2cqw;border-radius:1.1cqw;background:#FFFFFF;box-shadow:0 0 0 1px var(--hair), 0 1.6cqw 3.2cqw -1.4cqw rgba(41,56,81,.45);pointer-events:none;opacity:0;transform:translateY(.8cqw) scale(.97);transform-origin:50% 100%;transition:opacity .16s ease, transform .22s cubic-bezier(.2,.8,.2,1);}
+.tl-pop.on{opacity:1;transform:none;}
+.tl-pop svg{flex:none;display:block;width:14cqw;height:auto;}
+.tl-pop p{margin:0;font-family:var(--serif);font-size:1.9cqw;line-height:1.28;color:var(--ink);}
+
+/* ===== 4. Swatches ===== */
+.sx-swatch{background:#F3F4F6;--sh-bg:#F3F4F6;}
+.sw{position:absolute;inset:0;--cw:17cqw;--ch:48.6cqw;--px:32cqw;--py:57.8cqw;--rv:2.3cqw;--nameH:5.4cqw;--cellH:4.7cqw;--wf:1.78cqw;--spread:9deg;}
+.sw-card{position:absolute;left:calc(var(--px) - var(--cw) / 2);top:calc(var(--py) - var(--ch) + var(--rv));width:var(--cw);height:var(--ch);display:flex;flex-direction:column;background:#FFFFFF;border-radius:.7cqw;box-shadow:0 .1cqw .2cqw rgba(41,56,81,.1), 0 .9cqw 1.8cqw -.8cqw rgba(41,56,81,.35);transform-origin:50% calc(100% - var(--rv));--a:calc(var(--base) * var(--spread));--lift:0cqw;transform:rotate(var(--a)) translateY(var(--lift));transition:transform .62s cubic-bezier(.3,1.22,.45,1), box-shadow .3s ease;cursor:pointer;outline-offset:.5cqw;-webkit-user-select:none;user-select:none;}
+.sw-card:not(.on):hover{--lift:-1.2cqw;}
+.sw-card.on{--a:0deg;--lift:-2.2cqw;box-shadow:0 .1cqw .2cqw rgba(41,56,81,.1), 0 2.2cqw 3.6cqw -1.6cqw rgba(41,56,81,.48);}
+.sw-name{display:flex;align-items:center;height:var(--nameH);padding:0 1.2cqw;font-family:var(--serif);font-size:1.9cqw;color:var(--ink);white-space:nowrap;overflow:hidden;}
+.sw-cells{display:flex;flex-direction:column;gap:.14cqw;padding:0 .9cqw;}
+.sw-cell{position:relative;display:flex;align-items:flex-end;height:var(--cellH);padding:0 .8cqw .6cqw;background:var(--c);color:var(--t);font-family:var(--sans);font-weight:500;font-size:var(--wf);line-height:1;}
+.sw-cell:nth-child(4){margin-bottom:.8cqw;}
+.sw-w{display:block;min-width:1ch;max-width:100%;white-space:nowrap;overflow:hidden;outline:none;}
+.sw-card[data-i="3"].on .sw-w{min-width:70%;cursor:text;-webkit-user-select:text;user-select:text;}
+.sw-card[data-i="3"] .sw-w:empty::before{content:"";display:block;width:6cqw;height:0;margin-top:.8em;border-bottom:1px solid currentColor;opacity:.3;}
+.sw-card[data-i="3"] .sw-w:focus{box-shadow:0 .2cqw 0 currentColor;}
+.sw-foot{position:relative;flex:1;display:block;}
+.sw-rivet{position:absolute;left:50%;bottom:calc(var(--rv) - .8cqw);width:1.6cqw;height:1.6cqw;margin-left:-.8cqw;border-radius:50%;background:radial-gradient(circle at 40% 35%,#FFFFFF,#CDD1D8 70%,#B3B8C2);box-shadow:inset 0 0 0 .1cqw rgba(41,56,81,.22);}
+.sw-closed .sw-card{--a:0deg !important;--lift:0cqw !important;transition:none;}
+.sw-fanning .sw-card{transition-delay:calc(var(--j) * 70ms);}
+.sw-q{position:absolute;left:62cqw;right:5cqw;top:9.6cqw;margin:0;font-family:var(--serif);font-size:3.6cqw;line-height:1.25;color:var(--ink);outline:none;text-wrap:balance;}
+.sw-q.edit{text-decoration:underline dotted rgba(41,56,81,.35);text-decoration-thickness:.06em;text-underline-offset:.2em;cursor:text;}
+
+/* ===== 5. Preview first ===== */
+.sx-preview{background:#293851;--sh-bg:#293851;--sh-ink:#FFFFFF;--sh-soft:#C9D0DE;--sh-btn:#FFFFFF;--sh-btn-ink:#293851;}
+.pv{position:absolute;inset:0;--e:cubic-bezier(.25,.85,.25,1);}
+.pv-t{position:absolute;left:var(--l);top:var(--t);width:var(--w);aspect-ratio:16/9;display:block;border-radius:.8cqw;overflow:hidden;background:#FFFFFF;opacity:.6;filter:saturate(.55);box-shadow:0 0 0 1px rgba(255,255,255,.1), 0 .5cqw 1.2cqw -.5cqw rgba(0,0,0,.4);transition:left .64s var(--e), top .64s var(--e), width .64s var(--e), opacity .45s ease, filter .45s ease, box-shadow .45s ease;}
+.pv-t:hover{opacity:.9;filter:none;}
+.pv-t.big{opacity:1;filter:none;cursor:default;box-shadow:0 1.8cqw 3.8cqw -1.6cqw rgba(0,0,0,.62);}
+.pv-t[data-slot="big"]{--l:5cqw;--t:5.4cqw;--w:62cqw;}
+.pv-t[data-slot="s1"]{--l:72cqw;--t:5.4cqw;--w:23cqw;}
+.pv-t[data-slot="s2"]{--l:72cqw;--t:20cqw;--w:23cqw;}
+.pv-t[data-slot="s3"]{--l:72cqw;--t:34.6cqw;--w:23cqw;}
+.pv.grid .pv-t{opacity:1;filter:none;}
+.pv.grid .pv-t[data-g="0"]{--l:12.5cqw;--t:5cqw;--w:36cqw;}
+.pv.grid .pv-t[data-g="1"]{--l:51.5cqw;--t:5cqw;--w:36cqw;}
+.pv.grid .pv-t[data-g="2"]{--l:12.5cqw;--t:27.25cqw;--w:36cqw;}
+.pv.grid .pv-t[data-g="3"]{--l:51.5cqw;--t:27.25cqw;--w:36cqw;}
+.pv.snap .pv-t{transition:none;}
+.pv-screen{position:absolute;inset:0;display:block;container-type:inline-size;}
+.pv-screen canvas{position:absolute;inset:0;width:100%;height:100%;display:block;}
+.pv-name{position:absolute;left:5cqw;top:43.2cqw;margin:0;font-family:var(--serif);font-size:3.1cqw;color:#FFFFFF;transition:opacity .35s ease;}
+.pv.grid .pv-name{opacity:0;transition:none;}
+.sx-preview .pv > .go{background:#FFFFFF;color:var(--ink);box-shadow:0 .6cqw 1.4cqw -.7cqw rgba(0,0,0,.5);}
+.sx-preview .pv > .go:hover{background:#EDF0F6;}
+.bd{background:#20262F;display:flex;flex-direction:column;justify-content:center;gap:.9cqw;padding:0 5cqw;}
+.bd-row{display:flex;gap:.45cqw;}
+.bd-c{position:relative;flex:1;display:block;height:5.8cqw;border-radius:.45cqw;background:linear-gradient(#2F3640 0 50%,#272D36 50% 100%);color:#EEEBE3;font-family:var(--grot);font-weight:600;font-size:4.2cqw;line-height:5.8cqw;text-align:center;}
+.bd-c::after{content:"";position:absolute;left:0;right:0;top:50%;height:.2cqw;margin-top:-.1cqw;background:#14181E;}
+.cv{background:#B3DFDE;}
+.cv-h{position:absolute;left:6cqw;top:6.5cqw;width:72cqw;display:block;font-family:var(--news);font-weight:600;font-size:8.2cqw;line-height:1.04;letter-spacing:-.015em;color:#1E2B42;text-align:left;white-space:nowrap;}
+.cv-q{position:absolute;left:6cqw;bottom:6cqw;display:block;font-family:var(--news);font-style:italic;font-size:3.4cqw;color:#293851;}
+
+/* ===== 6. Recipe ===== */
+.sx-recipe{background:#E7EAF0;--sh-bg:#FFFFFF;--sh-font:var(--news);}
+.rc-card{position:absolute;left:4.6cqw;top:4.2cqw;right:4.6cqw;bottom:4.2cqw;padding:var(--pt) 4.6cqw 0;border-radius:.5cqw;background:#FFFFFF;transform:rotate(-.4deg);box-shadow:0 .15cqw .3cqw rgba(41,56,81,.07), 0 2.4cqw 4.4cqw -2.2cqw rgba(41,56,81,.32);font-family:var(--news);color:var(--ink);--pt:3cqw;--lh:4cqw;--fs:2.4cqw;--top:9.6cqw;--pen:#2B7A78;transition:transform .9s cubic-bezier(.2,.8,.2,1);}
+.rc-card.lift{transform:rotate(-3.2deg) translateY(-2.4cqw) scale(1.012);transition:none;}
+.rc-lines{position:absolute;left:0;right:0;top:calc(var(--top) - .6cqw);bottom:0;background:repeating-linear-gradient(180deg,transparent 0 calc(var(--lh) - 1.25px),#CFE6E5 calc(var(--lh) - 1.25px) var(--lh));pointer-events:none;border-radius:0 0 .5cqw .5cqw;}
+.rc-head{position:relative;display:flex;align-items:baseline;justify-content:space-between;gap:2cqw;height:calc(var(--top) - var(--pt));border-bottom:2px solid var(--coastal);}
+.rc-head h3{margin:0;font-family:var(--news);font-weight:500;font-style:italic;font-size:4.6cqw;line-height:1;letter-spacing:-.01em;}
+.rc-serves{font-style:italic;font-size:var(--fs);color:var(--soft);}
+.rc-cols{position:relative;display:grid;grid-template-columns:minmax(0,47fr) minmax(0,53fr);grid-template-areas:"ing meth";column-gap:5cqw;}
+.rc-ing{grid-area:ing;min-width:0;}
+.rc-meth{grid-area:meth;min-width:0;}
+.rc h4{margin:0;height:var(--lh);line-height:var(--lh);font-family:var(--news);font-weight:600;font-size:var(--fs);}
+.rc ul,.rc ol{list-style:none;margin:0;padding:0;}
+.rc li,.rc-serve{line-height:var(--lh);font-size:var(--fs);}
+.rc ul li{height:var(--lh);white-space:nowrap;overflow:hidden;text-overflow:ellipsis;}
+.rc ol li{min-height:var(--lh);padding-left:1.45em;text-indent:-1.45em;overflow:hidden;}
+.rc li.gone{display:none;}
+.rc-meth .n{display:inline-block;width:1.45em;text-indent:0;font-style:italic;color:var(--soft);}
+.rc-t{position:relative;display:inline-block;line-height:1.3;padding:0 .18em;margin:0 -.18em;border-radius:.25em;cursor:pointer;transition:background-color .15s ease, color .25s ease;touch-action:manipulation;-webkit-user-select:none;user-select:none;}
+.rc-t:hover{background:rgba(104,191,189,.18);}
+.rc-t em{font-style:italic;color:var(--pen);transition:color .25s ease;}
+.rc-t .v{display:inline-block;}
+.rc-x::after{content:"";position:absolute;left:-.05em;right:-.05em;top:54%;height:.085em;min-height:1.5px;border-radius:.1em;background:var(--ink);transform:rotate(-1.4deg) scaleX(0);transform-origin:0 50%;transition:transform .36s cubic-bezier(.55,0,.25,1);}
+.rc-x.off{color:rgba(41,56,81,.42);}
+.rc-x.off em{color:rgba(43,122,120,.45);}
+.rc-x.off::after{transform:rotate(-1.4deg) scaleX(1);}
+.rc ul li.rc-qline{height:auto;min-height:var(--lh);padding-left:1.2em;white-space:normal;overflow:visible;}
+.rc-q{font-style:italic;color:var(--pen);outline:none;border-radius:.2em;cursor:text;overflow-wrap:anywhere;}
+.rc-q:focus{color:var(--ink);background:rgba(104,191,189,.14);}
+.rc-serve{margin:0;height:var(--lh);white-space:nowrap;}
+.rc .go{right:3.6cqw;bottom:3.4cqw;}
+
+/* ===== Phone-width frames: simplified, larger, 44px targets ===== */
+@container frame (max-width: 520px){
+  .go{right:3.6cqw;bottom:3.6cqw;min-height:44px;padding:0 16px;font-size:13px;}
+  .sheet{padding:0 5cqw 6cqw;}
+
+  .st-line{left:4.8cqw;right:4.6cqw;top:4.6cqw;font-size:4.75cqw;line-height:1.5;}
+  .w::after{top:-.42em;bottom:-.42em;}
+  .st-prev{left:4.8cqw;bottom:3.6cqw;width:49cqw;min-height:44px;font-size:10.5px;}
+
+  .cn{--kx:19cqw;--ky:31cqw;--kd:22cqw;--rt:13.6cqw;--rl:17.4cqw;--lab:2.85cqw;}
+  .cn-lcd{left:39.6cqw;top:3.6cqw;width:56.8cqw;height:8.6cqw;padding:.6cqw;}
+  .cn-lcd-t{font-size:3cqw;line-height:7.4cqw;padding:0 2.4cqw;}
+  .cn-bank{left:39.2cqw;top:14.6cqw;}
+  .cn-sw,.cn-rk{width:11.4cqw;gap:2cqw;}
+  .cn-gap{display:none;}
+  .cn-slot{width:2.9cqw;height:15cqw;border-radius:1.45cqw;}
+  .cn-thumb{width:7cqw;height:4.8cqw;margin-left:-3.5cqw;}
+  .cn-thumb::before{left:1.4cqw;right:1.4cqw;top:1.3cqw;bottom:1.3cqw;}
+  .cn-sw[aria-checked="false"] .cn-thumb{transform:translateY(11cqw);}
+  .cn-rk-bez{width:7cqw;height:13.4cqw;margin-top:1.2cqw;padding:.6cqw;}
+  .cn-rk-face::before{width:.45cqw;height:2.2cqw;margin-left:-.22cqw;}
+  .cn-rk-face::after{width:2cqw;height:2cqw;margin-left:-1cqw;border-width:.4cqw;}
+  .cn-keys{left:4.4cqw;top:46.4cqw;gap:2cqw;}
+  .cn-key{width:11.6cqw;height:11.6cqw;border-radius:1.4cqw;}
+  .cn-key::after{inset:-.4cqw -1cqw;}
+  .ic{transform:scale(1.55);}
+  .cn-start{right:4.4cqw;bottom:4.2cqw;width:16.6cqw;height:16.6cqw;font-size:3.4cqw;}
+
+  .tl-q{left:4cqw;top:4.2cqw;right:4cqw;font-size:4.4cqw;}
+  .tl-b span{position:absolute;top:calc(100% + 1.3cqw);left:50%;transform:translateX(-50%);font-size:2.9cqw;color:var(--soft);}
+  .tl-b:first-child span{left:0;transform:none;}
+  .tl-b:last-child span{left:auto;right:0;transform:none;}
+  .tl-tab{font-size:3.3cqw;padding:0 2.8cqw;border-radius:1.4cqw;}
+  .tl-tab::after{top:-1.6cqw;bottom:-1.6cqw;}
+  .tl-pop{width:54cqw;gap:2.4cqw;padding:1.6cqw 2.6cqw 1.6cqw 1.6cqw;border-radius:1.8cqw;}
+  .tl-pop svg{width:18cqw;}
+  .tl-pop p{font-size:3.1cqw;}
+
+  .sw{--cw:24cqw;--ch:55.4cqw;--px:31.5cqw;--py:60.6cqw;--rv:2.6cqw;--nameH:6.6cqw;--cellH:5.2cqw;--wf:2.75cqw;--spread:7deg;}
+  .sw-name{font-size:2.9cqw;padding:0 1.6cqw;}
+  .sw-cells{padding:0 .9cqw;}
+  .sw-cell{padding:0 .9cqw .75cqw;}
+  .sw-q{left:61cqw;right:3.6cqw;top:5cqw;font-size:4.2cqw;}
+
+  .pv-t[data-slot="big"]{--l:3.6cqw;--t:4cqw;--w:66cqw;}
+  .pv-t[data-slot="s1"]{--l:74.4cqw;--t:4cqw;--w:22cqw;}
+  .pv-t[data-slot="s2"]{--l:74.4cqw;--t:18.2cqw;--w:22cqw;}
+  .pv-t[data-slot="s3"]{--l:74.4cqw;--t:32.4cqw;--w:22cqw;}
+  .pv.grid .pv-t[data-g="0"]{--l:12cqw;--t:4cqw;--w:36cqw;}
+  .pv.grid .pv-t[data-g="1"]{--l:52cqw;--t:4cqw;--w:36cqw;}
+  .pv.grid .pv-t[data-g="2"]{--l:12cqw;--t:26cqw;--w:36cqw;}
+  .pv.grid .pv-t[data-g="3"]{--l:52cqw;--t:26cqw;--w:36cqw;}
+  .pv-name{left:3.6cqw;top:45.6cqw;font-size:4cqw;}
+
+  .rc-card{left:1.8cqw;right:1.8cqw;top:2.2cqw;bottom:2.2cqw;padding:var(--pt) 3.2cqw 0;--pt:2.2cqw;--lh:4.75cqw;--fs:2.95cqw;--top:8.6cqw;}
+  .rc-head h3{font-size:5cqw;}
+  .rc h4{display:none;}
+  .rc-cols{grid-template-columns:minmax(0,1fr) minmax(0,1fr);grid-template-areas:"ing meth" "serve meth";column-gap:3cqw;}
+  .rc-meth{display:contents;}
+  .rc-meth ol{grid-area:meth;}
+  .rc-serve{grid-area:serve;}
+  .rc ul li.rc-qline{padding-left:.5em;}
+  .rc .go{right:3cqw;bottom:3cqw;}
+}
+
+@media (prefers-reduced-motion: reduce){
+  *,*::before,*::after{animation-duration:.001ms!important;animation-iteration-count:1!important;transition-duration:.001ms!important;transition-delay:0s!important;scroll-behavior:auto!important;}
+}
+</style>
+</head>
+<body>
+<div class="page">
+  <div class="top">
+    <a class="back" href="index.html">&larr; Sketchbook</a>
+    <button class="soundbtn" id="soundBtn" aria-pressed="true" aria-label="Sound is on. Turn it off">Sound on</button>
+  </div>
+
+  <header class="intro">
+    <h1>Setup<span class="tdot" aria-hidden="true"></span></h1>
+    <p>Ways a facilitator could set up the pulse without filling in a form.</p>
+  </header>
+
+  <main class="wall">
+
+    <!-- 1. Sentence -->
+    <section class="spec" id="sp-sentence" aria-labelledby="n-sentence">
+      <div class="frame sx-sentence" role="group" aria-label="Sentence setup on a laptop">
+        <p class="st-line">Ask how people feel about <span class="nw"><span class="w" data-k="topic" role="button" tabindex="0" style="--d:0s"><span class="w-clip"><span class="w-cur">AI</span></span></span></span> <span class="nw"><span class="w" data-k="when" role="button" tabindex="0" style="--d:.09s"><span class="w-clip"><span class="w-cur">when they arrive and before they leave</span></span></span>.</span> Let them add <span class="nw"><span class="w" data-k="second" role="button" tabindex="0" style="--d:.18s"><span class="w-clip"><span class="w-cur">a second feeling</span></span></span>,</span> and ask <span class="nw"><span class="w" data-k="moved" role="button" tabindex="0" style="--d:.27s"><span class="w-clip"><span class="w-cur">what moved them</span></span></span>.</span> Reveal it as <span class="nw"><span class="w" data-k="reveal" role="button" tabindex="0" style="--d:.36s"><span class="w-clip"><span class="w-cur">a field</span></span></span>.</span></p>
+        <p class="st-prev"><span>Participants will see: <q>How are you feeling about AI?</q></span></p>
+        <button class="go" type="button">Open the room</button>
+      </div>
+      <div class="cap"><div><h2 id="n-sentence">Sentence</h2><p>Setup as a sentence you can tap.</p></div><button class="replay" type="button" aria-label="Replay"><svg viewBox="0 0 24 24" width="18" height="18" aria-hidden="true"><path d="M5 12a7 7 0 1 0 2.05-4.95" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/><path d="M6.6 3.6v3.9h3.9" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/></svg></button></div>
+    </section>
+
+    <!-- 2. Console -->
+    <section class="spec" id="sp-console" aria-labelledby="n-console">
+      <div class="frame sx-console" role="group" aria-label="Console setup on a laptop">
+        <div class="cn">
+          <div class="cn-lcd" role="button" tabindex="0" aria-label="Question display. Press to write your own question"><span class="cn-lcd-in"><span class="cn-lcd-t">How are you feeling about AI?</span></span></div>
+          <div class="cn-dial">
+            <i class="cn-tick" style="--a:-54deg"></i><i class="cn-tick" style="--a:-18deg"></i><i class="cn-tick" style="--a:18deg"></i><i class="cn-tick" style="--a:54deg"></i>
+            <button class="cn-dl on" type="button" tabindex="-1" style="--a:-54deg">AI</button>
+            <button class="cn-dl" type="button" tabindex="-1" style="--a:-18deg">change</button>
+            <button class="cn-dl" type="button" tabindex="-1" style="--a:18deg">today</button>
+            <button class="cn-dl" type="button" tabindex="-1" style="--a:54deg">custom</button>
+            <div class="cn-knob" role="slider" tabindex="0" aria-label="Words" aria-valuemin="0" aria-valuemax="3" aria-valuenow="0" aria-valuetext="About AI"><span class="base"></span><span class="rot"><span class="knurl"></span><span class="face"></span><span class="mark"></span></span></div>
+          </div>
+          <div class="cn-bank">
+            <button class="cn-sw" type="button" role="switch" aria-checked="true" aria-label="Check in when people arrive"><span class="cn-slot"><span class="cn-thumb"></span></span><span class="cn-lab on">When people arrive</span></button>
+            <button class="cn-sw" type="button" role="switch" aria-checked="false" aria-label="Check in halfway"><span class="cn-slot"><span class="cn-thumb"></span></span><span class="cn-lab">Halfway</span></button>
+            <button class="cn-sw" type="button" role="switch" aria-checked="true" aria-label="Check in before they leave"><span class="cn-slot"><span class="cn-thumb"></span></span><span class="cn-lab on">Before they leave</span></button>
+            <span class="cn-gap" aria-hidden="true"></span>
+            <button class="cn-rk" type="button" role="switch" aria-checked="true" aria-label="Second feeling"><span class="cn-rk-bez"><span class="cn-rk-face"></span></span><span class="cn-lab on">second<br>feeling</span></button>
+            <button class="cn-rk" type="button" role="switch" aria-checked="true" aria-label="Sound"><span class="cn-rk-bez"><span class="cn-rk-face"></span></span><span class="cn-lab on">sound</span></button>
+          </div>
+          <div class="cn-keys" role="radiogroup" aria-label="Reveal">
+            <button class="cn-key" type="button" role="radio" aria-checked="true" aria-label="Field"><i class="ic ic-field"></i></button>
+            <button class="cn-key" type="button" role="radio" aria-checked="false" tabindex="-1" aria-label="Board"><i class="ic ic-board"></i></button>
+            <button class="cn-key" type="button" role="radio" aria-checked="false" tabindex="-1" aria-label="Sunburst"><i class="ic ic-sun"><b></b></i></button>
+            <button class="cn-key" type="button" role="radio" aria-checked="false" tabindex="-1" aria-label="Cover"><i class="ic ic-cover"></i></button>
+          </div>
+          <button class="cn-start" type="button" aria-pressed="false">Start</button>
+        </div>
+      </div>
+      <div class="cap"><div><h2 id="n-console">Console</h2><p>Knobs and switches, nothing to read.</p></div><button class="replay" type="button" aria-label="Replay"><svg viewBox="0 0 24 24" width="18" height="18" aria-hidden="true"><path d="M5 12a7 7 0 1 0 2.05-4.95" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/><path d="M6.6 3.6v3.9h3.9" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/></svg></button></div>
+    </section>
+
+    <!-- 3. Timeline -->
+    <section class="spec" id="sp-timeline" aria-labelledby="n-timeline">
+      <div class="frame sx-timeline" role="group" aria-label="Timeline setup on a laptop">
+        <div class="tl">
+          <p class="tl-q">How are you feeling about AI?</p>
+          <div class="tl-rib" aria-hidden="true">
+            <div class="tl-b" style="flex:15 1 0;--bg:#E4F4F4"><span>Opening</span></div>
+            <div class="tl-b" style="flex:50 1 0;--bg:#C9E8E7"><span>Part one</span></div>
+            <div class="tl-b" style="flex:15 1 0;--bg:#EEF0F4"><span>Break</span></div>
+            <div class="tl-b" style="flex:55 1 0;--bg:#C9E8E7"><span>Part two</span></div>
+            <div class="tl-b" style="flex:15 1 0;--bg:#E4F4F4"><span>Close</span></div>
+          </div>
+          <div class="tl-m" data-id="arrive"><span class="tl-stem"></span><button class="tl-tab" type="button">Arrive</button></div>
+          <div class="tl-m" data-id="middle"><span class="tl-stem"></span><button class="tl-tab" type="button">Halfway</button></div>
+          <div class="tl-m" data-id="leave"><span class="tl-stem"></span><button class="tl-tab" type="button">Leave</button></div>
+          <div class="tl-pop" aria-hidden="true"><svg viewBox="0 0 100 64"></svg><p></p></div>
+          <button class="go" type="button">Open the room</button>
+        </div>
+      </div>
+      <div class="cap"><div><h2 id="n-timeline">Timeline</h2><p>Drag the pulses to where they belong.</p></div><button class="replay" type="button" aria-label="Replay"><svg viewBox="0 0 24 24" width="18" height="18" aria-hidden="true"><path d="M5 12a7 7 0 1 0 2.05-4.95" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/><path d="M6.6 3.6v3.9h3.9" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/></svg></button></div>
+    </section>
+
+    <!-- 4. Swatches -->
+    <section class="spec" id="sp-swatches" aria-labelledby="n-swatches">
+      <div class="frame sx-swatch" role="group" aria-label="Swatches setup on a laptop">
+        <div class="sw">
+          <div class="sw-fan" role="radiogroup" aria-label="Words"></div>
+          <p class="sw-q" aria-label="Question">How are you feeling about AI?</p>
+          <button class="go" type="button">Open the room</button>
+        </div>
+      </div>
+      <div class="cap"><div><h2 id="n-swatches">Swatches</h2><p>Choose your words like paint.</p></div><button class="replay" type="button" aria-label="Replay"><svg viewBox="0 0 24 24" width="18" height="18" aria-hidden="true"><path d="M5 12a7 7 0 1 0 2.05-4.95" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/><path d="M6.6 3.6v3.9h3.9" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/></svg></button></div>
+    </section>
+
+    <!-- 5. Preview first -->
+    <section class="spec" id="sp-preview" aria-labelledby="n-preview">
+      <div class="frame sx-preview" role="group" aria-label="Preview first setup on a laptop">
+        <div class="pv">
+          <button class="pv-t big" type="button" data-slot="big" data-g="0" aria-pressed="true" aria-label="A field of dots"><span class="pv-screen"><canvas></canvas></span></button>
+          <button class="pv-t" type="button" data-slot="s1" data-g="1" aria-pressed="false" aria-label="A split-flap board"><span class="pv-screen bd"></span></button>
+          <button class="pv-t" type="button" data-slot="s2" data-g="2" aria-pressed="false" aria-label="A sunburst"><span class="pv-screen"><canvas></canvas></span></button>
+          <button class="pv-t" type="button" data-slot="s3" data-g="3" aria-pressed="false" aria-label="A cover headline"><span class="pv-screen cv"><canvas></canvas><span class="cv-h">Mostly curious.<br>Some anxious.<br>A few skeptics.</span><span class="cv-q">How are you feeling about AI?</span></span></button>
+          <p class="pv-name">A field of dots</p>
+          <button class="go" type="button">Open the room</button>
+        </div>
+      </div>
+      <div class="cap"><div><h2 id="n-preview">Preview first</h2><p>Pick the reveal by watching it.</p></div><button class="replay" type="button" aria-label="Replay"><svg viewBox="0 0 24 24" width="18" height="18" aria-hidden="true"><path d="M5 12a7 7 0 1 0 2.05-4.95" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/><path d="M6.6 3.6v3.9h3.9" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/></svg></button></div>
+    </section>
+
+    <!-- 6. Recipe -->
+    <section class="spec" id="sp-recipe" aria-labelledby="n-recipe">
+      <div class="frame sx-recipe" role="group" aria-label="Recipe setup on a laptop">
+        <div class="rc">
+          <article class="rc-card">
+            <div class="rc-lines" aria-hidden="true"></div>
+            <div class="rc-head"><h3>Room Pulse</h3><span class="rc-serves">Serves 12 to 200</span></div>
+            <div class="rc-cols">
+              <div class="rc-ing">
+                <h4>Ingredients</h4>
+                <ul>
+                  <li><span class="rc-t" data-k="q" role="button" tabindex="0">1 question</span></li>
+                  <li class="rc-qline"><span class="rc-q" aria-label="The question">How are you feeling about AI?</span></li>
+                  <li><span class="rc-t" data-k="words" role="button" tabindex="0">8 words <em class="v">about AI</em></span></li>
+                  <li><span class="rc-t" data-k="pulses" role="button" tabindex="0"><em class="v">2</em> <span class="p">pulses</span></span></li>
+                  <li><span class="rc-t rc-x" data-k="second" role="switch" aria-checked="true" tabindex="0"><em>a second feeling</em>, if you like</span></li>
+                  <li><span class="rc-t rc-x" data-k="moved" role="switch" aria-checked="true" tabindex="0"><em>a &ldquo;what moved you?&rdquo;</em> to finish</span></li>
+                  <li><span class="rc-t rc-x" data-k="sound" role="switch" aria-checked="true" tabindex="0"><em>sound</em>, to taste</span></li>
+                </ul>
+              </div>
+              <div class="rc-meth">
+                <h4>Method</h4>
+                <ol>
+                  <li data-s="open"><span class="n">1.</span>Open the room as people arrive.</li>
+                  <li data-s="look"><span class="n">2.</span>Look before you share.</li>
+                  <li data-s="show"><span class="n">3.</span>Show the room.</li>
+                  <li data-s="mid" class="gone"><span class="n">4.</span>Check in again halfway.</li>
+                  <li data-s="end"><span class="n">4.</span>Check in again before they leave.</li>
+                  <li data-s="shift"><span class="n">5.</span>Watch the shift.</li>
+                </ol>
+                <p class="rc-serve">Serve as <span class="rc-t" data-k="reveal" role="button" tabindex="0"><em class="v">a field</em></span>.</p>
+              </div>
+            </div>
+            <button class="go" type="button">Open the room</button>
+          </article>
+        </div>
+      </div>
+      <div class="cap"><div><h2 id="n-recipe">Recipe</h2><p>A setup you could read aloud.</p></div><button class="replay" type="button" aria-label="Replay"><svg viewBox="0 0 24 24" width="18" height="18" aria-hidden="true"><path d="M5 12a7 7 0 1 0 2.05-4.95" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/><path d="M6.6 3.6v3.9h3.9" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/></svg></button></div>
+    </section>
+
+  </main>
+</div>
+
+<script>
+/* ===== ROOM: shared simulated room for every Room Pulse prototype =====
+   Paste this whole block into a <script> in your page. It defines one global: ROOM.
+   Everything is deterministic, so every page tells the same story with the same 32 people.
+
+   The map: x = pleasantness (-1 unpleasant .. +1 pleasant), y = energy (-1 low .. +1 high).
+   Eight word slots, two per quadrant, mirrored in energy:
+     0 high energy pleasant, outer     4 high energy unpleasant, outer
+     1 high energy pleasant, inner     5 high energy unpleasant, inner
+     2 low energy pleasant, inner      6 low energy unpleasant, inner
+     3 low energy pleasant, outer      7 low energy unpleasant, outer
+*/
+var ROOM = (function(){
+  function mulberry32(a){ return function(){ a|=0; a=a+0x6D2B79F5|0; var t=Math.imul(a^a>>>15,1|a); t=t+Math.imul(t^t>>>7,61|t)^t; return ((t^t>>>14)>>>0)/4294967296; }; }
+
+  var SLOTS = [
+    {x: .62, y: .70}, {x: .48, y: .28}, {x: .48, y:-.28}, {x: .62, y:-.70},
+    {x:-.62, y: .70}, {x:-.48, y: .28}, {x:-.48, y:-.28}, {x:-.62, y:-.70}
+  ];
+  // quadrant of each slot: 'hp' high+pleasant, 'lp' low+pleasant, 'hu' high+unpleasant, 'lu' low+unpleasant
+  var QUAD = ['hp','hp','lp','lp','hu','hu','lu','lu'];
+
+  var SETS = {
+    ai: {
+      key:'ai', topic:'AI', prompt:'How are you feeling about AI?',
+      words:['Excited','Curious','Confident','Calm','Overwhelmed','Anxious','Skeptical','Indifferent'],
+      codes:['EXC','CUR','CNF','CLM','OVW','ANX','SKP','IND'],
+      headIn:'Mostly curious. Some anxious. A few skeptics.',
+      headOut:'Mostly excited. Still curious. The skeptics held.'
+    },
+    change: {
+      key:'change', topic:'the change ahead', prompt:'How do you feel about the change ahead?',
+      words:['Energized','Hopeful','Ready','Settled','Frustrated','Uneasy','Doubtful','Weary'],
+      codes:['ENG','HOP','RDY','STL','FRU','UNE','DBT','WRY'],
+      headIn:'Mostly hopeful. Some uneasy. A few doubters.',
+      headOut:'Mostly energized. Still hopeful. The doubters held.'
+    },
+    today: {
+      key:'today', topic:'today', prompt:'How are you arriving today?',
+      words:['Buzzing','Open','Focused','Relaxed','Stretched','Distracted','Tired','Flat'],
+      codes:['BZZ','OPN','FCS','RLX','STR','DST','TRD','FLT'],
+      headIn:'Mostly open. Some distracted. A few tired.',
+      headOut:'Mostly buzzing. Still open. A few still tired.'
+    }
+  };
+
+  // 32 people: [inSlot, outSlot, inSecond or -1, outSecond or -1]
+  var PLAN = [
+    [5,1,1,-1],[5,1,-1,-1],[5,0,1,5],[5,0,-1,-1],[5,5,4,-1],[5,2,-1,5],
+    [4,1,0,-1],[4,5,-1,-1],[4,0,5,4],[4,4,-1,-1],
+    [6,1,1,6],[6,1,-1,-1],[6,6,7,-1],[6,6,-1,-1],[6,2,-1,-1],
+    [7,1,6,-1],[7,6,-1,-1],
+    [1,0,5,5],[1,0,5,-1],[1,0,-1,-1],[1,0,5,-1],[1,1,-1,6],[1,1,5,-1],[1,2,-1,-1],
+    [0,0,-1,-1],[0,0,5,5],[0,2,-1,-1],
+    [2,2,-1,-1],[2,2,6,-1],[2,0,-1,-1],
+    [3,3,-1,-1],[3,3,-1,-1]
+  ];
+  var WHY = ['Trying it myself','Hearing the others','Less scary now','A clear next step','Real examples',
+    'Permission to play','Still unsure','My own work','The conversation','Seeing it work',
+    'Time to practice','Good questions','Not alone in this','Small wins'];
+
+  var rnd = mulberry32(20261002);
+  function jitter(s){ return (rnd()*2-1)*s; }
+  function place(slot, inten){
+    // jittered spot around the word, always closer to its own word than to any other
+    var p = SLOTS[slot], k = .7 + .3*inten, q;
+    for (var t = 0; t < 40; t++){
+      q = { x: clamp(p.x*k + jitter(.1), -.97, .97), y: clamp(p.y*k + jitter(.1), -.97, .97) };
+      if (nearest(q.x, q.y) === slot) return q;
+    }
+    return { x: p.x, y: p.y };
+  }
+  function nearest(x, y){
+    var best = 0, bd = 1e9;
+    for (var i = 0; i < SLOTS.length; i++){ var s = SLOTS[i], d = (s.x-x)*(s.x-x) + (s.y-y)*(s.y-y); if (d < bd){ bd = d; best = i; } }
+    return best;
+  }
+  function clamp(v,a,b){ return Math.max(a, Math.min(b, v)); }
+
+  var people = PLAN.map(function(r, i){
+    var iIn = .35 + rnd()*.65, iOut = .35 + rnd()*.65;
+    var pIn = place(r[0], iIn), pOut = place(r[1], iOut);
+    var seatRow = 3 + Math.floor(rnd()*28), seatCol = 'ABCDEF'.charAt(Math.floor(rnd()*6));
+    return {
+      id: i,
+      inSlot: r[0], outSlot: r[1], in2: r[2], out2: r[3],
+      inX: pIn.x, inY: pIn.y, outX: pOut.x, outY: pOut.y,
+      inIntensity: iIn, outIntensity: iOut,
+      joinDelay: Math.round(400 + rnd()*9000),      // ms after the waiting room opens
+      checkInDelay: Math.round(300 + rnd()*6000),   // ms after check-in opens
+      seat: seatRow + seatCol,
+      why: (i % 3 === 1) ? WHY[i % WHY.length] : ''  // about a third leave a one-word why
+    };
+  });
+
+  function counts(which){ // which: 'in' | 'out'
+    var c = [0,0,0,0,0,0,0,0];
+    people.forEach(function(p){ c[which==='out' ? p.outSlot : p.inSlot]++; });
+    return c;
+  }
+  function nearestSlot(x, y){ return nearest(x, y); }
+  function intensityWord(x, y){ // how far from the middle, in plain words
+    var r = Math.sqrt(x*x + y*y);
+    return r < .38 ? 'a little' : r < .72 ? 'clearly' : 'strongly';
+  }
+  function pleasantShare(which){
+    var c = counts(which); return (c[0]+c[1]+c[2]+c[3]) / people.length;
+  }
+  // flows between slots, for route maps and sankeys: [{from, to, n}]
+  function flows(){
+    var m = {};
+    people.forEach(function(p){ var k = p.inSlot + '>' + p.outSlot; m[k] = (m[k]||0) + 1; });
+    return Object.keys(m).map(function(k){ var a = k.split('>'); return { from:+a[0], to:+a[1], n:m[k] }; })
+      .sort(function(a,b){ return b.n - a.n; });
+  }
+  // FM-style frequency for a slot or a point, 88.0 to 108.0, by angle clockwise from "high energy"
+  function freq(x, y){
+    var ang = Math.atan2(x, y); if (ang < 0) ang += Math.PI*2;
+    return Math.round((88 + ang/(Math.PI*2)*20)*10)/10;
+  }
+
+  return {
+    SLOTS: SLOTS, QUAD: QUAD, SETS: SETS, people: people, WHY: WHY,
+    counts: counts, nearestSlot: nearestSlot, intensityWord: intensityWord,
+    pleasantShare: pleasantShare, flows: flows, freq: freq, rng: mulberry32
+  };
+})();
+</script>
+<script>
+/* ===== Shared helpers ===== */
+const RM = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+
+/* Run a moment only while it is on screen. */
+function whenVisible(el, onEnter, onLeave, threshold){
+  const io = new IntersectionObserver(es => es.forEach(e => {
+    if (e.isIntersecting) onEnter && onEnter(); else onLeave && onLeave();
+  }), { threshold: threshold == null ? 0.2 : threshold });
+  io.observe(el); return io;
+}
+
+/* One requestAnimationFrame loop for the whole page. Loop.add(fn) where fn(dt, now). */
+const Loop = (() => {
+  const tasks = new Set(); let running = false, last = 0;
+  function tick(t){
+    const dt = Math.min(50, t - (last || t)); last = t;
+    tasks.forEach(f => { try { f(dt, t); } catch (e) { console.error(e); } });
+    if (tasks.size) requestAnimationFrame(tick); else { running = false; last = 0; }
+  }
+  return {
+    add(f){ tasks.add(f); if (!running){ running = true; requestAnimationFrame(tick); } },
+    remove(f){ tasks.delete(f); }
+  };
+})();
+
+const Ease = {
+  linear: t => t,
+  outCubic: t => 1 - Math.pow(1 - t, 3),
+  inOutCubic: t => t < .5 ? 4*t*t*t : 1 - Math.pow(-2*t + 2, 3) / 2,
+  outBack: t => { const c1 = 1.70158, c3 = c1 + 1; return 1 + c3*Math.pow(t - 1, 3) + c1*Math.pow(t - 1, 2); },
+  outExpo: t => t === 1 ? 1 : 1 - Math.pow(2, -10*t)
+};
+/* tween(ms, t => ..., ease, done) returns a cancel function. Reduced motion jumps to the end. */
+function tween(ms, fn, ease, done){
+  ease = ease || Ease.outCubic;
+  if (RM){ fn(1); done && done(); return () => {}; }
+  const start = performance.now(); let dead = false;
+  const step = (dt, now) => {
+    if (dead) return;
+    const t = Math.min(1, (now - start) / ms); fn(ease(t));
+    if (t >= 1){ Loop.remove(step); done && done(); }
+  };
+  Loop.add(step);
+  return () => { dead = true; Loop.remove(step); };
+}
+
+/* Canvas sized to its CSS box at device pixel ratio. Returns the 2d context; call again on resize. */
+function fitCanvas(cv){
+  const r = cv.getBoundingClientRect(), d = Math.min(2, window.devicePixelRatio || 1);
+  cv.width = Math.max(1, Math.round(r.width * d)); cv.height = Math.max(1, Math.round(r.height * d));
+  const c = cv.getContext('2d'); c.setTransform(d, 0, 0, d, 0, 0); return c;
+}
+
+/* Sound: WebAudio only, created on the first gesture, one master mute. */
+const Sound = (() => {
+  let ctx = null, master = null, on = true;
+  function ac(){
+    if (!on) return null;
+    if (!ctx){
+      try {
+        ctx = new (window.AudioContext || window.webkitAudioContext)();
+        const comp = ctx.createDynamicsCompressor();
+        master = ctx.createGain(); master.gain.value = .55;
+        master.connect(comp); comp.connect(ctx.destination);
+      } catch (e){ return null; }
+    }
+    if (ctx.state === 'suspended') ctx.resume();
+    return ctx;
+  }
+  /* A short enveloped note. opts: {type:'sine'|'triangle'|..., gain, attack, release, when, detune} */
+  function tone(freq, dur, opts){
+    const c = ac(); if (!c) return;
+    opts = opts || {};
+    const t0 = c.currentTime + (opts.when || 0), a = opts.attack || .01, r = opts.release || .25;
+    const o = c.createOscillator(), g = c.createGain();
+    o.type = opts.type || 'sine'; o.frequency.value = freq; if (opts.detune) o.detune.value = opts.detune;
+    g.gain.setValueAtTime(0, t0);
+    g.gain.linearRampToValueAtTime(opts.gain == null ? .18 : opts.gain, t0 + a);
+    g.gain.exponentialRampToValueAtTime(.0001, t0 + a + dur + r);
+    o.connect(g); g.connect(master); o.start(t0); o.stop(t0 + a + dur + r + .05);
+  }
+  function setOn(v){ on = v; if (!v && ctx) ctx.suspend(); }
+  return { ac, tone, setOn, get on(){ return on; }, get ctx(){ return ctx; }, get out(){ return master; } };
+})();
+/* Created on a gesture that grants activation (pointerup, not pointerdown, so touch never warns). */
+['pointerup','keydown','touchend'].forEach(ev => document.addEventListener(ev, () => { if (!navigator.userActivation || navigator.userActivation.hasBeenActive) Sound.ac(); }, { passive: true }));
+(() => {
+  const b = document.getElementById('soundBtn'); if (!b) return;
+  b.addEventListener('click', () => {
+    const next = !Sound.on; Sound.setOn(next);
+    b.setAttribute('aria-pressed', String(next));
+    b.textContent = next ? 'Sound on' : 'Sound off';
+    b.setAttribute('aria-label', next ? 'Sound is on. Turn it off' : 'Sound is off. Turn it on');
+    if (next) Sound.ac();
+  });
+})();
+
+function esc(s){ return String(s).replace(/[&<>"]/g, c => ({ '&':'&amp;', '<':'&lt;', '>':'&gt;', '"':'&quot;' }[c])); }
+
+/* The viewer is one participant. Their answers carry from moment to moment. */
+const You = {
+  inX: .44, inY: .30, inSlot: 1, in2: -1,         // a sensible default so every moment renders at rest
+  outX: null, outY: null, outSlot: null, out2: -1, why: '',
+  _fns: [],
+  set(patch){ Object.assign(this, patch); this._fns.forEach(f => f(patch)); },
+  on(f){ this._fns.push(f); }
+};
+</script>
+<script>
+/* ===== Page glue ===== */
+const CODE = 'K7QP';
+let gestured = false;
+['pointerup', 'keydown', 'touchend'].forEach(ev => document.addEventListener(ev, () => { gestured = true; }, { passive: true, capture: true }));
+function activated(){ return navigator.userActivation ? navigator.userActivation.hasBeenActive : gestured; }
+function buzz(ms){ if (!activated() || typeof navigator.vibrate !== 'function') return; try { navigator.vibrate(ms || 10); } catch (e) {} }
+function wait(ms){ return new Promise(r => setTimeout(r, ms)); }
+function clamp(v, a, b){ return Math.max(a, Math.min(b, v)); }
+function editable(el, on){
+  if (!on){ el.removeAttribute('contenteditable'); return; }
+  el.setAttribute('contenteditable', 'true');
+  try { el.contentEditable = 'plaintext-only'; } catch (e) {}
+  el.spellcheck = false;
+}
+function selectAll(el){ const r = document.createRange(); r.selectNodeContents(el); const s = window.getSelection(); s.removeAllRanges(); s.addRange(r); }
+function caretEnd(el){ const r = document.createRange(); r.selectNodeContents(el); r.collapse(false); const s = window.getSelection(); s.removeAllRanges(); s.addRange(r); }
+function cleanText(el, max){ return el.textContent.replace(/\s+/g, ' ').trim().slice(0, max || 60); }
+document.addEventListener('paste', e => {
+  const t = e.target && e.target.closest ? e.target.closest('[contenteditable]') : null;
+  if (!t) return;
+  e.preventDefault();
+  const s = (((e.clipboardData || window.clipboardData) && (e.clipboardData || window.clipboardData).getData('text/plain')) || '').replace(/\s+/g, ' ');
+  document.execCommand('insertText', false, s);
+});
+
+/* Small sounds. Quiet until the viewer has touched the page, and only while sound is on. */
+const Sfx = (() => {
+  let nb = null;
+  function ctx(){ if (!Sound.on || !activated()) return null; return Sound.ac(); }
+  function noise(c){
+    if (!nb){ nb = c.createBuffer(1, Math.floor(c.sampleRate * .3), c.sampleRate); const d = nb.getChannelData(0); for (let i = 0; i < d.length; i++) d[i] = Math.random() * 2 - 1; }
+    return nb;
+  }
+  function burst(o){
+    const c = ctx(); if (!c || !Sound.out) return;
+    const t = c.currentTime + (o.when || 0), dur = o.dur || .03;
+    const s = c.createBufferSource(); s.buffer = noise(c);
+    const f = c.createBiquadFilter(); f.type = o.type || 'bandpass'; f.frequency.value = o.freq || 2000; f.Q.value = o.q == null ? 1 : o.q;
+    const g = c.createGain(); g.gain.setValueAtTime(0, t); g.gain.linearRampToValueAtTime(o.gain || .2, t + .002); g.gain.exponentialRampToValueAtTime(.0001, t + dur);
+    s.connect(f); f.connect(g); g.connect(Sound.out); s.start(t, Math.random() * .2); s.stop(t + dur + .03);
+  }
+  function tone(f, d, o){ if (ctx()) Sound.tone(f, d, o); }
+  return {
+    tick(i){ tone(1250 + (i || 0) * 60, .008, { type: 'sine', gain: .06, attack: .002, release: .05 }); },
+    roll(i){ burst({ freq: 2800, q: 1.4, gain: .09, dur: .02 }); tone(640 + (i || 0) * 48, .01, { type: 'triangle', gain: .07, attack: .002, release: .09 }); },
+    detent(){ burst({ freq: 3400, q: 3, gain: .3, dur: .014 }); tone(2100, .003, { type: 'square', gain: .016, attack: .001, release: .02 }); },
+    thock(){ burst({ type: 'lowpass', freq: 900, q: .7, gain: .42, dur: .05 }); tone(140, .02, { type: 'sine', gain: .16, attack: .002, release: .07 }); },
+    clack(){ burst({ freq: 1500, q: 1.4, gain: .3, dur: .03 }); tone(260, .012, { type: 'triangle', gain: .08, attack: .001, release: .05 }); },
+    flick(){ burst({ type: 'highpass', freq: 2400, q: .5, gain: .14, dur: .07 }); },
+    swish(){ burst({ type: 'bandpass', freq: 1100, q: .6, gain: .1, dur: .18 }); },
+    scratch(){ for (let k = 0; k < 5; k++) burst({ freq: 2500 + k * 320, q: 2, gain: .07, dur: .035, when: k * .034 }); },
+    chime(){ tone(784, .05, { type: 'sine', gain: .11, attack: .005, release: .55 }); tone(1175, .05, { type: 'sine', gain: .08, attack: .005, release: .65, when: .09 }); },
+    drop(){ tone(520, .015, { type: 'sine', gain: .07, attack: .002, release: .12 }); }
+  };
+})();
+
+/* The sheet that slides up when a room is opened. */
+function makeSheet(frame, go){
+  const sh = document.createElement('div');
+  sh.className = 'sheet'; sh.setAttribute('inert', ''); sh.setAttribute('role', 'dialog'); sh.setAttribute('aria-label', 'The room is open');
+  sh.innerHTML = '<p class="sheet-t">The room is open.</p><p class="sheet-code">' + CODE.split('').map(ch => '<span>' + ch + '</span>').join('') + '</p><p class="sheet-s">People join with this code.</p><button class="go" type="button">Back to setup</button>';
+  frame.appendChild(sh);
+  const back = sh.querySelector('.go');
+  const letters = [...sh.querySelectorAll('.sheet-code span')];
+  const api = {
+    open(){
+      if (sh.classList.contains('open')) return;
+      sh.classList.add('open'); sh.removeAttribute('inert'); Sfx.chime(); buzz(12);
+      if (!RM) letters.forEach((l, i) => l.animate([{ opacity: 0, transform: 'translateY(.4em)' }, { opacity: 1, transform: 'none' }], { duration: 460, delay: 200 + i * 75, easing: 'cubic-bezier(.2,.8,.2,1)', fill: 'backwards' }));
+      setTimeout(() => back.focus({ preventScroll: true }), 30);
+    },
+    close(){ if (!sh.classList.contains('open')) return; const had = sh.contains(document.activeElement); sh.classList.remove('open'); sh.setAttribute('inert', ''); if (had) go.focus({ preventScroll: true }); }
+  };
+  go.addEventListener('click', () => api.open());
+  back.addEventListener('click', () => { api.close(); Sfx.tick(0); });
+  sh.addEventListener('keydown', e => { if (e.key === 'Escape'){ e.preventDefault(); api.close(); } });
+  return api;
+}
+
+/* Each specimen plays once as it scrolls into view, and again from its Replay button. */
+function specimen(id, api){
+  const sec = document.getElementById(id), frame = sec.querySelector('.frame');
+  let played = false;
+  whenVisible(frame, () => {
+    if (api.enter) api.enter();
+    if (!played){ played = true; if (!RM && api.demo) api.demo(); }
+  }, () => { if (api.leave) api.leave(); }, .35);
+  sec.querySelector('.replay').addEventListener('click', () => { if (api.reset) api.reset(); if (!RM && api.demo) api.demo(); });
+}
+
+/* A word on a drum: the old word slides out, the new one slides in, the width follows. */
+function roll(el, text, opt){
+  opt = opt || {};
+  const clip = el.querySelector('.w-clip'), cur = el.querySelector('.w-cur');
+  cancelPeek(el); finishRoll(el);
+  if (RM || !clip.animate){ cur.textContent = text; return; }
+  const dir = opt.dir || 1, dur = opt.dur || 300, ease = 'cubic-bezier(.2,.9,.25,1)';
+  const fpx = parseFloat(getComputedStyle(clip).fontSize) || 16;
+  const w0 = clip.getBoundingClientRect().width / fpx;
+  const nx = document.createElement('span'); nx.className = 'w-next'; nx.setAttribute('aria-hidden', 'true'); nx.textContent = text;
+  clip.appendChild(nx);
+  const w1 = nx.getBoundingClientRect().width / fpx;
+  const anims = [
+    cur.animate([{ transform: 'translateY(0)', opacity: 1 }, { transform: 'translateY(' + (-100 * dir) + '%)', opacity: .1 }], { duration: dur, easing: ease, fill: 'forwards' }),
+    nx.animate([{ transform: 'translateY(' + (100 * dir) + '%)' }, { transform: 'translateY(0)' }], { duration: dur, easing: ease, fill: 'forwards' }),
+    clip.animate([{ width: w0 + 'em' }, { width: w1 + 'em' }], { duration: dur * .9, easing: ease, fill: 'forwards' })
+  ];
+  el._roll = { anims, nx, cur, text };
+  anims[1].onfinish = () => { if (el._roll && el._roll.nx === nx) finishRoll(el); };
+}
+function finishRoll(el){
+  const r = el._roll; if (!r) return; el._roll = null;
+  r.cur.textContent = r.text; r.nx.remove(); r.anims.forEach(a => a.cancel());
+}
+/* A glimpse of the next word on the drum, then back. The width never changes, so nothing reflows. */
+function peek(el, text, delay){
+  if (RM || el._roll) return;
+  cancelPeek(el);
+  const clip = el.querySelector('.w-clip'), cur = el.querySelector('.w-cur');
+  const nx = document.createElement('span'); nx.className = 'w-next'; nx.setAttribute('aria-hidden', 'true'); nx.textContent = text;
+  clip.appendChild(nx);
+  const o = { duration: 640, delay: delay || 0, easing: 'cubic-bezier(.4,0,.2,1)', fill: 'backwards' };
+  const anims = [
+    cur.animate([{ transform: 'translateY(0)' }, { transform: 'translateY(-22%)', offset: .45 }, { transform: 'translateY(0)' }], o),
+    nx.animate([{ transform: 'translateY(100%)' }, { transform: 'translateY(78%)', offset: .45 }, { transform: 'translateY(100%)' }], o)
+  ];
+  el._peek = { nx, anims };
+  anims[1].onfinish = () => { if (el._peek && el._peek.nx === nx) cancelPeek(el); };
+}
+function cancelPeek(el){
+  const p = el._peek; if (!p) return; el._peek = null;
+  p.anims.forEach(a => a.cancel()); p.nx.remove();
+}
+
+/* ===== 1. Sentence ===== */
+(() => {
+  const frame = document.querySelector('#sp-sentence .frame');
+  const line = frame.querySelector('.st-line');
+  const qEl = frame.querySelector('.st-prev q');
+  const go = frame.querySelector('.go');
+  const sheet = makeSheet(frame, go);
+  const TOPICS = [{ t: 'AI', set: 'ai' }, { t: 'the change ahead', set: 'change' }, { t: 'arriving today', set: 'today' }];
+  const OPT = {
+    when: ['when they arrive and before they leave', 'when they arrive, halfway, and before they leave', 'when they arrive'],
+    second: ['a second feeling', 'just one feeling'],
+    moved: ['what moved them', 'nothing more'],
+    reveal: ['a field', 'a board', 'a sunburst', 'a cover']
+  };
+  const W = {};
+  line.querySelectorAll('.w').forEach(el => { W[el.dataset.k] = el; });
+  let st = { topic: 0, when: 0, second: 0, moved: 0, reveal: 0 };
+  let custom = null, editing = false, before = null, runId = 0, lp = null;
+
+  const prevEl = frame.querySelector('.st-prev');
+  const ghost = line.cloneNode(true);
+  ghost.classList.add('st-ghost'); ghost.setAttribute('aria-hidden', 'true');
+  ghost.querySelectorAll('.w').forEach(e => { e.removeAttribute('tabindex'); e.removeAttribute('role'); });
+  frame.appendChild(ghost);
+  const GW = {}; ghost.querySelectorAll('.w').forEach(el => { GW[el.dataset.k] = el.querySelector('.w-cur'); });
+  const SIZES = [4.7, 4.45, 4.2, 3.95, 3.7, 3.45, 3.2];
+  let fs = SIZES[0];
+  /* Find the largest size at which the next sentence still clears the preview line */
+  function fitFor(vals){
+    Object.keys(GW).forEach(k => { GW[k].textContent = vals[k]; });
+    const fr = frame.getBoundingClientRect(), limit = prevEl.getBoundingClientRect().top - line.getBoundingClientRect().top - fr.width * .024;
+    for (const sz of SIZES){ ghost.style.fontSize = sz + 'cqw'; if (ghost.offsetHeight <= limit && ghost.scrollWidth <= ghost.clientWidth + 1) return sz; }
+    return SIZES[SIZES.length - 1];
+  }
+  function applyFs(sz){ if (sz === fs) return; fs = sz; line.style.fontSize = sz + 'cqw'; }
+  function values(over){ const v = {}; Object.keys(W).forEach(k => { v[k] = list(k)[st[k]]; }); return Object.assign(v, over || {}); }
+  const topics = () => custom ? TOPICS.concat([{ t: custom, set: 'custom' }]) : TOPICS;
+  const list = k => k === 'topic' ? topics().map(o => o.t) : OPT[k];
+  function question(){
+    const tp = topics()[st.topic];
+    return tp.set === 'custom' ? 'How are you feeling about ' + tp.t + '?' : ROOM.SETS[tp.set].prompt;
+  }
+  function setQ(text, animate){
+    if (qEl.textContent === text) return;
+    qEl.textContent = text;
+    if (animate && !RM) qEl.animate([{ opacity: .15, transform: 'translateY(.35em)' }, { opacity: 1, transform: 'none' }], { duration: 300, easing: 'cubic-bezier(.2,.8,.2,1)' });
+  }
+  function render(){
+    Object.keys(W).forEach(k => { cancelPeek(W[k]); finishRoll(W[k]); W[k].querySelector('.w-cur').textContent = list(k)[st[k]]; });
+    setQ(question(), false);
+    applyFs(fitFor(values()));
+  }
+  function step(k){
+    const L = list(k);
+    st[k] = (st[k] + 1) % L.length;
+    applyFs(fitFor(values()));
+    roll(W[k], L[st[k]]);
+    Sfx.roll(st[k]); buzz(8);
+    if (k === 'topic') setQ(question(), true);
+  }
+
+  /* Topic: long-press, double-click or just start typing to write your own */
+  const topicCur = W.topic.querySelector('.w-cur');
+  function enterEdit(ch){
+    if (editing) return;
+    cancelPeek(W.topic); finishRoll(W.topic);
+    editing = true; before = { topic: st.topic, text: topicCur.textContent };
+    W.topic.classList.add('editing'); line.classList.add('editing');
+    editable(topicCur, true);
+    if (typeof ch === 'string') topicCur.textContent = ch;
+    topicCur.focus({ preventScroll: true });
+    if (typeof ch === 'string') caretEnd(topicCur); else selectAll(topicCur);
+    onInput();
+  }
+  function onInput(){
+    const t = cleanText(topicCur, 40);
+    setQ('How are you feeling about ' + (t || '…') + '?', false);
+    applyFs(fitFor(values({ topic: (t || 'AI') + '  ' })));
+  }
+  function commit(cancel){
+    if (!editing) return;
+    editing = false;
+    editable(topicCur, false);
+    W.topic.classList.remove('editing'); line.classList.remove('editing');
+    const t = cleanText(topicCur, 40);
+    if (cancel || !t){ st.topic = before.topic; topicCur.textContent = before.text; }
+    else {
+      const hit = TOPICS.findIndex(o => o.t.toLowerCase() === t.toLowerCase());
+      if (hit >= 0){ st.topic = hit; topicCur.textContent = TOPICS[hit].t; }
+      else { custom = t; st.topic = TOPICS.length; topicCur.textContent = t; }
+    }
+    const sel = window.getSelection(); if (sel) sel.removeAllRanges();
+    setQ(question(), true);
+    applyFs(fitFor(values()));
+  }
+  topicCur.addEventListener('keydown', e => {
+    if (!editing) return;
+    e.stopPropagation();
+    if (e.key === 'Enter'){ e.preventDefault(); commit(); W.topic.focus({ preventScroll: true }); }
+    else if (e.key === 'Escape'){ e.preventDefault(); commit(true); W.topic.focus({ preventScroll: true }); }
+    else if (e.key.length === 1 && !e.metaKey && !e.ctrlKey && topicCur.textContent.length >= 40){ const sel = window.getSelection(); if (sel && sel.isCollapsed) e.preventDefault(); }
+  });
+  topicCur.addEventListener('input', onInput);
+  topicCur.addEventListener('blur', () => { if (editing) commit(); });
+  W.topic.addEventListener('pointerdown', e => {
+    if (editing || (e.pointerType === 'mouse' && e.button !== 0)) return;
+    lp = { x: e.clientX, y: e.clientY, t: setTimeout(() => { lp = null; enterEdit(); buzz(14); }, 480) };
+  });
+  W.topic.addEventListener('pointermove', e => { if (lp && Math.hypot(e.clientX - lp.x, e.clientY - lp.y) > 8){ clearTimeout(lp.t); lp = null; } });
+  ['pointerup', 'pointercancel', 'pointerleave'].forEach(ev => W.topic.addEventListener(ev, () => { if (lp){ clearTimeout(lp.t); lp = null; } }));
+  W.topic.addEventListener('contextmenu', e => e.preventDefault());
+
+  Object.keys(W).forEach(k => {
+    const el = W[k];
+    el.addEventListener('click', e => {
+      if (editing) return;
+      if (k === 'topic' && e.detail === 2){ enterEdit(); return; }
+      step(k);
+    });
+    el.addEventListener('keydown', e => {
+      if (editing) return;
+      if (e.key === 'Enter' || e.key === ' '){ e.preventDefault(); step(k); }
+      else if (k === 'topic' && e.key === 'F2'){ e.preventDefault(); enterEdit(); }
+      else if (k === 'topic' && e.key.length === 1 && !e.metaKey && !e.ctrlKey && !e.altKey){ e.preventDefault(); enterEdit(e.key); }
+    });
+  });
+
+  function reset(){
+    runId++;
+    if (editing) commit(true);
+    st = { topic: 0, when: 0, second: 0, moved: 0, reveal: 0 }; custom = null;
+    render(); sheet.close();
+  }
+  async function demo(){
+    const id = ++runId;
+    line.classList.add('pre'); void line.offsetWidth; line.classList.remove('pre');
+    await wait(900); if (id !== runId || editing) return;
+    Object.keys(W).forEach((k, i) => { const L = list(k); peek(W[k], L[(st[k] + 1) % L.length], i * 95); });
+  }
+  new ResizeObserver(() => { if (!editing) applyFs(fitFor(values())); }).observe(frame);
+  if (document.fonts && document.fonts.ready) document.fonts.ready.then(() => applyFs(fitFor(values())));
+  specimen('sp-sentence', { reset, demo });
+})();
+
+/* ===== 2. Console ===== */
+(() => {
+  const frame = document.querySelector('#sp-console .frame');
+  const KEYS = ['ai', 'change', 'today', 'custom'];
+  const NAMES = ['About AI', 'About a change', 'Arriving today', 'Your own words'];
+  const ANG = [-54, -18, 18, 54];
+  const knob = frame.querySelector('.cn-knob'), rot = knob.querySelector('.rot');
+  const dls = [...frame.querySelectorAll('.cn-dl')];
+  const lcd = frame.querySelector('.cn-lcd'), lcdIn = frame.querySelector('.cn-lcd-in');
+  let lcdT = frame.querySelector('.cn-lcd-t');
+  const sws = [...frame.querySelectorAll('.cn-sw')], rks = [...frame.querySelectorAll('.cn-rk')];
+  const keys = [...frame.querySelectorAll('.cn-key')], startBtn = frame.querySelector('.cn-start');
+  let idx = 0, ang = ANG[0], customQ = '', started = false, editing = false, runId = 0, stopSweep = null, kd = null;
+
+  const nearest = a => { let b = 0, bd = 1e9; ANG.forEach((x, i) => { const d = Math.abs(x - a); if (d < bd){ bd = d; b = i; } }); return b; };
+  const isOn = el => el.getAttribute('aria-checked') === 'true';
+  function setAng(a){ ang = a; rot.style.transform = 'rotate(' + a.toFixed(2) + 'deg)'; }
+  function lcdText(){
+    if (started) return 'Room open, code ' + CODE;
+    return KEYS[idx] === 'custom' ? (customQ || 'Your own question') : ROOM.SETS[KEYS[idx]].prompt;
+  }
+  function lcdSet(text, dir){
+    const ph = !started && KEYS[idx] === 'custom' && !customQ;
+    if (RM || !dir || lcdT.textContent === text){ lcdT.textContent = text; lcdT.classList.toggle('ph', ph); return; }
+    const old = lcdT, nu = old.cloneNode(false);
+    nu.textContent = text; nu.classList.toggle('ph', ph);
+    lcdIn.appendChild(nu); lcdT = nu;
+    const e = 'cubic-bezier(.3,.9,.3,1)';
+    const a = old.animate([{ transform: 'translateY(0)' }, { transform: 'translateY(' + (-100 * dir) + '%)' }], { duration: 230, easing: e, fill: 'forwards' });
+    a.onfinish = () => old.remove();
+    nu.animate([{ transform: 'translateY(' + (100 * dir) + '%)' }, { transform: 'translateY(0)' }], { duration: 230, easing: e });
+  }
+  function marks(){ dls.forEach((d, i) => d.classList.toggle('on', i === idx)); knob.setAttribute('aria-valuenow', String(idx)); knob.setAttribute('aria-valuetext', NAMES[idx]); }
+  function select(n, o){
+    o = o || {};
+    if (n === idx && !o.force) return;
+    if (editing) endEdit();
+    const dir = n >= idx ? 1 : -1;
+    idx = n; marks();
+    if (!o.quiet){ Sfx.detent(); buzz(5); }
+    if (started){ started = false; startBtn.setAttribute('aria-pressed', 'false'); }
+    lcdSet(lcdText(), dir);
+  }
+  function sweep(to, ms){
+    if (stopSweep){ stopSweep(); stopSweep = null; }
+    const from = ang, target = ANG[to];
+    if (RM){ setAng(target); select(to); return; }
+    stopSweep = tween(ms || Math.max(180, Math.abs(target - from) * 6), t => {
+      const a = from + (target - from) * t; setAng(a);
+      const n = nearest(a); if (n !== idx) select(n);
+    }, Ease.outCubic, () => { stopSweep = null; select(to); });
+  }
+
+  /* Knob: turn it, click it, or use the arrow keys */
+  function center(){ const r = knob.getBoundingClientRect(); return { x: r.left + r.width / 2, y: r.top + r.height / 2 }; }
+  function pang(e, c){ return Math.atan2(e.clientX - c.x, -(e.clientY - c.y)) * 180 / Math.PI; }
+  knob.addEventListener('pointerdown', e => {
+    if (e.pointerType === 'mouse' && e.button !== 0) return;
+    e.preventDefault(); knob.focus({ preventScroll: true });
+    if (stopSweep){ stopSweep(); stopSweep = null; }
+    try { knob.setPointerCapture(e.pointerId); } catch (err) {}
+    const c = center();
+    kd = { c, a0: pang(e, c), start: ang, moved: false, id: e.pointerId };
+    knob.classList.add('turning');
+  });
+  knob.addEventListener('pointermove', e => {
+    if (!kd || e.pointerId !== kd.id) return;
+    let d = pang(e, kd.c) - kd.a0;
+    if (d > 180) d -= 360; if (d < -180) d += 360;
+    if (!kd.moved && Math.abs(d) < 3) return;
+    kd.moved = true;
+    const raw = clamp(kd.start + d, -70, 70);
+    const n = nearest(raw), off = raw - ANG[n];
+    const pull = Math.max(0, 1 - Math.abs(off) / 16);
+    setAng(raw - off * .7 * pull);
+    if (n !== idx) select(n);
+  });
+  function endKnob(e){
+    if (!kd || (e && e.pointerId !== kd.id)) return;
+    const moved = kd.moved; kd = null; knob.classList.remove('turning');
+    if (!moved) sweep((idx + 1) % 4); else sweep(idx, 160);
+  }
+  knob.addEventListener('pointerup', endKnob);
+  knob.addEventListener('pointercancel', endKnob);
+  knob.addEventListener('keydown', e => {
+    let n = idx;
+    if (e.key === 'ArrowRight' || e.key === 'ArrowUp') n = Math.min(3, idx + 1);
+    else if (e.key === 'ArrowLeft' || e.key === 'ArrowDown') n = Math.max(0, idx - 1);
+    else if (e.key === 'Home') n = 0;
+    else if (e.key === 'End') n = 3;
+    else if (e.key === 'Enter' || e.key === ' ') n = (idx + 1) % 4;
+    else return;
+    e.preventDefault(); sweep(n);
+  });
+  dls.forEach((d, i) => d.addEventListener('click', () => sweep(i)));
+
+  /* The display: tap it to write your own question */
+  function beginEdit(){
+    if (editing || KEYS[idx] !== 'custom' || started) return;
+    editing = true; lcd.classList.add('editing');
+    lcdT.classList.remove('ph'); if (!customQ) lcdT.textContent = '';
+    editable(lcdT, true); lcdT.focus({ preventScroll: true });
+    if (customQ) selectAll(lcdT);
+  }
+  function endEdit(){
+    if (!editing) return;
+    editing = false; lcd.classList.remove('editing');
+    editable(lcdT, false);
+    customQ = cleanText(lcdT, 60);
+    lcdSet(lcdText());
+    const sel = window.getSelection(); if (sel) sel.removeAllRanges();
+  }
+  lcd.addEventListener('click', () => {
+    if (editing) return;
+    if (started){ started = false; startBtn.setAttribute('aria-pressed', 'false'); lcdSet(lcdText(), -1); }
+    if (KEYS[idx] !== 'custom'){ sweep(3); setTimeout(beginEdit, RM ? 0 : 340); } else beginEdit();
+  });
+  lcd.addEventListener('keydown', e => { if (editing) return; if (e.key === 'Enter' || e.key === ' '){ e.preventDefault(); lcd.click(); } });
+  lcdIn.addEventListener('keydown', e => { if (!editing) return; e.stopPropagation(); if (e.key === 'Enter' || e.key === 'Escape'){ e.preventDefault(); lcdT.blur(); } });
+  lcdIn.addEventListener('focusout', () => { if (editing) endEdit(); });
+
+  /* Slide switches for the moments (at least one stays on) */
+  function setSw(el, on, quiet){
+    if (isOn(el) === on) return;
+    el.setAttribute('aria-checked', String(on));
+    el.querySelector('.cn-lab').classList.toggle('on', on);
+    if (!quiet){ Sfx.thock(); buzz(8); }
+  }
+  const lastOne = el => isOn(el) && sws.filter(isOn).length === 1;
+  function nope(el){
+    const th = el.querySelector('.cn-thumb');
+    if (!RM) th.animate([{ translate: '0 0' }, { translate: '0 1.1cqw' }, { translate: '0 0' }], { duration: 240, easing: 'ease-out' });
+    Sfx.clack(); buzz(4);
+  }
+  sws.forEach(el => {
+    let d = null;
+    el.addEventListener('pointerdown', e => {
+      if (e.pointerType === 'mouse' && e.button !== 0) return;
+      d = { y: e.clientY, id: e.pointerId, moved: false };
+      try { el.setPointerCapture(e.pointerId); } catch (err) {}
+    });
+    el.addEventListener('pointermove', e => {
+      if (!d || e.pointerId !== d.id) return;
+      const dy = e.clientY - d.y;
+      if (Math.abs(dy) < 8) return;
+      d.moved = true; d.y = e.clientY;
+      const want = dy < 0;
+      if (want === isOn(el)) return;
+      if (!want && lastOne(el)){ nope(el); return; }
+      setSw(el, want);
+    });
+    el.addEventListener('pointerup', () => { if (d && d.moved) el._skip = true; d = null; });
+    el.addEventListener('pointercancel', () => { d = null; });
+    el.addEventListener('click', () => {
+      if (el._skip){ el._skip = false; return; }
+      if (lastOne(el)){ nope(el); return; }
+      setSw(el, !isOn(el));
+    });
+  });
+
+  /* Rockers for second feeling and sound */
+  function setRk(el, on, quiet){
+    if (isOn(el) === on) return;
+    el.setAttribute('aria-checked', String(on));
+    el.querySelector('.cn-lab').classList.toggle('on', on);
+    if (!quiet){ Sfx.clack(); buzz(8); }
+  }
+  rks.forEach(el => el.addEventListener('click', () => setRk(el, !isOn(el))));
+
+  /* Latching keys for the reveal */
+  function setKey(i, quiet){
+    keys.forEach((k, j) => { k.setAttribute('aria-checked', String(j === i)); k.tabIndex = j === i ? 0 : -1; });
+    if (!quiet){ Sfx.clack(); buzz(8); }
+  }
+  keys.forEach((k, i) => {
+    k.addEventListener('click', () => { if (isOn(k)){ Sfx.clack(); return; } setKey(i); });
+    k.addEventListener('keydown', e => {
+      const d = (e.key === 'ArrowRight' || e.key === 'ArrowDown') ? 1 : (e.key === 'ArrowLeft' || e.key === 'ArrowUp') ? -1 : 0;
+      if (!d) return;
+      e.preventDefault(); const n = (i + d + 4) % 4; setKey(n); keys[n].focus();
+    });
+  });
+
+  /* Start latches down and the display shows the room code */
+  function setStarted(v, quiet){
+    started = v; startBtn.setAttribute('aria-pressed', String(v));
+    lcdSet(lcdText(), v ? 1 : -1);
+    if (!quiet){ Sfx.thock(); if (v) Sfx.chime(); buzz(v ? 14 : 8); }
+  }
+  startBtn.addEventListener('click', () => { if (editing) lcdT.blur(); setStarted(!started); });
+
+  function reset(){
+    runId++;
+    if (stopSweep){ stopSweep(); stopSweep = null; }
+    if (editing){ editing = false; editable(lcdT, false); lcd.classList.remove('editing'); }
+    customQ = ''; started = false; startBtn.setAttribute('aria-pressed', 'false');
+    idx = 0; setAng(ANG[0]); marks(); lcdSet(lcdText());
+    [true, false, true].forEach((v, i) => setSw(sws[i], v, true));
+    rks.forEach(r => setRk(r, true, true)); setKey(0, true);
+  }
+  async function demo(){
+    const id = ++runId;
+    if (stopSweep){ stopSweep(); stopSweep = null; }
+    if (editing) lcdT.blur();
+    started = false; startBtn.setAttribute('aria-pressed', 'false');
+    sws.forEach(s => setSw(s, false, true)); rks.forEach(r => setRk(r, false, true));
+    keys.forEach(k => k.setAttribute('aria-checked', 'false'));
+    idx = 3; setAng(ANG[3]); marks(); lcdSet(lcdText());
+    await wait(380); if (id !== runId) return;
+    sweep(0, 1000);
+    await wait(760); if (id !== runId) return;
+    setSw(sws[0], true); await wait(150); if (id !== runId) return;
+    setSw(sws[2], true); await wait(220); if (id !== runId) return;
+    setRk(rks[0], true); await wait(150); if (id !== runId) return;
+    setRk(rks[1], true); await wait(220); if (id !== runId) return;
+    setKey(0);
+  }
+  reset();
+  specimen('sp-console', { reset, demo });
+})();
+
+/* ===== 3. Timeline ===== */
+(() => {
+  const frame = document.querySelector('#sp-timeline .frame');
+  const tl = frame.querySelector('.tl');
+  const pop = tl.querySelector('.tl-pop'), popP = pop.querySelector('p'), popSvg = pop.querySelector('svg');
+  const go = tl.querySelector('.go');
+  const sheet = makeSheet(frame, go);
+  const EDGES = [0, 15, 65, 80, 135, 150];
+  const WHERE = ['at the start of Opening', 'after Opening', 'at the start of the break', 'after the break', 'at the start of Close', 'at the very end'];
+  const ORDER = ['arrive', 'middle', 'leave'];
+  const NAME = { arrive: 'Arrive', middle: 'Halfway', leave: 'Leave' };
+  const PROMPT = { arrive: ROOM.SETS.ai.prompt, middle: 'How are you feeling now?', leave: 'And now, as you leave?' };
+  const DEF = { arrive: 0, middle: null, leave: 4 };
+  const PREF = { arrive: 0, middle: 3, leave: 4 };
+  const M = {};
+  tl.querySelectorAll('.tl-m').forEach(el => { const id = el.dataset.id; M[id] = { id, el, tab: el.querySelector('.tl-tab'), stem: el.querySelector('.tl-stem'), idx: null, parked: true, x: 6, y: 51, stop: null }; });
+  let runId = 0, drag = null, popFor = null, hideT = 0, swapT = 0, mode = '', pinned = 'leave';
+
+  function G(){
+    return frame.clientWidth < 520
+      ? { x0: 4, tw: 92, tabTop: 18.8, tabH: 9, ribTop: 30.6, ribH: 8.6, park: 49.6, gap: .35 }
+      : { x0: 6, tw: 88, tabTop: 28.8, tabH: 4.8, ribTop: 36.8, ribH: 8.2, park: 51.4, gap: .35 };
+  }
+  function applyGeo(){
+    const g = G(), m = frame.clientWidth < 520 ? 'phone' : 'wide';
+    if (m !== mode){ mode = m; ['x0', 'tw', 'tabTop', 'tabH', 'ribTop', 'ribH'].forEach(k => tl.style.setProperty('--' + k, g[k] + 'cqw')); }
+    return g;
+  }
+  function edgeX(k, g){
+    if (k <= 0) return g.x0;
+    if (k >= 5) return g.x0 + g.tw;
+    return g.x0 + (g.tw - g.gap * 4) * EDGES[k] / 150 + g.gap * (k - .5);
+  }
+  const cq = () => frame.clientWidth / 100;
+  function parkSlots(g){
+    const c = cq(), out = {}; let x = g.x0;
+    ORDER.forEach(id => { const m = M[id]; if (!m.parked) return; const w = m.tab.offsetWidth / c; out[id] = x + w / 2; x += w + 1.6; });
+    return out;
+  }
+  function draw(m){
+    const g = G();
+    m.el.style.left = m.x.toFixed(3) + 'cqw'; m.el.style.top = m.y.toFixed(3) + 'cqw';
+    m.stem.style.height = Math.max(0, g.ribTop + g.ribH - m.y - g.tabH).toFixed(3) + 'cqw';
+    const c = cq(), W = frame.clientWidth, w = m.tab.offsetWidth, stem = m.x * c, pad = 1.6 * c;
+    const left = clamp(stem - w / 2, pad, W - pad - w);
+    m.tab.style.left = (left - stem).toFixed(1) + 'px';
+  }
+  function moveTo(m, x, y, animate){
+    if (m.stop){ m.stop(); m.stop = null; }
+    if (!animate || RM){ m.x = x; m.y = y; draw(m); return; }
+    const x0 = m.x, y0 = m.y;
+    m.stop = tween(180, t => { m.x = x0 + (x - x0) * t; m.y = y0 + (y - y0) * t; draw(m); }, Ease.outCubic, () => { m.stop = null; });
+  }
+  function describe(m){ m.tab.setAttribute('aria-label', NAME[m.id] + ' pulse, ' + (m.parked ? 'not placed' : WHERE[m.idx])); }
+  function layout(animate){
+    const g = applyGeo(), slots = parkSlots(g);
+    ORDER.forEach(id => {
+      const m = M[id];
+      m.el.classList.toggle('parked', m.parked);
+      describe(m);
+      if (drag && drag.m === m && drag.floating) return;
+      if (m.parked) moveTo(m, slots[id], g.park, animate); else moveTo(m, edgeX(m.idx, g), g.tabTop, animate);
+    });
+  }
+  function allowed(m){
+    const i = ORDER.indexOf(m.id); let lo = 0, hi = 5;
+    ORDER.forEach((id, j) => { const o = M[id]; if (o === m || o.parked) return; if (j < i) lo = Math.max(lo, o.idx + 1); if (j > i) hi = Math.min(hi, o.idx - 1); });
+    return lo <= hi ? [lo, hi] : null;
+  }
+  function nearestEdge(m, x, g){
+    const r = allowed(m); if (!r) return null;
+    let b = r[0], bd = 1e9;
+    for (let k = r[0]; k <= r[1]; k++){ const d = Math.abs(edgeX(k, g) - x); if (d < bd){ bd = d; b = k; } }
+    return b;
+  }
+  const attached = () => ORDER.filter(id => !M[id].parked).length;
+  function shake(m){ if (!RM) m.tab.animate([{ translate: '0 0' }, { translate: '-.6cqw 0' }, { translate: '.6cqw 0' }, { translate: '0 0' }], { duration: 260, easing: 'ease-out' }); buzz(4); }
+
+  /* What participants see at that moment */
+  const dotSvg = (x, y) => '<circle cx="' + x.toFixed(1) + '" cy="' + y.toFixed(1) + '" r="4.2" fill="#FFCC00" stroke="#293851" stroke-width=".9"/>';
+  function popContent(m){
+    popP.textContent = PROMPT[m.id];
+    const mx = v => 50 + v * 40, my = v => 32 - v * 25;
+    const ox = You.outX == null ? .66 : You.outX, oy = You.outY == null ? .7 : You.outY;
+    let s = '<rect x="1" y="1" width="98" height="62" rx="8" fill="#E4F4F4"/><path d="M50 7V57M8 32H92" stroke="rgba(41,56,81,.14)" stroke-width="1"/>';
+    ROOM.SLOTS.forEach(p => { s += '<circle cx="' + mx(p.x).toFixed(1) + '" cy="' + my(p.y).toFixed(1) + '" r="1.7" fill="rgba(41,56,81,.3)"/>'; });
+    if (m.id === 'arrive') s += dotSvg(mx(You.inX), my(You.inY));
+    else {
+      const t = m.id === 'middle' ? .45 : 1, x = You.inX + (ox - You.inX) * t, y = You.inY + (oy - You.inY) * t;
+      s += '<path d="M' + mx(You.inX).toFixed(1) + ' ' + my(You.inY).toFixed(1) + 'L' + mx(x).toFixed(1) + ' ' + my(y).toFixed(1) + '" stroke="rgba(41,56,81,.35)" stroke-width=".9" stroke-linecap="round"/>' +
+        '<circle cx="' + mx(You.inX).toFixed(1) + '" cy="' + my(You.inY).toFixed(1) + '" r="3.8" fill="#E4F4F4" stroke="rgba(41,56,81,.55)" stroke-width="1" stroke-dasharray="1.7 1.5"/>' + dotSvg(mx(x), my(y));
+    }
+    popSvg.innerHTML = s;
+  }
+  function showPop(m, autoHide){
+    if (m.parked) return;
+    clearTimeout(hideT); clearTimeout(swapT);
+    if (popFor !== m.id && pop.classList.contains('on') && !RM){
+      pop.classList.remove('on');
+      swapT = setTimeout(() => showPop(m, autoHide), 140);
+      return;
+    }
+    if (popFor !== m.id){ popContent(m); popFor = m.id; }
+    const g = G(), c = cq(), W = frame.clientWidth, pw = pop.offsetWidth, ph = pop.offsetHeight;
+    const left = clamp(edgeX(m.idx, g) * c - pw / 2, 1.6 * c, W - 1.6 * c - pw);
+    pop.style.left = left.toFixed(1) + 'px';
+    pop.style.top = (g.tabTop * c - 1.5 * c - ph).toFixed(1) + 'px';
+    pop.classList.add('on');
+    if (autoHide) hideT = setTimeout(restPop, autoHide);
+  }
+  function hidePop(){ clearTimeout(hideT); clearTimeout(swapT); pop.classList.remove('on'); }
+  /* At rest on a wide frame, the pinned marker keeps its preview showing. On a phone it would cover the question. */
+  function restPop(){
+    clearTimeout(hideT);
+    if (!M[pinned] || M[pinned].parked) pinned = ['leave', 'middle', 'arrive'].find(id => !M[id].parked) || 'leave';
+    if (frame.clientWidth >= 520 && !M[pinned].parked && !drag) showPop(M[pinned]); else hidePop();
+  }
+
+  function attachDefault(m){
+    const r = allowed(m); if (!r){ shake(m); return; }
+    m.parked = false; m.idx = clamp(PREF[m.id], r[0], r[1]); pinned = m.id;
+    layout(true); Sfx.tick(m.idx); buzz(6); showPop(m, 1500);
+  }
+  function park(m){
+    if (m.parked) return;
+    if (attached() <= 1){ shake(m); return; }
+    m.parked = true; layout(true); Sfx.drop(); restPop();
+  }
+
+  ORDER.forEach(id => {
+    const m = M[id], tab = m.tab;
+    tab.addEventListener('pointerdown', e => {
+      if (e.pointerType === 'mouse' && e.button !== 0) return;
+      e.preventDefault(); tab.focus({ preventScroll: true });
+      try { tab.setPointerCapture(e.pointerId); } catch (err) {}
+      const r = frame.getBoundingClientRect();
+      drag = { m, id: e.pointerId, r, c: r.width / 100, x0: e.clientX, y0: e.clientY, moved: false, floating: false, prev: { idx: m.idx, parked: m.parked } };
+      m.el.classList.add('drag');
+      if (!m.parked){ pinned = m.id; showPop(m); }
+    });
+    tab.addEventListener('pointermove', e => {
+      if (!drag || drag.m !== m || e.pointerId !== drag.id) return;
+      if (!drag.moved && Math.hypot(e.clientX - drag.x0, e.clientY - drag.y0) < 5) return;
+      drag.moved = true;
+      const g = G();
+      const px = (e.clientX - drag.r.left) / drag.c, py = (e.clientY - drag.r.top) / drag.c;
+      const onTrack = py < g.ribTop + g.ribH + (g.park - g.ribTop - g.ribH) * .5;
+      if (onTrack){
+        const k = nearestEdge(m, px, g);
+        if (k != null){
+          const changed = m.parked || drag.floating || m.idx !== k;
+          m.parked = false; m.idx = k; drag.floating = false;
+          if (changed){ layout(true); Sfx.tick(k); buzz(5); showPop(m); }
+          return;
+        }
+      }
+      if (!drag.floating){ drag.floating = true; m.parked = true; hidePop(); layout(true); }
+      if (m.stop){ m.stop(); m.stop = null; }
+      m.x = clamp(px, 3, 97); m.y = clamp(py - g.tabH / 2, g.ribTop - g.tabH, 61.5 - g.tabH); draw(m);
+    });
+    function end(e){
+      if (!drag || drag.m !== m || (e && e.pointerId !== drag.id)) return;
+      const d = drag; drag = null; m.el.classList.remove('drag');
+      if (!d.moved){ if (m.parked) attachDefault(m); else { pinned = m.id; showPop(m, 1600); } return; }
+      if (d.floating && attached() === 0){ m.parked = d.prev.parked; m.idx = d.prev.idx; if (m.parked) m.parked = false; if (m.idx == null) m.idx = PREF[m.id]; }
+      Sfx.drop(); buzz(5);
+      layout(true);
+      if (!m.parked){ pinned = m.id; showPop(m, 1300); } else restPop();
+    }
+    tab.addEventListener('pointerup', end);
+    tab.addEventListener('pointercancel', end);
+    tab.addEventListener('keydown', e => {
+      if (e.key === 'ArrowLeft' || e.key === 'ArrowRight'){
+        e.preventDefault();
+        if (m.parked){ attachDefault(m); return; }
+        const r = allowed(m), k = clamp(m.idx + (e.key === 'ArrowRight' ? 1 : -1), r[0], r[1]);
+        if (k !== m.idx){ m.idx = k; layout(true); Sfx.tick(k); showPop(m); } else shake(m);
+      } else if (e.key === 'Delete' || e.key === 'Backspace' || e.key === 'ArrowDown'){ e.preventDefault(); park(m); }
+      else if ((e.key === 'Enter' || e.key === ' ' || e.key === 'ArrowUp') && m.parked){ e.preventDefault(); attachDefault(m); }
+    });
+    tab.addEventListener('mouseenter', () => { if (!drag && !m.parked) showPop(m); });
+    tab.addEventListener('mouseleave', () => { if (!drag && document.activeElement !== tab) restPop(); });
+    tab.addEventListener('focus', () => { if (!drag && !m.parked){ pinned = m.id; showPop(m); } });
+    tab.addEventListener('blur', () => { if (!drag) restPop(); });
+  });
+
+  function reset(){
+    runId++; hidePop(); pinned = 'leave';
+    ORDER.forEach(id => { M[id].parked = DEF[id] == null; M[id].idx = DEF[id]; });
+    layout(false); sheet.close(); restPop();
+  }
+  async function demo(){
+    const id = ++runId; hidePop();
+    ORDER.forEach(k => { M[k].parked = true; M[k].idx = null; });
+    layout(false);
+    await wait(420); if (id !== runId) return;
+    M.arrive.parked = false; M.arrive.idx = 0; layout(true); Sfx.tick(0);
+    await wait(380); if (id !== runId) return;
+    M.leave.parked = false; M.leave.idx = 1; layout(true); Sfx.tick(1);
+    for (let k = 2; k <= 4; k++){ await wait(200); if (id !== runId) return; M.leave.idx = k; layout(true); Sfx.tick(k); }
+    await wait(200); if (id !== runId) return;
+    pinned = 'leave'; showPop(M.leave);
+    await wait(1400); if (id !== runId) return;
+    if (!drag) restPop();
+  }
+  reset();
+  new ResizeObserver(() => { if (!drag){ hidePop(); layout(false); restPop(); } }).observe(frame);
+  if (document.fonts && document.fonts.ready) document.fonts.ready.then(() => { if (!drag){ layout(false); restPop(); } });
+  specimen('sp-timeline', { reset, demo });
+})();
+
+/* ===== 4. Swatches ===== */
+(() => {
+  const frame = document.querySelector('#sp-swatches .frame');
+  const fan = frame.querySelector('.sw-fan'), qEl = frame.querySelector('.sw-q');
+  const go = frame.querySelector('.go');
+  const sheet = makeSheet(frame, go);
+  const KEYS = ['ai', 'change', 'today', 'custom'];
+  const NAMES = ['About AI', 'About a change', 'Arriving today', 'Custom'];
+  /* one family per quadrant, deeper for the stronger word */
+  const CELL = [
+    ['#90B210', '#293851'], ['#C7D887', '#293851'], ['#B3DFDE', '#293851'], ['#68BFBD', '#293851'],
+    ['#B84F18', '#FFFFFF'], ['#EBB293', '#293851'], ['#D5D9E3', '#293851'], ['#586A90', '#FFFFFF']
+  ];
+  const CUSTOM_Q = 'How are you feeling?';
+  let cur = 0, customQ = CUSTOM_Q, runId = 0;
+
+  fan.innerHTML = KEYS.map((k, i) => {
+    const words = k === 'custom' ? ['', '', '', '', '', '', '', ''] : ROOM.SETS[k].words;
+    return '<div class="sw-card" role="radio" tabindex="-1" aria-checked="false" aria-label="' + NAMES[i] + '" data-i="' + i + '" style="--base:' + [-3, -1, 1, 3][i] + ';--j:' + i + '">' +
+      '<span class="sw-name">' + NAMES[i] + '</span><span class="sw-cells">' +
+      words.map((w, j) => '<span class="sw-cell" style="--c:' + CELL[j][0] + ';--t:' + CELL[j][1] + '"><span class="sw-w">' + esc(w) + '</span></span>').join('') +
+      '</span><span class="sw-foot"><i class="sw-rivet"></i></span></div>';
+  }).join('');
+  const cards = [...fan.querySelectorAll('.sw-card')];
+  const customWords = [...cards[3].querySelectorAll('.sw-w')];
+  customWords.forEach((w, j) => w.setAttribute('aria-label', 'Word ' + (j + 1)));
+
+  function setQ(animate){
+    const k = KEYS[cur], text = k === 'custom' ? customQ : ROOM.SETS[k].prompt;
+    editable(qEl, k === 'custom'); qEl.classList.toggle('edit', k === 'custom');
+    if (qEl.textContent !== text){
+      qEl.textContent = text;
+      if (animate && !RM) qEl.animate([{ opacity: 0, transform: 'translateY(.4em)' }, { opacity: 1, transform: 'none' }], { duration: 340, easing: 'cubic-bezier(.2,.8,.2,1)' });
+    }
+  }
+  function focusWord(w){ if (cur !== 3 || !w) return; w.focus({ preventScroll: true }); caretEnd(w); }
+  function pick(i, o){
+    o = o || {};
+    const same = i === cur;
+    cur = i;
+    cards.forEach((c, j) => {
+      const on = j === i;
+      c.classList.toggle('on', on); c.setAttribute('aria-checked', String(on)); c.tabIndex = on ? 0 : -1;
+      c.style.zIndex = on ? '20' : String(j + 1);
+    });
+    customWords.forEach(w => editable(w, i === 3));
+    setQ(!o.quiet && !same);
+    if (o.user && !same){ Sfx.flick(); buzz(8); }
+    if (o.edit && i === 3) setTimeout(() => focusWord(customWords.find(x => !x.textContent.trim()) || customWords[0]), same || RM ? 0 : 420);
+  }
+  cards.forEach((c, i) => {
+    c.addEventListener('click', e => {
+      if (i === 3 && cur === 3){
+        if (e.target.closest('.sw-w')) return;
+        const cell = e.target.closest('.sw-cell');
+        focusWord(cell ? cell.querySelector('.sw-w') : (customWords.find(x => !x.textContent.trim()) || customWords[0]));
+        return;
+      }
+      pick(i, { user: true, edit: true });
+    });
+    c.addEventListener('keydown', e => {
+      if (e.target !== c) return;
+      let n = null;
+      if (e.key === 'ArrowRight' || e.key === 'ArrowDown') n = (i + 1) % 4;
+      else if (e.key === 'ArrowLeft' || e.key === 'ArrowUp') n = (i + 3) % 4;
+      else if (e.key === 'Enter' || e.key === ' '){ e.preventDefault(); pick(i, { user: true, edit: true }); return; }
+      if (n == null) return;
+      e.preventDefault(); pick(n, { user: true }); cards[n].focus({ preventScroll: true });
+    });
+  });
+  customWords.forEach((w, j) => {
+    w.addEventListener('keydown', e => {
+      e.stopPropagation();
+      if (e.key === 'Enter'){ e.preventDefault(); if (j < 7) focusWord(customWords[j + 1]); else w.blur(); }
+      else if (e.key === 'Escape'){ e.preventDefault(); w.blur(); }
+      else if (e.key.length === 1 && !e.metaKey && !e.ctrlKey && w.textContent.length >= 14){ const s = window.getSelection(); if (s && s.isCollapsed) e.preventDefault(); }
+    });
+    w.addEventListener('blur', () => { w.textContent = cleanText(w, 14); });
+  });
+  qEl.addEventListener('keydown', e => { if (!qEl.isContentEditable) return; if (e.key === 'Enter' || e.key === 'Escape'){ e.preventDefault(); qEl.blur(); } });
+  qEl.addEventListener('input', () => { if (cur === 3) customQ = cleanText(qEl, 70) || CUSTOM_Q; });
+  qEl.addEventListener('blur', () => { if (cur === 3){ customQ = cleanText(qEl, 70) || CUSTOM_Q; qEl.textContent = customQ; } });
+
+  function reset(){
+    runId++;
+    frame.classList.remove('sw-closed', 'sw-fanning');
+    customWords.forEach(w => { w.textContent = ''; });
+    customQ = CUSTOM_Q; cur = -1; pick(0, { quiet: true }); sheet.close();
+  }
+  async function demo(){
+    const id = ++runId;
+    frame.classList.remove('sw-fanning'); frame.classList.add('sw-closed');
+    if (cur !== 0) pick(0, { quiet: true });
+    void frame.offsetWidth;
+    await wait(320); if (id !== runId) return;
+    frame.classList.add('sw-fanning'); frame.classList.remove('sw-closed'); Sfx.swish();
+    await wait(1100); if (id !== runId) return;
+    frame.classList.remove('sw-fanning');
+  }
+  cur = -1; pick(0, { quiet: true });
+  specimen('sp-swatches', { reset, demo });
+})();
+
+/* ===== 5. Preview first ===== */
+(() => {
+  const frame = document.querySelector('#sp-preview .frame');
+  const pv = frame.querySelector('.pv');
+  const tiles = [...pv.querySelectorAll('.pv-t')];
+  const nameEl = pv.querySelector('.pv-name');
+  const go = pv.querySelector('.go');
+  const sheet = makeSheet(frame, go);
+  const NAMES = ['A field of dots', 'A split-flap board', 'A sunburst', 'A cover headline'];
+  const SET = ROOM.SETS.ai, IN = ROOM.counts('in');
+  const COL = ['#90B210', '#C7D887', '#B3DFDE', '#68BFBD', '#D86527', '#EBB293', '#D5D9E3', '#586A90'];
+  const AROUND = [0, 1, 2, 3, 7, 6, 5, 4];
+  let chosen = 0, running = false, runId = 0;
+  const cvField = tiles[0].querySelector('canvas'), cvSun = tiles[2].querySelector('canvas'), cvCover = tiles[3].querySelector('canvas');
+
+  /* the split-flap board */
+  const bd = tiles[1].querySelector('.bd');
+  const ROWS = SET.words.map((w, i) => ({ w: w.toUpperCase(), n: IN[i] })).sort((a, b) => b.n - a.n)
+    .map(r => (r.w + '              ').slice(0, 12) + String(r.n).padStart(2, '0'));
+  bd.innerHTML = ROWS.map(r => '<span class="bd-row">' + r.split('').map(ch => '<span class="bd-c">' + (ch === ' ' ? '' : ch) + '</span>').join('') + '</span>').join('');
+  const cells = [...bd.querySelectorAll('.bd-row')].map(r => [...r.children]);
+  const ABC = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789';
+  let flips = [], nextFlip = 0, flipRow = 0;
+  function setCell(el, ch){
+    if (el.textContent === ch) return;
+    el.textContent = ch;
+    if (!RM) el.animate([{ transform: 'scaleY(1)' }, { transform: 'scaleY(.3)' }, { transform: 'scaleY(1)' }], { duration: 90, easing: 'ease-out' });
+  }
+  function boardTick(now){
+    if (!nextFlip) nextFlip = now + 1600;
+    if (now > nextFlip){
+      nextFlip = now + 2600;
+      const r = flipRow; flipRow = (flipRow + 1) % ROWS.length;
+      flips.push({ r, t0: now, last: new Array(14).fill(0) });
+    }
+    flips = flips.filter(f => {
+      let busy = false;
+      for (let j = 0; j < 14; j++){
+        const fin = ROWS[f.r][j] === ' ' ? '' : ROWS[f.r][j];
+        if (!fin) continue;
+        const settle = f.t0 + 260 + j * 55;
+        if (now < settle){
+          busy = true;
+          if (now - f.last[j] > 75){ f.last[j] = now; setCell(cells[f.r][j], ABC[Math.floor(Math.random() * ABC.length)]); }
+        } else setCell(cells[f.r][j], fin);
+      }
+      return busy;
+    });
+  }
+
+  /* canvases draw in a 1000 x 562.5 space and scale with the tile */
+  function size(){
+    const phone = frame.clientWidth < 520, big = frame.clientWidth * (phone ? .66 : .62), d = Math.min(2, window.devicePixelRatio || 1);
+    [cvField, cvSun, cvCover].forEach(cv => { const w = Math.max(2, Math.round(big * d)); if (cv.width !== w){ cv.width = w; cv.height = Math.round(w * 9 / 16); } });
+  }
+  function ctxOf(cv){ const c = cv.getContext('2d'), s = cv.width / 1000; c.setTransform(s, 0, 0, s, 0, 0); return c; }
+  function drawField(now){
+    const c = ctxOf(cvField), t = now * .001;
+    c.fillStyle = '#FFFFFF'; c.fillRect(0, 0, 1000, 563);
+    c.fillStyle = '#293851'; c.font = '400 30px Georgia, "Times New Roman", serif'; c.textAlign = 'left'; c.textBaseline = 'alphabetic';
+    c.fillText(SET.prompt, 46, 68);
+    const cx = 500, cy = 322, hx = 380, hy = 190;
+    c.strokeStyle = 'rgba(41,56,81,.13)'; c.lineWidth = 2;
+    c.beginPath(); c.moveTo(cx - hx - 40, cy); c.lineTo(cx + hx + 40, cy); c.moveTo(cx, cy - hy - 30); c.lineTo(cx, cy + hy + 30); c.stroke();
+    c.font = '500 19px Montserrat, Arial, sans-serif'; c.fillStyle = 'rgba(88,106,144,.9)';
+    ROOM.SLOTS.forEach((p, i) => {
+      const right = p.x > 0;
+      c.textAlign = right ? 'left' : 'right';
+      c.fillText(SET.words[i], cx + (p.x + (right ? .16 : -.16)) * hx, cy - p.y * hy + 7);
+    });
+    c.fillStyle = 'rgba(41,56,81,.85)';
+    ROOM.people.forEach((p, i) => {
+      const ph = i * 1.93, x = cx + p.inX * hx + Math.sin(t * .8 + ph) * 5, y = cy - p.inY * hy + Math.cos(t * .63 + ph * 1.3) * 4;
+      c.beginPath(); c.arc(x, y, 9, 0, 6.2832); c.fill();
+    });
+  }
+  function drawSun(now){
+    const c = ctxOf(cvSun), t = now * .001;
+    c.fillStyle = '#FFFFFF'; c.fillRect(0, 0, 1000, 563);
+    const cx = 500, cy = 284, r0 = 32, rMax = 188, maxC = Math.max.apply(null, IN), turn = t * .045;
+    c.font = '500 19px Montserrat, Arial, sans-serif'; c.textAlign = 'center'; c.textBaseline = 'middle';
+    AROUND.forEach((slot, k) => {
+      const a0 = -Math.PI / 2 + turn + k * Math.PI / 4 + .025, a1 = a0 + Math.PI / 4 - .05;
+      const r = r0 + (rMax - r0) * Math.sqrt(IN[slot] / maxC) * (1 + .03 * Math.sin(t * 1.2 + k * 1.7));
+      c.beginPath(); c.arc(cx, cy, r, a0, a1); c.arc(cx, cy, r0, a1, a0, true); c.closePath();
+      c.fillStyle = COL[slot]; c.fill();
+      const am = (a0 + a1) / 2, lr = rMax + 36;
+      c.fillStyle = 'rgba(88,106,144,.95)'; c.fillText(SET.words[slot], cx + Math.cos(am) * lr * 1.22, cy + Math.sin(am) * lr);
+    });
+  }
+  function drawCover(now){
+    const c = ctxOf(cvCover), t = now * .001;
+    c.clearRect(0, 0, 1000, 563);
+    const cx = 800, cy = 360, hx = 150, hy = 118;
+    c.fillStyle = 'rgba(41,56,81,.9)';
+    ROOM.people.forEach((p, i) => {
+      const ph = i * 2.3, x = cx + p.inX * hx + Math.sin(t * .7 + ph) * 4, y = cy - p.inY * hy + Math.cos(t * .55 + ph) * 3;
+      c.beginPath(); c.arc(x, y, 8, 0, 6.2832); c.fill();
+    });
+  }
+  function drawAll(now){ drawField(now); drawSun(now); drawCover(now); }
+  function stepFn(dt, now){ drawAll(now); boardTick(now); }
+
+  function layout(){
+    let s = 1;
+    tiles.forEach((t, i) => {
+      const on = i === chosen;
+      t.dataset.slot = on ? 'big' : 's' + (s++);
+      t.classList.toggle('big', on); t.setAttribute('aria-pressed', String(on));
+    });
+    nameEl.textContent = NAMES[chosen];
+  }
+  tiles.forEach((t, i) => t.addEventListener('click', () => {
+    const wasGrid = pv.classList.contains('grid');
+    if (wasGrid){ runId++; pv.classList.remove('grid'); }
+    if (i === chosen && !wasGrid) return;
+    chosen = i; layout(); Sfx.swish(); buzz(8);
+  }));
+
+  function enter(){ if (running || RM) return; running = true; Loop.add(stepFn); }
+  function leave(){ if (!running) return; running = false; Loop.remove(stepFn); }
+  function reset(){ runId++; pv.classList.remove('grid', 'snap'); chosen = 0; layout(); sheet.close(); }
+  async function demo(){
+    const id = ++runId;
+    pv.classList.add('snap', 'grid'); tiles.forEach(t => t.classList.remove('big'));
+    void pv.offsetWidth; pv.classList.remove('snap');
+    await wait(1150); if (id !== runId) return;
+    pv.classList.remove('grid'); chosen = 0; layout(); Sfx.swish();
+  }
+  size(); drawAll(0); layout();
+  new ResizeObserver(() => { size(); drawAll(performance.now()); }).observe(frame);
+  if (document.fonts && document.fonts.ready) document.fonts.ready.then(() => drawAll(performance.now()));
+  specimen('sp-preview', { reset, demo, enter, leave });
+})();
+
+/* ===== 6. Recipe ===== */
+(() => {
+  const frame = document.querySelector('#sp-recipe .frame');
+  const card = frame.querySelector('.rc-card');
+  const go = card.querySelector('.go');
+  const sheet = makeSheet(frame, go);
+  const SETS = [{ k: 'ai', t: 'about AI' }, { k: 'change', t: 'about a change' }, { k: 'today', t: 'for today' }];
+  const REVEAL = ['a field', 'a board', 'a sunburst', 'a cover'];
+  const T = {}; card.querySelectorAll('.rc-t').forEach(el => { T[el.dataset.k] = el; });
+  const qEl = card.querySelector('.rc-q');
+  const steps = [...card.querySelectorAll('.rc-meth li')];
+  const fresh = () => ({ set: 0, pulses: 2, second: true, moved: true, sound: true, reveal: 0 });
+  let st = fresh(), qCustom = null, runId = 0;
+
+  function swap(el, text, animate){
+    if (el.textContent === text) return;
+    el.textContent = text;
+    if (animate && !RM) el.animate([{ opacity: 0, transform: 'translateY(.45em)' }, { opacity: 1, transform: 'none' }], { duration: 280, easing: 'cubic-bezier(.2,.8,.2,1)' });
+  }
+  const question = () => qCustom || ROOM.SETS[SETS[st.set].k].prompt;
+  function lineH(){ const li = steps.find(x => !x.classList.contains('gone')); return li ? li.offsetHeight : 20; }
+  function toggleStep(li, on, animate){
+    if (li._a){ li._a.cancel(); li._a = null; }
+    const vis = !li.classList.contains('gone');
+    if (on === vis) return;
+    if (!animate || RM){ li.classList.toggle('gone', !on); return; }
+    const h = lineH();
+    if (on){
+      li.classList.remove('gone');
+      const a = li.animate([{ height: '0px', opacity: 0 }, { height: h + 'px', opacity: 1 }], { duration: 320, easing: 'cubic-bezier(.2,.8,.2,1)' });
+      li._a = a; a.onfinish = () => { if (li._a === a) li._a = null; };
+    } else {
+      const a = li.animate([{ height: h + 'px', opacity: 1 }, { height: '0px', opacity: 0 }], { duration: 260, easing: 'cubic-bezier(.4,0,.2,1)', fill: 'forwards' });
+      li._a = a; a.onfinish = () => { if (li._a === a){ li.classList.add('gone'); a.cancel(); li._a = null; } };
+    }
+  }
+  function renderSteps(animate){
+    const show = { open: 1, look: 1, show: 1, mid: st.pulses === 3, end: st.pulses >= 2, shift: st.pulses >= 2 };
+    let n = 0;
+    steps.forEach(li => {
+      const on = !!show[li.dataset.s];
+      if (on){ n++; swap(li.querySelector('.n'), n + '.', animate && !li.classList.contains('gone')); }
+      toggleStep(li, on, animate);
+    });
+  }
+  function render(animate){
+    swap(T.words.querySelector('.v'), SETS[st.set].t, animate);
+    swap(T.pulses.querySelector('.v'), String(st.pulses), animate);
+    T.pulses.querySelector('.p').textContent = st.pulses === 1 ? 'pulse' : 'pulses';
+    swap(T.reveal.querySelector('.v'), REVEAL[st.reveal], animate);
+    ['second', 'moved', 'sound'].forEach(k => { T[k].classList.toggle('off', !st[k]); T[k].setAttribute('aria-checked', String(st[k])); });
+    if (document.activeElement !== qEl) swap(qEl, question(), animate);
+    renderSteps(animate);
+  }
+  function act(k){
+    if (k === 'q'){ qEl.focus({ preventScroll: true }); selectAll(qEl); return; }
+    if (k === 'words'){ st.set = (st.set + 1) % SETS.length; qCustom = null; Sfx.roll(st.set); }
+    else if (k === 'pulses'){ st.pulses = st.pulses % 3 + 1; Sfx.roll(st.pulses); }
+    else if (k === 'reveal'){ st.reveal = (st.reveal + 1) % REVEAL.length; Sfx.roll(st.reveal); }
+    else { st[k] = !st[k]; if (!st[k]) Sfx.scratch(); else Sfx.tick(2); }
+    buzz(8); render(true);
+  }
+  Object.keys(T).forEach(k => {
+    T[k].addEventListener('click', () => act(k));
+    T[k].addEventListener('keydown', e => { if (e.key === 'Enter' || e.key === ' '){ e.preventDefault(); act(k); } });
+  });
+  editable(qEl, true);
+  qEl.addEventListener('keydown', e => { if (e.key === 'Enter' || e.key === 'Escape'){ e.preventDefault(); qEl.blur(); } });
+  qEl.addEventListener('input', () => { const t = cleanText(qEl, 80); qCustom = t || null; });
+  qEl.addEventListener('blur', () => { const t = cleanText(qEl, 64); qCustom = t && t !== ROOM.SETS[SETS[st.set].k].prompt ? t : null; qEl.textContent = question(); });
+  qEl.addEventListener('keydown', e => { if (e.key.length === 1 && !e.metaKey && !e.ctrlKey && qEl.textContent.length >= 64){ const sel = window.getSelection(); if (sel && sel.isCollapsed) e.preventDefault(); } });
+
+  function reset(){ runId++; st = fresh(); qCustom = null; card.classList.remove('lift'); render(false); sheet.close(); }
+  async function demo(){
+    const id = ++runId;
+    card.classList.add('lift'); void card.offsetWidth; card.classList.remove('lift');
+    await wait(800); if (id !== runId) return;
+    card.querySelectorAll('.rc-t').forEach((el, i) => {
+      el.animate([{ backgroundColor: 'rgba(104,191,189,0)' }, { backgroundColor: 'rgba(104,191,189,.3)' }, { backgroundColor: 'rgba(104,191,189,0)' }], { duration: 760, delay: i * 95, easing: 'ease-in-out' });
+    });
+  }
+  render(false);
+  specimen('sp-recipe', { reset, demo });
+})();
+</script>
+</body>
+</html>
