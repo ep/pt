@@ -5,6 +5,7 @@ A product testing space for simple, temporary, client-facing assets and tools, p
 There is no homepage at the repo root by design. Each project lives in its own folder and is published at its own URL:
 
 - https://ep.github.io/pt/wbwai201/report-builder/ : Turn the CSV export from a WBWAI 201 session into a sponsor-ready report
+- https://ep.github.io/pt/wbwai201/design-ideas/room-pulse: Podium pulse activity interaction, reveal, and design ideas 
 - https://ep.github.io/pt/field-tools/pair-poll/ : Pair Poll, a live paired-statement poll for workshops (field tool).
 - https://ep.github.io/pt/join/ : the short address participants type to join a poll (forwards to Pair Poll's join screen).
 - https://ep.github.io/pt/field-tools/chips/ : Place Your Chips, a live prioritization game (field tool).
