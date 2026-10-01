@@ -1,0 +1,19 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="robots" content="noindex, nofollow">
+<title>Join</title>
+<!-- The short address participants type from the projector for Room Pulse: ep.github.io/pt/pulse
+     It forwards to the pulse's join screen. A code after a question mark (pt/pulse/?ABCD)
+     is carried along so the screen fills it in. -->
+<script>
+  (function(){ var c=(location.search||'').replace(/^\?/,'').replace(/[^A-Za-z]/g,'').slice(0,8); location.replace('/pt/field-tools/room-pulse/?join'+(c?'='+c.toUpperCase():'')); })();
+</script>
+<meta http-equiv="refresh" content="0;url=/pt/field-tools/room-pulse/?join">
+</head>
+<body>
+<p style="font-family:'Helvetica Neue',Helvetica,Arial,sans-serif;padding:24px;color:#0E1012">Opening. If nothing happens, <a href="/pt/field-tools/room-pulse/?join" style="color:#0E1012">tap here</a>.</p>
+</body>
+</html>

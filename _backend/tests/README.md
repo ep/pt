@@ -1,6 +1,6 @@
 # Tests for the pt backend and field tools
 
-Three automated test suites live here. They are robot users: each one loads the real
+Four automated test suites live here. They are robot users: each one loads the real
 code, clicks through entire sessions in a simulated browser, and checks that
 everything behaves. They catch breakage in seconds that manual testing would take
 fifteen minutes to find, or miss entirely.
@@ -23,7 +23,17 @@ fifteen minutes to find, or miss entirely.
   the mirrored slides, the diverging bar, re-opening, the recap and report, the frost
   timing, links from sessions started before the code-join release, the bot test
   drive, and the gate screens.
-- `fake-db.mjs` is the shared fake database the worker and pair-poll suites use.
+- `qa-room-pulse.mjs` tests `../../field-tools/room-pulse/index.html` (Room Pulse) in a
+  simulated browser, against the real worker code with the fake database. It checks the
+  scoring math directly (balanced rounds, wins out of times shown, when a tie stays a
+  split, where each dot is placed, the headline wording), then runs whole sessions: the
+  four-step studio and its word map, joining by link and by code (the lobby QR is decoded
+  with jsQR), presence that falls when a page closes or goes quiet, answering, the fuse,
+  the reveal and the shift on the console, a mirror tab and every phone, reloads, a
+  newcomer at the second pulse, the results download, ending with undo, the gate screens,
+  and the bot test drive.
+- `fake-db.mjs` is the shared fake database the worker, pair-poll and room-pulse suites use.
+  It also counts the rows each request touches, so the worker suite can check what a read costs.
 
 ## Running them
 
@@ -36,6 +46,7 @@ Then, from anywhere in the repo:
     node _backend/tests/qa-worker.mjs
     node _backend/tests/qa-pyc.js
     node _backend/tests/qa-pair-poll.mjs
+    node _backend/tests/qa-room-pulse.mjs
 
 Every line prints PASS or FAIL, and the process exits nonzero on any failure.
 

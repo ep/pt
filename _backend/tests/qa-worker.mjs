@@ -19,7 +19,7 @@ const KH={'X-Session-Key':SK};
 (async function(){
 // health names the gated tools
 let r=await call('GET','/api/health');
-check('gating works with no dashboard variable set', r.data.ok===true && r.data.gatedTools.join()==='pyc,pair-poll');
+check('gating works with no dashboard variable set, Room Pulse included', r.data.ok===true && r.data.gatedTools.join()==='pyc,pair-poll,room-pulse');
 /* and a dashboard variable, if ever set, still wins */
 const ovEnv={ DB: FakeDB(), GATED_TOOLS:'other-tool' };
 const ovRes=await worker.fetch(new Request(base+'/api/health'), ovEnv);
@@ -108,6 +108,19 @@ await call('POST','/api/set',{tool:'pair-poll',code:'POLL',path:'pub/agg/q0',val
 await call('POST','/api/set',{tool:'pair-poll',code:'POLL',path:'ballot/q0/abc123',value:'L'},KH);
 await call('POST','/api/set',{tool:'pair-poll',code:'POLL',path:'roster/r1x2y3',value:{nick:'Priya'}},KH);
 await call('POST','/api/set',{tool:'pair-poll',code:'POLL',path:'public/decoy',value:1},KH);
+await call('POST','/api/set',{tool:'pair-poll',code:'POLL',path:'pub0',value:1},KH);
+await call('POST','/api/set',{tool:'pair-poll',code:'POLL',path:'pub_x',value:1},KH);
+for (let i=0;i<40;i++) await call('POST','/api/set',{tool:'pair-poll',code:'POLL',path:'ballot/q1/b'+i,value:'R'},KH);
+env.DB._reads.n=0;
+r=await call('GET','/api/state?tool=pair-poll&code=POLL&prefix=pub',null,KH);
+check('prefix read touches only its own rows plus the two internals, however many ballots the room holds', env.DB._reads.n<=4);
+check('prefix range leaves siblings that merely start with the letters out', r.data.state.pub0===undefined && r.data.state.pub_x===undefined);
+env.DB._reads.n=0;
+await call('POST','/api/set',{tool:'pair-poll',code:'POLL',path:'ballot/q1/b7',value:'L'},KH);
+check('updating an existing row skips the room count', env.DB._reads.n<=3);
+env.DB._reads.n=0;
+await call('POST','/api/set',{tool:'pair-poll',code:'POLL',path:'ballot/q1/fresh',value:'L'},KH);
+check('a new row still pays for the count', env.DB._reads.n>40);
 r=await call('GET','/api/state?tool=pair-poll&code=POLL&prefix=pub',null,KH);
 check('prefix read returns the pub rows', r.data.state.pub.meta.stage==='vote' && r.data.state.pub.agg.q0.L===13);
 check('prefix read leaves ballots and roster out', r.data.state.ballot===undefined && r.data.state.roster===undefined);
@@ -200,6 +213,36 @@ check('7-day sweep keeps live sessions', [...db2._rows.keys()].some(k=>k.startsW
   r = await capApi('/api/create', { tool:'pair-poll', code:'CAPY', sk:ck, open:['roster','ballot'] });
   r = await capApi('/api/set', { tool:'pair-poll', code:'CAPY', path:'pub/meta', value:{ stage:'lobby' } }, ck);
   check('a room under the ceiling writes normally in the same environment', r.status===200 && r.body.ok===true);
+}
+
+/* ---------- source: what the deployed file promises ---------- */
+{
+  const fs = await import('fs'); const url = await import('url'); const path = await import('path');
+  const src = fs.readFileSync(path.join(path.dirname(url.fileURLToPath(import.meta.url)), '../pt-worker.js'), 'utf8');
+  check('the prefix read is a range, never LIKE', /path >= \? AND path < \?/.test(src) && !/LIKE/.test(src));
+  check('the AI proxy note no longer claims it is safe as written', /Not safe to turn on as written/.test(src) && !/only a live gated session can spend budget/.test(src));
+  check('no free-tier wording left in the worker', !/free tier/i.test(src));
+  /* Room Pulse: open session with presence and ballots, nothing else */
+  const renv = { DB: FakeDB() };
+  const rp = async (pth, body, key) => { const req=new Request(base+pth,{method:body?'POST':'GET',headers:Object.assign({'Content-Type':'application/json'},key?{'X-Session-Key':key}:{}),body:body?JSON.stringify(body):undefined}); const res=await worker.fetch(req, renv); return { status:res.status, body: await res.json() }; };
+  let q = await rp('/api/create', { tool:'room-pulse', code:'PULS', sk:SK, open:['here','ballot'] });
+  check('room-pulse creates an open session', q.body.ok===true);
+  q = await rp('/api/set', { tool:'room-pulse', code:'PULS', path:'here/abc123', value:3 });
+  check('room-pulse guest heartbeat is allowed', q.body.ok===true);
+  q = await rp('/api/set', { tool:'room-pulse', code:'PULS', path:'ballot/abc123/1', value:{ s:'4013', d:0 } });
+  check('room-pulse guest ballot is allowed', q.body.ok===true);
+  q = await rp('/api/set', { tool:'room-pulse', code:'PULS', path:'pub/meta', value:{ stage:'open' } });
+  check('room-pulse guest cannot touch pub', q.status===401);
+  q = await rp('/api/clear', { tool:'room-pulse', code:'PULS' });
+  check('room-pulse guest cannot end the session', q.status===401);
+  q = await rp('/api/set', { tool:'room-pulse', code:'PULS', path:'pub/meta', value:{ stage:'open' } }, SK);
+  check('room-pulse host writes pub', q.body.ok===true);
+  /* a page closing sends its last heartbeat as plain text; the worker reads the body either way */
+  const beacon = new Request(base+'/api/set', { method:'POST', headers:{'Content-Type':'text/plain;charset=UTF-8','Origin':'https://ep.github.io'}, body: JSON.stringify({ tool:'room-pulse', code:'PULS', path:'here/abc123', value:-1 }) });
+  const br = await worker.fetch(beacon, renv);
+  check('a closing page can mark itself gone with a plain-text keepalive', br.status===200);
+  q = await rp('/api/state?tool=room-pulse&code=PULS&prefix=pub');
+  check('room-pulse phones read pub with the code alone', q.status===200 && q.body.state.pub.meta.stage==='open' && q.body.state.here===undefined);
 }
 
 console.log(failures===0?'\nWORKER TESTS PASSED':'\n'+failures+' FAILURES');

@@ -32,10 +32,10 @@
       type. Anyone with the link can do anything in the session.
     - Open session (create with "open", the Pair Poll model): anyone who knows the
       four-letter code can read the session and write under the open prefixes
-      (Pair Poll opens "roster" and "ballot"). Everything else, including clear,
-      needs the key, which only the facilitator holds. Participants never carry the
-      key at all. A wrong key is refused on every request, so a tool can verify a
-      key with one read.
+      (Pair Poll opens "roster" and "ballot"; Room Pulse opens "here" and
+      "ballot"). Everything else, including clear, needs the key, which only
+      the facilitator holds. Participants never carry the key at all. A wrong
+      key is refused on every request, so a tool can verify a key with one read.
     A code is easy to guess by machine (about 280,000 four-letter codes), so a tool
     only opens paths whose contents are harmless if a stranger reads or adds to
     them: anonymous ballots, yes; notes about colleagues, no. Anyone with the code
@@ -52,25 +52,27 @@
     Discussion notes should not outlive their usefulness.
 
   LATER, WHEN A PROTOTYPE NEEDS IT
-    AI proxy: add a secret ANTHROPIC_API_KEY, then uncomment the /api/ai block.
-      It only answers requests carrying a valid session key for a gated tool,
-      so only people inside a real session can spend the budget.
+    AI proxy: written below but commented out. As written it would also answer
+      tools that are not gated, and guests in open sessions. Before turning it
+      on, require a gated tool and the session key (role 'host'), then add a
+      secret ANTHROPIC_API_KEY and uncomment the /api/ai block.
     Collecting responses (forms, polls, waitlists): add a /api/submit route
       writing append-only rows, keyed the same way (tool + a collection name).
 */
 
 var RETENTION_DAYS = 7;
 
-/* The most rows one session may hold. Stops a scripted code-holder from burning
-   the free tier's daily write budget or bloating a session; the biggest honest
-   room (400 people, ten ballots each) stays well under it. A ROOM_ROWS_MAX
-   dashboard variable overrides if ever set. Updating an existing row is always
-   allowed, so a full room can still change its answers. */
+/* The most rows one session may hold. Stops a scripted code-holder from running
+   up the account's write bill (Workers Paid has no daily stop, so usage above the
+   plan is charged) or bloating a session; the biggest honest room (400 people,
+   ten ballots each) stays well under it. A ROOM_ROWS_MAX dashboard variable
+   overrides if ever set. Updating an existing row is always allowed, so a full
+   room can still change its answers, and it skips the count entirely. */
 var ROOM_ROWS_MAX = 6000;
 
 /* Which tools require a session key. Edit this list and commit to change it.
    A GATED_TOOLS variable in the dashboard, if you ever set one, overrides this. */
-var GATED_TOOLS_DEFAULT = 'pyc,pair-poll';
+var GATED_TOOLS_DEFAULT = 'pyc,pair-poll,room-pulse';
 
 /* Which origins may call this worker. Edit and redeploy to change it.
    An ALLOW_ORIGIN variable in the dashboard, if you ever set one, overrides this.
@@ -158,7 +160,11 @@ export default {
         if (prefix && !/^[A-Za-z0-9][A-Za-z0-9_]{0,11}$/.test(prefix)) return json({ error: 'bad prefix' }, 400);
         var rs;
         if (prefix) {
-          rs = await env.DB.prepare('SELECT path, value FROM kv WHERE room = ? AND (path = ? OR path LIKE ?)').bind(room, prefix, prefix + '/%').all();
+          /* A range on the primary key, so the database reads only these rows. Paths
+             hold only letters, digits, _ and /, and '/' is the only one of those that
+             sorts below '0', so [prefix, prefix + '0') is exactly the prefix row and
+             every row under it. */
+          rs = await env.DB.prepare('SELECT path, value FROM kv WHERE room = ? AND path >= ? AND path < ?').bind(room, prefix, prefix + '0').all();
         } else {
           rs = await env.DB.prepare('SELECT path, value FROM kv WHERE room = ?').bind(room).all();
         }
@@ -236,11 +242,13 @@ export default {
           if (/^(seats|pax)\//.test(body.path)) return json({ error: 'use claim' }, 400);
           var value = JSON.stringify(body.value === undefined ? null : body.value);
           if (value.length > 4000) return json({ error: 'too big' }, 400);
-          var cap = parseInt(env.ROOM_ROWS_MAX || '', 10) || ROOM_ROWS_MAX;
-          var cnt = await env.DB.prepare('SELECT COUNT(*) AS c FROM kv WHERE room = ?').bind(proom).first();
-          if (cnt && cnt.c >= cap) {
-            var existing = await env.DB.prepare('SELECT 1 AS x FROM kv WHERE room = ? AND path = ?').bind(proom, body.path).first();
-            if (!existing) return json({ error: 'room full' }, 409);
+          /* Updates are most writes (heartbeats, changed answers) and can never grow
+             the room, so they read one row. Only a new row pays for the count. */
+          var existing = await env.DB.prepare('SELECT 1 AS x FROM kv WHERE room = ? AND path = ?').bind(proom, body.path).first();
+          if (!existing) {
+            var cap = parseInt(env.ROOM_ROWS_MAX || '', 10) || ROOM_ROWS_MAX;
+            var cnt = await env.DB.prepare('SELECT COUNT(*) AS c FROM kv WHERE room = ?').bind(proom).first();
+            if (cnt && cnt.c >= cap) return json({ error: 'room full' }, 409);
           }
           await env.DB.prepare(
             'INSERT INTO kv (room, path, value, updated) VALUES (?,?,?,?) ' +
@@ -271,10 +279,11 @@ export default {
         }
 
         /* ---------------------------------------------------------------
-           FUTURE: AI PROXY. Add the ANTHROPIC_API_KEY secret first. Kept
-           behind the membership check above (host only would be
-           `if (role !== 'host') return json({ error: 'locked' }, 401);`),
-           so only a live gated session can spend budget.
+           FUTURE: AI PROXY. Not safe to turn on as written: the membership
+           check above runs only for gated tools, and it lets open-session
+           guests through. First add
+           `if (!gated || role !== 'host') return json({ error: 'locked' }, 401);`
+           at the top of the block, then the ANTHROPIC_API_KEY secret.
 
         if (url.pathname === '/api/ai') {
           var upstream = await fetch('https://api.anthropic.com/v1/messages', {
