@@ -7,7 +7,7 @@ There is no homepage at the repo root by design. Each project lives in its own f
 - https://ep.github.io/pt/wbwai201/report-builder/ : Turn the CSV export from WBWAI 201 into a sponsor-ready report
 - https://ep.github.io/pt/design-ideas/room-pulse: Podium pulse activity interaction, reveal, and design ideas 
 - https://ep.github.io/pt/field-tools/pair-poll/ : Pair Poll, a live paired-statement poll for workshops (field tool).
-- https://ep.github.io/pt/field-tools/room-pulse/ : Room Pulse, a live emotional check-in at the start and end of a session (field tool).
+- https://ep.github.io/pt/field-tools/room-pulse/ : Room Pulse, a live emotional check-in at the start and end of a session, which can also play saved results over time (field tool).
 - https://ep.github.io/pt/pulse/ : the short address participants type to join a pulse (forwards to Room Pulse's join screen).
 - https://ep.github.io/pt/join/ : the short address participants type to join a poll (forwards to Pair Poll's join screen).
 - https://ep.github.io/pt/field-tools/chips/ : Place Your Chips, a live prioritization game (field tool).

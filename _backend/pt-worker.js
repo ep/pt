@@ -17,6 +17,9 @@
     GET  /api/health                              -> {ok, gatedTools}
     GET  /api/state?tool=pyc&code=ABCD            -> the whole session as nested JSON
          ...&prefix=pub                        -> only the rows under one prefix (slim read for big rooms)
+         ...&times=here                        -> also {times, now}: when each row under that prefix was
+                                                    last written, and the worker's clock, both in ms, so a
+                                                    tool can tell an open page from a closed one (presence)
     POST /api/create {tool, code, sk, open?}      -> start a session; registers its session key
                                                     open: optional list of path prefixes participants
                                                     may write with the code alone (see KEYS)
@@ -158,15 +161,19 @@ export default {
            separately because they are not under the prefix. */
         var prefix = url.searchParams.get('prefix') || '';
         if (prefix && !/^[A-Za-z0-9][A-Za-z0-9_]{0,11}$/.test(prefix)) return json({ error: 'bad prefix' }, 400);
+        /* Optional write times for one prefix: Room Pulse asks for times=here to count the
+           phones that are still open by the worker's clock, not by each device's. */
+        var timesOf = url.searchParams.get('times') || '';
+        if (timesOf && !/^[A-Za-z0-9][A-Za-z0-9_]{0,11}$/.test(timesOf)) return json({ error: 'bad times' }, 400);
         var rs;
         if (prefix) {
           /* A range on the primary key, so the database reads only these rows. Paths
              hold only letters, digits, _ and /, and '/' is the only one of those that
              sorts below '0', so [prefix, prefix + '0') is exactly the prefix row and
              every row under it. */
-          rs = await env.DB.prepare('SELECT path, value FROM kv WHERE room = ? AND path >= ? AND path < ?').bind(room, prefix, prefix + '0').all();
+          rs = await env.DB.prepare('SELECT path, value, updated FROM kv WHERE room = ? AND path >= ? AND path < ?').bind(room, prefix, prefix + '0').all();
         } else {
-          rs = await env.DB.prepare('SELECT path, value FROM kv WHERE room = ?').bind(room).all();
+          rs = await env.DB.prepare('SELECT path, value, updated FROM kv WHERE room = ?').bind(room).all();
         }
         if (gatedTools.indexOf(tool) > -1) {
           var inn = await internals(room);
@@ -175,7 +182,7 @@ export default {
         } else if (!rs.results.length) {
           return json({ state: null });
         }
-        var state = {};
+        var state = {}, times = timesOf ? {} : null, under = timesOf + '/';
         for (var r = 0; r < rs.results.length; r++) {
           if (rs.results[r].path.charAt(0) === '_') continue; /* internals never leave the notebook */
           var parts = rs.results[r].path.split('/');
@@ -185,8 +192,9 @@ export default {
             node = node[parts[i]];
           }
           node[parts[parts.length - 1]] = JSON.parse(rs.results[r].value);
+          if (times && rs.results[r].path.indexOf(under) === 0) times[rs.results[r].path.slice(under.length)] = rs.results[r].updated;
         }
-        return json({ state: state });
+        return json(times ? { state: state, times: times, now: Date.now() } : { state: state });
       }
 
       if (request.method === 'POST') {

@@ -14,7 +14,7 @@ export function FakeDB(){
               if(r!==room) return;
               if(ranged && !(p>=args[1] && p<args[2])) return;
               if(pair && p!==args[1] && p!==args[2]) return;
-              out.push({path:p, value:v.value}); });
+              out.push({path:p, value:v.value, updated:v.updated}); });
             /* rows a real database would touch: an indexed range or key read touches only its matches, a whole-room read touches the room */
             reads.n += out.length;
             return { results: out };

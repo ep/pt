@@ -243,6 +243,21 @@ check('7-day sweep keeps live sessions', [...db2._rows.keys()].some(k=>k.startsW
   check('a closing page can mark itself gone with a plain-text keepalive', br.status===200);
   q = await rp('/api/state?tool=room-pulse&code=PULS&prefix=pub');
   check('room-pulse phones read pub with the code alone', q.status===200 && q.body.state.pub.meta.stage==='open' && q.body.state.here===undefined);
+  /* presence by the worker's clock: the console asks when each heartbeat row was written */
+  await rp('/api/set', { tool:'room-pulse', code:'PULS', path:'here/zzz999', value:7 });
+  renv.DB._rows.get('room-pulse:PULS|here/zzz999').updated = Date.now()-60000;
+  const t0 = Date.now();
+  q = await rp('/api/state?tool=room-pulse&code=PULS&times=here', null, SK);
+  check('times=here returns when each heartbeat was written, and the worker clock', q.status===200 && typeof q.body.now==='number' && q.body.now>=t0 && Object.keys(q.body.times).sort().join()==='abc123,zzz999' && q.body.now-q.body.times.zzz999>=59000 && q.body.now-q.body.times.abc123<5000);
+  check('times covers only the asked prefix', q.body.times['1']===undefined && q.body.times['meta']===undefined && q.body.state.ballot.abc123['1'].s==='4013');
+  q = await rp('/api/state?tool=room-pulse&code=PULS', null, SK);
+  check('without times the read is unchanged', q.status===200 && q.body.times===undefined && q.body.now===undefined);
+  q = await rp('/api/state?tool=room-pulse&code=PULS&times=_sk', null, SK);
+  check('times rejects an internal or malformed prefix', q.status===400);
+  q = await rp('/api/state?tool=room-pulse&code=PULS&times=here', null, 'wrongwrong11');
+  check('times needs the same key as any read', q.status===401);
+  q = await rp('/api/state?tool=room-pulse&code=PULS&prefix=here&times=here');
+  check('a guest prefix read can carry times too, with nothing internal', q.status===200 && q.body.times.abc123>0 && q.body.state._sk===undefined && q.body.state._open===undefined);
 }
 
 console.log(failures===0?'\nWORKER TESTS PASSED':'\n'+failures+' FAILURES');
