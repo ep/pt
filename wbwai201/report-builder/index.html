@@ -10,8 +10,10 @@
   never leaves the computer, whether this page is opened from a file or from a
   website. Fonts and the logo are packed inside the file.
 
-  To change a headline or a list label: edit the LABELS block near the end of
-  this file (plain JSON, between the two script tags marked LABELS).
+  To change a headline, a list label, the highlight sentences, the
+  confidentiality line or the order of sections: edit the LABELS block near
+  the end of this file (plain JSON, between the two script tags marked LABELS).
+  Sections appear in the order the activities are listed there.
 
   The main script is locked to this exact version by a hash in the policy.
   If the script itself is changed, the hash has to be updated too, or the page
@@ -20,9 +22,9 @@
 <html lang="en">
 <head>
 <meta charset="utf-8">
-<meta http-equiv="Content-Security-Policy" content="default-src 'none'; script-src 'sha256-S4XzO4lyLKB5jgTdG4Dvn8wCtImhlizSMg0ZYKQ457Q='; style-src 'unsafe-inline'; font-src data:; img-src data:; connect-src 'none'; form-action 'none'; base-uri 'none'; object-src 'none'; frame-src 'none'; worker-src 'none'; media-src 'none'; manifest-src 'none'">
+<meta http-equiv="Content-Security-Policy" content="default-src 'none'; script-src 'sha256-G956Cz4+fRiduLSEktlmnLW6UVrGar3MRr3McJUiCx4='; style-src 'unsafe-inline'; font-src data:; img-src data:; connect-src 'none'; form-action 'none'; base-uri 'none'; object-src 'none'; frame-src 'none'; worker-src 'none'; media-src 'none'; manifest-src 'none'">
 <meta name="referrer" content="no-referrer">
-<meta name="robots" content="noindex">
+<meta name="robots" content="noindex, nofollow">
 <meta name="viewport" content="width=device-width,initial-scale=1">
 <title>WBWAI 201 Report Builder</title>
 <style>
@@ -107,6 +109,7 @@ button,input{font:inherit;color:inherit}
 .cover .sub{font-family:var(--serif);font-style:italic;font-size:26px;color:var(--aegean);margin:14px 0 0}
 .cover .rule{width:60px;height:4px;border-radius:2px;background:var(--gold);margin:40px 0 28px}
 .cover .meta{font-size:18px;line-height:1.7;margin:0;overflow-wrap:anywhere}
+.cover .conf{font-size:13.5px;line-height:1.55;color:var(--aegean);max-width:4.4in;margin:26px 0 0}
 .clusterrow{position:relative;height:170px;margin-top:auto}
 .cluster{position:absolute;right:0;bottom:0;width:230px;height:170px}
 .cluster i{position:absolute;border-radius:50%}
@@ -126,23 +129,33 @@ button,input{font:inherit;color:inherit}
 .crow{display:grid;grid-template-columns:minmax(0,230px) minmax(0,1fr) auto;column-gap:24px;row-gap:8px;align-items:center;break-inside:avoid}
 .crow + .crow{margin-top:34px}
 .crow .nm{font-weight:600;font-size:17px;overflow-wrap:anywhere}
-.crow .track{height:14px;background:#F1EEE8;border-radius:4px;overflow:hidden}
-.crow .fill{height:100%;background:var(--cobalt);border-radius:4px}
+.crow .track{display:block;width:100%;height:14px}
 .crow .num{display:flex;align-items:baseline;justify-content:flex-end;gap:10px;min-width:96px}
 .crow .num b{font-family:var(--serif);font-weight:400;font-size:34px;line-height:1.05}
 .crow .num span{color:var(--aegean)}
 .crow .who{grid-column:1/-1;color:var(--aegean);font-size:14.5px;overflow-wrap:anywhere}
 
 /* lists */
-.pair{display:grid;grid-template-columns:1fr 1fr;column-gap:48px}
-.pair.stack{grid-template-columns:1fr;row-gap:56px}
+/* Lists stack as plain blocks, or sit side by side as two inline blocks when both are short.
+   No grid here: Safari slices grid content across page breaks when printing. */
+.pair{display:block}
+.pair.stack > .list + .list{margin-top:56px}
 .pair:not(.stack){break-inside:avoid}
+.pair:not(.stack) > .list{display:inline-block;vertical-align:top;width:calc(50% - 25px)}
+.pair:not(.stack) > .list + .list{margin-left:48px}
 .list{min-width:0}
-.list h3{font-family:var(--serif);font-weight:400;font-size:23px;line-height:1.25;margin:0 0 14px;break-after:avoid}
+.list h3{font-family:var(--serif);font-weight:400;font-size:23px;line-height:1.25;margin:0 0 14px;break-after:avoid;break-inside:avoid}
 .items{margin:0;padding:0}
-.row{display:flex;column-gap:48px;break-inside:avoid}
-.row.big{break-inside:auto}
-.row > .cell{flex:1 1 0;min-width:0;overflow-wrap:anywhere}
+/* Answers sit side by side as inline blocks. A browser never splits an inline block
+   across two pages, so this keeps every answer whole in Safari and Firefox as well as Chrome.
+   Very long answers (.big) may run across a page break instead. Widths leave 1px spare so
+   rounding never pushes the second answer onto its own line. */
+.row{display:block;break-inside:avoid}
+.row > .cell{display:inline-block;vertical-align:top;width:100%;overflow-wrap:anywhere}
+.row.n2 > .cell{width:calc(50% - 25px)}
+.row.n2 > .cell + .cell{margin-left:48px}
+.row.big{display:flex;column-gap:48px;break-inside:auto}
+.row.big > .cell{display:block;flex:1 1 0;min-width:0;width:auto;margin-left:0}
 .items .cell{position:relative;padding:14px 0 14px 26px;border-top:1px solid var(--hair)}
 .items .cell::before{content:'';position:absolute;left:3px;top:23px;width:8px;height:8px;border-radius:50%;background:var(--aegean)}
 .L .items .cell::before{background:var(--tealM)}
@@ -151,20 +164,21 @@ button,input{font:inherit;color:inherit}
 .row > .cell.gap{border-top:0}
 .row > .cell.gap::before{display:none}
 .items.long .cell{white-space:pre-line}
-.who{display:block;font-size:14.5px;color:var(--aegean);margin-top:4px;white-space:normal}
+.who{display:block;font-size:14.5px;color:var(--aegean);margin-top:4px;white-space:normal;overflow-wrap:anywhere}
 
 /* statements */
 .quotes .cell{padding:22px 0 24px;border-top:1px solid var(--hair)}
-.quotes .q{font-family:var(--serif);font-size:20px;line-height:1.55;margin:0;white-space:pre-line}
+.quotes .q{font-family:var(--serif);font-size:20px;line-height:1.55;margin:0;white-space:pre-line;overflow-wrap:anywhere}
 .quotes .q .tp{color:var(--aegean)}
 
-/* compact layout for big sessions: answers flow down columns, no rules between them */
+/* compact layout for big sessions: smaller type, up to three answers per row, no rules between them.
+   Rows rather than newspaper columns, because Safari prints newspaper columns as a single column. */
 .doc.compact{font-size:13.5px;line-height:1.4}
-.flow{column-gap:30px}
-.flow.c2{column-count:2}
-.flow.c3{column-count:3}
-.flow > .cell{display:block;break-inside:avoid}
-.flow > .cell.big{break-inside:auto}
+.row.n3 > .cell{width:calc((100% - 56px) / 3 - 1px)}
+.row.n3 > .cell + .cell{margin-left:28px}
+.compact .row.n2 > .cell{width:calc(50% - 16px)}
+.compact .row.n2 > .cell + .cell{margin-left:30px}
+.compact .row.big{column-gap:28px}
 .compact .rsec{margin-top:60px}
 .compact .sechead{margin-bottom:22px}
 .compact .sechead h2{font-size:27px}
@@ -173,10 +187,10 @@ button,input{font:inherit;color:inherit}
 .compact .crow .nm{font-size:15px}
 .compact .crow .num b{font-size:26px}
 .compact .crow .who{font-size:13px}
-.compact .pair{column-gap:32px}
-.compact .pair.stack{row-gap:32px}
+.compact .pair.stack > .list + .list{margin-top:32px}
+.compact .pair:not(.stack) > .list{width:calc(50% - 17px)}
+.compact .pair:not(.stack) > .list + .list{margin-left:32px}
 .compact .list h3{font-size:19px;margin-bottom:8px}
-.compact .row{column-gap:28px}
 .compact .items .cell{padding:3px 0 4px 16px;border-top:0}
 .compact .items .cell::before{left:2px;top:10px;width:6px;height:6px}
 .compact .items .who{display:inline;font-size:12.5px;margin:0 0 0 4px}
@@ -186,10 +200,24 @@ button,input{font:inherit;color:inherit}
 .compact .quotes .who{font-size:12.5px;margin-top:2px}
 .compact .end{margin-top:60px}
 
+/* highlights: one sentence per activity, the key numbers ringed in a brand tint */
+.hl h2{font-family:var(--serif);font-weight:400;font-size:32px;line-height:1.18;margin:0 0 26px;text-wrap:balance}
+.hl .st{font-family:var(--serif);font-size:19px;line-height:1.62;margin:0;max-width:6.3in;break-inside:avoid;overflow-wrap:anywhere}
+.hl .st + .st{margin-top:18px}
+.hn{display:inline-block;min-width:1.9em;padding:0 .42em;border:2px solid;border-radius:999px;text-align:center;font-size:1.2em;line-height:1.12;margin:0 .05em;white-space:nowrap;color:var(--cobalt)}
+.t-gold .hn{background:#FEF6C9;border-color:var(--sun)}
+.t-teal .hn{background:var(--tealT);border-color:var(--tealM)}
+.t-clay .hn{background:#F6E2D5;border-color:var(--clayM)}
+.t-fern .hn{background:#E9F0CF;border-color:var(--fern)}
+.compact .hl h2{font-size:27px;margin-bottom:18px}
+.compact .hl .st{font-size:16.5px}
+.compact .hl .st + .st{margin-top:12px}
+
 .end{margin-top:96px;display:flex;align-items:center;gap:14px;font-size:13px;color:var(--aegean);break-inside:avoid}
 .end .dot{width:12px;height:12px;border-radius:50%;background:var(--gold);flex:0 0 auto}
 
-@media (max-width:640px){
+/* phones only: never in print, where a narrow page could otherwise trigger these */
+@media screen and (max-width:640px){
   .choices,.fields{grid-template-columns:1fr}
   .doc{padding:32px 22px 28px;font-size:15.5px}
   .cover{min-height:0}
@@ -200,22 +228,37 @@ button,input{font:inherit;color:inherit}
   .sechead h2{font-size:28px}
   .crow{grid-template-columns:minmax(0,1fr) auto}
   .crow .track{grid-column:1/-1;grid-row:2}
-  .pair{grid-template-columns:1fr;row-gap:48px}
-  .row{flex-direction:column}
+  .pair > .list{display:block!important;width:auto!important}
+  .pair > .list + .list{margin:48px 0 0!important}
+  .row.big{flex-direction:column}
+  .row > .cell{display:block!important;width:auto!important;margin-left:0!important}
   .row > .cell.gap{display:none}
-  .flow.c2,.flow.c3{column-count:1}
   .quotes .q{font-size:18px}
+  .hl h2{font-size:27px}
+  .hl .st{font-size:17px}
 }
 @media print{
   *{-webkit-print-color-adjust:exact;print-color-adjust:exact}
   body,.viewer{background:#fff}
   .setup,.bar,.toast{display:none!important}
   .doc{width:auto;max-width:none;margin:0;padding:0;box-shadow:none;border-radius:0}
-  .cover{min-height:6.4in;break-after:page}
+  /* The first page prints with no page margin, so the cover carries its own. A first page with no
+     room in its margins also stops Chrome adding its own date, title and file address to every page. */
+  .cover{min-height:9.4in;padding:20mm 20mm 0;break-after:page}
   .rsec{margin-top:80px}
   .compact .rsec{margin-top:48px}
   .end{display:none}
   .cover + .rsec{margin-top:0}
+  .rsec.keep{break-inside:avoid}
+  /* Keep a heading with what follows it. Every browser moves a whole line of text to the
+     next page rather than split it, so the heading's last line gets an invisible tall
+     block: if the page can't fit the heading plus that much room, the heading moves on.
+     The negative margin puts the content back where it normally sits. */
+  .sechead p::after, .list h3::after{content:'';display:inline-block;width:0;vertical-align:top;height:var(--room)}
+  .sechead p{--room:2.2in;margin-bottom:calc(1.55em - var(--room))}
+  .list h3{--room:1.45in;margin-bottom:calc(14px + 1.25em - var(--room))}
+  .compact .sechead p{--room:1.3in}
+  .compact .list h3{--room:.8in;margin-bottom:calc(8px + 1.25em - var(--room))}
 }
 </style>
 <style id="pagebox"></style>
@@ -243,9 +286,17 @@ button,input{font:inherit;color:inherit}
 
   <div class="opts" id="opts" hidden>
     <section>
+      <h2>Who took part</h2>
+      <div class="choices" id="aud">
+        <button type="button" class="choice" data-v="org" aria-pressed="false">One organization</button>
+        <button type="button" class="choice" data-v="open" aria-pressed="false">Open enrolment</button>
+      </div>
+    </section>
+
+    <section>
       <h2>Names</h2>
       <div class="choices" id="names">
-        <button type="button" class="choice" data-v="anon" aria-pressed="false">Anonymous</button>
+        <button type="button" class="choice" data-v="anon" aria-pressed="false">Anonymous (recommended)</button>
         <button type="button" class="choice" data-v="show" aria-pressed="false">Show names</button>
       </div>
     </section>
@@ -262,7 +313,7 @@ button,input{font:inherit;color:inherit}
       <h2>Cover</h2>
       <div class="fields">
         <div class="fld wide"><label for="fTitle">Title</label><input id="fTitle" maxlength="120" autocomplete="off"></div>
-        <div class="fld"><label for="fOrg">Prepared for</label><input id="fOrg" maxlength="120" autocomplete="off"></div>
+        <div class="fld"><label for="fOrg" id="orgLabel">Prepared for</label><input id="fOrg" maxlength="120" autocomplete="off"></div>
         <div class="fld"><label for="fDate">Date</label><input id="fDate" type="date"></div>
       </div>
     </section>
@@ -291,16 +342,59 @@ button,input{font:inherit;color:inherit}
 </div>
 <div class="toast" id="toast" role="status" aria-live="polite" hidden></div>
 
-<!-- LABELS: edit headlines and list names here. Keep it valid JSON. -->
+<!-- LABELS: edit headlines, list names, highlight sentences and section order here. Keep it valid JSON.
+     Sections appear in the order of "activities". In the highlight sentences, {name|one|many} shows a
+     ringed number and the right word for it, {org} is the organization's name, and {=text} rings the text
+     as written. The first sentence in a "say" list whose numbers are all above zero is the one used. -->
 <script type="application/json" id="labels">
 {
   "report": {
     "defaultTitle": "Work Better with AI 201",
     "subtitle": "Participant responses",
-    "nothing": "No answers for this activity."
+    "nothing": "No answers for this activity.",
+    "confidential": "Confidential. These results come from an ExperiencePoint workshop and are for the workshop sponsor and the people they choose to share them with."
+  },
+  "highlights": {
+    "heading": "What this group achieved",
+    "orgFallback": "your organization",
+    "oneOrg": [
+      { "tint": "gold", "say": [
+        "Identified {dormant|dormant resource|dormant resources}, {perPerson} per person: existing assets AI can multiply in value across {org}."
+      ] },
+      { "tint": "teal", "say": [
+        "Shared {hopes|hope or fear|hopes and fears}, a candid read on sentiment to guide the next AI decisions at {org}."
+      ] },
+      { "tint": "clay", "say": [
+        "Wrote {value|core value statement|core value statements} defining the enduring value of each role at {org}, and named {easy|task|tasks} where AI delegation could make sense.",
+        "Wrote {value|core value statement|core value statements} defining the enduring value of each role at {org}.",
+        "Named {easy|task|tasks} where AI delegation could make sense, and {hard|task|tasks} where human judgment matters most.",
+        "Named {easy|task|tasks} where AI delegation could make sense."
+      ] },
+      { "tint": "fern", "say": [
+        "Built AI agents for their own work and shared workflows, cutting friction while keeping human judgment at the helm. Groups average {=1 to 3} agents per person."
+      ] }
+    ],
+    "openEnrolment": [
+      { "tint": "gold", "say": [
+        "Identified {dormant|dormant resource|dormant resources}, {perPerson} per person: existing assets AI can multiply in value across their organizations."
+      ] },
+      { "tint": "teal", "say": [
+        "Shared {hopes|hope or fear|hopes and fears}, a candid read on how professionals across organizations feel about AI today."
+      ] },
+      { "tint": "clay", "say": [
+        "Wrote {value|core value statement|core value statements} defining the enduring value of their roles, and named {easy|task|tasks} where AI delegation could make sense.",
+        "Wrote {value|core value statement|core value statements} defining the enduring value of their roles.",
+        "Named {easy|task|tasks} where AI delegation could make sense, and {hard|task|tasks} where human judgment matters most.",
+        "Named {easy|task|tasks} where AI delegation could make sense."
+      ] },
+      { "tint": "fern", "say": [
+        "Built AI agents for their own work and shared workflows, cutting friction while keeping human judgment at the helm. Groups average {=1 to 3} agents per person."
+      ] }
+    ]
   },
   "activities": [
     {
+      "id": "curve",
       "match": ["AI Adoption Curve", "Adoption Curve", "AI Value Curve"],
       "headline": "Where people place themselves on the AI curve",
       "type": "choice",
@@ -311,24 +405,28 @@ button,input{font:inherit;color:inherit}
       ]
     },
     {
+      "id": "hopes",
       "match": ["Hopes and Fears", "Hopes & Fears"],
       "headline": "What people hope for, and what worries them",
       "type": "lists",
       "lists": ["Hopes", "Fears"]
     },
     {
+      "id": "dormant",
       "match": ["Dormant Resources"],
       "headline": "Resources people already have, ready to put to work",
       "type": "lists",
       "lists": ["Documents to turn into an agent", "Great work to model new work on"]
     },
     {
+      "id": "agent",
       "match": ["Build Your First Agent", "First Agent"],
       "headline": "The agents people built",
       "type": "entries",
       "style": "plain"
     },
     {
+      "id": "value",
       "match": ["Core Value", "Core Value Statement"],
       "headline": "Where people say they create value",
       "type": "entries",
@@ -336,6 +434,7 @@ button,input{font:inherit;color:inherit}
       "template": ["My role exists to", "so that"]
     },
     {
+      "id": "scarce",
       "match": ["Abundant vs Scarce", "Abundant and Scarce", "Easy vs Hard"],
       "headline": "What to hand to AI, and what to keep human-led",
       "type": "lists",
@@ -353,8 +452,10 @@ button,input{font:inherit;color:inherit}
   var NOSUB = /^\s*\[?\s*no\s+submission\s*\]?\s*$/i;
   var ID_COL = /^(e-?mail( address)?|name|full name|first name|last name|participant|participant name|user ?id|user ?name)$/i;
   var DOT = ' · ';
-  var state = { model: null, fileName: '', names: null, compact: false, include: new Set() };
+  var state = { model: null, fileName: '', aud: null, names: null, compact: false, include: new Set() };
   var BIG_SESSION = 40; // more people than this starts in the compact layout
+  var NAME_MAX = 30;    // longer names are shortened with an ellipsis
+  var HL = 'hl';        // the highlights' key in state.include (activities use their column number)
 
   function $(id) { return document.getElementById(id); }
 
@@ -452,12 +553,18 @@ button,input{font:inherit;color:inherit}
     return out;
   }
 
+  // Names longer than NAME_MAX are cut at a character boundary and end with an ellipsis.
+  function shortName(s) {
+    var chars = Array.from(String(s || '').replace(/\s+/g, ' ').trim());
+    return chars.length > NAME_MAX ? chars.slice(0, NAME_MAX - 1).join('').trim() + '\u2026' : chars.join('');
+  }
+
   function norm(s) { return String(s || '').toLowerCase().replace(/&/g, ' and ').replace(/[^a-z0-9]+/g, ''); }
   function findConf(head) {
     var k = norm(head);
     for (var i = 0; i < LABELS.activities.length; i++) {
       var a = LABELS.activities[i];
-      if (a.match.some(function (m) { return norm(m) === k; })) return a;
+      if (a.match.some(function (m) { return norm(m) === k; })) return { conf: a, rank: i };
     }
     return null;
   }
@@ -466,23 +573,31 @@ button,input{font:inherit;color:inherit}
     var header = rows[0] || [];
     var body = rows.slice(1).filter(function (r) { return r.some(function (c) { return String(c).trim(); }); });
     if (header.length < 2 || !body.length) throw new Error('shape');
-    var people = body.map(function (r) { return { name: String(r[0] || '').trim(), row: r }; });
-    var hasNames = people.some(function (p) { return p.name; });
-    people.forEach(function (p) { if (!p.name) p.name = 'No name given'; });
-    var acts = [];
+    var cols = [];
     for (var c = 1; c < header.length; c++) {
       var head = String(header[c] || '').trim();
       if (ID_COL.test(head)) continue;
       var col = c;
       if (!head && body.every(function (r) { return !String(r[col] || '').trim(); })) continue;
-      acts.push(buildActivity(head || 'Column ' + (c + 1), c, people));
+      cols.push({ head: head || 'Column ' + (c + 1), c: c });
     }
-    if (!acts.length) throw new Error('shape');
-    return { people: people, acts: acts, hasNames: hasNames };
+    if (!cols.length) throw new Error('shape');
+    // A row with no answers in any activity is someone who registered but took no part.
+    // They stay out of every count, so per-person figures reflect the people in the room.
+    var all = body.map(function (r) { return { name: shortName(r[0]), row: r }; });
+    var people = all.filter(function (p) { return cols.some(function (k) { return toBlocks(p.row[k.c]).length > 0; }); });
+    if (!people.length) throw new Error('shape');
+    var hasNames = people.some(function (p) { return p.name; });
+    people.forEach(function (p) { if (!p.name) p.name = 'No name given'; });
+    var acts = cols.map(function (k) { return buildActivity(k.head, k.c, people); });
+    // Report order follows the LABELS list; columns it doesn't know keep their CSV order, after the rest.
+    acts.forEach(function (a, i) { a.pos = i; });
+    acts.sort(function (x, y) { return (x.rank - y.rank) || (x.pos - y.pos); });
+    return { people: people, acts: acts, hasNames: hasNames, idle: all.length - people.length };
   }
 
   function buildActivity(head, c, people) {
-    var conf = findConf(head);
+    var found = findConf(head), conf = found ? found.conf : null;
     var parsed = people.map(function (p) { return { p: p, blocks: toBlocks(p.row[c]) }; });
     var type = conf ? conf.type : null, style = conf ? conf.style : 'plain';
     if (!type) {
@@ -493,7 +608,8 @@ button,input{font:inherit;color:inherit}
       type = multi ? 'lists' : (avg > 70 ? 'entries' : 'items');
       style = 'plain';
     }
-    var a = { head: head, col: c, conf: conf, type: type, style: style, headline: conf ? conf.headline : head, total: people.length, answered: 0 };
+    var a = { head: head, col: c, conf: conf, id: conf ? conf.id : null, rank: found ? found.rank : Infinity,
+      type: type, style: style, headline: conf ? conf.headline : head, total: people.length, answered: 0 };
     if (type === 'choice') buildChoice(a, parsed);
     else if (type === 'entries') buildEntries(a, parsed);
     else buildLists(a, parsed, type === 'items');
@@ -587,9 +703,11 @@ button,input{font:inherit;color:inherit}
       return;
     }
     state.fileName = file.name;
-    state.names = null;
+    state.aud = null;
+    state.names = 'anon'; // anonymous unless someone deliberately chooses to show names
     state.compact = state.model.people.length > BIG_SESSION;
     state.include = new Set(state.model.acts.filter(function (a) { return a.answered > 0; }).map(function (a) { return a.col; }));
+    state.include.add(HL);
     paintSetup();
   }
 
@@ -603,7 +721,14 @@ button,input{font:inherit;color:inherit}
     $('opts').hidden = !loaded;
     if (!loaded) return;
     $('fname').textContent = state.fileName;
-    $('fsum').textContent = plural(m.people.length, 'person', 'people') + DOT + plural(m.acts.length, 'activity', 'activities');
+    $('fsum').textContent = plural(m.people.length, 'person', 'people') + DOT + plural(m.acts.length, 'activity', 'activities') +
+      (m.idle ? DOT + m.idle + ' with no answers left out' : '');
+
+    Array.prototype.forEach.call($('aud').children, function (b) {
+      b.setAttribute('aria-pressed', String(b.getAttribute('data-v') === state.aud));
+    });
+    $('aud').classList.remove('need');
+    $('orgLabel').textContent = state.aud === 'org' ? 'Organization' : 'Prepared for';
 
     if (!m.hasNames) state.names = 'anon';
     Array.prototype.forEach.call($('names').children, function (b) {
@@ -618,22 +743,22 @@ button,input{font:inherit;color:inherit}
 
     var ul = $('acts');
     ul.textContent = '';
-    m.acts.forEach(function (a) {
+    function row(key, name, count) {
       var box = h('input', { type: 'checkbox' });
-      box.checked = state.include.has(a.col);
+      box.checked = state.include.has(key);
       box.addEventListener('change', function () {
-        if (box.checked) state.include.add(a.col); else state.include.delete(a.col);
+        if (box.checked) state.include.add(key); else state.include.delete(key);
       });
-      ul.append(h('li', null, h('label', null, box,
-        h('span', { class: 'an', text: a.headline }),
-        h('span', { class: 'ct', text: a.answered ? a.answered + ' of ' + a.total : 'No answers' }))));
+      ul.append(h('li', null, h('label', null, box, h('span', { class: 'an', text: name }), count ? h('span', { class: 'ct', text: count }) : null)));
+    }
+    row(HL, LABELS.highlights.heading, '');
+    m.acts.forEach(function (a) {
+      row(a.col, a.headline, a.answered ? a.answered + ' of ' + a.total : 'No answers');
     });
     $('buildErr').hidden = true;
   }
 
   // ---------------------------------------------------------------- report
-  function copyright() { return 'Copyright © ExperiencePoint Inc. ' + new Date().getFullYear() + ', all rights reserved.'; }
-
   function coverInfo() {
     var title = $('fTitle').value.trim() || LABELS.report.defaultTitle;
     var org = $('fOrg').value.trim();
@@ -652,6 +777,70 @@ button,input{font:inherit;color:inherit}
   }
 
   function pct(n, d) { return d ? Math.round(n / d * 100) + '%' : '0%'; }
+  function fmt(n) { return n >= 1000 ? n.toLocaleString('en-US') : String(n); }
+
+  // ---------------------------------------------------------------- highlights
+  // The numbers behind the highlight sentences. Each one counts the bullets an
+  // included activity shows further down, so every figure can be checked in the report.
+  function hlNumbers() {
+    var v = { dormant: 0, hopes: 0, value: 0, easy: 0, hard: 0 };
+    selected().forEach(function (a) {
+      if (!a.answered) return;
+      var count = function (l) { return l ? l.items.length : 0; };
+      if (a.id === 'dormant') v.dormant = a.lists.reduce(function (s, l) { return s + l.items.length; }, 0);
+      else if (a.id === 'hopes') v.hopes = a.lists.reduce(function (s, l) { return s + l.items.length; }, 0);
+      else if (a.id === 'value') v.value = a.entries.length;
+      else if (a.id === 'scarce') { v.easy = count(a.lists[0]); v.hard = count(a.lists[1]); }
+    });
+    var per = v.dormant / state.model.people.length;
+    v.perPerson = v.dormant ? (Math.round(per * 10) / 10).toFixed(1).replace(/\.0$/, '') : 0;
+    return v;
+  }
+
+  // Turns one highlight sentence into parts: plain text, and ringed numbers.
+  // Returns null when a number it needs is zero or unknown, so the next wording is tried.
+  function hlParts(tpl, v, org) {
+    var parts = [], last = 0, ok = true, re = /\{([^}]*)\}/g, m;
+    while ((m = re.exec(tpl))) {
+      if (m.index > last) parts.push({ text: tpl.slice(last, m.index) });
+      last = re.lastIndex;
+      var t = m[1];
+      if (t === 'org') { parts.push({ text: org }); continue; }
+      if (t.charAt(0) === '=') { parts.push({ num: t.slice(1) }); continue; }
+      var bits = t.split('|'), n = v[bits[0]];
+      if (!n) { ok = false; break; }
+      parts.push({ num: typeof n === 'number' ? fmt(n) : n });
+      if (bits.length > 1) parts.push({ text: ' ' + (n === 1 ? bits[1] : (bits[2] || bits[1])) });
+    }
+    if (!ok) return null;
+    if (last < tpl.length) parts.push({ text: tpl.slice(last) });
+    return parts;
+  }
+
+  function highlights() {
+    if (!state.include.has(HL)) return [];
+    var v = hlNumbers();
+    var org = $('fOrg').value.trim() || LABELS.highlights.orgFallback;
+    var set = state.aud === 'open' ? LABELS.highlights.openEnrolment : LABELS.highlights.oneOrg;
+    var out = [];
+    set.forEach(function (st) {
+      for (var i = 0; i < st.say.length; i++) {
+        var parts = hlParts(st.say[i], v, org);
+        if (parts) { out.push({ tint: st.tint, parts: parts }); return; }
+      }
+    });
+    return out;
+  }
+
+  function renderHighlights(list) {
+    return h('section', { class: 'rsec hl' },
+      h('h2', { text: LABELS.highlights.heading }),
+      list.map(function (st) {
+        return h('p', { class: 'st t-' + st.tint }, st.parts.map(function (pt) {
+          return pt.num !== undefined ? h('span', { class: 'hn', text: pt.num }) : pt.text;
+        }));
+      }));
+  }
 
   function median(list) {
     var v = list.map(function (e) { return e.text.length; }).sort(function (a, b) { return a - b; });
@@ -668,17 +857,20 @@ button,input{font:inherit;color:inherit}
         h('p', { class: 'sub', text: LABELS.report.subtitle }),
         h('div', { class: 'rule' }),
         h('p', { class: 'meta' }, info.meta.map(function (line, i) { return [i ? h('br') : null, line]; })),
+        h('p', { class: 'conf', text: LABELS.report.confidential }),
         h('div', { class: 'clusterrow', 'aria-hidden': 'true' }, h('div', { class: 'cluster' }, h('i'), h('i'), h('i'), h('i'), h('i')))
       )
     );
+    var hl = highlights();
+    if (hl.length) doc.append(renderHighlights(hl));
     selected().forEach(function (a) { doc.append(renderActivity(a, show)); });
-    doc.append(h('footer', { class: 'end' }, h('span', { class: 'dot' }), h('span', { text: copyright() })));
+    doc.append(h('footer', { class: 'end', 'aria-hidden': 'true' }, h('span', { class: 'dot' })));
     document.title = ['WBWAI 201 responses', info.org, info.dateText].filter(Boolean).join(' - ');
     return doc;
   }
 
   function renderActivity(a, show) {
-    var sec = h('section', { class: 'rsec' },
+    var sec = h('section', { class: 'rsec' + (a.type === 'choice' ? ' keep' : '') },
       h('header', { class: 'sechead' }, h('h2', { text: a.headline }), h('p', { text: answeredText(a) })));
     if (!a.answered) { sec.append(h('p', { class: 'nothing', text: LABELS.report.nothing })); return sec; }
     if (a.type === 'choice') sec.append(renderChoice(a, show));
@@ -689,24 +881,35 @@ button,input{font:inherit;color:inherit}
 
   function renderChoice(a, show) {
     return h('div', { class: 'curve' }, a.options.map(function (o) {
-      var fill = h('div', { class: 'fill' });
-      fill.style.width = (a.answered ? o.count / a.answered * 100 : 0) + '%';
       return h('div', { class: 'crow' },
         h('div', { class: 'nm', text: o.name }),
-        h('div', { class: 'track', role: 'img', 'aria-label': o.name + ': ' + o.count + ' (' + pct(o.count, a.answered) + ')' }, fill),
+        bar(a.answered ? o.count / a.answered * 100 : 0, o.name + ': ' + o.count + ' (' + pct(o.count, a.answered) + ')'),
         h('div', { class: 'num' }, h('b', { text: String(o.count) }), h('span', { text: pct(o.count, a.answered) })),
         show && o.names.length ? h('div', { class: 'who', text: o.names.join(', ') }) : null);
     }));
   }
 
+  // A bar drawn as shapes rather than a background colour, so it prints in every browser.
+  function bar(percent, label) {
+    var NS = 'http://www.w3.org/2000/svg';
+    var svg = document.createElementNS(NS, 'svg');
+    svg.setAttribute('class', 'track'); svg.setAttribute('role', 'img'); svg.setAttribute('aria-label', label);
+    svg.setAttribute('width', '100%'); svg.setAttribute('height', '14');
+    [['100%', '#F1EEE8'], [Math.max(0, Math.min(100, percent)).toFixed(2) + '%', '#293851']].forEach(function (r) {
+      var rect = document.createElementNS(NS, 'rect');
+      rect.setAttribute('width', r[0]); rect.setAttribute('height', '14'); rect.setAttribute('rx', '4'); rect.setAttribute('fill', r[1]);
+      svg.append(rect);
+    });
+    return svg;
+  }
+
   // Lays cells out in rows of `per`, as plain blocks, so pages break cleanly between rows.
   function rows(cls, cells, per) {
-    if (state.compact) return h('div', { class: cls + ' flow' + (per > 1 ? ' c' + per : ''), role: 'list' }, cells);
     var box = h('div', { class: cls, role: 'list' });
     for (var i = 0; i < cells.length; i += per) {
       var chunk = cells.slice(i, i + per);
       var big = chunk.some(function (c) { return c.classList.contains('big'); });
-      var row = h('div', { class: 'row' + (big ? ' big' : '') }, chunk);
+      var row = h('div', { class: 'row n' + per + (big ? ' big' : '') }, chunk);
       while (row.children.length < per) row.append(h('div', { class: 'cell gap', 'aria-hidden': 'true' }));
       box.append(row);
     }
@@ -773,7 +976,17 @@ button,input{font:inherit;color:inherit}
     var o = '<div style="' + F + C + 'font-size:12pt;line-height:1.5">';
     o += '<h1 style="' + S + C + 'font-weight:normal;font-size:30pt;margin:0 0 6pt">' + esc(info.title) + '</h1>';
     o += '<p style="' + S + A + 'font-style:italic;font-size:16pt;margin:0 0 14pt">' + esc(LABELS.report.subtitle) + '</p>';
-    o += '<p style="' + F + C + 'font-size:12pt;margin:0 0 20pt">' + info.meta.map(esc).join('<br>') + '</p>';
+    o += '<p style="' + F + C + 'font-size:12pt;margin:0 0 10pt">' + info.meta.map(esc).join('<br>') + '</p>';
+    o += '<p style="' + F + A + 'font-size:9.5pt;margin:0 0 20pt">' + esc(LABELS.report.confidential) + '</p>';
+    var hl = highlights();
+    if (hl.length) {
+      o += '<h2 style="' + S + C + 'font-weight:normal;font-size:22pt;margin:30pt 0 10pt">' + esc(LABELS.highlights.heading) + '</h2>';
+      hl.forEach(function (st) {
+        o += '<p style="' + S + C + 'font-size:13pt;line-height:1.5;margin:0 0 10pt">' + st.parts.map(function (pt) {
+          return pt.num !== undefined ? '<b>' + esc(pt.num) + '</b>' : esc(pt.text);
+        }).join('') + '</p>';
+      });
+    }
     function who(name) { return show ? '<br><span style="' + A + 'font-size:10pt">' + esc(name) + '</span>' : ''; }
     selected().forEach(function (a) {
       o += '<h2 style="' + S + C + 'font-weight:normal;font-size:22pt;margin:30pt 0 4pt">' + esc(a.headline) + '</h2>';
@@ -804,7 +1017,7 @@ button,input{font:inherit;color:inherit}
         });
       }
     });
-    o += '<p style="' + F + A + 'font-size:9pt;margin:36pt 0 0">' + esc(copyright()) + '</p></div>';
+    o += '</div>';
     return o;
   }
 
@@ -812,6 +1025,12 @@ button,input{font:inherit;color:inherit}
     var show = state.names === 'show', info = coverInfo(), t = [];
     t.push(info.title, LABELS.report.subtitle, '');
     info.meta.forEach(function (m) { t.push(m); });
+    t.push('', LABELS.report.confidential);
+    var hl = highlights();
+    if (hl.length) {
+      t.push('', '', LABELS.highlights.heading, '');
+      hl.forEach(function (st) { t.push(st.parts.map(function (pt) { return pt.num !== undefined ? pt.num : pt.text; }).join('')); });
+    }
     selected().forEach(function (a) {
       t.push('', '', a.headline, answeredText(a), '');
       var who = function (n) { return show ? ' (' + n + ')' : ''; };
@@ -824,7 +1043,6 @@ button,input{font:inherit;color:inherit}
         t.push('');
       });
     });
-    t.push('', copyright());
     return t.join('\n');
   }
 
@@ -862,6 +1080,13 @@ button,input{font:inherit;color:inherit}
 
   // ---------------------------------------------------------------- flow
   function build() {
+    if (!state.aud) {
+      $('aud').classList.add('need');
+      $('buildErr').textContent = 'Choose One organization or Open enrolment.';
+      $('buildErr').hidden = false;
+      $('aud').scrollIntoView({ behavior: 'smooth', block: 'center' });
+      return;
+    }
     if (!state.names) {
       $('names').classList.add('need');
       $('buildErr').textContent = 'Choose Anonymous or Show names.';
@@ -869,19 +1094,20 @@ button,input{font:inherit;color:inherit}
       $('names').scrollIntoView({ behavior: 'smooth', block: 'center' });
       return;
     }
-    if (!selected().length) {
+    if (!selected().length && !state.include.has(HL)) {
       $('buildErr').textContent = 'Tick at least one activity.';
       $('buildErr').hidden = false;
       return;
     }
     $('buildErr').hidden = true;
-    // Portrait on any paper size. An empty top box stops the browser printing its own date and title line.
+    // Portrait on any paper size. Page 1 has no margin (the cover pads itself), which keeps Chrome from
+    // printing its own date, title and file address on any page. Page numbers show in browsers that
+    // support page margin boxes (Chrome, recent Safari); Firefox skips them.
     $('pagebox').textContent =
       '@page{size:portrait;margin:20mm 20mm 22mm 20mm;' +
       '@top-center{content:""}' +
-      '@bottom-left{content:"' + copyright() + '";font-family:Montserrat,Arial,sans-serif;font-size:8pt;font-weight:500;color:#586A90}' +
       '@bottom-right{content:counter(page);font-family:Montserrat,Arial,sans-serif;font-size:8pt;font-weight:600;color:#586A90}}' +
-      '@page:first{@bottom-right{content:none}}';
+      '@page:first{margin:0;@bottom-right{content:none}}';
     var stage = $('stage');
     stage.textContent = '';
     stage.append(renderReport());
@@ -898,7 +1124,7 @@ button,input{font:inherit;color:inherit}
   }
 
   function restart() {
-    state.model = null; state.names = null; state.fileName = '';
+    state.model = null; state.aud = null; state.names = null; state.fileName = '';
     $('file').value = ''; $('fOrg').value = ''; $('fDate').value = ''; $('fTitle').value = '';
     $('stage').textContent = '';
     $('pagebox').textContent = '';
@@ -932,6 +1158,15 @@ button,input{font:inherit;color:inherit}
   $('pick').addEventListener('click', function () { $('file').click(); });
   $('repick').addEventListener('click', function () { $('file').value = ''; $('file').click(); });
   $('file').addEventListener('change', function () { loadFile(this.files[0]); });
+  Array.prototype.forEach.call($('aud').children, function (b) {
+    b.addEventListener('click', function () {
+      state.aud = b.getAttribute('data-v');
+      $('aud').classList.remove('need');
+      $('buildErr').hidden = true;
+      $('orgLabel').textContent = state.aud === 'org' ? 'Organization' : 'Prepared for';
+      Array.prototype.forEach.call($('aud').children, function (x) { x.setAttribute('aria-pressed', String(x === b)); });
+    });
+  });
   Array.prototype.forEach.call($('names').children, function (b) {
     b.addEventListener('click', function () {
       state.names = b.getAttribute('data-v');
@@ -950,9 +1185,11 @@ button,input{font:inherit;color:inherit}
   $('edit').addEventListener('click', backToSetup);
   $('restart').addEventListener('click', restart);
   $('copy').addEventListener('click', copyDocs);
+  // Print straight from the click: the fonts are packed in the file, so they are loaded by now,
+  // and Safari can block a print that is not started directly by a click.
   $('print').addEventListener('click', function () {
-    var go = function () { window.print(); };
-    if (document.fonts && document.fonts.ready) document.fonts.ready.then(go); else go();
+    if (!document.fonts || document.fonts.status === 'loaded') window.print();
+    else document.fonts.ready.then(function () { window.print(); });
   });
   paintSetup();
 })();
