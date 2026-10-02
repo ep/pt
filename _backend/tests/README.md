@@ -45,6 +45,11 @@ fifteen minutes to find, or miss entirely.
   and open enrolment wording, skipped and unanswered activities, section order, shortened
   names, the confidentiality line, the copy for Google Docs, and that the page's security
   lock still matches its script.
+- `qa-kc-report-builder.mjs` tests `../../kc/report-builder/index.html` (the KickstartChange
+  report builder) the same way, with made-up teams built inside the file. It covers one
+  chapter per team (team, change, Hallway Huddle, then the rest), one change for everyone
+  or one per team, the highlights and their numbers, skipped activities, the copies for
+  Google Docs and for AI, and that the page's security lock still matches its script.
 - `fake-db.mjs` is the shared fake database the worker, pair-poll and room-pulse suites use.
   It also counts the rows each request touches, so the worker suite can check what a read costs.
 
@@ -61,6 +66,7 @@ Then, from anywhere in the repo:
     node _backend/tests/qa-pair-poll.mjs
     node _backend/tests/qa-room-pulse.mjs
     node _backend/tests/qa-report-builder.mjs
+    node _backend/tests/qa-kc-report-builder.mjs
 
 Every line prints PASS or FAIL, and the process exits nonzero on any failure.
 
