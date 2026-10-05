@@ -76,6 +76,8 @@ h1,h2,h3{font-family:var(--serif);font-weight:400;margin:0;text-wrap:balance}
 .find h3{font-size:clamp(22px,2.5vw,28px);line-height:1.25}
 .find p{margin:12px 0 0;font-size:16.5px;line-height:1.6;max-width:62ch}
 .find .viz{margin-top:28px;max-width:620px}
+.find p a{text-decoration:underline;text-decoration-color:var(--pigeon);text-decoration-thickness:1.5px;text-underline-offset:3px}
+.find p a:hover{text-decoration-color:var(--cobalt)}
 @media (max-width:760px){.find{grid-template-columns:minmax(0,1fr)}.big{margin-bottom:10px}}
 
 /* Questions */
@@ -180,7 +182,7 @@ table.t{width:100%;border-collapse:collapse;font-size:15px}
   <div class="wrap">
     <img class="logo" src="data:image/png;base64,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" alt="ExperiencePoint">
     <h1>Reimagine with AI</h1>
-    <p class="sub">What 49 webinar attendees told us about redesigning work with AI.</p>
+    <p class="sub">What 49 webinar attendees said about redesigning work with AI.</p>
   </div>
   <div class="cluster" aria-hidden="true"><i></i><i></i><i></i><i></i><i></i></div>
 </header>
@@ -192,7 +194,7 @@ table.t{width:100%;border-collapse:collapse;font-size:15px}
       <button class="tab" role="tab" id="t-compare" aria-controls="compare" aria-selected="false" tabindex="-1"><span class="full">How this group compares</span><span class="short">Compared</span></button>
       <button class="tab" role="tab" id="t-results" aria-controls="results" aria-selected="false" tabindex="-1">Results</button>
       <button class="tab" role="tab" id="t-industry" aria-controls="industry" aria-selected="false" tabindex="-1"><span class="full">By industry</span><span class="short">Industry</span></button>
-      <button class="tab" role="tab" id="t-webinar" aria-controls="webinar" aria-selected="false" tabindex="-1"><span class="full">The webinar</span><span class="short">Webinar</span></button>
+      <button class="tab" role="tab" id="t-webinar" aria-controls="webinar" aria-selected="false" tabindex="-1"><span class="full">Who took part</span><span class="short">Who</span></button>
     </div>
     <button class="dl" id="dl" aria-label="Download CSV"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 3v12"/><path d="m7 10 5 5 5-5"/><path d="M5 21h14"/></svg><span>Download CSV</span></button>
   </div>
@@ -209,14 +211,14 @@ table.t{width:100%;border-collapse:collapse;font-size:15px}
           <div class="big">73%</div>
           <div>
             <h3>73% say redesigning work with AI is a priority for the next year.</h3>
-            <p>Only 7 of 49 say the focus is still rolling out tools. That's a lot of ambition. So far 35% have redesigned a workflow, so most of this group wants to go further than they have.</p>
+            <p>Only 14% are still in the early stages of AI adoption, focused mainly on rolling out tools.</p>
           </div>
         </div>
         <div class="find">
           <div class="big">90%</div>
           <div>
-            <h3>Nearly everyone uses AI alone. Far fewer use it together.</h3>
-            <p>Every step that involves other people drops off: 41% have built something others use, 35% have redesigned a workflow, and 29% have changed a role, process or hiring plan. Helping teams use AI together looks like the biggest need.</p>
+            <h3>Nearly everyone uses AI alone. Far fewer are changing how their teams work with it.</h3>
+            <p>Individual use is high, but adoption staggers for this group as soon as other people are involved. That matters because AI's biggest payoff comes from teams changing how work gets done together.</p>
             <div class="viz" data-viz="solo"></div>
           </div>
         </div>
@@ -224,29 +226,29 @@ table.t{width:100%;border-collapse:collapse;font-size:15px}
           <div class="big">4&times;</div>
           <div>
             <h3>Redesign happens where there's budget and owners.</h3>
-            <p>Where redesign has budget and owners, 59% have redesigned a workflow. Where it's only been stated, 2 of 14 have, about the same as where it isn't a priority at all.</p>
+            <p>With both in place, 59% have redesigned a workflow. When leaders just say it matters but don't fund it, few have (14%), no more than at organizations where it isn't a priority at all.</p>
             <div class="viz" data-viz="money"></div>
           </div>
         </div>
         <div class="find">
           <div class="big">41%</div>
           <div>
-            <h3>Time is the biggest barrier, with or without a budget.</h3>
-            <p>41% say people don't have time to rethink how they work. It's the top answer where redesign is funded (45%) and where it isn't (37%).</p>
+            <h3>Time is the biggest barrier to reimagination, with or without a budget.</h3>
+            <p>About 2 in 5 of those polled say their people don't have time to rethink how they work. It's the top answer where redesign is funded (45%) and where it isn't (37%).</p>
           </div>
         </div>
         <div class="find">
           <div class="big">53%</div>
           <div>
             <h3>Clear direction from leaders goes with getting more done.</h3>
-            <p>Only 1 in 3 describe leadership-led adoption. Where leaders encourage AI but teams figure it out, results look a lot like people working on their own.</p>
+            <p>Only 1 in 3 respondents describe leadership-led adoption. Where leaders encourage AI but teams figure it out, results are similar to people working on their own.</p>
             <div class="viz" data-viz="lead"></div>
           </div>
         </div>
         <div class="find">
           <div class="big">5 of 7</div>
           <div>
-            <h3>After time, the next barrier depends on funding.</h3>
+            <h3>After time, the next barrier to reimagination depends on funding.</h3>
             <p>Time tops the list either way. Without funding, no shared direction comes next: 7 of the 9 who picked it aren't funded. With funding, data comes up: 5 of the 7 who said their tools can't reach the data they need have budget and owners.</p>
           </div>
         </div>
@@ -254,13 +256,14 @@ table.t{width:100%;border-collapse:collapse;font-size:15px}
     </div>
 
     <div class="block">
-      <h2 class="sec">Questions this raises</h2>
-      <ul class="qs">
-        <li>If time is the top barrier even where there's money, is anyone budgeting for time?</li>
-        <li>What turns a stated priority into a funded one: a named owner, protected hours, or a budget line?</li>
-        <li>Six teams have built an agent others use without redesigning a workflow. Are agents being added to old processes?</li>
-        <li>When leaders encourage AI but leave teams to figure it out, what would useful direction look like?</li>
-        <li>Where is the time AI saves actually going?</li>
+      <h2 class="sec">What you can try</h2>
+      <p class="lead">Among the organizations we surveyed, the ones that had moved beyond individual AI use to redesigning how work gets done tended to have budget and owners, clear direction from leaders, and a way to measure outcomes. Time was the top barrier whether or not they had redesigned, and most have yet to redesign work as a team. Each of these is a small place to start.</p>
+      <ul class="plain">
+        <li><b>Give redesign an owner and a budget.</b> Where it had both, 59% had redesigned a workflow. Where it was only stated, 2 of 14 had.</li>
+        <li><b>Protect time to rethink work.</b> Time was the top barrier, with or without funding. Treat rethinking a workflow like any other project, with hours set aside for it.</li>
+        <li><b>Pick one shared workflow and redesign it together.</b> 90% use AI on their own, but only 35% have redesigned a workflow and 29% have changed a role, process or hiring plan. Most have yet to take AI into the work they do together.</li>
+        <li><b>Turn encouragement into direction.</b> Where adoption was leadership-led, 53% had redesigned a workflow, against 28% where leaders encourage AI and leave teams to figure it out.</li>
+        <li><b>Measure outcomes as well as usage.</b> 37% have no formal way to measure AI yet. Where redesign was funded, 68% tracked business outcomes.</li>
       </ul>
     </div>
 
@@ -268,7 +271,6 @@ table.t{width:100%;border-collapse:collapse;font-size:15px}
       <h2 class="sec">About this data</h2>
       <ul class="notes">
         <li>49 people from different organizations, each describing their own workplace.</li>
-        <li>They chose to attend a webinar on this topic, so they're likely further along than most.</li>
         <li>The numbers are small. One person is about 2 points, and industry groups have 3 to 9 people, so treat small gaps as noise.</li>
       </ul>
       <div class="end" aria-hidden="true"></div>
@@ -280,43 +282,43 @@ table.t{width:100%;border-collapse:collapse;font-size:15px}
 <section class="panel" id="compare" role="tabpanel" aria-labelledby="t-compare" hidden>
   <div class="wrap">
     <div class="block">
-      <h2 class="sec">How this group compares</h2>
-      <p class="lead">Ahead of the wider world on almost every measure, and stuck in the same place: turning personal use into team change.</p>
+      <h2 class="sec">How this group compares to other organizations</h2>
+      <p class="lead">This surveyed group is ahead of the wider world on almost every measure, but stuck in the same place: turning personal use into team capability.</p>
       <div class="finds">
         <div class="find">
           <div class="big">35%</div>
           <div>
             <h3>A step ahead on redesign.</h3>
-            <p>35% of this group have redesigned a workflow with AI. McKinsey puts it at about 1 in 4 organizations, outside the top performers. 41% have built an agent or automation others use, against 30% in BCG's worker survey who say agents are already built into workflows.</p>
+            <p>35% of this group have redesigned a workflow with AI. McKinsey (2025) found that about <a href="https://www.mckinsey.com/capabilities/quantumblack/our-insights/the-state-of-ai-how-organizations-are-rewiring-to-capture-value" target="_blank" rel="noopener">1 in 5</a> organizations using gen AI have fundamentally redesigned at least some workflows. 41% have built an agent or automation others use, against <a href="https://www.bcg.com/press/3june2026-ai-reshaping-jobs-faster-than-companies-reshaping-work" target="_blank" rel="noopener">30% of workers</a> in BCG's 2026 survey that say agents are already built into their workflows.</p>
           </div>
         </div>
         <div class="find">
           <div class="big">90%</div>
           <div>
             <h3>Much heavier AI users than the average worker.</h3>
-            <p>90% use AI for their own tasks. Across US employees, Gallup finds 52% use AI in their role at all, and 30% use it a few times a week or more. This group chose to spend an hour on AI, so being ahead fits.</p>
+            <p>90% use AI for their own tasks. That's well ahead of the broader U.S. workforce, where only <a href="https://www.gallup.com/699797/indicator-artificial-intelligence.aspx" target="_blank" rel="noopener">52% of workers</a> currently use AI in their role, according to a 2026 Gallup survey.</p>
           </div>
         </div>
         <div class="find">
           <div class="big">1 in 3</div>
           <div>
             <h3>More direction from leaders than most, but still a minority.</h3>
-            <p>35% say AI adoption is leadership-led, with a clear direction. Gallup finds 25% of US employees say their organization has shared a clear plan for AI.</p>
+            <p>35% say AI adoption is leadership-led, with a clear direction, ahead of the <a href="https://www.gallup.com/699797/indicator-artificial-intelligence.aspx" target="_blank" rel="noopener">25% of US employees</a> who say their organization has communicated a clear plan for AI integration (Gallup 2026).</p>
           </div>
         </div>
         <div class="find">
           <div class="big">29%</div>
           <div>
             <h3>The same gap as everyone else: personal gains, little team change.</h3>
-            <p>90% of this group use AI on their own, but 29% have changed a role, process or hiring plan. Gallup sees the same pattern: 65% of US employees say AI has made them more productive, but only about 1 in 10 in organizations using AI strongly agree it has transformed how work gets done.</p>
+            <p>90% of this group use AI on their own, but only 29% have used it to change a role, process or hiring plan. Gallup 2026 data sees the same pattern: <a href="https://www.gallup.com/workplace/704225/rising-adoption-spurs-workforce-changes.aspx" target="_blank" rel="noopener">65% of US employees</a> say AI has made them more productive, but only about <a href="https://www.gallup.com/workplace/704225/rising-adoption-spurs-workforce-changes.aspx" target="_blank" rel="noopener">1 in 10 employees</a> in AI-adopting organizations strongly agree it has transformed how work gets done.</p>
           </div>
         </div>
       </div>
     </div>
 
     <div class="block">
-      <h2 class="sec">Side by side</h2>
-      <p class="lead">Outside surveys ask different people slightly different questions, so read these as rough comparisons.</p>
+      <h2 class="sec">Side by side: Against the benchmarks</h2>
+      <p class="lead">How this group measures up against national and global benchmarks.</p>
       <div class="viz" data-viz="compare"></div>
     </div>
 
@@ -325,8 +327,8 @@ table.t{width:100%;border-collapse:collapse;font-size:15px}
       <div class="facts">
         <div class="fact"><div class="fn">66%</div><p>of frontline workers who use AI regularly get little or no guidance on what to do with the time it saves them.</p><a class="src" href="https://www.bcg.com/press/3june2026-ai-reshaping-jobs-faster-than-companies-reshaping-work" target="_blank" rel="noopener">BCG, June 2026</a></div>
         <div class="fact"><div class="fn">Nearly 40%</div><p>of AI time savings are lost to rework: fixing errors, rewriting and checking output.</p><a class="src" href="https://newsroom.workday.com/2026-01-14-New-Workday-Research-Companies-Are-Leaving-AI-Gains-on-the-Table" target="_blank" rel="noopener">Workday, January 2026</a></div>
-        <div class="fact"><div class="fn">13%</div><p>of AI users are rewarded for trying to reinvent their work with AI when the results fall short.</p><a class="src" href="https://www.microsoft.com/en-us/worklab/work-trend-index/agents-human-agency-and-the-opportunity-for-every-organization" target="_blank" rel="noopener">Microsoft Work Trend Index, May 2026</a></div>
-        <div class="fact"><div class="fn">+25</div><p>points of measurable business impact come from a clear AI strategy. Better tools alone add about 5.</p><a class="src" href="https://www.bcg.com/press/3june2026-ai-reshaping-jobs-faster-than-companies-reshaping-work" target="_blank" rel="noopener">BCG, June 2026</a></div>
+        <div class="fact"><div class="fn">13%</div><p>of AI users are rewarded for trying to reinvent their work with AI, even if the results fall short.</p><a class="src" href="https://www.microsoft.com/en-us/worklab/work-trend-index/agents-human-agency-and-the-opportunity-for-every-organization" target="_blank" rel="noopener">Microsoft Work Trend Index, May 2026</a></div>
+        <div class="fact"><div class="fn">+25</div><p>percentage points of measurable business impact come from a clear AI strategy. Better tools alone add about 5.</p><a class="src" href="https://www.bcg.com/press/3june2026-ai-reshaping-jobs-faster-than-companies-reshaping-work" target="_blank" rel="noopener">BCG, June 2026</a></div>
         <div class="fact"><div class="fn">63%</div><p>of organizations lack AI-ready data practices, or don't know if they have them.</p><a class="src" href="https://www.gartner.com/en/newsroom/press-releases/2025-02-26-lack-of-ai-ready-data-puts-ai-projects-at-risk" target="_blank" rel="noopener">Gartner, February 2025</a></div>
         <div class="fact"><div class="fn">56%</div><p>of CEOs say they've seen no significant financial benefit from AI so far.</p><a class="src" href="https://www.pwc.com/gx/en/news-room/press-releases/2026/pwc-2026-global-ceo-survey.html" target="_blank" rel="noopener">PwC CEO Survey, January 2026</a></div>
       </div>
@@ -344,16 +346,16 @@ table.t{width:100%;border-collapse:collapse;font-size:15px}
 <!-- INDUSTRY -->
 <section class="panel" id="industry" role="tabpanel" aria-labelledby="t-industry" hidden>
   <div class="wrap">
-    <h2 class="sec">How industries compare</h2>
-    <p class="lead">Each dot is one person. Groups are small, so read these as early signals.</p>
+    <h2 class="sec">A look at our audience by industry</h2>
+    <p class="lead">Each dot represents one person. Groups are small, so read these as early signals.</p>
     <div class="viz ind-table" data-viz="industry"></div>
     <div class="notice">
-      <div><h3>Tech and information is furthest along.</h3><p>All 6 have redesigned a workflow and built an agent or automation that others use.</p></div>
-      <div><h3>Financial services is measuring, and stretched.</h3><p>All 7 call redesign a priority and 5 track business outcomes. 5 of 7 say time is what's holding them back.</p></div>
+      <div><h3>Tech and information is furthest along.</h3><p>All 6 respondents have redesigned a workflow and built an agent or automation that others use.</p></div>
+      <div><h3>Financial services is measuring AI value, but stretched.</h3><p>All 7 call redesign a priority and 5 track business outcomes. 5 of 7 say time is what's holding them back.</p></div>
       <div><h3>Government is willing but not resourced.</h3><p>6 of 8 call it a priority, but only 2 have funded it, and none have built an agent others use.</p></div>
       <div><h3>Healthcare is mostly bottom-up.</h3><p>Half say people are on their own with AI, and only 1 of 6 describes leadership-led adoption.</p></div>
       <div><h3>Consultants and coaches have funding, but little redesign yet.</h3><p>4 of 9 have budget and owners, about average, but only 1 has redesigned a workflow, and 5 have no formal metrics.</p></div>
-      <div><h3>Business schools are just starting.</h3><p>None of the 4 have funded redesign or redesigned a workflow yet.</p></div>
+      <div><h3>Business schools are just getting started.</h3><p>None of the 4 have funded a redesign or redesigned a workflow yet.</p></div>
     </div>
   </div>
 </section>
@@ -363,7 +365,7 @@ table.t{width:100%;border-collapse:collapse;font-size:15px}
   <div class="wrap">
     <div class="block">
       <h2 class="sec">Who came</h2>
-      <p class="lead">49 people, and every one of them answered all six questions.</p>
+      <p class="lead">49 people, and every one of them answered every question.</p>
       <div class="two">
         <div class="viz" data-viz="who"></div>
         <div>
@@ -375,78 +377,7 @@ table.t{width:100%;border-collapse:collapse;font-size:15px}
       </div>
     </div>
 
-    <div class="block">
-      <h2 class="sec">What they wanted next</h2>
-      <div class="finds">
-        <div class="find">
-          <div class="big">86%</div>
-          <div><h3>asked for the recording and the Reimagine tool.</h3></div>
-        </div>
-        <div class="find">
-          <div class="big">37%</div>
-          <div><h3>wanted to talk about a workshop for their team or a consult.</h3></div>
-        </div>
-        <div class="find">
-          <div class="big">2&times;</div>
-          <div>
-            <h3>People working on their own asked for help twice as often.</h3>
-            <p>Half of those who said people are mostly on their own with AI asked for a workshop or consult, against 1 in 4 in leadership-led organizations.</p>
-          </div>
-        </div>
-      </div>
-    </div>
-
-    <div class="block">
-      <h2 class="sec">Who wants to go further</h2>
-      <p class="lead">18 people asked to talk about a workshop for their team or a consult. Here they are, strongest interest first.</p>
-      <div class="viz" data-viz="interest"></div>
-    </div>
-
-    <div class="block">
-      <h2 class="sec">What stands out about them</h2>
-      <div class="finds">
-        <div class="find">
-          <div class="big">6 of 10</div>
-          <div>
-            <h3>Most who asked about a workshop already have budget and owners.</h3>
-            <p>That compares with 45% of everyone. All 3 who asked about both a workshop and a consult have budget and owners.</p>
-          </div>
-        </div>
-        <div class="find">
-          <div class="big">56%</div>
-          <div>
-            <h3>They're stuck more than they're busy.</h3>
-            <p>10 of the 18 say what holds them back is no shared direction, or usage stuck on low-stakes tasks. Only 6 of the other 31 said the same. 5 of the 7 who said usage is stuck asked to talk, and so did 5 of the 9 with no shared direction.</p>
-            <div class="viz" data-viz="askers"></div>
-          </div>
-        </div>
-        <div class="find">
-          <div class="big">4 of 6</div>
-          <div>
-            <h3>Most of the strongest interest comes from government and healthcare.</h3>
-            <p>They make up 4 of the 6 in the top two groups above. Half of government (4 of 8) and half of healthcare (3 of 6) asked to talk. Consulting (2 of 9), tech (1 of 6) and retail (0 of 3) asked least.</p>
-          </div>
-        </div>
-        <div class="find">
-          <div class="big">14</div>
-          <div>
-            <h3>14 more have budget and owners but only asked for the recording.</h3>
-            <p>They're further along than those who asked: 9 have redesigned a workflow and 10 have built something others use. They have money and momentum, so they're worth a conversation too.</p>
-          </div>
-        </div>
-      </div>
-    </div>
-
-    <div class="block">
-      <h2 class="sec">Where they could use help</h2>
-      <ul class="plain">
-        <li><b>Shared direction.</b> Giving teams a clear plan to follow. 14 of the 18 work where adoption isn't leadership-led: leaders encourage it and leave teams to figure it out, or people are on their own.</li>
-        <li><b>Getting past low-stakes use.</b> Moving from quick personal wins to work that matters. 5 of the 18 say usage is stuck on low-stakes tasks.</li>
-        <li><b>Redesigning work as a team.</b> Only 5 of the 18 have redesigned a workflow so far.</li>
-        <li><b>A way to measure.</b> 6 of the 18 have no formal way to measure AI yet.</li>
-      </ul>
-      <div class="end" aria-hidden="true"></div>
-    </div>
+    <div class="end" aria-hidden="true"></div>
   </div>
 </section>
 </main>
@@ -464,7 +395,7 @@ table.t{width:100%;border-collapse:collapse;font-size:15px}
 <script>
 (function(){
 'use strict';
-var AGG = {"Q1": {"answers": ["Leadership-led, with a clear direction", "Leadership-encouraged, but teams figure it out themselves", "Mostly individuals on their own", "Restricted or discouraged"], "counts": [17, 18, 12, 2], "byGroup": {"Consulting & coaching": [4, 2, 3, 0], "Financial services": [4, 2, 0, 1], "Government": [1, 5, 2, 0], "Healthcare": [1, 2, 3, 0], "Tech & information": [4, 2, 0, 0], "Business schools": [0, 2, 1, 1], "Retail & consumer": [1, 2, 0, 0], "Not given": [2, 1, 3, 0]}, "multi": false, "bySeg": {"Asked about a workshop or consult": [4, 7, 6, 1], "Did not ask": [13, 11, 6, 1]}}, "Q2": {"answers": ["Used AI for their own individual tasks", "Built an agent or automation that others use", "Measured time saved or business impact", "Redesigned a workflow with AI in it (not just faster steps)", "Changed a role, a process, or a hiring plan because of AI", "None of these yet"], "counts": [44, 20, 18, 17, 14, 2], "byGroup": {"Consulting & coaching": [9, 4, 3, 1, 3, 0], "Financial services": [6, 5, 3, 3, 4, 1], "Government": [7, 0, 2, 2, 1, 1], "Healthcare": [6, 1, 1, 2, 1, 0], "Tech & information": [6, 6, 5, 6, 5, 0], "Business schools": [3, 0, 1, 0, 0, 0], "Retail & consumer": [2, 1, 1, 1, 0, 0], "Not given": [5, 3, 2, 2, 0, 0]}, "multi": true, "bySeg": {"Asked about a workshop or consult": [15, 6, 6, 5, 4, 1], "Did not ask": [29, 14, 12, 12, 10, 1]}}, "Q3": {"answers": ["Yes, with budget and owners", "Yes, stated, but nothing resourced yet", "No, the focus is tool rollout and usage", "Don't know"], "counts": [22, 14, 7, 6], "byGroup": {"Consulting & coaching": [4, 2, 2, 1], "Financial services": [4, 3, 0, 0], "Government": [2, 4, 1, 1], "Healthcare": [2, 3, 0, 1], "Tech & information": [5, 0, 0, 1], "Business schools": [0, 1, 2, 1], "Retail & consumer": [1, 1, 1, 0], "Not given": [4, 0, 1, 1]}, "multi": false, "bySeg": {"Asked about a workshop or consult": [8, 5, 4, 1], "Did not ask": [14, 9, 3, 5]}}, "Q4": {"answers": ["Time saved or productivity", "Business outcomes (cost, revenue, cycle time, quality)", "Usage (logins, prompts, licences activated)", "Nothing formal yet"], "counts": [21, 19, 18, 18], "byGroup": {"Consulting & coaching": [4, 2, 2, 5], "Financial services": [5, 5, 5, 1], "Government": [2, 3, 3, 4], "Healthcare": [3, 1, 2, 2], "Tech & information": [4, 5, 2, 1], "Business schools": [0, 0, 2, 2], "Retail & consumer": [1, 0, 1, 1], "Not given": [2, 3, 1, 2]}, "multi": true, "bySeg": {"Asked about a workshop or consult": [7, 7, 7, 6], "Did not ask": [14, 12, 11, 12]}}, "Q5": {"answers": ["People don't have time to rethink how they work", "Every team is doing it differently, no shared direction", "Usage is flat or stuck on low-stakes tasks", "Our tools can't access the data / systems people actually need", "Other"], "counts": [20, 9, 7, 7, 6], "byGroup": {"Consulting & coaching": [3, 1, 0, 3, 2], "Financial services": [5, 0, 1, 0, 1], "Government": [3, 2, 1, 2, 0], "Healthcare": [2, 2, 1, 0, 1], "Tech & information": [2, 1, 0, 1, 2], "Business schools": [2, 2, 0, 0, 0], "Retail & consumer": [1, 1, 1, 0, 0], "Not given": [2, 0, 3, 1, 0]}, "multi": false, "bySeg": {"Asked about a workshop or consult": [6, 5, 5, 2, 0], "Did not ask": [14, 4, 2, 5, 6]}}, "Q6": {"answers": ["A recording of this webinar and the Reimagine tool", "Talk about running a workshop with one of my teams", "Consult on building capability at scale"], "counts": [42, 10, 11], "byGroup": {"Consulting & coaching": [9, 1, 1], "Financial services": [6, 2, 0], "Government": [7, 2, 3], "Healthcare": [6, 3, 2], "Tech & information": [5, 0, 1], "Business schools": [3, 1, 1], "Retail & consumer": [3, 0, 0], "Not given": [3, 1, 3]}, "multi": true, "bySeg": {"Asked about a workshop or consult": [11, 10, 11], "Did not ask": [31, 0, 0]}}, "groupN": {"Consulting & coaching": 9, "Financial services": 7, "Government": 8, "Healthcare": 6, "Tech & information": 6, "Business schools": 4, "Retail & consumer": 3, "Not given": 6}, "writeins": ["clarity and best practices on adoption. AI overload at the moment", "HIPPAA", "Not supported by leadership", "AI capability and thinking at diversified levels", "Data security", "AI tool performance"], "interest": {"total": 18, "tiers": [{"label": "Workshop and consult, with budget and owners", "n": 3}, {"label": "Workshop, with budget and owners", "n": 3}, {"label": "Workshop, without budget and owners", "n": 4}, {"label": "Consult, with budget and owners", "n": 2}, {"label": "Consult, without budget and owners", "n": 6}], "compare": [{"label": "Priority has budget and owners", "ask": 8, "rest": 14}, {"label": "Leadership-led, with a clear direction", "ask": 4, "rest": 13}, {"label": "Have redesigned a workflow", "ask": 5, "rest": 12}, {"label": "Held back by no shared direction, or usage stuck on low-stakes tasks", "ask": 10, "rest": 6, "hi": true}, {"label": "Held back by no time to rethink work", "ask": 6, "rest": 14}]}, "segN": {"Asked about a workshop or consult": 18, "Did not ask": 31}};
+var AGG = {"Q1": {"answers": ["Leadership-led, with a clear direction", "Leadership-encouraged, but teams figure it out themselves", "Mostly individuals on their own", "Restricted or discouraged"], "counts": [17, 18, 12, 2], "byGroup": {"Consulting & coaching": [4, 2, 3, 0], "Financial services": [4, 2, 0, 1], "Government": [1, 5, 2, 0], "Healthcare": [1, 2, 3, 0], "Tech & information": [4, 2, 0, 0], "Business schools": [0, 2, 1, 1], "Retail & consumer": [1, 2, 0, 0], "Not given": [2, 1, 3, 0]}, "multi": false}, "Q2": {"answers": ["Used AI for their own individual tasks", "Built an agent or automation that others use", "Measured time saved or business impact", "Redesigned a workflow with AI in it (not just faster steps)", "Changed a role, a process, or a hiring plan because of AI", "None of these yet"], "counts": [44, 20, 18, 17, 14, 2], "byGroup": {"Consulting & coaching": [9, 4, 3, 1, 3, 0], "Financial services": [6, 5, 3, 3, 4, 1], "Government": [7, 0, 2, 2, 1, 1], "Healthcare": [6, 1, 1, 2, 1, 0], "Tech & information": [6, 6, 5, 6, 5, 0], "Business schools": [3, 0, 1, 0, 0, 0], "Retail & consumer": [2, 1, 1, 1, 0, 0], "Not given": [5, 3, 2, 2, 0, 0]}, "multi": true}, "Q3": {"answers": ["Yes, with budget and owners", "Yes, stated, but nothing resourced yet", "No, the focus is tool rollout and usage", "Don't know"], "counts": [22, 14, 7, 6], "byGroup": {"Consulting & coaching": [4, 2, 2, 1], "Financial services": [4, 3, 0, 0], "Government": [2, 4, 1, 1], "Healthcare": [2, 3, 0, 1], "Tech & information": [5, 0, 0, 1], "Business schools": [0, 1, 2, 1], "Retail & consumer": [1, 1, 1, 0], "Not given": [4, 0, 1, 1]}, "multi": false}, "Q4": {"answers": ["Time saved or productivity", "Business outcomes (cost, revenue, cycle time, quality)", "Usage (logins, prompts, licences activated)", "Nothing formal yet"], "counts": [21, 19, 18, 18], "byGroup": {"Consulting & coaching": [4, 2, 2, 5], "Financial services": [5, 5, 5, 1], "Government": [2, 3, 3, 4], "Healthcare": [3, 1, 2, 2], "Tech & information": [4, 5, 2, 1], "Business schools": [0, 0, 2, 2], "Retail & consumer": [1, 0, 1, 1], "Not given": [2, 3, 1, 2]}, "multi": true}, "Q5": {"answers": ["People don't have time to rethink how they work", "Every team is doing it differently, no shared direction", "Usage is flat or stuck on low-stakes tasks", "Our tools can't access the data / systems people actually need", "Other"], "counts": [20, 9, 7, 7, 6], "byGroup": {"Consulting & coaching": [3, 1, 0, 3, 2], "Financial services": [5, 0, 1, 0, 1], "Government": [3, 2, 1, 2, 0], "Healthcare": [2, 2, 1, 0, 1], "Tech & information": [2, 1, 0, 1, 2], "Business schools": [2, 2, 0, 0, 0], "Retail & consumer": [1, 1, 1, 0, 0], "Not given": [2, 0, 3, 1, 0]}, "multi": false}, "groupN": {"Consulting & coaching": 9, "Financial services": 7, "Government": 8, "Healthcare": 6, "Tech & information": 6, "Business schools": 4, "Retail & consumer": 3, "Not given": 6}, "writeins": ["clarity and best practices on adoption. AI overload at the moment", "HIPPAA", "Not supported by leadership", "AI capability and thinking at diversified levels", "Data security", "AI tool performance"]};
 var N = Object.keys(AGG.groupN).reduce(function(s, g){ return s + AGG.groupN[g]; }, 0);
 
 /* ---------- Question set (display order and headlines) ---------- */
@@ -479,9 +410,7 @@ var QS = [
     text:'What metrics are you using to evaluate AI today? (Pick all that apply.)', order:[0,1,2,3], hi:[3] },
   { id:'Q5', title:'Time is the biggest barrier.',
     text:"What's the biggest thing holding your AI adoption back?", order:[0,1,2,3,4], hi:[0], writeins:true },
-  { id:'Q6', title:'Most want the recording. More than 1 in 3 want help going further.',
-    text:"What's the right next step for you? (Pick all that apply.)", order:[0,1,2], hi:[0] }
-];
+  ];
 function pct(k, n){ return Math.round(k / n * 100); }
 
 /* ---------- Chart specs ---------- */
@@ -530,12 +459,12 @@ var SPECS = {
     ]}
   },
   compare: {
-    chart: { kind:'table', cols:[{label:''},{label:'This group', r:true},{label:'Elsewhere', r:true},{label:'Who they asked'}], rows:[
+    chart: { kind:'table', cols:[{label:''},{label:'This group', r:true},{label:'Benchmark', r:true},{label:'Benchmark source and sample'}], rows:[
       { cells:['Use AI for their own tasks', '90%', '52%', {note:'US employees who use AI in their role at least a few times a year', link:'Gallup, May 2026', href:'https://www.gallup.com/699797/indicator-artificial-intelligence.aspx'}] },
       { cells:['Say redesigning work is a priority', '73%', '63%', {note:'C-suite leaders who expect redesigning work to bring the best return on people in 2026', link:'Mercer, Jan 2026', href:'https://www.mercer.com/about/newsroom/as-organizations-race-to-adopt-ai-in-2026-marsh-s-mercer-says-empower-talent-and-redesign-work-to-achieve-meaningful-gains/'}] },
       { cells:['Clear direction from leaders', '35%', '25%', {note:'US employees whose organization has shared a clear plan for AI', link:'Gallup, May 2026', href:'https://www.gallup.com/699797/indicator-artificial-intelligence.aspx'}] },
       { cells:['Built an agent or automation others use', '41%', '30%', {note:'Workers who say AI agents are already built into workflows', link:'BCG, Jun 2026', href:'https://www.bcg.com/press/3june2026-ai-reshaping-jobs-faster-than-companies-reshaping-work'}] },
-      { hi:true, cells:['Redesigned a workflow with AI', '35%', 'About 25%', {note:'Organizations, not counting the top performers', link:'McKinsey, Aug 2026', href:'https://www.mckinsey.com/capabilities/quantumblack/our-insights/the-state-of-ai'}] }
+      { hi:true, cells:['Redesigned a workflow with AI', '35%', '21%', {note:'Organizations using gen AI that have fundamentally redesigned at least some workflows', link:'McKinsey, Mar 2025', href:'https://www.mckinsey.com/capabilities/quantumblack/our-insights/the-state-of-ai-how-organizations-are-rewiring-to-capture-value'}] }
     ]}
   },
   solo: {
@@ -549,23 +478,7 @@ var SPECS = {
       return { hi:j === 0, cells:[AGG.Q2.answers[i], String(AGG.Q2.counts[i]), pct(AGG.Q2.counts[i], N) + '%'] };
     })}
   },
-  interest: {
-    chart: { kind:'bars', rows: AGG.interest.tiers.map(function(t, i){ return { label:t.label, k:t.n, n:AGG.interest.total, count:true, hi:i < 2 }; }) },
-    table: { kind:'table', cols:[{label:'What they asked for'},{label:'People', r:true}],
-      rows: AGG.interest.tiers.map(function(t, i){ return { hi:i < 2, cells:[t.label, String(t.n)] }; })
-        .concat([{ all:true, cells:['Everyone who asked', String(AGG.interest.total)] }]) }
-  },
-  askers: (function(){
-    var A = AGG.interest.compare, na = AGG.interest.total, no = N - na;
-    function row(r, hi){ return { hi:hi, cells:[r.label, {bar:pct(r.ask, na), k:r.ask, n:na}, {bar:pct(r.rest, no), k:r.rest, n:no}] }; }
-    function trow(r, hi){ return { hi:hi, cells:[r.label, r.ask + ' (' + pct(r.ask, na) + '%)', r.rest + ' (' + pct(r.rest, no) + '%)'] }; }
-    var cols = [{label:''},{label:'Asked to talk (' + na + ')'},{label:'Everyone else (' + no + ')'}];
-    return {
-      chart: { kind:'table', cols:cols, rows:A.map(function(r){ return row(r, !!r.hi); }) },
-      table: { kind:'table', cols:cols.map(function(c, i){ return { label:c.label, r:i > 0 }; }), rows:A.map(function(r){ return trow(r, !!r.hi); }) }
-    };
-  })(),
-  who: {
+    who: {
     chart: { kind:'bars', rows: Object.keys(AGG.groupN).filter(function(g){ return g !== 'Not given'; })
       .sort(function(a, b){ return AGG.groupN[b] - AGG.groupN[a]; })
       .map(function(g){ return { label:g, k:AGG.groupN[g], n:N, count:true }; })
@@ -752,13 +665,7 @@ document.getElementById('dl').addEventListener('click', function(){
     a.answers.forEach(function(ans, i){
       lines.push([q.id, q.text, 'Everyone', ans, a.counts[i], N, pct(a.counts[i], N) + '%'].map(cell).join(','));
     });
-    Object.keys(a.bySeg).forEach(function(g){
-      var n = AGG.segN[g];
-      a.answers.forEach(function(ans, i){
-        lines.push([q.id, q.text, g, ans, a.bySeg[g][i], n, pct(a.bySeg[g][i], n) + '%'].map(cell).join(','));
-      });
-    });
-    Object.keys(a.byGroup).forEach(function(g){
+        Object.keys(a.byGroup).forEach(function(g){
       var n = AGG.groupN[g];
       a.answers.forEach(function(ans, i){
         lines.push([q.id, q.text, g, ans, a.byGroup[g][i], n, pct(a.byGroup[g][i], n) + '%'].map(cell).join(','));
