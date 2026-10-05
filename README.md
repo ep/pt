@@ -52,6 +52,7 @@ There is no homepage at the repo root by design. Each project lives in its own f
 - https://ep.github.io/pt/field-tools/pair-poll/ : Pair Poll, a live paired-statement poll for workshops (field tool).
 - https://ep.github.io/pt/join/ : the short address participants type to join a poll (forwards to Pair Poll's join screen).
 - https://ep.github.io/pt/field-tools/chips/ : Place Your Chips, a live prioritization game (field tool).
+- https://ep.github.io/pt/field-tools/ai-impact-ladder/ : AI Impact Ladder, a guided conversation about measuring AI adoption and its impact, ending with a plan to share (field tool).
 - https://ep.github.io/pt/wbwai201/report-builder/ : Turn the CSV export from WBWAI 201 into a sponsor-ready report.
 - https://ep.github.io/pt/kc/report-builder/ : Turn the CSV export from KickstartChange into a team-by-team report.
 - https://ep.github.io/pt/agents/ : Create Your First Agent. Companion activity for Work Better with AI 201.

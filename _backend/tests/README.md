@@ -1,6 +1,6 @@
 # Tests for the pt backend and field tools
 
-Five automated test suites live here. They are robot users: each one loads the real
+Seven automated test suites live here. They are robot users: each one loads the real
 code, clicks through entire sessions in a simulated browser, and checks that
 everything behaves. They catch breakage in seconds that manual testing would take
 fifteen minutes to find, or miss entirely.
@@ -50,6 +50,14 @@ fifteen minutes to find, or miss entirely.
   chapter per team (team, change, Hallway Huddle, then the rest), one change for everyone
   or one per team, the highlights and their numbers, skipped activities, the copies for
   Google Docs and for AI, and that the page's security lock still matches its script.
+- `qa-ai-impact-ladder.mjs` tests `../../field-tools/ai-impact-ladder/index.html` (AI Impact
+  Ladder) in a simulated browser. It walks the whole conversation: the read on usage and
+  results, the three-pick cap on leadership priorities, the ladder intro and each rung (status,
+  split views, how you know, what's helping), the focus suggestion against the panel's
+  scenarios and the "Worth a check" line, which measure sections open and what to start with,
+  notes (left out of the report unless ticked), the plan fields, the text, report and CSV
+  (escaping everything typed; downloads only on the hosted page), picking up after a reload,
+  a browser that blocks storage, no analytics or brand names, and one primary button per screen.
 - `fake-db.mjs` is the shared fake database the worker, pair-poll and room-pulse suites use.
   It also counts the rows each request touches, so the worker suite can check what a read costs.
 
@@ -67,6 +75,7 @@ Then, from anywhere in the repo:
     node _backend/tests/qa-room-pulse.mjs
     node _backend/tests/qa-report-builder.mjs
     node _backend/tests/qa-kc-report-builder.mjs
+    node _backend/tests/qa-ai-impact-ladder.mjs
 
 Every line prints PASS or FAIL, and the process exits nonzero on any failure.
 

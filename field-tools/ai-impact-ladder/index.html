@@ -1,0 +1,1339 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="robots" content="noindex, nofollow">
+<title>AI Impact Ladder</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Montserrat:wght@500;600;700&display=swap">
+<style>
+:root{
+  --gold:#FFCC00; --pollen:#FEF6C9; --sun:#F2C94C; --sunInk:#7A5B00;
+  --cobalt:#293851; --aegean:#586A90; --pigeon:#D5D9E3;
+  --paper:#FFFFFF; --warm:#FBF8F3; --line:rgba(41,56,81,.16);
+  --tealT:#E4F4F4; --tealM:#68BFBD; --teal:#3E8E8C;
+  --clayT:#F6E2D5; --clayM:#D86527; --clay:#B14E1C;
+  --fernT:#EEF4D6; --fern:#90B210; --fernInk:#5C7500;
+  --sans:'Montserrat',Arial,sans-serif; --serif:Georgia,'Times New Roman',serif;
+  --spring:cubic-bezier(.22,1,.36,1);
+}
+*{box-sizing:border-box}
+[hidden]{display:none!important}
+html{-webkit-text-size-adjust:100%}
+body{margin:0;background:var(--warm);color:var(--cobalt);font:500 16px/1.55 var(--sans);-webkit-font-smoothing:antialiased}
+button,input,textarea{font:inherit;color:inherit}
+button{background:none;border:0;padding:0;cursor:pointer}
+a{color:inherit}
+:focus-visible{outline:3px solid var(--gold);outline-offset:3px;border-radius:6px}
+h1,h2,h3,h4{font-family:var(--serif);font-weight:400;margin:0;text-wrap:balance}
+p{margin:0}
+ul,ol{margin:0}
+.wrap{max-width:1000px;margin:0 auto;padding-inline:28px}
+@media (max-width:560px){.wrap{padding-inline:16px}}
+
+/* Header and step navigator */
+.top{position:sticky;top:0;z-index:30;background:var(--warm);border-bottom:1.5px solid var(--line)}
+.toprow{display:flex;align-items:center;justify-content:space-between;gap:18px;min-height:62px}
+.brand{font-family:var(--serif);font-size:19px;white-space:nowrap}
+.steps{display:flex;gap:2px;align-items:center}
+.steps button{display:flex;align-items:center;gap:8px;min-height:44px;padding:0 9px;border-radius:999px;font-size:13.5px;font-weight:600;color:var(--aegean);white-space:nowrap}
+.steps button:hover{color:var(--cobalt)}
+.steps .n{display:inline-grid;place-items:center;width:23px;height:23px;border-radius:50%;border:1.5px solid var(--pigeon);font-size:11.5px;font-weight:700;background:var(--paper)}
+.steps button.done .n{background:var(--tealT);border-color:var(--tealM);color:var(--teal)}
+.steps button[aria-current="step"]{color:var(--cobalt)}
+.steps button[aria-current="step"] .n{background:var(--cobalt);border-color:var(--cobalt);color:#fff}
+.steps .of{display:none}
+@media (max-width:920px){.steps button .l{display:none}.steps button[aria-current="step"] .l{display:inline}}
+@media (max-width:600px){
+  .steps button:not([aria-current="step"]){display:none}
+  .steps .n{display:none}
+  .steps .of{display:inline;color:var(--aegean)}
+  .brand{font-size:17px}
+}
+.prog{display:none;height:3px;background:var(--pigeon)}
+.prog i{display:block;height:100%;width:0;background:var(--cobalt);transition:width .4s var(--spring)}
+@media (max-width:600px){.prog{display:block}}
+
+/* Mini ladder: side on wide screens, a row under the header otherwise */
+.mini{position:fixed;right:16px;top:50%;transform:translateY(-50%);z-index:15;width:116px;display:none}
+.mini .mr{display:grid;grid-template-columns:34px minmax(0,1fr);gap:0 10px;align-items:center}
+.mini .rail{align-self:stretch;border-inline:2px solid var(--cobalt);display:flex;align-items:center;min-height:42px}
+.mini .bar{display:block;height:6px;width:100%}
+.mini .nm{font-size:12px;font-weight:600;line-height:1.25}
+.mini .st{display:block;font-size:11px;font-weight:500;color:var(--aegean)}
+.mini .mr.cur .nm{text-decoration:underline;text-decoration-thickness:2px;text-underline-offset:3px}
+.mini .mr.foc .bar,.minirow .mi.foc .bar,.frow[aria-pressed="true"] .bar{box-shadow:0 0 0 2px var(--warm),0 0 0 4px var(--cobalt)}
+.mini .mr.foc .nm{font-weight:700}
+@media (min-width:1260px){.mini.on{display:block}}
+.minirow{display:none;border-top:1px solid var(--line)}
+.minirow .wrap{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:10px;padding-block:8px}
+.minirow .mi{min-width:0}
+.minirow .bar{display:block;height:5px;border-radius:999px}
+.minirow .nm{display:block;margin-top:4px;font-size:11.5px;font-weight:600;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.minirow .mi.cur .nm{text-decoration:underline;text-decoration-thickness:2px;text-underline-offset:3px}
+.minirow .mi.foc .nm{font-weight:700}
+@media (max-width:1259px){.minirow.on{display:block}}
+
+/* Status colors, shared by bars everywhere */
+.s-well{background:var(--teal)}
+.s-mixed{background:var(--sun)}
+.s-not{background:var(--clayM)}
+.s-cant{background:repeating-linear-gradient(90deg,var(--aegean) 0 5px,transparent 5px 9px)}
+.s-none{background:var(--pigeon)}
+
+/* Screens */
+.screen{padding-block:44px 150px}
+.screen.enter{animation:enter .34s var(--spring) both}
+@keyframes enter{from{opacity:0;transform:translateY(8px)}to{opacity:1;transform:none}}
+.title{font-size:clamp(28px,3.6vw,40px);line-height:1.12}
+.lede{margin-top:12px;font-size:17px;color:var(--aegean);max-width:58ch;text-wrap:pretty}
+.ask{margin-top:34px}
+.ask h3{font-size:clamp(19px,2.1vw,22px);line-height:1.35}
+.hint{margin-top:12px;font-size:14px;font-weight:600;color:var(--clay);min-height:22px}
+
+/* Chips */
+.chips{display:flex;flex-wrap:wrap;gap:10px;margin-top:14px}
+.chip{min-height:46px;padding:10px 18px;border-radius:999px;background:var(--paper);border:1.5px solid var(--line);font-size:15px;font-weight:600;display:inline-flex;align-items:center;gap:10px;text-align:left;transition:background .2s,border-color .2s}
+.chip:hover{border-color:var(--aegean)}
+.chip[aria-pressed="true"]{background:var(--tealT);border-color:var(--teal);color:var(--teal)}
+.chip[aria-pressed="true"]::before{content:"";flex:0 0 auto;width:8px;height:8px;border-radius:50%;background:currentColor}
+.chip.nudge{animation:nudge .5s ease 1}
+@keyframes nudge{0%,100%{transform:none}30%{transform:translateX(-4px)}60%{transform:translateX(4px)}}
+.chips.sm .chip{min-height:44px;padding:8px 16px;font-size:14px}
+.chip.st-mixed[aria-pressed="true"]{background:var(--pollen);border-color:var(--sun);color:var(--sunInk)}
+.chip.st-not[aria-pressed="true"]{background:var(--clayT);border-color:var(--clayM);color:var(--clay)}
+.chip.st-cant[aria-pressed="true"]{background:var(--warm);border-color:var(--aegean);border-style:dashed;color:var(--aegean)}
+.other{min-height:46px;padding:10px 18px;border-radius:999px;background:var(--paper);border:1.5px dashed var(--line);font-size:15px;font-weight:600;width:min(320px,100%);color:var(--cobalt)}
+.other::placeholder{color:var(--aegean);font-weight:600}
+.other:focus{outline:none;border-color:var(--aegean);border-style:solid}
+.other.on{background:var(--tealT);border:1.5px solid var(--teal);color:var(--teal)}
+.linkbtn{margin-top:12px;min-height:36px;font-size:13.5px;font-weight:600;color:var(--aegean);text-decoration:underline;text-decoration-color:var(--line);text-underline-offset:3px}
+.linkbtn:hover{color:var(--cobalt)}
+
+/* Reveal */
+.reveal{margin-top:34px;background:var(--paper);border-radius:18px;border:1.5px solid var(--line);border-top:3px solid var(--gold);padding:30px}
+@media (max-width:560px){.reveal{padding:22px}}
+.reveal.show{animation:enter .4s var(--spring) both}
+.say{font-family:var(--serif);font-size:clamp(20px,2.3vw,26px);line-height:1.42;max-width:46ch}
+.src{font-size:12.5px;color:var(--aegean);text-decoration:underline;text-decoration-color:var(--line);text-underline-offset:3px}
+.src:hover{color:var(--cobalt)}
+.fine{margin-top:16px;font-size:13.5px;color:var(--aegean);max-width:70ch}
+.core{margin-top:28px;padding-top:22px;border-top:1.5px solid var(--line);font-family:var(--serif);font-size:clamp(21px,2.5vw,28px);line-height:1.38;max-width:44ch}
+.core em{font-style:normal;background:linear-gradient(transparent 62%,rgba(255,204,0,.55) 62%)}
+
+/* Today: the gap */
+.gap{margin-top:26px;display:grid;gap:18px;max-width:640px}
+.gb{display:grid;grid-template-columns:104px minmax(0,1fr);gap:6px 20px;align-items:center}
+.gv{grid-row:span 2;font-family:var(--serif);font-size:clamp(40px,5vw,52px);line-height:1}
+.gt{position:relative;height:12px;border-radius:999px;background:var(--pigeon);overflow:hidden}
+.gt i{position:absolute;inset:0 auto 0 0;border-radius:999px}
+.gt i.a{background:var(--tealM)} .gt i.b{background:var(--cobalt)}
+.gt b{position:absolute;top:0;bottom:0;background:repeating-linear-gradient(45deg,rgba(242,201,76,.9) 0 4px,rgba(242,201,76,.25) 4px 8px)}
+.gl{font-size:15px}
+.gb + .src,.gap + .src{display:inline-block;margin-top:14px}
+
+/* Priorities */
+.dests{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:14px;margin-top:22px}
+@media (max-width:820px){.dests{grid-template-columns:repeat(2,minmax(0,1fr))}}
+@media (max-width:460px){.dests{grid-template-columns:minmax(0,1fr)}}
+.dest{border-radius:16px;padding:18px;background:var(--warm);border:1.5px solid var(--line);min-width:0;transition:opacity .5s,background .5s}
+.dest h3{font-size:19px;line-height:1.25}
+.dest p{margin-top:6px;font-size:13.5px;color:var(--aegean)}
+.dest ul{margin:12px 0 0;padding:0;list-style:none;display:grid;gap:6px;font-size:14px;font-weight:600;color:var(--teal)}
+.dest.on{background:var(--tealT);border-color:var(--teal)}
+.dest.off{opacity:.72}
+.watchhead{margin-top:30px;font-size:20px}
+.watch{margin-top:8px}
+.watch div{display:grid;grid-template-columns:minmax(0,240px) minmax(0,1fr);gap:4px 22px;padding-block:13px;border-top:1.5px solid var(--line)}
+.watch div:first-child{border-top:0}
+.watch b{font-weight:700}
+@media (max-width:560px){.watch div{grid-template-columns:minmax(0,1fr)}}
+
+/* Ladder, large (intro) */
+.lad{margin-top:30px;display:grid;max-width:760px}
+.lrow{display:grid;grid-template-columns:110px minmax(0,1fr);gap:0 26px;align-items:stretch}
+.lrail{border-inline:3px solid var(--cobalt);display:flex;align-items:center}
+.lbar{display:block;height:10px;width:100%;background:var(--cobalt);transform-origin:left center}
+.lrow.peak .lbar{background:var(--gold)}
+.lrow:first-child .lrail{padding-top:18px}
+.lrow:last-child .lrail{padding-bottom:18px}
+.ltext{display:flex;gap:16px;align-items:baseline;padding-block:16px;border-top:1.5px solid var(--line)}
+.lrow:first-child .ltext{border-top:0}
+.lnum{font-family:var(--serif);font-size:30px;line-height:1;color:var(--aegean);min-width:20px}
+.ltext h3{font-size:clamp(20px,2.3vw,24px);line-height:1.25}
+.ltext h3 span{color:var(--aegean)}
+.ltext .lq{margin-top:4px;font-size:15px}
+.ltext .lown{margin-top:2px;font-size:13px;color:var(--aegean)}
+@media (max-width:560px){.lrow{grid-template-columns:54px minmax(0,1fr);gap:0 14px}.lnum{display:none}}
+.lad.anim .lbar{animation:grow .6s var(--spring) both;animation-delay:var(--d)}
+.lad.anim .ltext{animation:fade .5s ease both;animation-delay:calc(var(--d) + .12s)}
+.after.anim{animation:fade .5s ease both;animation-delay:3s}
+@keyframes grow{from{transform:scaleX(0)}to{transform:scaleX(1)}}
+@keyframes fade{from{opacity:0;transform:translateY(6px)}to{opacity:1;transform:none}}
+.after{margin-top:22px;max-width:60ch}
+.after p{font-size:16px}
+details.why{margin-top:18px}
+details.why summary,details.how summary{cursor:pointer;list-style:none;display:inline-flex;align-items:center;gap:8px;min-height:40px;font-size:14px;font-weight:600;color:var(--aegean)}
+details.why summary::-webkit-details-marker,details.how summary::-webkit-details-marker{display:none}
+details.why summary::before,details.how summary::before{content:"+";display:inline-grid;place-items:center;width:20px;height:20px;border:1.5px solid currentColor;border-radius:50%;font-size:13px;line-height:1}
+details.why[open] summary::before,details.how[open] summary::before{content:"\2212"}
+details.why ul{margin:8px 0 0;padding-left:20px;display:grid;gap:8px;font-size:15px;max-width:66ch}
+
+/* Rung page */
+.rhead{display:flex;gap:18px;align-items:baseline}
+.rnum{font-family:var(--serif);font-size:clamp(44px,6vw,64px);line-height:.9;color:var(--aegean)}
+.own{margin-top:6px;font-size:14px;font-weight:600;color:var(--aegean)}
+.rungpage .ask{margin-top:30px}
+
+/* Focus */
+.fgrid{margin-top:30px;display:grid;grid-template-columns:minmax(0,360px) minmax(0,1fr);gap:34px;align-items:start}
+@media (max-width:820px){.fgrid{grid-template-columns:minmax(0,1fr)}}
+.flad{display:grid}
+.frow{display:grid;grid-template-columns:78px minmax(0,1fr);gap:0 18px;text-align:left;width:100%;border-radius:0}
+.frow .rail{border-inline:3px solid var(--cobalt);display:flex;align-items:center;padding-inline:0}
+.frow:first-child .rail{padding-top:14px}
+.frow:last-child .rail{padding-bottom:14px}
+.frow .bar{display:block;height:9px;width:100%;transition:box-shadow .3s}
+.frow .tx{display:grid;gap:2px;padding:14px 12px;border-radius:12px;margin-block:4px;border:1.5px solid transparent}
+.frow:hover .tx{border-color:var(--line);background:var(--paper)}
+.frow .nm{font-family:var(--serif);font-size:20px;line-height:1.2}
+.frow .nm b{font-weight:400;color:var(--aegean);margin-right:8px}
+.frow .st{font-size:13.5px;color:var(--aegean)}
+.frow .sg{font-size:12.5px;font-weight:700;color:var(--cobalt)}
+.frow[aria-pressed="true"] .tx{background:var(--paper);border-color:var(--cobalt)}
+.fcard{background:var(--paper);border:1.5px solid var(--line);border-top:3px solid var(--gold);border-radius:18px;padding:28px}
+@media (max-width:560px){.fcard{padding:22px}}
+.fcard h3{font-size:clamp(24px,2.8vw,30px);line-height:1.2}
+.fcard .why{margin-top:10px;font-size:16px;max-width:60ch}
+.fcard .check{margin-top:14px;padding:12px 16px;border-radius:12px;background:var(--pollen);font-size:15px;font-weight:600;color:var(--sunInk)}
+.fcard h4{margin-top:22px;font-size:19px}
+.fcard ul{margin-top:8px;padding-left:20px;display:grid;gap:8px;font-size:15.5px}
+.fcard .train{margin-top:20px;padding-top:16px;border-top:1.5px solid var(--line);font-size:15px}
+.fcard .train b{display:block;font-weight:700;margin-bottom:2px}
+.empty{font-family:var(--serif);font-size:20px;color:var(--aegean)}
+
+/* Measures */
+.askbox{margin-top:28px;background:var(--paper);border:1.5px solid var(--line);border-left:5px solid var(--gold);border-radius:16px;padding:26px 28px}
+@media (max-width:560px){.askbox{padding:20px}}
+.askbox h3{font-size:clamp(22px,2.5vw,26px)}
+.askbox .main{margin-top:8px;font-family:var(--serif);font-size:clamp(18px,2vw,21px);line-height:1.45;max-width:54ch}
+.askbox h4{margin-top:18px;font-family:var(--sans);font-size:14px;font-weight:700}
+.askbox ul{margin-top:6px;padding-left:20px;display:grid;gap:6px;font-family:var(--serif);font-size:17px;max-width:60ch}
+.askbox .src{display:inline-block;margin-top:14px}
+.legend{margin-top:30px;display:flex;align-items:center;gap:10px;font-size:13.5px;color:var(--aegean)}
+.trust{display:inline-flex;gap:4px;align-items:center;flex:0 0 auto}
+.trust i{width:9px;height:9px;border-radius:50%;background:var(--pigeon)}
+.trust i.on{background:var(--cobalt)}
+.rsec{margin-top:12px;border-top:1.5px solid var(--line)}
+.rsh{width:100%;display:flex;align-items:center;gap:14px;min-height:60px;text-align:left}
+.rsh .k{font-family:var(--serif);font-size:26px;color:var(--aegean);min-width:18px}
+.rsh .nm{font-family:var(--serif);font-size:21px}
+.rsh .tag{margin-left:auto;font-size:13px;font-weight:600;color:var(--aegean);text-align:right}
+.rsh .chev{flex:0 0 auto;width:22px;height:22px;display:grid;place-items:center;border:1.5px solid var(--aegean);border-radius:50%;font-size:13px;line-height:1;color:var(--aegean)}
+.plays{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:14px;padding-bottom:20px}
+@media (max-width:760px){.plays{grid-template-columns:minmax(0,1fr)}}
+.play{position:relative;background:var(--paper);border:1.5px solid var(--line);border-radius:16px;padding:18px 20px 14px;min-width:0}
+.play h4{font-size:19px;line-height:1.3;padding-right:44px}
+.play .what{margin-top:6px;font-size:14.5px}
+.play .meta{margin-top:8px;display:flex;align-items:center;gap:10px;font-size:12.5px;color:var(--aegean)}
+.play .meta span{min-width:0}
+.ev{display:flex;flex-wrap:wrap;gap:6px;margin-top:14px}
+.ev button{min-height:40px;padding:6px 12px;border-radius:999px;border:1.5px solid var(--line);background:var(--paper);font-size:13px;font-weight:700;color:var(--aegean)}
+.ev button:hover{border-color:var(--aegean)}
+.ev button[aria-pressed="true"].have{background:var(--tealT);border-color:var(--teal);color:var(--teal)}
+.ev button[aria-pressed="true"].easy{background:var(--fernT);border-color:var(--fern);color:var(--fernInk)}
+.ev button[aria-pressed="true"].hard{background:var(--clayT);border-color:var(--clayM);color:var(--clay)}
+.ev button[aria-pressed="true"].no{background:var(--warm);border-color:var(--aegean);color:var(--cobalt);text-decoration:line-through}
+details.how{margin-top:6px}
+details.how p{font-size:14px;color:var(--cobalt);max-width:60ch;padding-bottom:4px}
+.pnote{position:absolute;top:12px;right:12px;width:40px;height:40px;border-radius:50%;display:grid;place-items:center;color:var(--aegean)}
+.pnote:hover{background:var(--warm);color:var(--cobalt)}
+.pnote.has::after,.note-btn.has::after{content:"";position:absolute;top:8px;right:8px;width:8px;height:8px;border-radius:50%;background:var(--gold);box-shadow:0 0 0 1.5px var(--cobalt)}
+.picks{margin-top:18px;display:grid;gap:0}
+.picks li{list-style:none;display:grid;grid-template-columns:auto minmax(0,1fr);gap:2px 16px;padding-block:14px;border-top:1.5px solid var(--line)}
+.picks li > :not(.trust),.mlist li > :not(.trust){grid-column:2}
+.picks li:first-child{border-top:0}
+.picks b{font-family:var(--serif);font-weight:400;font-size:19px}
+.picks span{font-size:13.5px;color:var(--aegean)}
+.picks .trust{grid-row:1 / span 2;grid-column:1;align-self:center}
+.picks{padding:0}
+.r5cols{display:grid;grid-template-columns:minmax(0,1.4fr) minmax(0,1fr);gap:30px;margin-top:22px}
+@media (max-width:760px){.r5cols{grid-template-columns:minmax(0,1fr)}}
+.r5cols h3{font-size:21px}
+
+/* Cover */
+.cover{display:grid;grid-template-columns:minmax(0,1fr) 300px;gap:40px;align-items:center;padding-block:40px 0}
+@media (max-width:760px){.cover{grid-template-columns:minmax(0,1fr)}.cover-art{order:-1;max-width:170px}}
+.cover h1{font-size:clamp(36px,5.2vw,58px);line-height:1.06;max-width:15ch}
+.cover .lede{font-size:19px;margin-top:18px;max-width:44ch}
+.fields{margin-top:30px;display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:16px;max-width:560px}
+@media (max-width:560px){.fields{grid-template-columns:minmax(0,1fr)}}
+.field{display:grid;gap:6px}
+.field span{font-size:13.5px;font-weight:600;color:var(--aegean)}
+.field input{min-height:48px;padding:10px 14px;border-radius:12px;border:1.5px solid var(--line);background:var(--paper);font:500 16px var(--sans);color:var(--cobalt);width:100%}
+.field input:focus{outline:none;border-color:var(--cobalt)}
+.cover .date{margin-top:22px;font-size:14px;font-weight:600}
+.cover .privacy{margin-top:8px;font-size:13.5px;color:var(--aegean);max-width:52ch}
+.cover-art svg{width:100%;height:auto;display:block}
+.cover-art .rg{stroke-dasharray:1;stroke-dashoffset:1;animation:draw .8s var(--spring) forwards;animation-delay:calc(.25s + var(--i) * .32s)}
+@keyframes draw{to{stroke-dashoffset:0}}
+
+/* Plan */
+.band{margin-top:26px;background:var(--cobalt);color:#fff;border-radius:22px;padding:30px 32px;display:grid;grid-template-columns:minmax(0,1fr) 150px;gap:24px;align-items:center;-webkit-print-color-adjust:exact;print-color-adjust:exact}
+@media (max-width:560px){.band{grid-template-columns:minmax(0,1fr) 84px;padding:22px}}
+.band h2{font-size:clamp(28px,3.6vw,40px);line-height:1.12;overflow-wrap:anywhere}
+.band .date{margin-top:6px;font-size:14px;color:rgba(255,255,255,.72)}
+.band .foc{margin-top:16px;font-family:var(--serif);font-size:20px}
+.band .foc b{font-weight:400;background:linear-gradient(transparent 62%,rgba(255,204,0,.6) 62%)}
+.band svg{width:100%;height:auto;display:block}
+.psec{margin-top:40px}
+.psec > h3{font-size:clamp(22px,2.6vw,27px)}
+.psec > .lede{font-size:15px;margin-top:6px}
+.wf{margin-top:14px;display:grid;gap:0}
+.wf .row{display:grid;grid-template-columns:minmax(0,1.5fr) minmax(0,1.3fr) repeat(3,minmax(0,1fr));gap:12px}
+.wf .hd{font-size:12.5px;font-weight:700;color:var(--aegean);padding-bottom:2px}
+.inp{width:100%;min-height:44px;border:0;border-bottom:1.5px solid var(--line);background:transparent;padding:8px 2px;font-size:15px;border-radius:0}
+.inp:focus{outline:none;border-bottom-color:var(--cobalt)}
+.inp::placeholder{color:#6b7896}
+@media (max-width:760px){
+  .wf .hd{display:none}
+  .wf .row{grid-template-columns:repeat(2,minmax(0,1fr));padding:12px 0;border-top:1.5px solid var(--line)}
+  .wf .row .inp:first-child{grid-column:1 / -1}
+}
+.lbl{display:grid;gap:2px}
+.lbl span{font-size:12.5px;font-weight:700;color:var(--aegean)}
+.trio{margin-top:14px;display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:18px}
+@media (max-width:760px){.trio{grid-template-columns:minmax(0,1fr)}}
+.mlist{margin-top:14px;padding:0}
+.mlist li{list-style:none;padding-block:14px;border-top:1.5px solid var(--line);display:grid;grid-template-columns:auto minmax(0,1fr);gap:2px 16px}
+.mlist li:first-child{border-top:0}
+.mlist b{font-family:var(--serif);font-weight:400;font-size:19px}
+.mlist span{font-size:13.5px;color:var(--aegean)}
+.mlist .trust{grid-row:1 / span 2;grid-column:1;align-self:center}
+.agl{margin-top:14px;padding:0;counter-reset:ag;display:grid;gap:0}
+.agl li{list-style:none;counter-increment:ag;display:grid;grid-template-columns:34px minmax(0,1fr) 170px 130px;gap:6px 14px;align-items:end;padding-block:14px;border-top:1.5px solid var(--line)}
+.agl li:first-child{border-top:0}
+.agl li::before{content:counter(ag);font-family:var(--serif);font-size:24px;color:var(--aegean);align-self:start;line-height:1.2}
+.agl p{align-self:start;font-size:15.5px}
+@media (max-width:760px){.agl li{grid-template-columns:28px minmax(0,1fr) minmax(0,1fr)}.agl p{grid-column:2 / -1}.agl li .lbl:first-of-type{grid-column:2}}
+.notes{margin-top:12px;padding:0}
+.notes li{list-style:none;display:grid;grid-template-columns:minmax(0,1fr) auto;gap:6px 14px;padding-block:12px;border-top:1.5px solid var(--line)}
+.notes li:first-child{border-top:0}
+.notes .ctx{font-size:12.5px;font-weight:700;color:var(--aegean)}
+.notes .tx{font-family:var(--serif);font-size:17px;white-space:pre-wrap;overflow-wrap:anywhere}
+.notes .ctl{grid-row:span 2;display:flex;align-items:center;gap:6px}
+.toggle{display:inline-flex;align-items:center;gap:8px;min-height:40px;font-size:13.5px;font-weight:600;cursor:pointer}
+.toggle input{width:18px;height:18px;accent-color:var(--teal)}
+.del{min-height:40px;padding:0 12px;font-size:13.5px;font-weight:600;color:var(--clay)}
+.where{margin-top:14px;padding:0}
+.where li{list-style:none;display:grid;grid-template-columns:110px minmax(0,1fr);gap:4px 18px;padding-block:13px;border-top:1.5px solid var(--line)}
+.where li:first-child{border-top:0}
+.where .nm{font-family:var(--serif);font-size:19px}
+.where .bar{display:block;height:6px;border-radius:999px;margin-top:6px;width:80px}
+.where p{font-size:14.5px}
+.where p.sm{font-size:13.5px;color:var(--aegean)}
+@media (max-width:560px){.where li{grid-template-columns:minmax(0,1fr)}}
+.wlist{margin-top:10px;padding-left:20px;display:grid;gap:6px;font-size:15px}
+.dlrow{margin-top:14px;display:flex;flex-wrap:wrap;gap:10px 18px;align-items:center}
+.dlnote{font-size:13.5px;color:var(--aegean)}
+.coreband{margin-top:44px;font-family:var(--serif);font-size:clamp(20px,2.3vw,25px);line-height:1.42;max-width:48ch}
+.restart{margin-top:40px}
+
+/* Note popover */
+.notepop{position:fixed;z-index:45;bottom:88px;left:max(16px,calc(50% - 484px));width:min(380px,calc(100vw - 32px));background:var(--paper);border:1.5px solid var(--cobalt);border-radius:16px;padding:16px;box-shadow:0 18px 40px rgba(41,56,81,.18)}
+.notepop .np-ctx{font-size:13px;font-weight:700;color:var(--aegean)}
+.notepop textarea{margin-top:8px;width:100%;min-height:96px;resize:vertical;border:1.5px solid var(--line);border-radius:10px;padding:10px 12px;font-family:var(--serif);font-size:16px;line-height:1.45;background:var(--warm)}
+.notepop textarea:focus{outline:none;border-color:var(--cobalt)}
+.np-row{margin-top:8px;display:flex;align-items:center;justify-content:space-between;gap:10px;flex-wrap:wrap}
+
+/* Controls bar */
+.bar-ctl{position:fixed;left:0;right:0;bottom:0;z-index:40;background:var(--warm);border-top:1.5px solid var(--line)}
+.bar-ctl .wrap{display:flex;align-items:center;justify-content:space-between;gap:10px;min-height:76px}
+.ctl-l,.ctl-r{display:flex;align-items:center;gap:8px}
+.btn{min-height:48px;padding:0 26px;border-radius:999px;background:var(--cobalt);color:#fff;font-weight:700;font-size:15px;white-space:nowrap}
+.btn:hover{background:#1f2b3f}
+.btn.sec{background:var(--paper);color:var(--cobalt);border:1.5px solid var(--cobalt)}
+.btn.sec:hover{background:var(--warm)}
+.btn.ghost{background:none;color:var(--aegean);padding:0 12px}
+.btn.ghost:hover{color:var(--cobalt)}
+.btn.sm{min-height:44px;padding:0 20px;font-size:14px}
+.note-btn{position:relative;display:inline-flex;align-items:center;gap:8px}
+@media (max-width:560px){.btn{padding:0 18px}.btn.ghost{padding:0 8px}.bar-ctl .wrap{gap:6px}}
+@media (max-width:400px){.btn.sec{padding:0 14px;font-size:14px}.btn{padding:0 16px}#primary .xl{display:none}}
+.mcopy{display:none}
+@media (max-width:600px){#copy{display:none!important}.mcopy{display:inline-block}}
+
+.toast{position:fixed;left:50%;bottom:96px;transform:translateX(-50%);z-index:50;background:var(--cobalt);color:#fff;font-size:14px;font-weight:600;padding:12px 20px;border-radius:999px;opacity:0;pointer-events:none;transition:opacity .2s}
+.toast.show{opacity:1}
+
+@media (prefers-reduced-motion:reduce){*{animation:none!important;transition:none!important}.cover-art .rg{stroke-dashoffset:0}}
+@media print{
+  .top,.bar-ctl,.toast,.mini,.notepop,.restart,.dlrow,.pnote{display:none!important}
+  body{background:#fff}
+  .screen{padding-block:0}
+  .band{break-inside:avoid}
+}
+</style>
+</head>
+<body>
+
+<header class="top">
+  <div class="wrap toprow">
+    <span class="brand">AI Impact Ladder</span>
+    <nav class="steps" id="steps" aria-label="Steps"></nav>
+  </div>
+  <div class="prog" aria-hidden="true"><i id="prog"></i></div>
+  <div class="minirow" id="minirow" aria-hidden="true"><div class="wrap" id="minirowIn"></div></div>
+</header>
+<aside class="mini" id="mini" aria-label="Your ladder"></aside>
+
+<main>
+<!-- Cover -->
+<section class="screen" id="s0" data-step="0">
+  <div class="wrap cover">
+    <div>
+      <h1>See what AI is changing, and show it.</h1>
+      <p class="lede">A short conversation about measuring AI adoption and its impact, and what to adjust along the way.</p>
+      <div class="fields">
+        <label class="field"><span>Prepared for (optional)</span><input id="who" type="text" maxlength="80" autocomplete="off" placeholder="Organization or team"></label>
+        <label class="field"><span>Prepared with (optional)</span><input id="by" type="text" maxlength="80" autocomplete="off" placeholder="Name, organization"></label>
+      </div>
+      <p class="date" id="coverDate"></p>
+      <p class="privacy">Your answers stay in this browser tab and clear when you close it. Nothing you enter is sent anywhere.</p>
+    </div>
+    <div class="cover-art" id="coverArt" aria-hidden="true"></div>
+  </div>
+</section>
+
+<!-- 1 Today -->
+<section class="screen" id="s1" data-step="1" hidden>
+  <div class="wrap">
+    <h2 class="title">How far has AI got here?</h2>
+    <div class="ask">
+      <h3>How many people use AI at work most weeks?</h3>
+      <div class="chips" id="qUse" role="group" aria-label="How many people use AI at work most weeks"></div>
+    </div>
+    <div class="ask">
+      <h3>Can you see it in business results yet?</h3>
+      <div class="chips" id="qRes" role="group" aria-label="Can you see it in business results yet"></div>
+    </div>
+    <p class="hint" id="h1" aria-live="polite"></p>
+    <div class="reveal" id="r1" hidden>
+      <p class="say" id="r1say"></p>
+      <div class="gap" role="img" aria-label="80% say AI has improved their own productivity; 37% attribute any profit impact to AI.">
+        <div class="gb"><span class="gv">80%</span><span class="gt"><i class="a" style="width:80%"></i></span><span class="gl">say AI has improved their own productivity</span></div>
+        <div class="gb"><span class="gv">37%</span><span class="gt"><i class="b" style="width:37%"></i><b style="left:37%;width:43%"></b></span><span class="gl">attribute any profit impact to AI</span></div>
+      </div>
+      <a class="src" href="https://www.mckinsey.com/capabilities/quantumblack/our-insights/the-state-of-ai" target="_blank" rel="noopener">McKinsey, The State of AI, 2026: 1,719 respondents in 97 countries</a>
+      <p class="core">Value shows up when the work itself changes. <em>So measure each step, from using AI to changed work to business results, and adjust where things stall.</em></p>
+    </div>
+  </div>
+</section>
+
+<!-- 2 Priorities -->
+<section class="screen" id="s2" data-step="2" hidden>
+  <div class="wrap">
+    <h2 class="title">What matters most to your leaders?</h2>
+    <p class="lede">Pick up to three they've said out loud.</p>
+    <div class="chips" id="qPrio" role="group" aria-label="What matters most to your leaders"></div>
+    <p class="hint" id="h2" aria-live="polite"></p>
+    <div class="reveal" id="r2" hidden>
+      <p class="say">Time saved only becomes value once someone decides where it goes. It can go four places.</p>
+      <div class="dests" id="dests"></div>
+      <h3 class="watchhead">Numbers your leaders already watch</h3>
+      <div class="watch" id="watch"></div>
+      <p class="fine">Based on <a class="src" href="https://www.gartner.com/en/documents/5188263" target="_blank" rel="noopener">Gartner's guidance on the business value of generative AI, 2024</a>: value depends on how new productivity is used.</p>
+    </div>
+  </div>
+</section>
+
+<!-- 3 Ladder -->
+<section class="screen" id="s3" data-step="3" hidden>
+  <div class="wrap">
+    <div id="ladIntro">
+      <h2 class="title">The AI Impact Ladder</h2>
+      <p class="lede">Four questions leaders ask about AI, in the order value usually builds.</p>
+      <div class="lad" id="ladBig"></div>
+      <div class="after" id="ladAfter">
+        <p>Rungs can move at the same time. The order shows where to look when something stalls.</p>
+        <details class="why">
+          <summary>Why these four</summary>
+          <ul>
+            <li>Each rung asks a different question, has a different owner, and moves on a different clock: weeks for use, months for changed work, a year or more for results.</li>
+            <li>Using and changing are split on purpose. Nearly three-quarters of the organizations getting the most from AI have fundamentally redesigned workflows (<a class="src" href="https://www.mckinsey.com/capabilities/quantumblack/our-insights/the-state-of-ai" target="_blank" rel="noopener">McKinsey, 2026</a>). People in companies redesigning work are 24 points more likely to see measurable business improvement (<a class="src" href="https://www.bcg.com/publications/2026/ai-at-work-why-strategy-matters-more-than-tools" target="_blank" rel="noopener">BCG, 2026</a>).</li>
+            <li>It lines up with what you may already use: <a class="src" href="https://adoption.microsoft.com/en-us/copilot/" target="_blank" rel="noopener">Microsoft's Copilot Dashboard</a> (readiness, adoption, impact), the <a class="src" href="https://www.kirkpatrickpartners.com/the-kirkpatrick-model/" target="_blank" rel="noopener">Kirkpatrick model</a> (learning, behavior, results), and <a class="src" href="https://www.prosci.com/blog/adkar-for-ai-adoption" target="_blank" rel="noopener">Prosci's</a> point that installed does not equal integrated.</li>
+          </ul>
+        </details>
+      </div>
+    </div>
+    <div id="ladRung" class="rungpage" hidden></div>
+  </div>
+</section>
+
+<!-- 4 Focus -->
+<section class="screen" id="s4" data-step="4" hidden>
+  <div class="wrap">
+    <h2 class="title">Where to focus next</h2>
+    <p class="lede">Our suggestion, your call. Tap a rung to choose.</p>
+    <div class="fgrid">
+      <div class="flad" id="flad" role="group" aria-label="Choose a focus rung"></div>
+      <div id="fcard"></div>
+    </div>
+  </div>
+</section>
+
+<!-- 5 Measures -->
+<section class="screen" id="s5" data-step="5" hidden>
+  <div class="wrap">
+    <h2 class="title">How you'll see it moving</h2>
+    <div class="askbox">
+      <h3>Ask before you measure</h3>
+      <p class="main">Talk to three to five leaders about what would convince them. Test the measures on one team for about six weeks. Adjust before you scale.</p>
+      <h4>Questions that work</h4>
+      <ul id="askq"></ul>
+      <a class="src" href="https://www.kirkpatrickpartners.com/the-kirkpatrick-model/" target="_blank" rel="noopener">Based on Kirkpatrick's Return on Expectations, and research on imagining an outcome has already happened</a>
+    </div>
+    <p class="legend"><span class="trust" aria-hidden="true"><i class="on"></i><i class="on"></i><i class="on"></i></span>How much leaders tend to trust it as evidence of value</p>
+    <div id="plays"></div>
+    <p class="hint" id="h5" aria-live="polite"></p>
+    <div class="reveal" id="r5" hidden>
+      <p class="say" id="r5say"></p>
+      <div class="r5cols">
+        <div><h3>Start with these</h3><ul class="picks" id="picks"></ul></div>
+        <div id="laterBox"><h3>Plan for later</h3><ul class="picks" id="later"></ul></div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- 6 Plan -->
+<section class="screen" id="s6" data-step="6" hidden>
+  <div class="wrap">
+    <h2 class="title">Your plan</h2>
+    <p class="lede">Fill in what you can together. Leave the rest for later.</p>
+    <div id="plan"></div>
+  </div>
+</section>
+</main>
+
+<div class="notepop" id="notepop" role="dialog" aria-label="Note" hidden>
+  <p class="np-ctx" id="npCtx"></p>
+  <textarea id="npText" maxlength="600" placeholder="In their words"></textarea>
+  <div class="np-row">
+    <label class="toggle"><input type="checkbox" id="npPark"> Come back to this later</label>
+    <button class="btn sm" id="npDone" type="button">Done</button>
+  </div>
+</div>
+
+<nav class="bar-ctl" aria-label="Controls">
+  <div class="wrap">
+    <div class="ctl-l">
+      <button class="btn ghost" id="back" type="button">Back</button>
+      <button class="btn ghost note-btn" id="noteBtn" type="button" aria-haspopup="dialog"><svg width="16" height="16" viewBox="0 0 16 16" aria-hidden="true" focusable="false"><path d="M11.2 2.2l2.6 2.6-8 8L2.4 13.6l.8-3.4z" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linejoin="round"/></svg>Note</button>
+    </div>
+    <div class="ctl-r"><button class="btn sec" id="copy" type="button" hidden>Copy as text</button><button class="btn" id="primary" type="button">Begin</button></div>
+  </div>
+</nav>
+<div class="toast" id="toast" role="status" aria-live="polite"></div>
+
+<script>
+(function(){
+'use strict';
+
+/* ---------------- Content ---------------- */
+var USE = [{id:'most',label:'Most'},{id:'half',label:'About half'},{id:'few',label:'A few'},{id:'unsure',label:'Not sure'}];
+var RES = [{id:'clear',label:'Clearly'},{id:'little',label:'A little'},{id:'notyet',label:'Not yet'},{id:'unsure',label:'Not sure'}];
+var DESTS = [
+  {id:'less',  title:'Same work, less effort', line:'Less overtime, outside spend and hiring'},
+  {id:'more',  title:'More work, same team',   line:'More output and speed from the same people'},
+  {id:'better',title:'Better work',            line:'Fewer errors, lower risk, more meaningful work'},
+  {id:'new',   title:'New work',               line:'New products, services and ways to serve'}
+];
+var PRIOS = [
+  {id:'rev',     label:'Grow revenue',               dest:'more',   watch:'Win rate, time to revenue, revenue per person'},
+  {id:'cost',    label:'Lower cost',                 dest:'less',   watch:'Cost per case or transaction, overtime, outside spend'},
+  {id:'speed',   label:'Move faster',                dest:'more',   watch:'Cycle time, time to market'},
+  {id:'quality', label:'Improve quality',            dest:'better', watch:'Errors and rework, customer satisfaction'},
+  {id:'risk',    label:'Reduce risk',                dest:'better', watch:'Incidents, audit findings, AI used within policy'},
+  {id:'capacity',label:'Do more with the same team', dest:'more',   watch:'Output per person, backlog cleared'},
+  {id:'new',     label:'Create new offerings',       dest:'new',    watch:'New products or services launched, revenue from them'},
+  {id:'talent',  label:'Attract and keep talent',    dest:'better', watch:'Retention, engagement, internal moves'}
+];
+var RUNGS = [
+  {n:1, name:'Ready', line:'People can.', q:'Can people use AI safely and well in their work?', owner:'IT and L&D',
+   levers:[['tools','Approved AI tools for those who need them'],['guide','Clear guidance on what\'s allowed'],['data','Data and permissions cleaned up'],['train','Training or workshops'],['self','Self-directed learning']],
+   moves:['Put approved tools in reach of everyone who needs them, with one clear page on what\'s allowed.','Let people practice on their own work, with someone on hand to help.','Clean up data access and permissions early, so people trust what AI can see.'],
+   train:'Training builds skills and confidence quickly. It can\'t fix missing access or unclear rules on its own.'},
+  {n:2, name:'Using', line:'People do.', q:'Do people use it for real work, week after week?', owner:'managers and champions',
+   levers:[['mgr','Managers making time for it'],['lead','Leaders sharing how they use it'],['champ','Champions or user communities'],['lib','Shared prompts and use cases'],['help','Office hours or a help channel']],
+   moves:['Ask managers to make room for it: one real use case shared at each team meeting.','Have leaders show their own use, small and real.','Give people somewhere to ask: champions, office hours or a help channel.'],
+   train:'A workshop can spark use. Habits stick when managers and peers keep it going.'},
+  {n:3, name:'Changing', line:'The work is different.', q:'Has the way a team\'s work gets done changed?', owner:'team leads and process owners',
+   levers:[['wksp','Workflow redesign workshops'],['time','Protected time to redesign'],['own','Owners for key workflows'],['hands','Hands-on training on real workflows'],['qa','Quality and risk sign-off for AI-assisted work']],
+   moves:['Pick two or three shared workflows and redesign them hands-on, with the people who do the work.','Give teams a mandate and protected time to change how the work runs.','Name an owner for each workflow, and agree quality and risk checks up front.'],
+   train:'A hands-on workshop can redesign two or three real workflows in an afternoon. Keeping the change going needs an owner and time.'},
+  {n:4, name:'Paying off', line:'It\'s worth what it costs.', q:'Is it moving numbers leaders watch, by more than it costs?', owner:'executives and finance',
+   levers:[['base','Baselines on key workflows'],['credit','Finance agreed how AI gets credit'],['where','A decision on where freed time goes'],['plans','Staffing or pricing plans adjusted'],['review','A regular review that decides what to scale or stop']],
+   moves:['For each changed workflow, agree with finance the number it should move, the baseline and how AI gets credit.','Decide where freed time goes: less overtime or outside spend, more output, better work, or new work.','Hold a regular review that decides what to scale and what to stop.'],
+   train:'Training alone won\'t move this rung. It needs the decisions here: baselines, credit and where freed time goes.'}
+];
+var STATUS = [{id:'well',label:'Going well'},{id:'mixed',label:'Mixed'},{id:'not',label:'Not yet'},{id:'cant',label:'Can\'t tell'}];
+var KNOW = [{id:'data',label:'Data'},{id:'stories',label:'Stories'},{id:'gut',label:'Gut feel'}];
+var PLAYS = [
+  {id:'r1', rung:1, name:'Know what\'s allowed', what:'Two pulse questions: “I know what I\'m allowed to use AI for in my work” and “I have the AI tools I need.”', type:'Self-report', src:'Pulse survey', trust:1,
+   how:'Five-point agree scale, added to a pulse you already run. Check new questions with HR or privacy first. Pair with licence data to spot paid licences nobody uses.', owner:'L&D', freq:'Quarterly'},
+  {id:'r2', rung:1, name:'Show it on real work', what:'After training, people bring one piece of real work they did with AI. Count how many can.', type:'Observed', src:'Training follow-up', trust:2,
+   how:'Ask within two weeks of training. It shows ability on real work, which a confidence rating can\'t.', owner:'L&D', freq:'After each training'},
+  {id:'u1', rung:2, name:'Weekly habit', what:'Share of licensed people active in at least three of the last four weeks.', type:'System data', src:'AI tool admin dashboard', trust:1,
+   how:'Some dashboards report on a 28-day window and hide small groups, so a single pilot team can show blank. With two AI tools, agree one definition of “active” first.', owner:'IT', freq:'Monthly'},
+  {id:'u2', rung:2, name:'Depth of use', what:'One pulse question: “How do you mostly use AI? For the odd question / For my own tasks / Built into a regular workflow / In work my team shares.”', type:'Self-report', src:'Pulse survey', trust:1,
+   how:'One answer each. Watch the share moving past “my own tasks.”', owner:'L&D', freq:'Quarterly'},
+  {id:'c1', rung:3, name:'What changed this month?', what:'Team leads fill in two fields: what changed in how the team works, and one example.', type:'Manager report', src:'Short monthly form', trust:2,
+   how:'Two minutes, pilot team leads only. Keep the examples: they become the stories leaders remember.', owner:'Team leads', freq:'Monthly'},
+  {id:'c2', rung:3, name:'One workflow, before and after', what:'Cycle time and rework on one workflow that already records timestamps, before and after it changed.', type:'System data', src:'Where the workflow runs: ticketing, CRM, document history', trust:3,
+   how:'Choose a workflow with real timestamps, like proposal turnaround or draft to review. Take the baseline before anything changes.', owner:'Process owner', freq:'Monthly'},
+  {id:'c3', rung:3, name:'Quality and risk held', what:'Errors, rework or policy incidents on the changed workflows.', type:'System data', src:'Quality checks, risk or incident logs', trust:2,
+   how:'Agree the threshold up front, so speed never costs quality.', owner:'Risk or quality lead', freq:'Monthly'},
+  {id:'p1', rung:4, name:'Value agreed with finance', what:'Before you start: the number each workflow should move, its baseline, and how AI gets credit.', type:'Agreement', src:'Finance', trust:3,
+   how:'First ask how and when decisions like this get made here, then fit the agreement into that cycle.', owner:'Finance', freq:'Before the pilot, then each review'},
+  {id:'p2', rung:4, name:'A fair comparison', what:'Compare teams using the changed workflow with teams not using it yet, or at least with the trend before AI.', type:'System data', src:'The number leaders watch, plus rollout dates', trust:3,
+   how:'A staggered rollout gives you the comparison for free. Note anything else that moved the number: volume, season, new systems.', owner:'Finance or analytics', freq:'Each review'},
+  {id:'p3', rung:4, name:'Where freed capacity went', what:'Overtime, outside spend, hires not needed, or output per person.', type:'System data', src:'Finance and HR reports', trust:2,
+   how:'If you also ask people, give fixed options and never ask for hours: people tend to overstate time saved.', owner:'Finance and HR', freq:'Quarterly'}
+];
+var EV = [{id:'have',label:'Already have it'},{id:'easy',label:'Easy to add'},{id:'hard',label:'Hard for us'},{id:'no',label:'Wouldn\'t convince'}];
+var ASKQ = ['“It\'s a year from now and you\'re sure this worked. What did you see?”','“Think of a program you funded again. What convinced you?”','“When and how does a decision like this get made here?”'];
+var ASKMAIN = 'Talk to three to five leaders about what would convince them. Test the measures on one team for about six weeks. Adjust before you scale.';
+var AGREE = ['The two or three workflows that matter most, each with a baseline, a target and how AI gets credit.','Where freed time should go, and the full cost of the program to weigh value against.','Who owns the readout, when leaders see it, and what would make you scale or stop.'];
+var CORE = 'Value shows up when the work itself changes. So measure each step, from using AI to changed work to business results, and adjust where things stall.';
+var NAV = ['Today','Priorities','Ladder','Focus','Measures','Plan'];
+var COLORS = {well:'#3E8E8C', mixed:'#F2C94C', not:'#D86527', cant:'#586A90', none:'#D5D9E3'};
+var NUMW = ['nothing','one thing','two things','three things','four things','five things','six things'];
+
+/* ---------------- State ---------------- */
+function freshPlan(){ return {team:'', leaders:'', review:'', wf:[{},{},{}], ag:[{},{},{}], next:{}}; }
+function fresh(){ return {v:3, step:0, sub:0, use:null, res:null, prios:[], st:{}, split:{}, know:{}, lev:{}, other:{}, focus:0, focusSet:false, ev:{}, open:{}, shown:{}, who:'', by:'', notes:{}, plan:freshPlan()}; }
+var S = fresh();
+var KEY = 'ail.v3';
+function store(v){ try{ sessionStorage.setItem(KEY, JSON.stringify(v)); }catch(e){} }
+function readStore(){ try{ var t = sessionStorage.getItem(KEY); return t ? JSON.parse(t) : null; }catch(e){ return null; } }
+function save(){ store(S); }
+
+/* ---------------- Helpers ---------------- */
+var $ = function(id){ return document.getElementById(id); };
+function esc(s){ return String(s == null ? '' : s).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;').replace(/'/g,'&#39;'); }
+function h(tag, attrs, html){ var el = document.createElement(tag); if (attrs) for (var k in attrs){ if (attrs[k] != null) el.setAttribute(k, attrs[k]); } if (html != null) el.innerHTML = html; return el; }
+function listWords(a){ if (a.length <= 1) return a.join(''); return a.slice(0,-1).join(', ') + ' and ' + a[a.length-1]; }
+function lower(s){ return s.charAt(0).toLowerCase() + s.slice(1); }
+function reduced(){ try{ return window.matchMedia && window.matchMedia('(prefers-reduced-motion: reduce)').matches; }catch(e){ return false; } }
+function each(list, fn){ Array.prototype.forEach.call(list, fn); }
+var toastT;
+function toast(msg){ var t = $('toast'); t.textContent = msg; t.classList.add('show'); clearTimeout(toastT); toastT = setTimeout(function(){ t.classList.remove('show'); }, 2400); }
+function keepFocus(fn){
+  var a = document.activeElement, sel = null;
+  if (a && a !== document.body){
+    var sec = a.closest && a.closest('.rsec');
+    if (a.id) sel = '#' + a.id;
+    else if (sec && a.classList.contains('rsh')) sel = '.rsec[data-rung="' + sec.getAttribute('data-rung') + '"] .rsh';
+    else { var c = a.closest && a.closest('[id]'), at = ['data-v','data-id','data-rung','data-go'].filter(function(x){ return a.hasAttribute(x); })[0]; if (c && at) sel = '#' + c.id + ' [' + at + '="' + a.getAttribute(at) + '"]'; }
+  }
+  fn();
+  if (sel){ var el = document.querySelector(sel); if (el && el !== document.activeElement) try{ el.focus(); }catch(e){} }
+}
+function hint(n, msg){ var el = $('h' + n); if (el) el.textContent = msg || ''; }
+function find(list, id){ for (var i = 0; i < list.length; i++) if (list[i].id === id) return list[i]; return null; }
+function today(){ var d = new Date(); return d.getFullYear() + '-' + String(d.getMonth()+1).padStart(2,'0') + '-' + String(d.getDate()).padStart(2,'0'); }
+function niceDate(){ try{ return new Date().toLocaleDateString('en-CA', {year:'numeric', month:'long', day:'numeric'}); }catch(e){ return today(); } }
+function hosted(){ return location.host === 'ep.github.io'; }
+function trustDots(n){ var s = '<span class="trust" role="img" aria-label="Leaders\' trust: ' + n + ' of 3">'; for (var i = 1; i <= 3; i++) s += '<i class="' + (i <= n ? 'on' : '') + '"></i>'; return s + '</span>'; }
+
+/* ---------------- The ladder logic ---------------- */
+function statuses(n){ return S.st[n] || []; }
+function statusOf(n){
+  var a = statuses(n);
+  if (!a.length) return null;
+  if (a.indexOf('not') > -1) return 'not';
+  if (a.indexOf('mixed') > -1) return 'mixed';
+  if (a.indexOf('well') > -1) return 'well';
+  return 'cant';
+}
+function statusLabel(id){ var s = find(STATUS, id); return s ? s.label : ''; }
+function statusText(n){
+  var a = statuses(n);
+  if (!a.length) return 'Not discussed';
+  if (a.length > 1) return 'Views differ: ' + listWords(a.map(statusLabel));
+  return statusLabel(a[0]);
+}
+function barStyle(n){
+  var a = statuses(n);
+  if (a.length > 1 && a[0] !== 'cant' && a[1] !== 'cant') return ' style="background:linear-gradient(90deg,' + COLORS[a[0]] + ' 50%,' + COLORS[a[1]] + ' 50%)"';
+  return '';
+}
+function barClass(n){ return 's-' + (statusOf(n) || 'none'); }
+function leversOf(n){
+  var R = RUNGS[n-1], out = [];
+  (S.lev[n] || []).forEach(function(id){ R.levers.forEach(function(l){ if (l[0] === id) out.push(l[1]); }); });
+  var o = (S.other[n] || '').trim(); if (o) out.push(o);
+  return out;
+}
+function leverWords(n){ var R = RUNGS[n-1], out = []; (S.lev[n] || []).forEach(function(id){ R.levers.forEach(function(l){ if (l[0] === id) out.push(lower(l[1])); }); }); var o = (S.other[n] || '').trim(); if (o) out.push('“' + o + '”'); return out; }
+function knowText(n){ var k = find(KNOW, S.know[n]); return k ? k.label : ''; }
+
+function suggest(){
+  var ans = [1,2,3,4].filter(function(n){ return statusOf(n); });
+  if (!ans.length) return null;
+  var i, n, s;
+  for (i = 0; i < ans.length; i++){
+    n = ans[i]; s = statusOf(n);
+    if ((s === 'mixed' || s === 'not') && leversOf(n).length <= 1) return {n:n, kind:'thin'};
+    if (s === 'not') return {n:n, kind:'stuck'};
+  }
+  var mixed = ans.filter(function(n){ return statusOf(n) === 'mixed'; });
+  if (mixed.length){ var best = mixed[0]; mixed.forEach(function(m){ if (leversOf(m).length < leversOf(best).length) best = m; }); return {n:best, kind:'mixed', only:mixed.length === 1}; }
+  var cant = ans.filter(function(n){ return statusOf(n) === 'cant'; });
+  if (cant.length) return {n:cant[0], kind:'cant'};
+  var top = ans[ans.length - 1];
+  return {n: top < 4 ? top + 1 : 4, kind:'well'};
+}
+function why(sg){
+  if (!sg) return '';
+  var R = RUNGS[sg.n-1], s = statusOf(sg.n), L = leverWords(sg.n);
+  if (sg.kind === 'thin'){
+    var help = L.length ? 'the only help in place is ' + L[0] : 'nothing is in place to help it';
+    return R.name + (s === 'not' ? ' isn\'t there yet' : ' is mixed') + ', and ' + help + '. ' + (sg.n < 4 ? 'Every rung above builds on it.' : 'This is the step that turns changed work into results.');
+  }
+  if (sg.kind === 'stuck') return R.name + ' isn\'t there yet, even with ' + (L.length <= 2 ? listWords(L) : NUMW[L.length] || L.length + ' things') + ' in place. Worth asking what\'s in the way.';
+  if (sg.kind === 'mixed') return sg.only ? R.name + ' is mixed, with some help in place. It\'s the place to push next.' : 'Every rung that\'s mixed has some help in place. ' + R.name + ' has the least, so it\'s the easiest place to push.';
+  if (sg.kind === 'cant') return 'You can\'t tell yet how ' + R.name + ' is going, so measuring it is the next move.';
+  if (sg.n === 4 && statusOf(4) === 'well') return 'Every rung you looked at is going well. Keep showing it, and spread what works to the next team.';
+  return 'Every rung you looked at is going well. ' + R.name + ' is the next one up.';
+}
+function reasonFor(sg){
+  if (!sg || !S.focus) return '';
+  if (sg.n === S.focus) return why(sg);
+  return 'We\'d suggested ' + RUNGS[sg.n-1].name + '.' + (challenge() ? '' : ' ' + why(sg));
+}
+function challenge(){
+  var sg = suggest();
+  if (!sg || !S.focus || S.focus <= sg.n || sg.kind === 'well') return '';
+  var s = statusOf(sg.n), A = RUNGS[sg.n-1].name, B = RUNGS[S.focus-1].name;
+  var how = s === 'not' ? A + ' isn\'t there yet' : s === 'mixed' ? A + ' is mixed' : 'you can\'t tell yet how ' + A + ' is going';
+  return 'Worth a check: ' + how + ', and ' + B + ' depends on it.';
+}
+
+/* ---------------- Measures logic ---------------- */
+function rungPri(r){ return r === S.focus ? 0 : statusOf(r) === 'cant' ? 1 : 2; }
+function strong(p){ return p.trust >= 2; }
+function startPicks(){
+  var c = PLAYS.filter(function(p){ var v = S.ev[p.id]; return v === 'have' || v === 'easy'; });
+  c.sort(function(a, b){
+    return rungPri(a.rung) - rungPri(b.rung) || (S.ev[a.id] === 'have' ? 0 : 1) - (S.ev[b.id] === 'have' ? 0 : 1) || b.trust - a.trust || PLAYS.indexOf(a) - PLAYS.indexOf(b);
+  });
+  var out = c.slice(0, 3);
+  if (out.length === 3 && !out.some(strong)){ var s = c.filter(strong)[0]; if (s) out[2] = s; }
+  return out;
+}
+function laterPicks(){ return PLAYS.filter(function(p){ return S.ev[p.id] === 'hard'; }).sort(function(a, b){ return b.trust - a.trust; }).slice(0, 3); }
+function anyRated(){ return PLAYS.some(function(p){ return !!S.ev[p.id]; }); }
+function openDefault(r){ return !S.focus || r === S.focus || statusOf(r) === 'cant'; }
+function isOpen(r){ return S.open[r] !== undefined ? S.open[r] : openDefault(r); }
+
+/* ---------------- Notes ---------------- */
+function noteCtx(k){
+  var m = {cover:'Cover', today:'Today', prio:'Priorities', ladder:'The ladder', focus:'Focus', meas:'Measures', plan:'Plan'};
+  if (m[k]) return m[k];
+  if (/^r[1-4]$/.test(k)) return 'Ladder: ' + RUNGS[+k.charAt(1) - 1].name;
+  if (k.indexOf('m:') === 0){ var p = find(PLAYS, k.slice(2)); return p ? 'Measure: ' + p.name : 'Measure'; }
+  return 'Note';
+}
+function currentKey(){
+  var s = S.step;
+  if (s === 1) return 'today'; if (s === 2) return 'prio';
+  if (s === 3) return S.sub ? 'r' + S.sub : 'ladder';
+  if (s === 4) return 'focus'; if (s === 5) return 'meas'; if (s === 6) return 'plan';
+  return 'cover';
+}
+function hasNote(k){ var n = S.notes[k]; return !!(n && n.t && n.t.trim()); }
+function included(n){ return n.inc !== undefined ? n.inc : !!n.park; }
+function noteList(){
+  var order = ['cover','today','prio','ladder','r1','r2','r3','r4','focus','meas'].concat(PLAYS.map(function(p){ return 'm:' + p.id; })).concat(['plan']);
+  return order.filter(hasNote).map(function(k){ var n = S.notes[k]; return {k:k, ctx:noteCtx(k), t:n.t.trim(), park:!!n.park, inc:included(n)}; });
+}
+var popKey = null;
+function openNote(k, anchor){
+  popKey = k;
+  var n = S.notes[k] || {t:'', park:false};
+  $('npCtx').textContent = noteCtx(k);
+  $('npText').value = n.t || '';
+  $('npPark').checked = !!n.park;
+  var pop = $('notepop'); pop.hidden = false;
+  if (anchor && anchor.getBoundingClientRect && k.indexOf('m:') === 0){
+    var r = anchor.getBoundingClientRect();
+    pop.style.left = Math.max(16, Math.min(window.innerWidth - pop.offsetWidth - 16, r.right - pop.offsetWidth)) + 'px';
+    var below = r.bottom + 8, top = (below + pop.offsetHeight > window.innerHeight - 90) ? Math.max(70, r.top - pop.offsetHeight - 8) : below;
+    pop.style.top = top + 'px'; pop.style.bottom = 'auto';
+  } else { pop.style.left = ''; pop.style.top = ''; pop.style.bottom = ''; }
+  try{ $('npText').focus(); }catch(e){}
+}
+function closeNote(){
+  if (popKey === null) return;
+  var k = popKey; popKey = null;
+  $('notepop').hidden = true;
+  var t = $('npText').value.slice(0, 600);
+  if (t.trim()){ var old = S.notes[k] || {}; S.notes[k] = {t:t, park:$('npPark').checked}; if (old.inc !== undefined) S.notes[k].inc = old.inc; }
+  else delete S.notes[k];
+  save(); syncNoteDots();
+  if (S.step === 6) renderNotes();
+}
+function syncNoteDots(){
+  $('noteBtn').classList.toggle('has', hasNote(currentKey()));
+  each(document.querySelectorAll('.pnote'), function(b){ b.classList.toggle('has', hasNote(b.getAttribute('data-k'))); });
+}
+
+/* ---------------- Ladder drawings ---------------- */
+var RY = [232, 172, 112, 52];
+function railX(y){ var d = (272 - y) / 264 * 24; return [40 + d, 160 - d]; }
+function ladderSVG(cols, opts){
+  opts = opts || {};
+  var rail = opts.rail || '#293851';
+  var s = '<svg viewBox="0 0 200 284" aria-hidden="true" focusable="false" overflow="visible">';
+  s += '<line x1="40" y1="278" x2="64" y2="6" stroke="' + rail + '" stroke-width="6" stroke-linecap="round"/>';
+  s += '<line x1="160" y1="278" x2="136" y2="6" stroke="' + rail + '" stroke-width="6" stroke-linecap="round"/>';
+  for (var i = 0; i < 4; i++){
+    var y = RY[i], x = railX(y), c = cols[i];
+    s += '<line class="rg" style="--i:' + i + '" pathLength="1" x1="' + (x[0]+4).toFixed(1) + '" y1="' + y + '" x2="' + (x[1]-4).toFixed(1) + '" y2="' + y + '" stroke="' + c + '" stroke-width="11" stroke-linecap="round"/>';
+    if (opts.focus === i + 1) s += '<circle cx="' + (x[1] + 22).toFixed(1) + '" cy="' + y + '" r="9" fill="#FFCC00" stroke="' + rail + '" stroke-width="3"/>';
+  }
+  return s + '</svg>';
+}
+function statusCols(){ return [1,2,3,4].map(function(n){ return COLORS[statusOf(n) || 'none']; }); }
+
+function renderMini(){
+  var on = S.step >= 3;
+  $('mini').classList.toggle('on', on); $('minirow').classList.toggle('on', on);
+  if (!on) return;
+  var cur = S.step === 3 ? S.sub : 0;
+  var side = '', row = '';
+  for (var n = 4; n >= 1; n--){
+    var R = RUNGS[n-1], cls = (n === cur ? ' cur' : '') + (n === S.focus && S.step >= 4 ? ' foc' : '');
+    side += '<div class="mr' + cls + '"><span class="rail"><i class="bar ' + barClass(n) + '"' + barStyle(n) + '></i></span><span class="nm">' + esc(R.name) + '<span class="st">' + esc(statusText(n)) + '</span></span></div>';
+  }
+  for (var m = 1; m <= 4; m++){
+    var Q = RUNGS[m-1], c2 = (m === cur ? ' cur' : '') + (m === S.focus && S.step >= 4 ? ' foc' : '');
+    row += '<div class="mi' + c2 + '"><i class="bar ' + barClass(m) + '"' + barStyle(m) + '></i><span class="nm">' + esc(Q.name) + '</span></div>';
+  }
+  $('mini').innerHTML = side; $('minirowIn').innerHTML = row;
+}
+
+/* ---------------- Chip groups ---------------- */
+function single(container, opts, get, set, after){
+  container.innerHTML = '';
+  opts.forEach(function(o){
+    var b = h('button', {type:'button', class:'chip', 'data-id':o.id, 'aria-pressed':String(get() === o.id)}, esc(o.label));
+    b.addEventListener('click', function(){ set(get() === o.id && o.toggle ? null : o.id); save(); keepFocus(function(){ single(container, opts, get, set, after); }); if (after) after(); });
+    container.appendChild(b);
+  });
+}
+
+/* ---------------- 1 Today ---------------- */
+function r1Line(){
+  var u = S.use, r = S.res;
+  if (u === 'unsure') return 'Plenty of organizations can\'t say yet. A simple, regular read on use is an easy first step.';
+  if (u === 'few') return 'You\'re early. That\'s a good time to build measurement in, before habits set.';
+  if (r === 'clear') return 'You\'re ahead of most. The next job is knowing what produced it, so you can repeat it.';
+  if (r === 'unsure') return 'Use is easier to see than results. A large global survey found the same gap:';
+  return 'Use is running ahead of results. A large global survey found the same gap:';
+}
+function renderToday(){
+  single($('qUse'), USE, function(){ return S.use; }, function(v){ S.use = v; }, function(){ hint(1, ''); if (S.shown[1]) $('r1say').textContent = r1Line(); });
+  single($('qRes'), RES, function(){ return S.res; }, function(v){ S.res = v; }, function(){ hint(1, ''); if (S.shown[1]) $('r1say').textContent = r1Line(); });
+  $('r1').hidden = !S.shown[1];
+  if (S.shown[1]) $('r1say').textContent = r1Line();
+}
+
+/* ---------------- 2 Priorities ---------------- */
+function renderPrioChips(){
+  var c = $('qPrio'); c.innerHTML = '';
+  PRIOS.forEach(function(o){
+    var on = S.prios.indexOf(o.id) > -1;
+    var b = h('button', {type:'button', class:'chip', 'data-id':o.id, 'aria-pressed':String(on)}, esc(o.label));
+    b.addEventListener('click', function(){
+      var i = S.prios.indexOf(o.id);
+      if (i > -1){ S.prios.splice(i, 1); hint(2, ''); }
+      else if (S.prios.length >= 3){ hint(2, 'Three is the limit. Unpick one to swap.'); b.classList.remove('nudge'); void b.offsetWidth; b.classList.add('nudge'); return; }
+      else { S.prios.push(o.id); hint(2, ''); }
+      save(); keepFocus(renderPrioChips); if (S.shown[2]) renderR2();
+    });
+    c.appendChild(b);
+  });
+}
+function renderR2(){
+  var lit = {};
+  S.prios.forEach(function(id){ var l = find(PRIOS, id); if (l) (lit[l.dest] = lit[l.dest] || []).push(l.label); });
+  var d = $('dests'); d.innerHTML = '';
+  DESTS.forEach(function(x){
+    var on = !!lit[x.id];
+    d.appendChild(h('div', {class:'dest ' + (on ? 'on' : 'off'), 'data-dest':x.id},
+      '<h3>' + esc(x.title) + '</h3><p>' + esc(x.line) + '</p>' + (on ? '<ul>' + lit[x.id].map(function(s){ return '<li>' + esc(s) + '</li>'; }).join('') + '</ul>' : '')));
+  });
+  var w = $('watch'); w.innerHTML = '';
+  S.prios.forEach(function(id){ var l = find(PRIOS, id); if (l) w.appendChild(h('div', {'data-prio':id}, '<b>' + esc(l.label) + '</b><span>' + esc(l.watch) + '</span>')); });
+}
+function renderPrios(){ renderPrioChips(); $('r2').hidden = !S.shown[2]; if (S.shown[2]) renderR2(); }
+
+/* ---------------- 3 Ladder ---------------- */
+var introPlayed = false;
+function renderIntro(){
+  var big = $('ladBig'), html = '';
+  for (var n = 4; n >= 1; n--){
+    var R = RUNGS[n-1], d = (0.2 + (n - 1) * 0.7).toFixed(2) + 's';
+    html += '<div class="lrow' + (n === 4 ? ' peak' : '') + '" style="--d:' + d + '" data-rung="' + n + '"><div class="lrail"><i class="lbar"></i></div>' +
+      '<div class="ltext"><span class="lnum">' + n + '</span><div><h3>' + esc(R.name) + ' <span>' + esc(R.line) + '</span></h3><p class="lq">' + esc(R.q) + '</p><p class="lown">Usually owned by ' + esc(R.owner) + '</p></div></div></div>';
+  }
+  big.innerHTML = html;
+  var play = !introPlayed && !reduced();
+  big.classList.toggle('anim', play); $('ladAfter').classList.toggle('anim', play);
+  introPlayed = true;
+}
+function renderRung(n){
+  var R = RUNGS[n-1], page = $('ladRung');
+  var st = statuses(n), split = !!S.split[n], s = statusOf(n);
+  var html = '<div class="rhead"><span class="rnum">' + n + '</span><div><h2 class="title">' + esc(R.name) + ': ' + esc(lower(R.line)) + '</h2><p class="lede">' + esc(R.q) + '</p><p class="own">Usually owned by ' + esc(R.owner) + '</p></div></div>';
+  html += '<div class="ask"><h3>How\'s it going?</h3><div class="chips" id="stChips" role="group" aria-label="How\'s it going">' +
+    STATUS.map(function(o){ return '<button type="button" class="chip st-' + o.id + '" data-v="' + o.id + '" aria-pressed="' + (st.indexOf(o.id) > -1) + '">' + esc(o.label) + '</button>'; }).join('') + '</div>' +
+    '<button type="button" class="linkbtn" id="splitBtn" aria-pressed="' + split + '">' + (split ? 'Pick both views, then carry on' : 'Views differ in the room?') + '</button></div>';
+  if (s && s !== 'cant'){
+    html += '<div class="ask"><h3>How do you know?</h3><div class="chips sm" id="knowChips" role="group" aria-label="How do you know">' +
+      KNOW.map(function(o){ return '<button type="button" class="chip" data-v="' + o.id + '" aria-pressed="' + (S.know[n] === o.id) + '">' + esc(o.label) + '</button>'; }).join('') + '</div></div>';
+  }
+  var lev = S.lev[n] || [], other = S.other[n] || '';
+  html += '<div class="ask"><h3>What\'s helping?</h3><div class="chips" id="levChips" role="group" aria-label="What\'s helping">' +
+    R.levers.map(function(l){ return '<button type="button" class="chip" data-v="' + l[0] + '" aria-pressed="' + (lev.indexOf(l[0]) > -1) + '">' + esc(l[1]) + '</button>'; }).join('') +
+    '<input class="other' + (other.trim() ? ' on' : '') + '" id="otherIn" type="text" maxlength="60" autocomplete="off" placeholder="+ Something else" aria-label="Something else that\'s helping"></div></div>';
+  page.innerHTML = html;
+  $('otherIn').value = other;
+  each(page.querySelectorAll('#stChips button'), function(b){ b.addEventListener('click', function(){ clickStatus(n, b.getAttribute('data-v')); }); });
+  $('splitBtn').addEventListener('click', function(){
+    S.split[n] = !S.split[n];
+    if (!S.split[n] && statuses(n).length > 1) S.st[n] = statuses(n).slice(0, 1);
+    save(); keepFocus(function(){ renderRung(n); }); renderMini();
+  });
+  each(page.querySelectorAll('#knowChips button'), function(b){ b.addEventListener('click', function(){ var v = b.getAttribute('data-v'); S.know[n] = S.know[n] === v ? undefined : v; if (!S.know[n]) delete S.know[n]; save(); keepFocus(function(){ renderRung(n); }); }); });
+  each(page.querySelectorAll('#levChips button'), function(b){ b.addEventListener('click', function(){
+    var v = b.getAttribute('data-v'), a = (S.lev[n] || []).slice(), i = a.indexOf(v);
+    if (i > -1) a.splice(i, 1); else a.push(v);
+    S.lev[n] = a; save(); b.setAttribute('aria-pressed', String(i < 0));
+  }); });
+  $('otherIn').addEventListener('input', function(){ S.other[n] = this.value.slice(0, 60); this.classList.toggle('on', !!S.other[n].trim()); save(); });
+}
+function clickStatus(n, id){
+  var a = statuses(n).slice(), i = a.indexOf(id);
+  if (S.split[n]){ if (i > -1) a.splice(i, 1); else { if (a.length >= 2) a.shift(); a.push(id); } }
+  else a = (i > -1 && a.length === 1) ? [] : [id];
+  S.st[n] = a;
+  var s = statusOf(n); if (!s || s === 'cant') delete S.know[n];
+  save(); keepFocus(function(){ renderRung(n); }); renderMini();
+}
+function renderLadder(){
+  var intro = S.sub === 0;
+  $('ladIntro').hidden = !intro; $('ladRung').hidden = intro;
+  if (intro) renderIntro(); else renderRung(S.sub);
+}
+
+/* ---------------- 4 Focus ---------------- */
+function renderFocus(){
+  var sg = suggest();
+  if (!S.focusSet) S.focus = sg ? sg.n : 0;
+  var f = $('flad'); f.innerHTML = '';
+  for (var n = 4; n >= 1; n--){
+    (function(n){
+      var R = RUNGS[n-1], L = leversOf(n);
+      var b = h('button', {type:'button', class:'frow', 'data-rung':n, 'aria-pressed':String(S.focus === n)},
+        '<span class="rail"><i class="bar ' + barClass(n) + '"' + barStyle(n) + '></i></span><span class="tx"><span class="nm"><b>' + n + '</b>' + esc(R.name) + '</span>' +
+        '<span class="st">' + esc(statusText(n)) + (statuses(n).length ? ' · ' + (L.length ? L.length + ' in place' : 'nothing in place yet') : '') + '</span>' +
+        (sg && sg.n === n ? '<span class="sg">Our suggestion</span>' : '') + '</span>');
+      b.addEventListener('click', function(){ S.focus = n; S.focusSet = true; save(); keepFocus(renderFocus); renderMini(); });
+      f.appendChild(b);
+    })(n);
+  }
+  var c = $('fcard');
+  if (!S.focus){
+    c.innerHTML = '<div class="fcard"><p class="empty">Answer a few rungs on the ladder first, or tap a rung to choose a focus.</p></div>';
+    return;
+  }
+  var R = RUNGS[S.focus-1], chk = challenge();
+  var reason = reasonFor(sg);
+  c.innerHTML = '<div class="fcard" data-focus="' + S.focus + '"><h3>Focus: ' + esc(R.name) + '</h3>' +
+    (reason ? '<p class="why" id="fwhy">' + esc(reason) + '</p>' : '') +
+    (chk ? '<p class="check" id="fcheck">' + esc(chk) + '</p>' : '') +
+    '<h4>Moves to consider</h4><ul>' + R.moves.map(function(m){ return '<li>' + esc(m) + '</li>'; }).join('') + '</ul>' +
+    '<p class="train"><b>What training can and can\'t do here</b>' + esc(R.train) + '</p>' +
+    '<p class="fine">“Can\'t tell” never counts against a rung. It shows where to measure first.</p></div>';
+}
+
+/* ---------------- 5 Measures ---------------- */
+function renderMeasures(){
+  $('askq').innerHTML = ASKQ.map(function(q){ return '<li>' + esc(q) + '</li>'; }).join('');
+  var wrap = $('plays'); wrap.innerHTML = '';
+  var order = [1,2,3,4];
+  if (S.focus) order = [S.focus].concat(order.filter(function(r){ return r !== S.focus; }));
+  order.forEach(function(r){
+    var R = RUNGS[r-1], open = isOpen(r);
+    var rated = PLAYS.filter(function(p){ return p.rung === r && S.ev[p.id]; }).length, total = PLAYS.filter(function(p){ return p.rung === r; }).length;
+    var tag = r === S.focus ? 'Your focus' : statusOf(r) === 'cant' ? 'Can\'t tell yet' : (rated ? rated + ' of ' + total + ' marked' : '');
+    var sec = h('section', {class:'rsec', 'data-rung':r});
+    sec.innerHTML = '<button type="button" class="rsh" aria-expanded="' + open + '"><span class="k">' + r + '</span><span class="nm">' + esc(R.name) + '</span><span class="tag">' + esc(tag) + '</span><span class="chev" aria-hidden="true">' + (open ? '&#8722;' : '+') + '</span></button>';
+    if (open){
+      var grid = h('div', {class:'plays'});
+      PLAYS.filter(function(p){ return p.rung === r; }).forEach(function(p){
+        var card = h('article', {class:'play', 'data-p':p.id});
+        card.innerHTML = '<h4>' + esc(p.name) + '</h4><p class="what">' + esc(p.what) + '</p>' +
+          '<p class="meta">' + trustDots(p.trust) + '<span>' + esc(p.type) + ' · ' + esc(p.src) + '</span></p>' +
+          '<div class="ev" role="group" aria-label="' + esc(p.name) + '">' + EV.map(function(e){ return '<button type="button" class="' + e.id + '" data-v="' + e.id + '" aria-pressed="' + (S.ev[p.id] === e.id) + '">' + esc(e.label) + '</button>'; }).join('') + '</div>' +
+          '<details class="how"><summary>How to run it</summary><p>' + esc(p.how) + '</p></details>' +
+          '<button type="button" class="pnote" data-k="m:' + p.id + '" aria-label="Note on ' + esc(p.name) + '"><svg width="16" height="16" viewBox="0 0 16 16" aria-hidden="true" focusable="false"><path d="M11.2 2.2l2.6 2.6-8 8L2.4 13.6l.8-3.4z" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linejoin="round"/></svg></button>';
+        each(card.querySelectorAll('.ev button'), function(b){ b.addEventListener('click', function(){
+          var v = b.getAttribute('data-v'); if (S.ev[p.id] === v) delete S.ev[p.id]; else S.ev[p.id] = v;
+          save(); hint(5, ''); each(card.querySelectorAll('.ev button'), function(x){ x.setAttribute('aria-pressed', String(S.ev[p.id] === x.getAttribute('data-v'))); });
+          updateTag(r); if (S.shown[5]) renderR5();
+        }); });
+        card.querySelector('.pnote').addEventListener('click', function(ev){ ev.stopPropagation(); if (popKey) closeNote(); openNote('m:' + p.id, this); });
+        grid.appendChild(card);
+      });
+      sec.appendChild(grid);
+    }
+    sec.querySelector('.rsh').addEventListener('click', function(){ S.open[r] = !isOpen(r); save(); keepFocus(renderMeasures); });
+    wrap.appendChild(sec);
+  });
+  $('r5').hidden = !S.shown[5];
+  if (S.shown[5]) renderR5();
+  syncNoteDots();
+}
+function updateTag(r){
+  var t = document.querySelector('.rsec[data-rung="' + r + '"] .tag'); if (!t) return;
+  if (r === S.focus || statusOf(r) === 'cant') return;
+  var rated = PLAYS.filter(function(p){ return p.rung === r && S.ev[p.id]; }).length, total = PLAYS.filter(function(p){ return p.rung === r; }).length;
+  t.textContent = rated ? rated + ' of ' + total + ' marked' : '';
+}
+function r5Line(picks){
+  if (!picks.length) return 'Nothing is marked as already there or easy to add. Start with the leader conversations, then choose one measure together.';
+  var have = picks.filter(function(p){ return S.ev[p.id] === 'have'; }).length, easy = picks.length - have;
+  var w = ['','One','Two','Three'];
+  var a;
+  if (have && easy) a = w[have] + ' you already collect, ' + lower(w[easy]) + ' easy to add.';
+  else if (have) a = picks.length === 1 ? 'You already collect this one.' : 'You already collect all of these.';
+  else a = picks.length === 1 ? 'This one is easy to add.' : 'Each of these is easy to add.';
+  var them = picks.length === 1 ? 'it' : 'them';
+  return a + (picks.some(strong) ? ' Run ' + them + ' with one team for six weeks, then adjust.' : ' Run ' + them + ' with one team for six weeks, and add one measure leaders trust more before results are reviewed.');
+}
+function pickLi(p){ return '<li data-p="' + p.id + '">' + trustDots(p.trust) + '<b>' + esc(p.name) + '</b><span>' + esc(RUNGS[p.rung-1].name) + ' · ' + esc(p.src) + '</span></li>'; }
+function renderR5(){
+  var picks = startPicks(), later = laterPicks();
+  $('r5say').textContent = r5Line(picks);
+  $('picks').innerHTML = picks.length ? picks.map(pickLi).join('') : '<li><span>None yet.</span></li>';
+  $('laterBox').hidden = !later.length;
+  $('later').innerHTML = later.map(pickLi).join('');
+}
+
+/* ---------------- Model, text, report, CSV ---------------- */
+function prio(id){ var l = find(PRIOS, id); return l ? {label:l.label, watch:l.watch} : null; }
+function model(){
+  var sg = suggest(), f = S.focus, R = f ? RUNGS[f-1] : null;
+  return {
+    who: S.who.trim(), by: S.by.trim(), date: niceDate(),
+    prios: S.prios.map(prio).filter(Boolean),
+    rungs: RUNGS.map(function(Q){ return {n:Q.n, name:Q.name, line:Q.line, owner:Q.owner, st:statusOf(Q.n), stText:statusText(Q.n), know:knowText(Q.n), lev:leversOf(Q.n)}; }),
+    focus: R ? {n:f, name:R.name, moves:R.moves, train:R.train, why: reasonFor(sg), check: challenge()} : null,
+    start: startPicks(), later: laterPicks(), plan: S.plan,
+    notes: noteList().filter(function(n){ return n.inc && !n.park; }),
+    parked: noteList().filter(function(n){ return n.inc && n.park; })
+  };
+}
+function blank(v){ v = (v || '').trim(); return v || '________'; }
+function summaryText(M){
+  var L = [], P = M.plan;
+  L.push('AI impact plan' + (M.who ? ': ' + M.who : ''));
+  L.push(M.date + (M.by ? '. Prepared with ' + M.by : '')); L.push('');
+  if (M.focus){
+    L.push('Focus: ' + M.focus.name);
+    if (M.focus.why) L.push(M.focus.why);
+    if (M.focus.check) L.push(M.focus.check);
+    L.push('Moves to consider:'); M.focus.moves.forEach(function(m){ L.push('- ' + m); });
+    L.push('What training can and can\'t do here: ' + M.focus.train); L.push('');
+  }
+  L.push('Workflows to prove it on');
+  P.wf.forEach(function(r, i){ L.push((i+1) + '. ' + blank(r.w) + ' | Number it should move: ' + blank(r.n) + ' | Baseline: ' + blank(r.b) + ' | Target: ' + blank(r.t) + ' | Owner: ' + blank(r.o)); });
+  L.push(''); L.push('Start with these measures');
+  if (M.start.length) M.start.forEach(function(p){ L.push('- ' + p.name + ' (' + RUNGS[p.rung-1].name + '): ' + p.what + ' Source: ' + p.src + '. How often: ' + p.freq + '.'); });
+  else L.push('- To choose together');
+  if (M.later.length){ L.push(''); L.push('Plan for later'); M.later.forEach(function(p){ L.push('- ' + p.name + ' (' + RUNGS[p.rung-1].name + ')'); }); }
+  L.push(''); L.push('Ask before you measure'); L.push(ASKMAIN);
+  ASKQ.forEach(function(q){ L.push('- ' + q); });
+  L.push('Leaders to talk to: ' + blank(P.leaders)); L.push('Team to test with: ' + blank(P.team)); L.push('Review date: ' + blank(P.review));
+  L.push(''); L.push('Three things to agree together');
+  AGREE.forEach(function(a, i){ var g = P.ag[i] || {}; L.push((i+1) + '. ' + a + ' Owner: ' + blank(g.o) + '. By: ' + blank(g.d) + '.'); });
+  L.push(''); L.push('Next step');
+  L.push('What: ' + blank(P.next.what) + ' | Who: ' + blank(P.next.who) + ' | When: ' + blank(P.next.when));
+  L.push(''); L.push('Where you are');
+  M.rungs.slice().reverse().forEach(function(r){ L.push(r.n + ' ' + r.name + ': ' + r.stText + (r.know ? ' (based on ' + r.know.toLowerCase() + ')' : '') + (r.lev.length ? '. Helping: ' + r.lev.join('; ') : '') + '.'); });
+  if (M.prios.length){ L.push(''); L.push('What matters to your leaders'); M.prios.forEach(function(p){ L.push('- ' + p.label + '. Watch: ' + p.watch); }); }
+  if (M.parked.length){ L.push(''); L.push('To come back to'); M.parked.forEach(function(n){ L.push('- ' + n.ctx + ': ' + n.t); }); }
+  if (M.notes.length){ L.push(''); L.push('In your words'); M.notes.forEach(function(n){ L.push('- ' + n.ctx + ': ' + n.t); }); }
+  L.push(''); L.push(CORE);
+  return L.join('\n');
+}
+function csvCell(v){ v = String(v == null ? '' : v); return /[",\n]/.test(v) ? '"' + v.replace(/"/g, '""') + '"' : v; }
+function csv(){
+  var start = startPicks().map(function(p){ return p.id; });
+  var rows = [['Rung','Measure','What to look at','Source','Evidence','Leaders\' trust (1 to 3)','Status','Start now','Suggested owner','How often','Baseline date']];
+  PLAYS.forEach(function(p){
+    var v = S.ev[p.id]; if (!v || v === 'no') return;
+    rows.push([p.rung + ' ' + RUNGS[p.rung-1].name, p.name, p.what, p.src, p.type, p.trust, find(EV, v).label, start.indexOf(p.id) > -1 ? 'Yes' : '', p.owner, p.freq, '']);
+  });
+  return '﻿' + rows.map(function(r){ return r.map(csvCell).join(','); }).join('\r\n') + '\r\n';
+}
+function slug(){ return (S.who.trim() || 'plan').toLowerCase().replace(/[^a-z0-9]+/g, '-').replace(/^-|-$/g, '') || 'plan'; }
+function saveFile(name, type, body){
+  var blob = new Blob([body], {type:type});
+  var url = URL.createObjectURL(blob);
+  var a = h('a', {href:url, download:name});
+  document.body.appendChild(a); a.click(); a.remove();
+  setTimeout(function(){ URL.revokeObjectURL(url); }, 2000);
+}
+function downloadCSV(){ saveFile('ai-impact-ladder-measures-' + slug() + '-' + today() + '.csv', 'text/csv;charset=utf-8', csv()); toast('Spreadsheet downloaded.'); }
+
+function reportDoc(M){
+  var P = M.plan;
+  var css = '@page{margin:14mm}*{box-sizing:border-box}body{margin:0;background:#FBF8F3;color:#293851;font:500 15px/1.55 Montserrat,Arial,sans-serif;-webkit-print-color-adjust:exact;print-color-adjust:exact}' +
+    'main{max-width:880px;margin:0 auto;padding:32px 24px 60px}h1,h2,h3{font-family:Georgia,serif;font-weight:400;margin:0}p{margin:0}' +
+    '.cover{background:#293851;color:#fff;border-radius:24px;padding:44px;display:grid;grid-template-columns:1fr 220px;gap:32px;align-items:center;min-height:520px;break-after:page;page-break-after:always}' +
+    '.cover h1{font-size:44px;line-height:1.08}.cover .for{margin-top:18px;font-family:Georgia,serif;font-size:24px}.cover .meta{margin-top:8px;color:rgba(255,255,255,.75);font-size:14px}' +
+    '.cover .foc{margin-top:28px;font-family:Georgia,serif;font-size:20px}.cover .foc b{font-weight:400;background:linear-gradient(transparent 62%,rgba(255,204,0,.6) 62%)}.cover svg{width:100%;height:auto}' +
+    '.key{margin-top:26px;display:flex;flex-wrap:wrap;gap:8px 18px;font-size:12.5px;color:rgba(255,255,255,.8)}.key i{display:inline-block;width:18px;height:6px;border-radius:3px;margin-right:6px;vertical-align:middle}' +
+    '.page{margin-top:36px}.page + .page{break-before:page;page-break-before:always}.page > h2{font-size:32px;line-height:1.15}' +
+    'section{margin-top:26px;break-inside:avoid}section h3{font-size:21px;padding-bottom:8px;border-bottom:2px solid #293851}' +
+    'table{width:100%;border-collapse:collapse;margin-top:6px;font-size:14px}th{text-align:left;font-size:12px;color:#586A90;font-weight:700;padding:8px 8px 6px 0;border-bottom:1.5px solid rgba(41,56,81,.16)}' +
+    'td{padding:10px 8px 10px 0;border-bottom:1.5px solid rgba(41,56,81,.16);vertical-align:top}td.b{color:#97a1b7}' +
+    'ul,ol{margin:8px 0 0;padding-left:20px}li{margin:5px 0}.why{margin-top:10px;font-size:15.5px}.check{margin-top:10px;padding:10px 14px;border-radius:10px;background:#FEF6C9;color:#7A5B00;font-weight:600}' +
+    '.train{margin-top:12px;font-size:14px;color:#586A90}.ask{margin-top:10px;font-family:Georgia,serif;font-size:18px;line-height:1.45}.fill{margin-top:10px;display:grid;grid-template-columns:repeat(3,1fr);gap:14px}' +
+    '.fill div{border-bottom:1.5px solid rgba(41,56,81,.3);padding-bottom:6px}.fill span{display:block;font-size:12px;font-weight:700;color:#586A90}' +
+    '.bar{display:inline-block;width:46px;height:6px;border-radius:3px;vertical-align:middle;margin-right:8px}.q{font-family:Georgia,serif;font-size:16px}' +
+    '.core{margin-top:36px;font-family:Georgia,serif;font-size:21px;line-height:1.42}.src{margin-top:28px;font-size:12px;color:#586A90}.src a{color:#586A90}' +
+    '@media(max-width:640px){.cover{grid-template-columns:1fr;padding:28px;min-height:0}.cover svg{max-width:150px}.fill{grid-template-columns:1fr}}' +
+    '@media print{body{font-size:12px;background:#fff}main{max-width:none;padding:0}.cover{min-height:228mm;padding:40px}.page{margin-top:0}.page > h2{font-size:26px}section{margin-top:18px;break-inside:auto}section h3{font-size:17px;break-after:avoid;page-break-after:avoid}tr{break-inside:avoid}table{font-size:11.5px}.ask{font-size:15px}.q{font-size:13.5px}.core{margin-top:22px;font-size:16px}.src{margin-top:14px}}';
+  var cols = statusCols();
+  var bar = function(r){ return '<span class="bar" style="background:' + COLORS[r.st || 'none'] + '"></span>'; };
+  var cover = '<div class="cover"><div><h1>AI impact plan</h1>' +
+    (M.who ? '<p class="for">Prepared for ' + esc(M.who) + '</p>' : '') +
+    '<p class="meta">' + esc(M.date) + (M.by ? '<br>Prepared with ' + esc(M.by) : '') + '</p>' +
+    (M.focus ? '<p class="foc">Focus: <b>' + esc(M.focus.name) + '</b></p>' : '') +
+    '<p class="key"><span><i style="background:' + COLORS.well + '"></i>Going well</span><span><i style="background:' + COLORS.mixed + '"></i>Mixed</span><span><i style="background:' + COLORS.not + '"></i>Not yet</span><span><i style="background:' + COLORS.cant + '"></i>Can\'t tell</span></p></div>' +
+    '<div>' + ladderSVG(cols, {rail:'#FFFFFF', focus: M.focus ? M.focus.n : 0}) + '</div></div>';
+  var wfRows = P.wf.map(function(r){ var c = function(v){ v = (v || '').trim(); return v ? '<td>' + esc(v) + '</td>' : '<td class="b">&nbsp;</td>'; }; return '<tr>' + c(r.w) + c(r.n) + c(r.b) + c(r.t) + c(r.o) + '</tr>'; }).join('');
+  var plan = '<div class="page"><h2>The plan</h2>' +
+    (M.focus ? '<section><h3>Focus: ' + esc(M.focus.name) + '</h3>' + (M.focus.why ? '<p class="why">' + esc(M.focus.why) + '</p>' : '') + (M.focus.check ? '<p class="check">' + esc(M.focus.check) + '</p>' : '') +
+      '<ul>' + M.focus.moves.map(function(m){ return '<li>' + esc(m) + '</li>'; }).join('') + '</ul><p class="train">What training can and can\'t do here: ' + esc(M.focus.train) + '</p></section>' : '') +
+    '<section><h3>Workflows to prove it on</h3><table><thead><tr><th>Workflow</th><th>Number it should move</th><th>Baseline</th><th>Target</th><th>Owner</th></tr></thead><tbody>' + wfRows + '</tbody></table></section>' +
+    '<section><h3>Start with these measures</h3>' + (M.start.length ? '<table><thead><tr><th>Measure</th><th>Rung</th><th>Source</th><th>How often</th><th>Suggested owner</th></tr></thead><tbody>' +
+      M.start.map(function(p){ return '<tr><td><b>' + esc(p.name) + '</b><br>' + esc(p.what) + '</td><td>' + esc(RUNGS[p.rung-1].name) + '</td><td>' + esc(p.src) + '</td><td>' + esc(p.freq) + '</td><td>' + esc(p.owner) + '</td></tr>'; }).join('') + '</tbody></table>' : '<p class="why">To choose together, after the leader conversations.</p>') +
+      (M.later.length ? '<p class="train">Plan for later: ' + esc(M.later.map(function(p){ return p.name; }).join('; ')) + '</p>' : '') + '</section>' +
+    '<section><h3>Ask before you measure</h3><p class="ask">' + esc(ASKMAIN) + '</p><ul>' + ASKQ.map(function(q){ return '<li class="q">' + esc(q) + '</li>'; }).join('') + '</ul>' +
+      '<div class="fill"><div><span>Leaders to talk to</span>' + esc(P.leaders.trim()) + '&nbsp;</div><div><span>Team to test with</span>' + esc(P.team.trim()) + '&nbsp;</div><div><span>Review date</span>' + esc(P.review.trim()) + '&nbsp;</div></div></section>' +
+    '<section><h3>Three things to agree together</h3><table><thead><tr><th></th><th>Owner</th><th>By when</th></tr></thead><tbody>' +
+      AGREE.map(function(a, i){ var g = P.ag[i] || {}; return '<tr><td>' + (i+1) + '. ' + esc(a) + '</td><td>' + esc((g.o || '').trim()) + '&nbsp;</td><td>' + esc((g.d || '').trim()) + '&nbsp;</td></tr>'; }).join('') + '</tbody></table></section>' +
+    '<section><h3>Next step</h3><div class="fill"><div><span>What</span>' + esc((P.next.what || '').trim()) + '&nbsp;</div><div><span>Who</span>' + esc((P.next.who || '').trim()) + '&nbsp;</div><div><span>When</span>' + esc((P.next.when || '').trim()) + '&nbsp;</div></div></section></div>';
+  var where = '<div class="page"><h2>Where you are</h2>' +
+    '<section><h3>The ladder</h3><table><thead><tr><th>Rung</th><th>How it\'s going</th><th>How you know</th><th>What\'s helping</th></tr></thead><tbody>' +
+      M.rungs.slice().reverse().map(function(r){ return '<tr><td><b>' + r.n + ' ' + esc(r.name) + '</b><br><span style="color:#586A90">' + esc(r.line) + '</span></td><td>' + bar(r) + esc(r.stText) + '</td><td>' + esc(r.know || '') + '</td><td>' + esc(r.lev.join('; ')) + '</td></tr>'; }).join('') + '</tbody></table></section>' +
+    (M.prios.length ? '<section><h3>What matters to your leaders</h3><table><thead><tr><th>Priority</th><th>Numbers they already watch</th></tr></thead><tbody>' + M.prios.map(function(p){ return '<tr><td>' + esc(p.label) + '</td><td>' + esc(p.watch) + '</td></tr>'; }).join('') + '</tbody></table></section>' : '') +
+    (M.parked.length ? '<section><h3>To come back to</h3><ul>' + M.parked.map(function(n){ return '<li><b>' + esc(n.ctx) + ':</b> ' + esc(n.t) + '</li>'; }).join('') + '</ul></section>' : '') +
+    (M.notes.length ? '<section><h3>In your words</h3><ul>' + M.notes.map(function(n){ return '<li><b>' + esc(n.ctx) + ':</b> <span class="q">' + esc(n.t) + '</span></li>'; }).join('') + '</ul></section>' : '') +
+    '<p class="core">' + esc(CORE) + '</p>' +
+    '<p class="src">Sources: McKinsey, The State of AI, 2026. BCG, AI at Work, 2026. Gartner, business value of generative AI, 2024. Microsoft Copilot adoption guidance. The Kirkpatrick model. Prosci, ADKAR for AI adoption.</p></div>';
+  return '<!DOCTYPE html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1"><title>' + esc('AI impact plan' + (M.who ? ', ' + M.who : '')) + '</title>' +
+    '<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Montserrat:wght@500;600;700&display=swap"><style>' + css + '</style></head><body><main>' + cover + plan + where + '</main></body></html>';
+}
+function download(){ saveFile('ai-impact-ladder-' + slug() + '-' + today() + '.html', 'text/html', reportDoc(model())); toast('Downloaded. Open it and print to PDF if you need one.'); }
+function copyText(){
+  var t = summaryText(model());
+  var fb = function(){ var ta = h('textarea'); ta.value = t; ta.setAttribute('readonly', ''); ta.style.position = 'fixed'; ta.style.opacity = '0'; document.body.appendChild(ta); ta.select(); try{ document.execCommand('copy'); toast('Copied. Paste it into an email or doc.'); }catch(e){ toast('Select the plan and copy it.'); } ta.remove(); };
+  try{ if (navigator.clipboard && navigator.clipboard.writeText) navigator.clipboard.writeText(t).then(function(){ toast('Copied. Paste it into an email or doc.'); }, fb); else fb(); }catch(e){ fb(); }
+}
+
+/* ---------------- 6 Plan ---------------- */
+function inp(key, ph, label, val){
+  return '<input class="inp" type="text" maxlength="120" autocomplete="off" data-k="' + key + '" placeholder="' + esc(ph) + '"' + (label ? ' aria-label="' + esc(label) + '"' : '') + ' value="' + esc(val || '') + '">';
+}
+function lab(label, key, ph, val){ return '<label class="lbl"><span>' + esc(label) + '</span>' + inp(key, ph, null, val) + '</label>'; }
+function renderNotes(){
+  var wrap = $('noteWrap'); if (!wrap) return;
+  var notes = noteList();
+  wrap.innerHTML = notes.length ? '<div class="psec" id="noteRev"><h3>Your notes</h3><p class="lede">Only the ones you tick go in the report.</p><ul class="notes">' +
+    notes.map(function(n){ return '<li data-k="' + esc(n.k) + '"><span class="ctx">' + esc(n.ctx) + (n.park ? ' · To come back to' : '') + '</span><div class="ctl"><label class="toggle"><input type="checkbox" data-inc="' + esc(n.k) + '"' + (n.inc ? ' checked' : '') + '> In report</label><button type="button" class="del" data-del="' + esc(n.k) + '">Delete</button></div><span class="tx">' + esc(n.t) + '</span></li>'; }).join('') + '</ul></div>' : '';
+  each(wrap.querySelectorAll('[data-inc]'), function(el){ el.addEventListener('change', function(){ var n = S.notes[el.getAttribute('data-inc')]; if (n){ n.inc = el.checked; save(); } }); });
+  each(wrap.querySelectorAll('[data-del]'), function(el){ el.addEventListener('click', function(){ delete S.notes[el.getAttribute('data-del')]; save(); renderNotes(); syncNoteDots(); }); });
+}
+function setKey(key, v){
+  var p = key.split('.'), o = S.plan;
+  for (var i = 0; i < p.length - 1; i++) o = o[p[i]];
+  o[p[p.length-1]] = v.slice(0, 120);
+}
+function renderPlan(){
+  var M = model(), P = S.plan, host = hosted();
+  var watch = M.prios.length ? M.prios[0].watch.split(',')[0] : 'Cycle time';
+  var html = '<div class="band"><div><h2>' + esc(M.who || 'AI impact plan') + '</h2><p class="date">' + esc(M.date) + (M.by ? ' · Prepared with ' + esc(M.by) : '') + '</p>' +
+    (M.focus ? '<p class="foc">Focus: <b>' + esc(M.focus.name) + '</b></p>' : '<p class="foc">Focus: to choose together</p>') + '</div>' +
+    '<div>' + ladderSVG(statusCols(), {rail:'#FFFFFF', focus:S.focus}) + '</div></div>';
+  html += '<div class="psec"><h3>Workflows to prove it on</h3><div class="wf"><div class="row hd" aria-hidden="true"><span>Workflow</span><span>Number it should move</span><span>Baseline</span><span>Target</span><span>Owner</span></div>' +
+    P.wf.map(function(r, i){ var n = i + 1; return '<div class="row">' + inp('wf.' + i + '.w', i === 0 ? 'e.g. Proposal turnaround' : 'Workflow ' + n, 'Workflow ' + n, r.w) + inp('wf.' + i + '.n', i === 0 ? 'e.g. ' + watch : 'Number', 'Number it should move, workflow ' + n, r.n) + inp('wf.' + i + '.b', 'Baseline', 'Baseline, workflow ' + n, r.b) + inp('wf.' + i + '.t', 'Target', 'Target, workflow ' + n, r.t) + inp('wf.' + i + '.o', 'Owner', 'Owner, workflow ' + n, r.o) + '</div>'; }).join('') + '</div></div>';
+  html += '<div class="psec"><h3>Start with these measures</h3>' +
+    (M.start.length ? '<ul class="mlist">' + M.start.map(function(p){ return '<li>' + trustDots(p.trust) + '<b>' + esc(p.name) + '</b><span>' + esc(RUNGS[p.rung-1].name) + ' · ' + esc(p.src) + ' · ' + esc(p.freq) + ' · Suggested owner: ' + esc(p.owner) + '</span></li>'; }).join('') + '</ul>' : '<p class="lede">Nothing chosen yet. Pick together after the leader conversations.</p>') +
+    '<div class="dlrow">' + (host ? (PLAYS.some(function(p){ return S.ev[p.id] && S.ev[p.id] !== 'no'; }) ? '<button type="button" class="btn sec sm" id="csvBtn">Download your measures as a spreadsheet</button>' : '') + '<button type="button" class="btn sec sm mcopy" id="copy2">Copy as text</button>' : '<span class="dlnote">Downloads work on the hosted page. Copy as text works everywhere.</span>') + '</div></div>';
+  html += '<div class="psec"><h3>Ask before you measure</h3><p class="lede">' + esc(ASKMAIN) + '</p><div class="trio">' + lab('Leaders to talk to', 'leaders', 'Names or roles', P.leaders) + lab('Team to test with', 'team', 'One team', P.team) + lab('Review date', 'review', 'About six weeks out', P.review) + '</div></div>';
+  html += '<div class="psec"><h3>Three things to agree together</h3><ol class="agl">' + AGREE.map(function(a, i){ var g = P.ag[i] || {}; return '<li><p>' + esc(a) + '</p>' + lab('Owner', 'ag.' + i + '.o', 'Who', g.o) + lab('By when', 'ag.' + i + '.d', 'Date', g.d) + '</li>'; }).join('') + '</ol></div>';
+  html += '<div class="psec"><h3>Next step</h3><div class="trio">' + lab('What', 'next.what', 'The next thing we do', P.next.what) + lab('Who', 'next.who', 'Names', P.next.who) + lab('When', 'next.when', 'Date', P.next.when) + '</div></div>';
+  html += '<div id="noteWrap"></div>';
+  html += '<div class="psec"><h3>Where you are</h3><ul class="where">' + M.rungs.slice().reverse().map(function(r){
+    return '<li><div><span class="nm">' + r.n + ' ' + esc(r.name) + '</span><i class="bar ' + barClass(r.n) + '"' + barStyle(r.n) + '></i></div><div><p>' + esc(r.stText) + (r.know ? ', based on ' + esc(r.know.toLowerCase()) : '') + '</p><p class="sm">' + (r.lev.length ? 'Helping: ' + esc(r.lev.join('; ')) : 'Nothing noted as helping yet') + '</p></div></li>'; }).join('') + '</ul>' +
+    (M.prios.length ? '<h3 class="watchhead">What matters to your leaders</h3><ul class="wlist">' + M.prios.map(function(p){ return '<li><b>' + esc(p.label) + '.</b> Watch: ' + esc(p.watch) + '</li>'; }).join('') + '</ul>' : '') + '</div>';
+  html += '<p class="coreband">' + esc(CORE) + '</p><div class="restart"><button type="button" class="linkbtn" id="restartBtn">Start over</button></div>';
+  $('plan').innerHTML = html;
+  each($('plan').querySelectorAll('.inp'), function(el){ el.addEventListener('input', function(){ setKey(el.getAttribute('data-k'), el.value); save(); }); });
+  renderNotes();
+  if ($('csvBtn')) $('csvBtn').addEventListener('click', downloadCSV);
+  if ($('copy2')) $('copy2').addEventListener('click', copyText);
+  var rb = $('restartBtn'), armed = false, t;
+  rb.addEventListener('click', function(){
+    if (armed){ clearTimeout(t); restart(); return; }
+    armed = true; rb.textContent = 'Click again to clear everything'; t = setTimeout(function(){ armed = false; rb.textContent = 'Start over'; }, 3500);
+  });
+}
+
+/* ---------------- Navigation ---------------- */
+function gapFor(step){
+  if (step === 1){ if (!S.use) return 'Pick how many people use AI most weeks.'; if (!S.res) return 'Pick whether you can see it in results yet.'; }
+  if (step === 2 && !S.prios.length) return 'Pick at least one.';
+  if (step === 5 && !anyRated()) return 'Mark at least one measure first.';
+  return '';
+}
+function reveal(step){
+  S.shown[step] = true; save();
+  var r = $('r' + step);
+  if (step === 1) $('r1say').textContent = r1Line();
+  if (step === 2) renderR2();
+  if (step === 5) renderR5();
+  r.hidden = false; r.classList.remove('show'); void r.offsetWidth; r.classList.add('show');
+  try{ r.scrollIntoView({behavior: reduced() ? 'auto' : 'smooth', block:'start'}); }catch(e){}
+  syncControls();
+}
+function primary(){
+  var s = S.step;
+  if (s === 0){ go(1); return; }
+  if (s === 1 || s === 2 || s === 5){
+    if (!S.shown[s]){ var g = gapFor(s); if (g){ hint(s, g); return; } reveal(s); return; }
+    go(s === 2 ? 3 : s + 1, s === 2 ? 0 : null); return;
+  }
+  if (s === 3){ if (S.sub < 4){ S.sub++; save(); render(); top(); return; } go(4); return; }
+  if (s === 4){ go(5); return; }
+  if (s === 6){ if (hosted()) download(); else copyText(); }
+}
+function back(){
+  var s = S.step;
+  if (s === 3 && S.sub > 0){ S.sub--; save(); render(); top(); return; }
+  if (s === 4){ go(3, 4); return; }
+  if (s > 0) go(s - 1);
+}
+function top(){ try{ window.scrollTo(0, 0); }catch(e){} }
+function go(step, sub){
+  if (popKey) closeNote();
+  S.step = step; if (sub != null) S.sub = sub;
+  save(); render(); top();
+  var sc = $('s' + step); sc.classList.remove('enter'); void sc.offsetWidth; if (!reduced()) sc.classList.add('enter');
+}
+function stepAnswered(k){
+  if (k === 1) return !!(S.use && S.res);
+  if (k === 2) return S.prios.length > 0;
+  if (k === 3) return [1,2,3,4].some(function(n){ return statuses(n).length > 0; });
+  if (k === 4) return !!S.focus;
+  if (k === 5) return anyRated();
+  return false;
+}
+function syncControls(){
+  var s = S.step, p = $('primary'), label;
+  if (s === 0) label = 'Begin';
+  else if (s === 6) label = hosted() ? 'Download<span class="xl"> report</span>' : 'Copy as text';
+  else if ((s === 1 || s === 2 || s === 5) && !S.shown[s]) label = 'Show';
+  else if (s === 3 && S.sub === 0) label = 'Start with Ready';
+  else if (s === 3 && S.sub < 4) label = 'Next rung';
+  else label = 'Next';
+  p.innerHTML = label;
+  $('back').hidden = s === 0;
+  $('noteBtn').hidden = s === 0;
+  $('copy').hidden = !(s === 6 && hosted());
+  var nav = $('steps');
+  each(nav.querySelectorAll('button'), function(b){
+    var k = +b.getAttribute('data-go');
+    if (k === s) b.setAttribute('aria-current', 'step'); else b.removeAttribute('aria-current');
+    b.classList.toggle('done', k < s && stepAnswered(k));
+  });
+  $('prog').style.width = (s / 6 * 100) + '%';
+  syncNoteDots();
+}
+function buildNav(){
+  var nav = $('steps'); nav.innerHTML = '';
+  NAV.forEach(function(label, i){
+    var k = i + 1;
+    var b = h('button', {type:'button', 'data-go':k}, '<span class="n">' + k + '</span><span class="of">' + k + ' of 6 · </span><span class="l">' + esc(label) + '</span>');
+    b.addEventListener('click', function(){ if (S.step !== k) go(k); });
+    nav.appendChild(b);
+  });
+}
+function render(){
+  for (var i = 0; i <= 6; i++) $('s' + i).hidden = i !== S.step;
+  var s = S.step;
+  if (s === 0){ $('who').value = S.who; $('by').value = S.by; }
+  if (s === 1) renderToday();
+  if (s === 2) renderPrios();
+  if (s === 3) renderLadder();
+  if (s === 4) renderFocus();
+  if (s === 5){ if (!S.focusSet){ var sg = suggest(); S.focus = sg ? sg.n : 0; } renderMeasures(); }
+  if (s === 6){ if (!S.focusSet){ var sg2 = suggest(); S.focus = sg2 ? sg2.n : 0; } renderPlan(); }
+  renderMini(); syncControls();
+}
+function restart(){ S = fresh(); introPlayed = false; save(); go(0); }
+
+/* ---------------- Wiring ---------------- */
+$('coverDate').textContent = niceDate();
+$('coverArt').innerHTML = ladderSVG([COLORS.well, '#90B210', COLORS.mixed, '#FFCC00']);
+buildNav();
+$('primary').addEventListener('click', primary);
+$('back').addEventListener('click', back);
+$('copy').addEventListener('click', copyText);
+$('noteBtn').addEventListener('click', function(ev){ ev.stopPropagation(); if (popKey) { closeNote(); return; } openNote(currentKey(), null); });
+$('npDone').addEventListener('click', closeNote);
+$('npText').addEventListener('input', function(){ if (!popKey) return; var t = this.value.slice(0, 600), old = S.notes[popKey] || {}; if (t.trim()){ S.notes[popKey] = {t:t, park:$('npPark').checked}; if (old.inc !== undefined) S.notes[popKey].inc = old.inc; } else delete S.notes[popKey]; save(); });
+window.addEventListener('scroll', function(){ if (popKey && popKey.indexOf('m:') === 0) closeNote(); }, {passive:true});
+$('notepop').addEventListener('click', function(ev){ ev.stopPropagation(); });
+document.addEventListener('click', function(){ if (popKey) closeNote(); });
+document.addEventListener('keydown', function(ev){ if (ev.key === 'Escape' && popKey) closeNote(); });
+$('who').addEventListener('input', function(){ S.who = this.value.slice(0, 80); save(); });
+$('by').addEventListener('input', function(){ S.by = this.value.slice(0, 80); save(); });
+
+var saved = readStore();
+if (saved && typeof saved === 'object' && saved.v === 3 && typeof saved.step === 'number'){
+  var f = fresh();
+  for (var k in f) if (saved[k] !== undefined && (f[k] === null ? (saved[k] === null || typeof saved[k] === 'string') : typeof saved[k] === typeof f[k])) f[k] = saved[k];
+  if (!f.plan || !Array.isArray(f.plan.wf) || !Array.isArray(f.plan.ag) || typeof f.plan.next !== 'object') f.plan = freshPlan();
+  f.step = Math.max(0, Math.min(6, f.step)); f.sub = Math.max(0, Math.min(4, +f.sub || 0));
+  S = f;
+  if (S.sub) introPlayed = true;
+}
+go(S.step);
+
+window.__ail = {S:function(){ return S; }, model:model, summaryText:summaryText, reportDoc:reportDoc, csv:csv, suggest:suggest, why:why, challenge:challenge, statusOf:statusOf, startPicks:startPicks, hosted:hosted};
+})();
+</script>
+</body>
+</html>
