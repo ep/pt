@@ -1,0 +1,658 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="robots" content="noindex, nofollow">
+<title>Break the Ice</title>
+<link rel="icon" type="image/svg+xml" href="/pt/assets/favicon/favicon.svg">
+<link rel="icon" type="image/png" sizes="32x32" href="/pt/assets/favicon/favicon-32.png">
+<link rel="shortcut icon" href="/pt/assets/favicon/favicon.ico">
+<link rel="apple-touch-icon" sizes="180x180" href="/pt/assets/favicon/apple-touch-icon.png">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Unbounded:wght@500;700;800&family=DM+Sans:opsz,wght@9..40,400;9..40,500;9..40,700&display=swap" rel="stylesheet">
+<style>
+:root{--bg:#FFF9F0;--ink:#1E2336;--soft:#5C6378;--line:#E9E1D3;--gold:#FFCC00;--d:'Unbounded',system-ui,sans-serif;--b:'DM Sans',system-ui,sans-serif}
+*{box-sizing:border-box}
+html,body{margin:0}
+body{background:var(--bg);color:var(--ink);font-family:var(--b);font-size:18px;line-height:1.5}
+button,input{font:inherit;color:inherit}
+a{color:inherit}
+.wrap{max-width:1220px;margin:0 auto;padding:44px 32px 80px}
+[hidden]{display:none!important}
+
+/* hub */
+.hub h1{font-family:var(--d);font-weight:800;font-size:clamp(48px,8vw,112px);line-height:.92;letter-spacing:-.03em;margin:0}
+.hub .lede{font-size:clamp(19px,2vw,23px);color:var(--soft);max-width:660px;margin:20px 0 44px}
+.tiles{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:22px}
+.tile{all:unset;box-sizing:border-box;cursor:pointer;border-radius:26px;padding:24px 24px 26px;min-height:260px;display:flex;flex-direction:column;background:var(--c);color:var(--fg,#fff);transition:transform .25s cubic-bezier(.3,.7,.2,1.4),box-shadow .25s;position:relative;overflow:hidden}
+.tile:hover{transform:translateY(-6px) rotate(-.6deg);box-shadow:0 22px 36px -22px rgba(30,35,54,.6)}
+.tile:focus-visible{outline:4px solid var(--ink);outline-offset:4px}
+.tile svg{width:84px;height:84px;margin-bottom:auto}
+.tile h2{font-family:var(--d);font-weight:700;font-size:25px;line-height:1.1;margin:18px 0 8px;letter-spacing:-.01em}
+.tile p{margin:0;font-size:16.5px;line-height:1.4;opacity:.92}
+.tile .play{position:absolute;top:22px;right:22px;width:38px;height:38px;border-radius:50%;background:rgba(255,255,255,.22);display:flex;align-items:center;justify-content:center}
+.tile .play::after{content:"";border-left:12px solid currentColor;border-top:8px solid transparent;border-bottom:8px solid transparent;margin-left:4px}
+.hub .note{margin-top:40px;color:var(--soft);font-size:16px;max-width:760px}
+
+/* idea page */
+.nav{display:flex;justify-content:space-between;align-items:center;margin-bottom:34px}
+.nav button{border:0;background:none;cursor:pointer;font-weight:700;font-size:16px;padding:6px 0}
+.nav .pn{display:flex;gap:18px}
+.idea h1{font-family:var(--d);font-weight:800;font-size:clamp(40px,7vw,88px);line-height:.95;letter-spacing:-.03em;margin:0;color:var(--c)}
+.idea .hook{font-size:clamp(21px,2.4vw,28px);line-height:1.3;margin:16px 0 36px;max-width:780px;font-weight:500}
+.panel{border-radius:28px;background:var(--tint);padding:28px;margin-bottom:44px}
+.panel svg.ill{display:block;width:100%;max-width:820px;height:auto;margin:0 auto}
+.beats{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:28px;margin-bottom:40px}
+.beat .t{font-family:var(--d);font-weight:800;font-size:40px;color:var(--c);line-height:1;letter-spacing:-.02em}
+.beat p{margin:12px 0 0;font-size:18px}
+.leave{border:3px solid var(--ink);border-radius:24px;padding:24px 28px;display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:24px;margin-bottom:30px}
+.leave h3{font-family:var(--d);font-weight:700;font-size:15px;margin:0 0 6px;color:var(--c)}
+.leave p{margin:0;font-size:18px;font-weight:500}
+.fine{display:grid;grid-template-columns:1fr 1fr;gap:28px;color:var(--soft);font-size:16.5px}
+.fine b{color:var(--ink)}
+
+.say{position:relative;background:var(--c);color:#fff;border-radius:26px;padding:24px 30px;font-size:clamp(21px,2.3vw,27px);line-height:1.35;font-weight:500;margin:0 0 44px;max-width:900px}
+.say::after{content:"";position:absolute;left:44px;bottom:-16px;border-left:18px solid transparent;border-right:4px solid transparent;border-top:18px solid var(--c)}
+.snd{position:fixed;right:20px;bottom:20px;z-index:30;width:52px;height:52px;border-radius:50%;border:0;background:var(--ink);color:#fff;display:flex;align-items:center;justify-content:center;cursor:pointer;box-shadow:0 10px 24px -10px rgba(0,0,0,.5)}
+.snd svg{width:22px;height:22px}
+.snd[aria-pressed="false"]{opacity:.55}
+/* stage for playable ones */
+.stage{display:grid;grid-template-columns:minmax(0,1fr) 300px;gap:24px;align-items:start}
+.proj{border-radius:16px;overflow:hidden;position:relative;aspect-ratio:16/9;background:#fff;box-shadow:0 0 0 8px #1E2336,0 30px 50px -30px rgba(0,0,0,.6)}
+.host{display:flex;gap:10px;align-items:center;flex-wrap:wrap;margin-top:26px}
+.btn{border:0;border-radius:999px;padding:12px 22px;font-weight:700;cursor:pointer;background:var(--ink);color:#fff;font-size:16px}
+.btn:disabled{opacity:.35;cursor:default}
+.btn.ghost{background:transparent;color:var(--ink);box-shadow:inset 0 0 0 2px var(--ink)}
+.seg{display:flex;border-radius:999px;box-shadow:inset 0 0 0 2px var(--ink);padding:3px}
+.seg button{border:0;background:none;border-radius:999px;padding:8px 14px;font-weight:700;font-size:15px;cursor:pointer}
+.seg button[aria-pressed="true"]{background:var(--ink);color:#fff}
+.phone{width:100%;max-width:300px;aspect-ratio:9/18.5;background:#fff;border-radius:38px;box-shadow:0 0 0 9px #1E2336,0 30px 50px -30px rgba(0,0,0,.6);padding:34px 18px 20px;position:relative;overflow:hidden;display:flex;flex-direction:column;margin:0 auto}
+.phone::before{content:"";position:absolute;top:10px;left:50%;width:86px;height:20px;border-radius:12px;background:#1E2336;margin-left:-43px}
+.phone h4{font-family:var(--d);font-weight:700;font-size:20px;line-height:1.15;margin:8px 0 14px}
+.phone .opts{display:grid;gap:8px}
+.phone .opts button{border:2px solid var(--line);background:#fff;border-radius:14px;padding:11px 12px;text-align:left;font-weight:700;cursor:pointer;font-size:16px;transition:border-color .2s,background .2s}
+.phone .opts button:hover{border-color:var(--ink)}
+.phone p{margin:0 0 10px;font-size:15.5px;line-height:1.45}
+.phone .big{font-family:var(--d);font-weight:800;font-size:24px;line-height:1.1;margin:6px 0 12px;color:var(--c)}
+.phone .muted{color:var(--soft);font-size:14px}
+
+@media (max-width:900px){
+  .wrap{padding:26px 16px 60px}
+  .tiles{grid-template-columns:1fr 1fr;gap:14px}
+  .tile{min-height:220px;padding:18px}.tile h2{font-size:20px}.tile svg{width:60px;height:60px}
+  .beats,.leave,.fine{grid-template-columns:1fr}
+  .stage{grid-template-columns:1fr}
+  .panel{padding:16px}
+}
+@media (max-width:520px){.tiles{grid-template-columns:1fr}}
+@media (prefers-reduced-motion:reduce){*{transition:none!important;animation:none!important}}
+</style>
+</head>
+<body>
+<div class="wrap">
+  <section class="hub" id="hub">
+    <h1>Break the ice</h1>
+    <p class="lede">Nine ways a room of strangers becomes teams of three or four, each with a name and a mission, in about three minutes.</p>
+    <div class="tiles" id="tiles"></div>
+    <p class="note">Built for open enrollment: people from different companies, using different tools, who have never met. Three of these you can play with a simulated room.</p>
+  </section>
+  <section class="idea" id="idea" hidden></section>
+</div>
+
+<button class="snd" id="snd" type="button"></button>
+<script>
+/* Sound. One quiet engine per page, tuned to C major pentatonic so overlapping notes never clash.
+   Nothing plays until the first tap or key press. Mute is remembered in this browser. */
+const SND = (() => {
+  const C = window.AudioContext || window.webkitAudioContext;
+  let ctx = null, master = null, verb = null, noiseBuf = null, unlocked = false, on = true;
+  const last = {};
+  try { on = localStorage.getItem('ep-sound') !== 'off'; } catch (e) {}
+  function build() {
+    ctx = new C();
+    master = ctx.createGain(); master.gain.value = .5;
+    const comp = ctx.createDynamicsCompressor(); comp.threshold.value = -20; comp.ratio.value = 4;
+    master.connect(comp); comp.connect(ctx.destination);
+    const len = Math.floor(ctx.sampleRate * 1.8), ir = ctx.createBuffer(2, len, ctx.sampleRate);
+    for (let c = 0; c < 2; c++) { const d = ir.getChannelData(c); for (let i = 0; i < len; i++) d[i] = (Math.random() * 2 - 1) * Math.pow(1 - i / len, 3.2); }
+    verb = ctx.createConvolver(); verb.buffer = ir;
+    const wet = ctx.createGain(); wet.gain.value = .2; verb.connect(wet); wet.connect(master);
+    noiseBuf = ctx.createBuffer(1, ctx.sampleRate, ctx.sampleRate);
+    const n = noiseBuf.getChannelData(0); for (let i = 0; i < n.length; i++) n[i] = Math.random() * 2 - 1;
+  }
+  function unlock() { unlocked = true; if (C && !ctx) { try { build(); } catch (e) {} } if (ctx && ctx.state === 'suspended') ctx.resume(); }
+  ['pointerdown', 'keydown', 'touchstart'].forEach(ev => addEventListener(ev, unlock, { capture: true, passive: true }));
+  const ready = () => on && unlocked && ctx;
+  const BASE = [130.81, 146.83, 164.81, 196, 220]; // C D E G A, from C3
+  const note = i => BASE[((i % 5) + 5) % 5] * Math.pow(2, Math.floor(i / 5));
+  function bus(pan, wet) {
+    const g = ctx.createGain(); let head = g;
+    if (ctx.createStereoPanner) { const p = ctx.createStereoPanner(); p.pan.value = Math.max(-1, Math.min(1, pan || 0)); g.connect(p); head = p; }
+    head.connect(master); if (wet !== false) head.connect(verb); return g;
+  }
+  function tone(f, o, partials) {
+    const t = ctx.currentTime + (o.delay || 0), out = bus(o.pan, o.wet), a = o.attack || .004, L = o.len || 1;
+    partials.forEach(([m, v, decay, type]) => {
+      const osc = ctx.createOscillator(), g = ctx.createGain();
+      osc.type = type || 'sine'; osc.frequency.setValueAtTime(f * m, t);
+      if (o.glide) osc.frequency.exponentialRampToValueAtTime(f * m * o.glide, t + decay * L);
+      g.gain.setValueAtTime(.0001, t); g.gain.exponentialRampToValueAtTime(Math.max(.0002, (o.vel || .3) * v), t + a);
+      g.gain.exponentialRampToValueAtTime(.0001, t + a + decay * L);
+      osc.connect(g); g.connect(out); osc.start(t); osc.stop(t + a + decay * L + .05);
+    });
+  }
+  const api = {
+    note,
+    /* woody mallet, like a marimba bar */
+    mallet(i, o = {}) { if (ready()) tone(note(i), o, [[1, 1, .8], [3.98, .2, .16], [9.8, .05, .05]]); },
+    /* glass bell with a slow shimmer */
+    bell(i, o = {}) { if (!ready()) return; const f = note(i); tone(f, o, [[1, 1, 2.2], [2.76, .3, 1.1], [5.4, .1, .5]]); tone(f * 1.0045, { ...o, vel: (o.vel || .3) * .45 }, [[1, 1, 2.6]]); },
+    /* soft pad chord, for big moments */
+    pad(list, o = {}) { if (!ready()) return; list.forEach((i, k) => tone(note(i), { ...o, attack: .18, delay: (o.delay || 0) + k * (o.roll || 0) }, [[1, .7, 1.8, 'triangle'], [2, .12, 1.2]])); },
+    /* retro computer beep */
+    blip(f, o = {}) { if (ready()) tone(f, { ...o, wet: false }, [[1, .5, .09, 'square']]); },
+    /* filtered noise: paper, whoosh, card snap, pen */
+    noise(o = {}) {
+      if (!ready()) return;
+      const t = ctx.currentTime + (o.delay || 0), src = ctx.createBufferSource(), fl = ctx.createBiquadFilter(), g = ctx.createGain(), d = o.d || .2, a = o.a || .01;
+      src.buffer = noiseBuf; fl.type = o.type || 'bandpass'; fl.Q.value = o.q || 1; fl.frequency.setValueAtTime(o.f || 1000, t);
+      if (o.f2) fl.frequency.exponentialRampToValueAtTime(o.f2, t + a + d);
+      g.gain.setValueAtTime(.0001, t); g.gain.exponentialRampToValueAtTime(o.vel || .2, t + a); g.gain.exponentialRampToValueAtTime(.0001, t + a + d);
+      src.connect(fl); fl.connect(g); g.connect(bus(o.pan, o.wet)); src.start(t, Math.random() * .5); src.stop(t + a + d + .05);
+    },
+    /* say a word out loud, for the phrasebook */
+    say(text) {
+      if (!on || !('speechSynthesis' in window)) return;
+      speechSynthesis.cancel();
+      const u = new SpeechSynthesisUtterance(text), vs = speechSynthesis.getVoices();
+      u.voice = vs.find(v => /en-(CA|GB|US)/.test(v.lang) && v.localService) || vs.find(v => /^en/.test(v.lang)) || null;
+      u.rate = .92; u.pitch = 1; speechSynthesis.speak(u);
+    },
+    canSay: 'speechSynthesis' in window,
+    /* thin out crowds of events: true at most once per ms per key */
+    thin(key, ms) { const n = performance.now(); if (last[key] && n - last[key] < ms) return false; last[key] = n; return true; },
+    pan(x, w) { return Math.max(-.8, Math.min(.8, (x / (w || innerWidth)) * 1.6 - .8)); },
+    get on() { return on; },
+    button(el) {
+      const ON = '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M4 9.5h3.5L12 6v12l-4.5-3.5H4z"/><path d="M15.5 9a4.5 4.5 0 0 1 0 6M18 6.5a8 8 0 0 1 0 11"/></svg>';
+      const OFF = '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M4 9.5h3.5L12 6v12l-4.5-3.5H4z"/><path d="M16 9.5l5 5M21 9.5l-5 5"/></svg>';
+      const paint = () => { el.innerHTML = on ? ON : OFF; el.setAttribute('aria-pressed', on); el.setAttribute('aria-label', on ? 'Sound is on' : 'Sound is off'); el.title = on ? 'Sound on' : 'Sound off'; };
+      paint();
+      el.addEventListener('click', () => { on = !on; try { localStorage.setItem('ep-sound', on ? 'on' : 'off'); } catch (e) {} if (!on && 'speechSynthesis' in window) speechSynthesis.cancel(); paint(); if (on) { unlock(); api.mallet(10, { vel: .22 }); api.mallet(12, { vel: .18, delay: .08 }); } });
+    }
+  };
+  return api;
+})();
+
+</script>
+<script>
+/* ---------------- the nine ---------------- */
+const IDEAS = [
+ { id: 'signs', say: "Before you meet each other, I need to know one thing. What's your sign? Your AI sign.", name: "What's Your Sign?", c: '#3B2F8F', tint: '#ECE9FB', play: true,
+   hook: 'Your AI tool is your star sign. Find your constellation.',
+   beats: [['0:30', 'Everyone picks a sign on their phone: Claude, ChatGPT, Copilot, Gemini, Rising (I use a few) or No sign yet.'], ['1:00', "Each sign's constellation draws itself on the big screen, one star per person, and every phone shows its horoscope."], ['1:30', 'Constellations split into teams of 3 or 4. Same sign to swap tips, or mixed signs for range.']],
+   team: '3 or 4 people who share a sign, or who cover the sky.', named: 'Ursa Copilot. Claude Borealis. The Little GPT.', mission: 'By the wrap, show the other signs one thing your tool surprised you with.',
+   why: 'In an open room the tool is the one thing everyone has in common, and it is exactly what they came to get better at.',
+   watch: 'Keep every horoscope affectionate toward every tool. Make No sign yet the warmest welcome in the room.' },
+ { id: 'assemble', say: 'Everyone just got one part of a robot. Find the rest of it.', name: 'Assemble', c: '#1F8E8B', tint: '#E1F3F2',
+   hook: 'Each person is one part of an AI. Find the rest of your robot.',
+   beats: [['0:15', 'Everyone gets a part at the door: Brain, Face, Hands or Recipe.'], ['1:00', 'Find the three parts you are missing. Four parts make one working AI, and one team.'], ['1:30', 'Name your AI and give it a job title. Your part is your role for the day.']],
+   team: 'Four people, one of each part.', named: 'Gordon, Head of Inbox. Pat, Chief Summarizer.', mission: 'Brain thinks out loud, Hands types, Face presents, Recipe writes down what worked.',
+   why: 'People learn the vocabulary by being it, before anyone explains a thing, and the roles keep quieter people in the work.',
+   watch: 'If the room does not divide by four, add a fifth part: Memory, the note-taker.' },
+ { id: 'nemesis', say: "Think of the one task you'd hand to AI tomorrow if you could. That's your nemesis. Go find the people who share it.", name: 'Nemesis', c: '#C9531C', tint: '#FBEADF',
+   hook: "Name the task you'd hand to AI tomorrow. Find the people who hate it too.",
+   beats: [['0:30', 'Pick your nemesis: the inbox, meeting notes, the status report, the approval chase, the spreadsheet cleanup or the slide deck.'], ['1:00', 'Everyone stands with their nemesis. Big piles split into teams of 3 or 4.'], ['1:30', 'Give your nemesis a villain name. Your team name is its sworn rival.']],
+   team: '3 or 4 people with the same enemy.', named: 'The Inbox Slayers, sworn rivals of Lord Reply-All.', mission: 'Take one real bite out of your nemesis before the end of the day.',
+   why: 'Shared annoyance bonds strangers fast, and teams arrive at the workflow activity already agreeing on what to work on.',
+   watch: 'Keep the list universal across companies. A small Something else pile is fine.' },
+ { id: 'hallucination', say: 'Ask your AI to tell one small lie about you. Make it believable.', name: 'Two Truths and a Hallucination', c: '#5E7F0B', tint: '#EEF4DA',
+   hook: 'Two true facts about you. One your AI made up. Your table guesses.',
+   beats: [['1:00', 'Ask your AI: "Write one believable but false fun fact about me. I work in..."'], ['1:30', 'Tell your table all three facts. They guess which one is the hallucination.'], ['0:30', 'The best hallucination at the table becomes the team name.']],
+   team: 'Your table.', named: 'The Former Yodeling Champions.', mission: 'Keep a tally all day. Every hallucination your team catches scores a point.',
+   why: "Everyone's hands are on their tool in the first minute, and the room learns what a hallucination is by laughing at one.",
+   watch: 'Some tools hedge or refuse to make things up. That is a find too, so share it.' },
+ { id: 'fold', say: 'Line up by how much you used AI this week. Not once at this end, all day at that end. Then we fold you.', name: 'The Fold', c: '#34508F', tint: '#E6ECF8', play: true,
+   hook: 'Line up by how much you used AI this week. Fold the line in half.',
+   beats: [['0:45', 'One line across the room, from Not once to All day, every day.'], ['0:45', 'Fold it: the first person meets the last. Two pairs side by side make a team.'], ['1:00', 'Each team names itself after its range.']],
+   team: 'A newcomer and a regular in every team.', named: 'Zero to Hero. Fresh Eyes, Old Hands.', mission: 'The most experienced person helps the newest build first. The newest asks every question.',
+   why: 'A line-up shows the whole range of the room in seconds, and folding it mixes experience on purpose.',
+   watch: 'Make Not once an honored end of the line. In a virtual room, people use a slider and the screen does the fold.' },
+ { id: 'fears', say: "Pick the AI worry you hear most, yours or anyone's. Then look around.", name: 'Fear Busters', c: '#C23A4E', tint: '#FBE6E9',
+   hook: 'Pick the AI worry you hear most. Team up to test it.',
+   beats: [['0:30', "Pick one worry: It makes things up. It'll take my job. I'll leak something. I'm already behind. It's hype. No time to learn it."], ['0:45', 'The screen shows how many people share each worry. Most find they are far from alone.'], ['1:00', 'Teams of 3 or 4 form around one worry and turn it into a mission.']],
+   team: '3 or 4 people who share a worry.', named: 'The Myth Testers. The Fact Checkers.', mission: 'Test your worry today. At the wrap, give a verdict: busted, confirmed, or it depends.',
+   why: 'Seeing others share a worry ends the feeling that it is just you, and testing a fear moves people further than debating it.',
+   watch: "It overlaps the intro's hopes and fears, so run it as the opener to that conversation." },
+ { id: 'potluck', say: "It's a potluck. Bring the best thing you've ever asked AI to do.", name: 'Potluck', c: '#B88A00', tint: '#FFF4CC',
+   hook: 'Bring your best AI dish. Sit with the people who cook like you.',
+   beats: [['0:45', "Everyone writes their best-ever AI request in one line. Never used it? Write the dish you'd love to order."], ['0:45', 'Pick your course: Write it, Sum it up, Plan it or Make it. Each course becomes a table.'], ['1:00', 'Each table names its restaurant and reads out its menu.']],
+   team: '3 or 4 people who use AI the same way.', named: 'The Summary Bistro. Plan B Diner.', mission: 'By the wrap, add one dish nobody at your table had cooked before.',
+   why: 'The menus become the room\'s shared list of what works: everyone learning from everyone, from the first minute.',
+   watch: 'The kind of request only. No client names, no data.' },
+ { id: 'match', say: 'Six hot takes are about to land on your phone. Swipe honestly.', name: "It's a Match", c: '#C2387F', tint: '#FBE4F0', play: true,
+   hook: 'Swipe on six AI hot takes. Your team is the people who swiped like you.',
+   beats: [['0:45', "Six cards on your phone. Swipe right if you agree, left if you don't."], ['0:30', 'The screen matches the people who swiped most alike into teams of 3 or 4.'], ['1:00', 'Each team names itself after what it agreed on.']],
+   team: '3 or 4 people who see AI the same way.', named: 'The Polite Ones. They all thank their AI.', mission: "Find the take you'd change your mind on by the end of the day.",
+   why: 'Opinions are faster to share than life stories. Flip the matching to pair opposites for livelier teams.',
+   watch: "Keep the takes playful, and nothing about anyone's employer." },
+ { id: 'crest', say: "One word each, about you. Then let your AIs design your team's crest.", name: 'Crest', c: '#293851', tint: '#E9ECF3',
+   hook: 'Each person gives one word. Your AIs design the team crest.',
+   beats: [['0:30', 'Your table is your team. Each person gives one word about themselves: a hobby, a hometown, a snack.'], ['1:00', 'Everyone pastes the same words into their own AI and asks for a team name, a motto and a crest.'], ['1:00', 'Compare what each tool made. Vote, remix, done.']],
+   team: 'Your table.', named: 'The Sourdough Sailors. Motto: rise and roam.', mission: 'Live up to the motto.',
+   why: "The team's first act together is using AI together, and different tools giving different answers starts the jagged-edge conversation in minute one.",
+   watch: 'In a virtual room, one person shares their screen and reads the others out.' }
+];
+
+/* tile glyphs, 84 x 84, drawn in white */
+const GLYPH = {
+  signs: '<g fill="currentColor"><path d="M42 8l4 12 12 4-12 4-4 12-4-12-12-4 12-4z"/><circle cx="18" cy="56" r="4"/><circle cx="34" cy="70" r="4"/><circle cx="62" cy="62" r="5"/><circle cx="70" cy="40" r="3"/></g><path d="M18 56L34 70 62 62 70 40" stroke="currentColor" stroke-width="2" fill="none" opacity=".6"/>',
+  assemble: '<g fill="none" stroke="currentColor" stroke-width="5" stroke-linejoin="round"><rect x="10" y="10" width="28" height="28" rx="6"/><circle cx="60" cy="24" r="14"/><path d="M10 50h28v24H10z"/><path d="M48 50h24l-4 24H52z"/></g>',
+  nemesis: '<g fill="none" stroke="currentColor" stroke-width="5" stroke-linejoin="round"><rect x="12" y="26" width="60" height="40" rx="6"/><path d="M12 30l30 20 30-20"/><path d="M20 26l6-14 8 12M64 26l-6-14-8 12"/></g>',
+  hallucination: '<g fill="none" stroke="currentColor" stroke-width="5" stroke-linejoin="round"><path d="M8 16h40v24H22l-8 8v-8H8z"/><path d="M36 46h40v24h-6v8l-8-8H36z" stroke-dasharray="6 5"/></g>',
+  fold: '<g fill="currentColor"><circle cx="12" cy="30" r="6"/><circle cx="30" cy="30" r="6"/><circle cx="48" cy="30" r="6"/><circle cx="12" cy="60" r="6"/><circle cx="30" cy="60" r="6"/><circle cx="48" cy="60" r="6"/></g><path d="M58 30c18 0 18 30 0 30" stroke="currentColor" stroke-width="5" fill="none" stroke-linecap="round"/><path d="M60 52l-6 8 8 4" stroke="currentColor" stroke-width="5" fill="none" stroke-linecap="round" stroke-linejoin="round"/>',
+  fears: '<g fill="none" stroke="currentColor" stroke-width="5" stroke-linecap="round"><path d="M42 10l26 10v18c0 18-12 30-26 36C28 68 16 56 16 38V20z"/><path d="M30 42l9 9 16-18"/></g>',
+  potluck: '<g fill="none" stroke="currentColor" stroke-width="5" stroke-linecap="round" stroke-linejoin="round"><path d="M10 44h64c0 16-14 26-32 26S10 60 10 44z"/><path d="M28 34c0-6 6-6 6-12M42 34c0-6 6-6 6-12M56 34c0-6 6-6 6-12"/></g>',
+  match: '<g fill="none" stroke="currentColor" stroke-width="5" stroke-linejoin="round"><rect x="14" y="12" width="40" height="56" rx="8" transform="rotate(-10 34 40)"/><rect x="30" y="14" width="40" height="56" rx="8" transform="rotate(8 50 42)" fill="currentColor" fill-opacity=".25"/></g><path d="M50 36c-3-4-9-2-8 3 1 4 8 8 8 8s7-4 8-8c1-5-5-7-8-3z" fill="currentColor"/>',
+  crest: '<g fill="none" stroke="currentColor" stroke-width="5" stroke-linejoin="round"><path d="M42 8l28 8v20c0 20-12 32-28 40C26 68 14 56 14 36V16z"/><path d="M42 8v68M14 36h56"/></g>'
+};
+const ILL = {}; // illustrations for the six that are not playable, filled in below
+
+/* ---------------- routing ---------------- */
+const hub = document.getElementById('hub'), idea = document.getElementById('idea');
+document.getElementById('tiles').innerHTML = IDEAS.map(d => `<button class="tile" style="--c:${d.c}" data-id="${d.id}"><svg viewBox="0 0 84 84" aria-hidden="true">${GLYPH[d.id]}</svg><h2>${d.name}</h2><p>${d.hook}</p>${d.play ? '<span class="play" aria-label="Playable"></span>' : ''}</button>`).join('');
+document.getElementById('tiles').addEventListener('click', e => { const t = e.target.closest('.tile'); if (!t) return; const i = IDEAS.findIndex(x => x.id === t.dataset.id); SND.mallet(5 + i, { vel: .26, pan: SND.pan(e.clientX) }); location.hash = t.dataset.id; });
+let stopSim = null;
+function route() {
+  if (stopSim) { stopSim(); stopSim = null; }
+  const d = IDEAS.find(x => '#' + x.id === location.hash);
+  hub.hidden = !!d; idea.hidden = !d;
+  if (!d) { document.title = 'Break the Ice'; return; }
+  document.title = d.name;
+  const i = IDEAS.indexOf(d), prev = IDEAS[(i + 8) % 9], next = IDEAS[(i + 1) % 9];
+  idea.style.setProperty('--c', d.c); idea.style.setProperty('--tint', d.tint);
+  idea.innerHTML = `<div class="nav"><button type="button" data-go="">&larr; All nine</button><div class="pn"><button type="button" data-go="${prev.id}">&larr; ${prev.name}</button><button type="button" data-go="${next.id}">${next.name} &rarr;</button></div></div>
+    <h1>${d.name}</h1><p class="hook">${d.hook}</p>
+    <div class="panel" id="panel">${d.play ? '' : ILL[d.id]}</div>
+    <p class="say">&ldquo;${d.say}&rdquo;</p>
+    <div class="beats">${d.beats.map(([t, p]) => `<div class="beat"><div class="t">${t}</div><p>${p}</p></div>`).join('')}</div>
+    <div class="leave"><div><h3>The team</h3><p>${d.team}</p></div><div><h3>Names like</h3><p>${d.named}</p></div><div><h3>The mission</h3><p>${d.mission}</p></div></div>
+    <div class="fine"><p><b>Why it works.</b> ${d.why}</p><p><b>Watch for.</b> ${d.watch}</p></div>`;
+  idea.querySelectorAll('[data-go]').forEach(b => b.onclick = e => { SND.mallet(b.dataset.go ? 9 : 7, { vel: .16, pan: SND.pan(e.clientX) }); location.hash = b.dataset.go; });
+  if (d.play) stopSim = SIMS[d.id](document.getElementById('panel'), d);
+  scrollTo(0, 0);
+}
+addEventListener('hashchange', route);
+
+/* ---------------- shared helpers ---------------- */
+let seed = 3;
+const rnd = () => (seed = (seed * 16807) % 2147483647, (seed - 1) / 2147483646);
+const shuffle = a => { for (let i = a.length - 1; i > 0; i--) { const j = Math.floor(rnd() * (i + 1)); [a[i], a[j]] = [a[j], a[i]]; } return a; };
+function groupSizes(n) { const k = Math.max(1, Math.round(n / 3.6)); const out = Array(k).fill(Math.floor(n / k)); for (let i = 0; i < n % k; i++) out[i]++; return out; }
+const NS = 'http://www.w3.org/2000/svg';
+const el = (tag, attrs = {}, parent) => { const e = document.createElementNS(NS, tag); for (const k in attrs) e.setAttribute(k, attrs[k]); if (parent) parent.appendChild(e); return e; };
+const TEAMC = ['#68BFBD', '#FF8A5B', '#B6D94C', '#FFD34E', '#F27BB5', '#8FB4FF', '#C6A8FF', '#FFFFFF'];
+const SIMS = {};
+</script>
+<script>
+/* Three playable sketches. Everyone except "you" is simulated. Nothing is sent anywhere. */
+
+function tween(items, ms, done) { // items: [{set(p)}], p from 0 to 1
+  const t0 = performance.now(); let raf;
+  const ease = t => t < .5 ? 4 * t * t * t : 1 - Math.pow(-2 * t + 2, 3) / 2;
+  const f = now => { const p = Math.min(1, (now - t0) / ms); items.forEach(it => it.set(ease(p))); if (p < 1) raf = requestAnimationFrame(f); else done && done(); };
+  raf = requestAnimationFrame(f); return () => cancelAnimationFrame(raf);
+}
+/* every team gets its own small chord, played in turn from left to right: the room heard as one piece */
+function teamChords(slotsList, W, mineIndex) {
+  slotsList.forEach((sl, gi) => [0, 2, 4].forEach((k, j) => SND.bell(5 + (gi % 4) + k, { delay: gi * .2 + j * .06, vel: .09, pan: SND.pan(sl.x, W) })));
+  if (mineIndex >= 0) { SND.bell(12, { delay: slotsList.length * .2 + .25, vel: .2, pan: SND.pan(slotsList[mineIndex].x, W) }); SND.bell(14, { delay: slotsList.length * .2 + .4, vel: .18, pan: SND.pan(slotsList[mineIndex].x, W) }); }
+}
+function slots(n, W, H, top) { // team slot centres in a grid
+  const cols = Math.min(4, n), rows = Math.ceil(n / cols), out = [];
+  for (let i = 0; i < n; i++) { const r = Math.floor(i / cols), c = i % cols, inRow = r === rows - 1 ? n - r * cols : cols;
+    out.push({ x: W / 2 + (c - (inRow - 1) / 2) * (W / cols) * .92, y: top + (r + .5) * ((H - top) / rows) }); }
+  return out;
+}
+
+/* ============ What's Your Sign? ============ */
+SIMS.signs = (panel, d) => {
+  seed = 41;
+  const SIGNS = ['Claude', 'ChatGPT', 'Copilot', 'Gemini', 'Rising', 'No sign yet'];
+  const NOTE = { Rising: 'I use a few', 'No sign yet': 'Not using AI yet' };
+  const SCOPE = {
+    Claude: 'You like a careful answer, and you will edit it anyway. Today, tell it what good looks like before it starts.',
+    ChatGPT: 'You were here early, and you have a chat for everything. Today, give one of them a proper name.',
+    Copilot: 'You live where the work lives: the inbox, the meeting, the shared deck. Today, ask it for something you would never have asked.',
+    Gemini: 'The only sign that was a star sign first. Today, ask it to connect two things nobody has connected.',
+    Rising: 'Three tabs open, a favorite for every job. Today, you are the translator.',
+    'No sign yet': 'Clear skies. Everything you try today is a first. Lucky you.'
+  };
+  const SIM = { Claude: 4, ChatGPT: 7, Copilot: 8, Gemini: 3, Rising: 3, 'No sign yet': 2 };
+  const W = 1280, H = 720, RW = W / 3, RH = (H - 20) / 2;
+  panel.innerHTML = `<div class="stage"><div><div class="proj" style="background:radial-gradient(circle at 30% 20%,#2A2370,#0E0B2C 70%)"><svg id="sky" viewBox="0 0 ${W} ${H}" style="width:100%;height:100%;display:block"></svg></div>
+    <div class="host"><div class="seg" role="group" aria-label="Team mix"><button type="button" data-m="same" aria-pressed="true">Same sign</button><button type="button" data-m="mixed" aria-pressed="false">Mixed signs</button></div>
+    <button class="btn" id="form" type="button" disabled>Form teams</button><button class="btn ghost" id="again" type="button">Again</button></div></div>
+    <div class="phone" id="ph"></div></div>`;
+  const sky = panel.querySelector('#sky'), ph = panel.querySelector('#ph'), form = panel.querySelector('#form');
+  let mode = 'same', people = [], timers = [], stop = null, me = null, formed = false;
+  const gBack = el('g', {}, sky), gLines = el('g', {}, sky), gLab = el('g', {}, sky), gStars = el('g', {}, sky), gTeam = el('g', {}, sky);
+  for (let i = 0; i < 70; i++) el('circle', { cx: rnd() * W, cy: rnd() * H, r: rnd() * 1.4 + .3, fill: '#fff', opacity: .25 + rnd() * .3 }, gBack);
+  const region = s => { const i = SIGNS.indexOf(s); return { x: (i % 3) * RW, y: 20 + Math.floor(i / 3) * RH }; };
+  SIGNS.forEach(s => { const r = region(s); const t = el('text', { x: r.x + 34, y: r.y + 52, fill: '#fff', 'font-family': 'Unbounded', 'font-weight': 700, 'font-size': 24, opacity: .9 }, gLab); t.textContent = s; });
+  function place(s) {
+    const r = region(s);
+    for (let k = 0; k < 200; k++) { const x = r.x + 50 + rnd() * (RW - 100), y = r.y + 90 + rnd() * (RH - 120);
+      if (people.every(p => (p.x - x) ** 2 + (p.y - y) ** 2 > 52 * 52)) return { x, y }; }
+    return { x: r.x + 60 + rnd() * (RW - 120), y: r.y + 100 + rnd() * (RH - 140) };
+  }
+  function arrive(s, mine) {
+    const { x, y } = place(s), same = people.filter(p => p.s === s);
+    if (same.length) { const n = same.reduce((a, b) => ((a.x - x) ** 2 + (a.y - y) ** 2 < (b.x - x) ** 2 + (b.y - y) ** 2 ? a : b));
+      el('line', { x1: n.x, y1: n.y, x2: x, y2: y, stroke: '#fff', 'stroke-opacity': .35, 'stroke-width': 1.5 }, gLines); }
+    const c = el('circle', { cx: x, cy: y, r: mine ? 9 : 5.5, fill: mine ? '#FFCC00' : '#fff' }, gStars);
+    if (mine) el('circle', { cx: x, cy: y, r: 16, fill: 'none', stroke: '#FFCC00', 'stroke-width': 2 }, gStars).classList.add('ring');
+    c.animate([{ r: 0, opacity: 0 }, { r: mine ? 9 : 5.5, opacity: 1 }], { duration: 400, easing: 'cubic-bezier(.3,1.6,.5,1)' });
+    if (mine) { SND.bell(12, { vel: .28, pan: SND.pan(x, W) }); SND.mallet(7, { vel: .2, pan: SND.pan(x, W) }); }
+    else if (SND.thin('star', 300)) SND.bell(9 + Math.floor(Math.random() * 6), { vel: .07, pan: SND.pan(x, W) });
+    const p = { s, x, y, c, mine }; people.push(p); return p;
+  }
+  function ask() {
+    ph.innerHTML = `<h4>What's your sign?</h4><p class="muted">The AI tool you use most.</p><div class="opts">${SIGNS.map(s => `<button type="button" data-s="${s}">${s}${NOTE[s] ? `<br><span class="muted" style="font-weight:500">${NOTE[s]}</span>` : ''}</button>`).join('')}</div>`;
+    ph.querySelectorAll('button').forEach(b => b.onclick = () => { me = arrive(b.dataset.s, true); told(); });
+  }
+  function told() { ph.innerHTML = `<p class="muted">You're a</p><div class="big">${me.s}</div><p>${SCOPE[me.s]}</p><p class="muted" style="margin-top:auto">Your star is the gold one.</p>`; }
+  function start() {
+    people = []; me = null; formed = false; [gLines, gStars, gTeam].forEach(g => g.innerHTML = ''); gLab.style.opacity = 1; form.disabled = true;
+    const queue = shuffle(Object.entries(SIM).flatMap(([s, n]) => Array(n).fill(s)));
+    queue.forEach((s, i) => timers.push(setTimeout(() => { arrive(s); if (i === queue.length - 1) form.disabled = false; }, 400 + i * 210 + rnd() * 120)));
+    ask();
+  }
+  function teams() {
+    let groups = [];
+    if (mode === 'same') {
+      const pool = [];
+      SIGNS.forEach(s => { const m = people.filter(p => p.s === s); if (m.length < 3) { pool.push(...m); return; }
+        let i = 0; groupSizes(m.length).forEach(n => { groups.push({ s, m: m.slice(i, i + n) }); i += n; }); });
+      if (pool.length >= 3) groups.push({ s: 'pool', m: pool }); else if (pool.length) groups.sort((a, b) => a.m.length - b.m.length)[0].m.push(...pool);
+      const used = {};
+      groups.forEach(g => { const pats = g.s === 'pool' ? ['Shooting Stars'] : g.s === 'No sign yet' ? ['Clear Skies', 'First Light', 'New Moon'] : g.s === 'Rising' ? ['The Risers', 'Moonrise', 'Rising Tide'] :
+        [`Ursa ${g.s}`, `${g.s} Borealis`, `The Little ${g.s}`, `${g.s} Major`, `${g.s} Minor`, `Great ${g.s}`];
+        used[g.s] = (used[g.s] || 0); g.name = pats[used[g.s]++ % pats.length]; });
+    } else {
+      const order = []; const by = SIGNS.map(s => shuffle(people.filter(p => p.s === s)));
+      while (by.some(b => b.length)) by.forEach(b => b.length && order.push(b.shift()));
+      const sizes = groupSizes(order.length); let i = 0;
+      const names = ['The Whole Sky', 'Star Crossed', 'Full House', 'Mixed Signals', 'The Zodiac', 'All Signs Point Yes', 'The Milky Way', 'Night Shift'];
+      groups = sizes.map((n, k) => ({ m: [], name: names[k % names.length] }));
+      order.forEach((p, k) => groups[k % groups.length].m.push(p));
+    }
+    return groups;
+  }
+  function formTeams() {
+    if (formed) return; formed = true; form.disabled = true;
+    const groups = teams(), S = slots(groups.length, W, H, 30);
+    gLines.innerHTML = ''; gLab.style.transition = 'opacity .5s'; gLab.style.opacity = 0;
+    SND.noise({ type: 'bandpass', f: 400, f2: 1600, q: .6, a: .12, d: .9, vel: .08 });
+    const moves = [];
+    groups.forEach((g, gi) => { const col = TEAMC[gi % TEAMC.length];
+      g.m.forEach((p, k) => { const a = -Math.PI / 2 + k * 2 * Math.PI / g.m.length + .4, tx = S[gi].x + Math.cos(a) * 54, ty = S[gi].y - 20 + Math.sin(a) * 40;
+        const fx = p.x, fy = p.y; p.tx = tx; p.ty = ty; if (!p.mine) p.c.setAttribute('fill', col);
+        moves.push({ set: t => { p.c.setAttribute('cx', fx + (tx - fx) * t); p.c.setAttribute('cy', fy + (ty - fy) * t); const r = sky.querySelector('.ring'); if (p.mine && r) { r.setAttribute('cx', fx + (tx - fx) * t); r.setAttribute('cy', fy + (ty - fy) * t); } } }); }); });
+    stop = tween(moves, 1100, () => {
+      groups.forEach((g, gi) => { const col = TEAMC[gi % TEAMC.length], pts = g.m.map(p => `${p.tx},${p.ty}`).join(' ');
+        const pl = el('polygon', { points: pts, fill: col, 'fill-opacity': .1, stroke: col, 'stroke-width': 2, 'stroke-opacity': .8 }, gTeam);
+        pl.animate([{ opacity: 0 }, { opacity: 1 }], { duration: 500 });
+        const t = el('text', { x: S[gi].x, y: S[gi].y + 64, 'text-anchor': 'middle', fill: '#fff', 'font-family': 'Unbounded', 'font-weight': 700, 'font-size': 19 }, gTeam); t.textContent = g.name;
+        t.animate([{ opacity: 0 }, { opacity: 1 }], { duration: 600 }); });
+      sky.appendChild(gStars);
+      const mine = me && groups.find(g => g.m.includes(me));
+      teamChords(S, W, mine ? groups.indexOf(mine) : -1);
+      if (mine) ph.innerHTML = `<p class="muted">Your constellation</p><div class="big">${mine.name}</div><p><b>Mission:</b> ${d.mission}</p><p class="muted" style="margin-top:auto">${mine.m.length - 1} others are reading this same name right now.</p>`;
+    });
+  }
+  panel.querySelectorAll('.seg button').forEach(b => b.onclick = () => { mode = b.dataset.m; panel.querySelectorAll('.seg button').forEach(x => x.setAttribute('aria-pressed', x === b)); });
+  form.onclick = formTeams;
+  panel.querySelector('#again').onclick = () => { timers.forEach(clearTimeout); timers = []; stop && stop(); start(); };
+  start();
+  return () => { timers.forEach(clearTimeout); stop && stop(); };
+};
+
+/* ============ The Fold ============ */
+SIMS.fold = (panel, d) => {
+  seed = 7;
+  const W = 1280, H = 720, N = 24;
+  panel.innerHTML = `<div class="stage"><div><div class="proj" style="background:#F4F7FD"><svg id="room" viewBox="0 0 ${W} ${H}" style="width:100%;height:100%;display:block"></svg></div>
+    <div class="host"><button class="btn" id="line" type="button">Line up</button><button class="btn" id="fold" type="button" disabled>Fold the line</button><button class="btn" id="mk" type="button" disabled>Make teams</button><button class="btn ghost" id="again" type="button">Again</button></div></div>
+    <div class="phone" id="ph"></div></div>`;
+  const room = panel.querySelector('#room'), ph = panel.querySelector('#ph');
+  const B = { line: panel.querySelector('#line'), fold: panel.querySelector('#fold'), mk: panel.querySelector('#mk') };
+  const gT = el('g', {}, room), gEnds = el('g', {}, room), gP = el('g', {}, room);
+  let people = [], me = null, stop = null;
+  const shade = u => { const a = [207, 216, 238], b = [52, 80, 143]; return `rgb(${a.map((v, i) => Math.round(v + (b[i] - v) * u)).join(',')})`; };
+  const ends = [['Not once', 60, 'start'], ['All day, every day', W - 60, 'end']];
+  function setPos(p, x, y) { p.x = x; p.y = y; p.g.setAttribute('transform', `translate(${x} ${y})`); }
+  function start() {
+    people = []; me = null; gP.innerHTML = ''; gT.innerHTML = ''; gEnds.innerHTML = '';
+    B.line.disabled = false; B.fold.disabled = true; B.mk.disabled = true;
+    for (let i = 0; i < N - 1; i++) add(Math.min(1, Math.pow(rnd(), 1.3)), false);
+    ph.innerHTML = `<h4>How much did you use AI this week?</h4><input type="range" min="0" max="100" value="35" id="sl" style="width:100%;accent-color:${d.c}"><div style="display:flex;justify-content:space-between" class="muted"><span>Not once</span><span>All day</span></div>
+      <button class="btn" id="join" type="button" style="margin-top:22px;background:${d.c}">Join the line</button><p class="muted" style="margin-top:auto">The gold dot will be you.</p>`;
+    ph.querySelector('#join').onclick = () => { me = add(ph.querySelector('#sl').value / 100, true); SND.mallet(8, { vel: .26 }); ph.innerHTML = `<p class="muted">You're in the room.</p><div class="big">Find your spot in the line.</div><p>Ask the people next to you how much they used it. Shuffle until it's right.</p>`; };
+  }
+  function add(u, mine) {
+    const g = el('g', {}, gP);
+    el('circle', { r: mine ? 21 : 18, fill: mine ? '#FFCC00' : shade(u), stroke: mine ? '#1E2336' : 'none', 'stroke-width': 3 }, g);
+    const p = { u, g, mine }; setPos(p, 120 + rnd() * (W - 240), 120 + rnd() * (H - 240)); people.push(p); return p;
+  }
+  const slotX = i => 70 + i * ((W - 140) / (N - 1));
+  function lineUp() {
+    if (people.length < N) add(rnd(), false); // someone else stands in if you haven't joined
+    people.sort((a, b) => a.u - b.u);
+    ends.forEach(([t, x, a]) => { const e = el('text', { x, y: 300, 'text-anchor': a, 'font-family': 'Unbounded', 'font-weight': 700, 'font-size': 22, fill: '#34508F' }, gEnds); e.textContent = t; });
+    people.forEach((p, i) => { if (i % 2 === 0) SND.mallet(5 + Math.floor(i / 3), { delay: .25 + i * .04, vel: p.mine ? .22 : .09, len: .5, pan: SND.pan(slotX(i), W) }); });
+    stop = tween(people.map((p, i) => { const fx = p.x, fy = p.y, tx = slotX(i), ty = 380; return { set: t => setPos(p, fx + (tx - fx) * t, fy + (ty - fy) * t) }; }), 1200);
+    B.line.disabled = true; B.fold.disabled = false;
+    if (me) ph.innerHTML = `<p class="muted">You're number</p><div class="big">${people.indexOf(me) + 1} of ${N}</div><p>Counting from Not once.</p>`;
+  }
+  const half = N / 2, colX = i => 120 + i * ((W - 240) / (half - 1));
+  function fold() {
+    gEnds.innerHTML = '';
+    SND.noise({ type: 'bandpass', f: 300, f2: 1800, q: .6, a: .25, d: 1.1, vel: .1, pan: .4 }); SND.mallet(12, { delay: 1.4, vel: .16 }); SND.mallet(5, { delay: 1.4, vel: .16 });
+    stop = tween(people.map((p, i) => {
+      const fx = p.x, fy = p.y; const top = i < half, tx = top ? colX(i) : colX(N - 1 - i), ty = top ? 250 : 500;
+      const cx = top ? (fx + tx) / 2 : Math.max(fx, tx) + 160, cy = top ? 250 : 650;
+      return { set: t => setPos(p, (1 - t) ** 2 * fx + 2 * (1 - t) * t * cx + t * t * tx, (1 - t) ** 2 * fy + 2 * (1 - t) * t * cy + t * t * ty) };
+    }), 1500);
+    B.fold.disabled = true; B.mk.disabled = false;
+    if (me) { const i = people.indexOf(me), o = people[N - 1 - i]; ph.innerHTML = `<p class="muted">Folded. Say hello to the person opposite.</p><div class="big">${o.u > me.u ? 'They use it more than you.' : 'You use it more than they do.'}</div><p>That gap is the point.</p>`; }
+  }
+  const NAMES = ['Zero to Hero', 'Fresh Eyes, Old Hands', 'Day One, Day 1,000', 'Rookies and Regulars', 'The Full Range', 'First Timers Club'];
+  const LINES = [['Zero to', 'Hero'], ['Fresh Eyes,', 'Old Hands'], ['Day One,', 'Day 1,000'], ['Rookies and', 'Regulars'], ['The Full', 'Range'], ['First Timers', 'Club']];
+  function make() {
+    B.mk.disabled = true;
+    for (let j = 0; j < half / 2; j++) {
+      const x0 = colX(2 * j) - 44, x1 = colX(2 * j + 1) + 44, col = TEAMC[j];
+      const r = el('rect', { x: x0, y: 196, width: x1 - x0, height: 360, rx: 26, fill: col, 'fill-opacity': .22, stroke: col, 'stroke-width': 3 }, gT);
+      r.animate([{ opacity: 0 }, { opacity: 1 }], { duration: 500, delay: j * 120, fill: 'both' });
+      const t = el('text', { x: (x0 + x1) / 2, y: 600, 'text-anchor': 'middle', 'font-family': 'Unbounded', 'font-weight': 700, 'font-size': 18, fill: '#1E2336' }, gT);
+      LINES[j].forEach((ln, k) => { const ts = el('tspan', { x: (x0 + x1) / 2, dy: k ? 24 : 0 }, t); ts.textContent = ln; }); t.animate([{ opacity: 0 }, { opacity: 1 }], { duration: 500, delay: j * 120 + 200, fill: 'both' });
+    }
+    { const S = Array.from({ length: half / 2 }, (_, j) => ({ x: (colX(2 * j) + colX(2 * j + 1)) / 2 })); const i = me ? people.indexOf(me) : -1; teamChords(S, W, me ? Math.floor((i < half ? i : N - 1 - i) / 2) : -1); }
+    if (me) { const i = people.indexOf(me), col = i < half ? i : N - 1 - i, j = Math.floor(col / 2);
+      ph.innerHTML = `<p class="muted">Your team</p><div class="big">${NAMES[j]}</div><p><b>Mission:</b> ${d.mission}</p>`; }
+  }
+  B.line.onclick = lineUp; B.fold.onclick = fold; B.mk.onclick = make;
+  panel.querySelector('#again').onclick = () => { stop && stop(); seed += 13; start(); };
+  start();
+  return () => stop && stop();
+};
+
+/* ============ It's a Match ============ */
+SIMS.match = (panel, d) => {
+  seed = 99;
+  const TAKES = ["I've said thank you to an AI.", "I'd let AI write my out-of-office.", 'AI writing is easy to spot.', "I'd let AI book my travel.", "I'd let AI reply to my boss.", 'I check everything it writes.'];
+  const TNAME = [['The Polite Ones', 'No Thank Yous'], ['Out of Office', 'Always In'], ['The Detectives', 'Fooled Me Twice'], ['Bon Voyage', 'Aisle Seat Control'], ['The Daredevils', 'Not My Boss'], ['The Checkers', 'Living Dangerously']];
+  const ARCH = [[1, 1, 0, 1, 1, 0], [0, 0, 1, 0, 0, 1], [1, 1, 1, 0, 0, 1], [0, 1, 0, 1, 1, 0]];
+  const W = 1280, H = 720, N = 24;
+  panel.innerHTML = `<div class="stage"><div><div class="proj" style="background:#FCEFF6"><svg id="room" viewBox="0 0 ${W} ${H}" style="width:100%;height:100%;display:block"></svg></div>
+    <div class="host"><div class="seg" role="group" aria-label="Match on"><button type="button" data-m="alike" aria-pressed="true">Match alike</button><button type="button" data-m="opposite" aria-pressed="false">Match opposites</button></div>
+    <button class="btn" id="mt" type="button" disabled>Match everyone</button><button class="btn ghost" id="again" type="button">Again</button></div></div>
+    <div class="phone" id="ph"></div></div>`;
+  const room = panel.querySelector('#room'), ph = panel.querySelector('#ph'), mt = panel.querySelector('#mt');
+  const gT = el('g', {}, room), gP = el('g', {}, room);
+  let people = [], me = null, stop = null, timers = [], mode = 'alike', done = 0;
+  function start() {
+    people = []; me = null; done = 0; gP.innerHTML = ''; gT.innerHTML = ''; mt.disabled = true;
+    for (let i = 0; i < N - 1; i++) {
+      const a = ARCH[Math.floor(rnd() * ARCH.length)], ans = a.map(v => rnd() < .16 ? 1 - v : v);
+      const c = el('circle', { r: 16, fill: '#E9A6CB', cx: 120 + rnd() * (W - 240), cy: 110 + rnd() * (H - 220) }, gP);
+      const p = { ans, c, x: +c.getAttribute('cx'), y: +c.getAttribute('cy') }; people.push(p);
+      timers.push(setTimeout(() => { c.setAttribute('fill', '#C2387F'); c.animate([{ r: 16 }, { r: 22 }, { r: 16 }], { duration: 400 }); if (++done === N - 1 && (me ? me.ans.length === 6 : true)) mt.disabled = false; }, 800 + rnd() * 5200));
+    }
+    swipe([]);
+  }
+  function swipe(ans) {
+    if (ans.length === TAKES.length) {
+      const c = el('circle', { r: 20, fill: '#FFCC00', stroke: '#1E2336', 'stroke-width': 3, cx: W / 2, cy: H / 2 }, gP);
+      me = { ans, c, x: W / 2, y: H / 2, mine: true }; people.push(me);
+      ph.innerHTML = `<p class="muted">All six done.</p><div class="big">Waiting for your matches...</div><p>The gold dot is you.</p>`;
+      if (done === N - 1) mt.disabled = false; return;
+    }
+    const i = ans.length;
+    ph.innerHTML = `<p class="muted">${i + 1} of ${TAKES.length}</p><div id="card" style="flex:1;border-radius:22px;background:${d.tint};display:flex;align-items:center;padding:22px;font-family:Unbounded;font-weight:700;font-size:22px;line-height:1.2;touch-action:none;cursor:grab;user-select:none;margin:6px 0 16px">${TAKES[i]}</div>
+      <div style="display:flex;gap:10px"><button class="btn ghost" style="flex:1" data-v="0">Nope</button><button class="btn" style="flex:1;background:${d.c}" data-v="1">Agree</button></div>`;
+    const card = ph.querySelector('#card');
+    const go = v => { if (v) { SND.mallet(9, { vel: .28, pan: .5 }); SND.mallet(12, { vel: .2, pan: .5, delay: .07 }); } else { SND.mallet(3, { vel: .3, pan: -.5 }); SND.noise({ type: 'lowpass', f: 320, a: .002, d: .06, vel: .2, pan: -.5 }); }
+      SND.noise({ type: 'bandpass', f: 900, f2: 2600, q: .8, a: .02, d: .2, vel: .08, pan: v ? .6 : -.6 });
+      card.style.transition = 'transform .35s, opacity .35s'; card.style.transform = `translateX(${v ? 260 : -260}px) rotate(${v ? 18 : -18}deg)`; card.style.opacity = 0; setTimeout(() => swipe([...ans, v]), 300); };
+    ph.querySelectorAll('[data-v]').forEach(b => b.onclick = () => go(+b.dataset.v));
+    let sx = null;
+    card.onpointerdown = e => { sx = e.clientX; card.setPointerCapture(e.pointerId); card.style.transition = 'none'; };
+    card.onpointermove = e => { if (sx === null) return; const dx = e.clientX - sx; card.style.transform = `translateX(${dx}px) rotate(${dx / 14}deg)`; };
+    card.onpointerup = e => { if (sx === null) return; const dx = e.clientX - sx; sx = null; if (Math.abs(dx) > 80) go(dx > 0 ? 1 : 0); else { card.style.transition = 'transform .3s'; card.style.transform = ''; } };
+  }
+  const sim = (a, b) => a.ans.reduce((s, v, i) => s + (v === b.ans[i] ? 1 : 0), 0);
+  function match() {
+    mt.disabled = true;
+    const left = [...people], groups = [];
+    if (me) { left.splice(left.indexOf(me), 1); left.unshift(me); }
+    while (left.length) {
+      const seed0 = left.shift(); const size = left.length + 1 <= 5 ? left.length + 1 : 4;
+      left.sort((a, b) => mode === 'alike' ? sim(b, seed0) - sim(a, seed0) : sim(a, seed0) - sim(b, seed0));
+      groups.push([seed0, ...left.splice(0, size - 1)]);
+    }
+    const usedNames = new Set();
+    const named = groups.map(g => {
+      const scores = TAKES.map((_, t) => { const y = g.filter(p => p.ans[t]).length; return { t, agree: Math.max(y, g.length - y), yes: y * 2 >= g.length }; }).sort((a, b) => b.agree - a.agree);
+      for (const s of scores) { const n = TNAME[s.t][s.yes ? 0 : 1]; if (!usedNames.has(n)) { usedNames.add(n); return { g, name: n, s }; } }
+      return { g, name: 'The Wildcards', s: scores[0] };
+    });
+    const S = slots(named.length, W, H, 40), moves = [];
+    SND.noise({ type: 'bandpass', f: 400, f2: 1600, q: .6, a: .12, d: .9, vel: .08 });
+    named.forEach((n, gi) => n.g.forEach((p, k) => { const a = k * 2 * Math.PI / n.g.length - Math.PI / 2, tx = S[gi].x + Math.cos(a) * 46, ty = S[gi].y - 24 + Math.sin(a) * 46, fx = p.x, fy = p.y;
+      moves.push({ set: t => { p.c.setAttribute('cx', fx + (tx - fx) * t); p.c.setAttribute('cy', fy + (ty - fy) * t); } }); }));
+    stop = tween(moves, 1200, () => {
+      named.forEach((n, gi) => { const t = el('text', { x: S[gi].x, y: S[gi].y + 62, 'text-anchor': 'middle', 'font-family': 'Unbounded', 'font-weight': 700, 'font-size': 20, fill: '#1E2336' }, gT); t.textContent = n.name; t.animate([{ opacity: 0 }, { opacity: 1 }], { duration: 500 }); });
+      const mine = me && named.find(n => n.g.includes(me));
+      teamChords(S, W, mine ? named.indexOf(mine) : -1);
+      if (mine) { const take = TAKES[mine.s.t], all = mine.s.agree === mine.g.length;
+        ph.innerHTML = `<p class="muted">It's a match.</p><div class="big">${mine.name}</div><p>${mode === 'alike' ? `${all ? 'All of you' : 'Most of you'} ${mine.s.yes ? 'agreed' : 'disagreed'}: &ldquo;${take}&rdquo;` : 'You were matched with the people who swiped most unlike you.'}</p><p><b>Mission:</b> ${d.mission}</p>`; }
+    });
+  }
+  panel.querySelectorAll('.seg button').forEach(b => b.onclick = () => { mode = b.dataset.m; panel.querySelectorAll('.seg button').forEach(x => x.setAttribute('aria-pressed', x === b)); });
+  mt.onclick = match;
+  panel.querySelector('#again').onclick = () => { timers.forEach(clearTimeout); timers = []; stop && stop(); seed += 7; start(); };
+  start();
+  return () => { timers.forEach(clearTimeout); stop && stop(); };
+};
+
+</script>
+<script>
+/* Illustrations for the six sketches that aren't playable. 820 x 420. */
+(() => {
+const ink = '#1E2336', U = 'font-family="Unbounded" font-weight="700"', Dm = 'font-family="DM Sans" font-weight="700"';
+const svg = body => `<svg class="ill" viewBox="0 0 820 420" role="img">${body}</svg>`;
+
+/* Assemble: four parts drifting into one robot */
+ILL.assemble = svg(`
+  <g fill="none" stroke="${ink}" stroke-width="3" stroke-dasharray="10 9" opacity=".4"><circle cx="410" cy="150" r="58"/><rect x="356" y="214" width="108" height="112" rx="26"/></g>
+  <g stroke="${ink}" stroke-width="5" stroke-linejoin="round" stroke-linecap="round">
+    <g transform="translate(150 92)"><path d="M-52 0C-60-32-28-52-8-40C2-58 36-54 40-36C68-40 80-10 62 4C72 22 48 36 32 26C20 40-8 40-16 26C-38 38-60 22-52 0Z" fill="#FEF6C9"/><path d="M-22-22q12 10 0 22M8-30q-10 16 6 28M36-8q-10 10 0 18" fill="none" stroke-width="3.5"/></g>
+    <g transform="translate(670 92)"><circle r="46" fill="#E4F4F4"/><circle cx="-54" r="12" fill="#68BFBD"/><circle cx="54" r="12" fill="#68BFBD"/><circle cx="-16" cy="-6" r="6" fill="${ink}" stroke="none"/><circle cx="16" cy="-6" r="6" fill="${ink}" stroke="none"/><path d="M-16 16q16 12 32 0" fill="none"/></g>
+    <g transform="translate(150 300)"><path d="M-50 30v-40a10 10 0 0 1 20 0v-10a10 10 0 0 1 20 0v48c0 14-10 24-22 24s-18-10-18-22z" fill="#EBB293"/><path d="M50 30v-40a10 10 0 0 0-20 0v-10a10 10 0 0 0-20 0v48c0 14 10 24 22 24s18-10 18-22z" fill="#EBB293"/></g>
+    <g transform="translate(670 300) rotate(-8)"><rect x="-40" y="-52" width="80" height="100" rx="8" fill="#fff"/><rect x="-37.5" y="-49.5" width="75" height="22" rx="6" fill="#D86527"/><path d="M-26-8h52M-26 8h40M-26 24h46" stroke-width="3.5"/></g>
+  </g>
+  <g ${U} font-size="20" fill="${ink}" text-anchor="middle"><text x="150" y="170">Brain</text><text x="670" y="176">Face</text><text x="150" y="390">Hands</text><text x="670" y="390">Recipe</text><text x="410" y="376" font-size="17" fill="#1F8E8B">One working AI</text></g>
+  <g fill="none" stroke="#1F8E8B" stroke-width="4" stroke-linecap="round" stroke-linejoin="round">
+    <path d="M232 110L334 138M324 128l10 10-13 4"/><path d="M588 110L486 138M496 128l-10 10 13 4"/><path d="M226 286L340 266M328 260l12 6-10 9"/><path d="M594 286L480 266M492 260l-12 6 10 9"/>
+  </g>`);
+
+/* Nemesis: the inbox monster and its rivals */
+ILL.nemesis = svg(`
+  <g stroke="${ink}" stroke-width="5" stroke-linejoin="round">
+    <path d="M250 330c-30-120 40-230 160-230s190 110 160 230z" fill="#C9531C"/>
+    <path d="M300 120l-30-60 60 40M520 120l30-60-60 40" fill="#C9531C"/>
+    <circle cx="350" cy="200" r="30" fill="#fff"/><circle cx="470" cy="200" r="30" fill="#fff"/>
+    <circle cx="358" cy="208" r="12" fill="${ink}"/><circle cx="462" cy="208" r="12" fill="${ink}"/>
+    <path d="M326 168l44 14M494 168l-44 14" stroke-width="7" stroke-linecap="round"/>
+    <path d="M340 270h140l-14 22-14-18-14 18-14-18-14 18-14-18-14 18-14-18-14 18z" fill="#fff"/>
+    <g fill="#fff"><rect x="190" y="250" width="70" height="48" rx="6" transform="rotate(-14 225 274)"/><rect x="560" y="240" width="70" height="48" rx="6" transform="rotate(12 595 264)"/><rect x="600" y="140" width="62" height="42" rx="6" transform="rotate(20 631 161)"/></g>
+    <path d="M196 262l30 18 28-26M566 252l30 20 30-20M606 150l26 16 24-18" fill="none" stroke-width="3.5"/>
+  </g>
+  <g ${U} font-size="22" fill="${ink}" text-anchor="middle"><text x="410" y="372">Lord Reply-All</text></g>
+  <g transform="translate(70 70) rotate(-6)"><rect width="150" height="64" rx="12" fill="#fff" stroke="${ink}" stroke-width="4"/><text x="75" y="28" text-anchor="middle" ${Dm} font-size="16" fill="${ink}">The Inbox</text><text x="75" y="48" text-anchor="middle" ${Dm} font-size="16" fill="${ink}">Slayers</text></g>
+  <path d="M220 110l40 20" stroke="${ink}" stroke-width="4" stroke-linecap="round"/>`);
+
+/* Two Truths and a Hallucination */
+ILL.hallucination = svg(`
+  <g ${Dm} font-size="21" fill="${ink}">
+    <g transform="rotate(-3 200 120)"><path d="M70 70h270a20 20 0 0 1 20 20v60a20 20 0 0 1-20 20H140l-36 30v-30H70a20 20 0 0 1-20-20V90a20 20 0 0 1 20-20z" fill="#fff" stroke="${ink}" stroke-width="5"/><text x="80" y="128">I've run two marathons.</text></g>
+    <g transform="rotate(2 600 130)"><path d="M460 90h270a20 20 0 0 1 20 20v60a20 20 0 0 1-20 20H690v30l-36-30H460a20 20 0 0 1-20-20v-60a20 20 0 0 1 20-20z" fill="#fff" stroke="${ink}" stroke-width="5"/><text x="470" y="148">I speak Portuguese.</text></g>
+    <g transform="rotate(-1 410 320)"><path d="M210 260h400a20 20 0 0 1 20 20v60a20 20 0 0 1-20 20H450l-36 30v-30H210a20 20 0 0 1-20-20v-60a20 20 0 0 1 20-20z" fill="#EEF4DA" stroke="#5E7F0B" stroke-width="5" stroke-dasharray="14 8"/><text x="226" y="318">I was a regional yodeling champion.</text></g>
+  </g>
+  <g fill="#5E7F0B"><path d="M650 250l6 16 16 6-16 6-6 16-6-16-16-6 16-6z"/><path d="M180 240l4 10 10 4-10 4-4 10-4-10-10-4 10-4z"/><path d="M700 330l3 8 8 3-8 3-3 8-3-8-8-3 8-3z"/></g>
+  <text x="410" y="236" text-anchor="middle" ${U} font-size="40" fill="${ink}">?</text>`);
+
+/* Fear Busters: you are not alone */
+ILL.fears = svg((() => {
+  const rows = [["It makes things up", 9], ["It'll take my job", 6], ["I'm already behind", 7], ["I'll leak something", 4], ["It's hype", 2], ["No time to learn it", 5]];
+  return rows.map(([t, n], i) => `<text x="40" y="${99 + i * 56}" ${Dm} font-size="22" fill="${ink}">${t}</text>` +
+    Array.from({ length: n }, (_, k) => `<circle cx="${330 + k * 46}" cy="${92 + i * 56}" r="17" fill="${i === 0 && k === 3 ? '#FFCC00' : '#C23A4E'}" stroke="${i === 0 && k === 3 ? ink : 'none'}" stroke-width="3" opacity="${i === 0 && k === 3 ? 1 : .55 + k * .05}"/>`).join('')).join('') +
+    `<text x="468" y="38" ${U} font-size="17" fill="${ink}" text-anchor="middle">You, and 8 others</text><path d="M468 48v18" stroke="${ink}" stroke-width="3" stroke-linecap="round"/>`;
+})());
+
+/* Potluck: the room's menu */
+ILL.potluck = svg(`
+  <rect x="190" y="20" width="440" height="380" rx="20" fill="#fff" stroke="${ink}" stroke-width="5"/>
+  <text x="410" y="74" text-anchor="middle" ${U} font-size="28" fill="${ink}">Today's menu</text>
+  <path d="M290 92h240" stroke="#B88A00" stroke-width="3" stroke-dasharray="2 8" stroke-linecap="round"/>
+  <g ${Dm} fill="${ink}">
+    <text x="230" y="134" font-size="17" fill="#B88A00">Write it</text><text x="230" y="160" font-size="20" font-weight="500">The polite no, to a client, warmly</text>
+    <text x="230" y="206" font-size="17" fill="#B88A00">Sum it up</text><text x="230" y="232" font-size="20" font-weight="500">A 60-page report, as five bullets</text>
+    <text x="230" y="278" font-size="17" fill="#B88A00">Plan it</text><text x="230" y="304" font-size="20" font-weight="500">An offsite agenda with a budget</text>
+    <text x="230" y="350" font-size="17" fill="#B88A00">Make it</text><text x="230" y="376" font-size="20" font-weight="500">A quiz for my team's onboarding</text>
+  </g>
+  <g fill="none" stroke="${ink}" stroke-width="5" stroke-linecap="round"><path d="M80 300c0-40 30-60 60-60s60 20 60 60z" fill="#FFF4CC"/><path d="M70 300h140M110 220c0-12 10-12 10-24M140 214c0-12 10-12 10-24"/></g>`);
+
+/* Crest */
+ILL.crest = svg(`
+  <g stroke="${ink}" stroke-width="5" stroke-linejoin="round">
+    <path d="M410 30l150 40v110c0 110-70 170-150 210-80-40-150-100-150-210V70z" fill="#E9ECF3"/>
+    <path d="M410 30v380M260 190h300" stroke-width="4"/>
+    <path d="M300 130c0-26 24-40 44-40s44 14 44 40v16h-88z" fill="#E8B26A"/><path d="M318 110q8 8 0 16M346 104q8 8 0 18" fill="none" stroke-width="3"/>
+    <path d="M440 150h90l-12 18h-66z" fill="#68BFBD"/><path d="M484 150V90l34 46h-34" fill="#fff"/>
+    <circle cx="340" cy="260" r="30" fill="#FFCC00"/><path d="M325 260l10 10 20-22" fill="none" stroke-width="4"/>
+    <path d="M450 230l30 50 30-50z" fill="#D86527"/>
+    <path d="M200 340c70 30 350 30 420 0l-10 54c-70 26-330 26-400 0z" fill="#fff"/>
+  </g>
+  <text x="410" y="397" text-anchor="middle" font-family="Unbounded" font-weight="800" font-size="22" fill="${ink}">Rise and roam</text>
+  <g ${Dm} font-size="19" fill="#293851"><text x="40" y="80">sourdough</text><text x="40" y="112">sailing</text><text x="660" y="80">Halifax</text><text x="660" y="112">early riser</text></g>
+  <path d="M150 92l90 30M650 92l-80 30" stroke="#293851" stroke-width="2.5" stroke-dasharray="4 6"/>`);
+})();
+
+</script>
+<script>SND.button(document.getElementById('snd')); route();</script>
+</body>
+</html>

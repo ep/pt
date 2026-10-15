@@ -42,6 +42,8 @@ There is no homepage at the repo root by design. Each project lives in its own f
 
 <p align="center">
 <a href="https://ep.github.io/pt/design-ideas/room-pulse/"><img src="assets/readme/podium-pulse-sketchbook.svg" width="98%" alt="Podium Pulse sketchbook: design ideas for a check-in that bookends a session."></a>
+<a href="https://ep.github.io/pt/design-ideas/wbwai-ai-guide/"><img src="assets/readme/wbwai-ai-guide.svg" width="49%" alt="Working with AI sketchbook: five ways to make one guide, with a side for participants and a side for facilitators."></a>
+<a href="https://ep.github.io/pt/design-ideas/wbwai-icebreakers/"><img src="assets/readme/wbwai-icebreakers.svg" width="49%" alt="Icebreaker sketchbook: nine ways a room of strangers becomes teams, each with a name and a mission."></a>
 </p>
 
 <details>
@@ -62,6 +64,8 @@ There is no homepage at the repo root by design. Each project lives in its own f
 - https://ep.github.io/pt/podium-for-partners/ : Positioning Podium with IP-holder partner prospects.
 - https://ep.github.io/pt/podium-for-partners-ideo/ : Positioning Podium, IDEO version.
 - https://ep.github.io/pt/design-ideas/room-pulse/ : Podium pulse activity interaction, reveal, and design ideas.
+- https://ep.github.io/pt/design-ideas/wbwai-ai-guide/ : Working with AI sketchbook, five design directions for a double-sided guide to working with AI, for Work Better with AI 201 participants and facilitators.
+- https://ep.github.io/pt/design-ideas/wbwai-icebreakers/ : Icebreaker sketchbook, nine team-forming mechanics for open enrollment workshops, three of them playable.
 - https://ep.github.io/pt/Logistics/EC/In-Person/ : Support's experimental logistics checklist.
 - https://ep.github.io/pt/t3/wbwai-curveballroleplay/ : Experimental T3 artefact: WBWAI Curveball Roleplay.
 - https://ep.github.io/pt/t3/wbwai-prepskillbuilder/ : Experimental T3 artefact: WBWAI Prep Skill Builder.
