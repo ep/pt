@@ -533,6 +533,56 @@ def room_pulse():
     return "".join(out), css
 
 
+def clear_instructions():
+    """The Clear Instructions sketchbook's own Picture Steps slide in miniature: three numbered
+    pictures (on your own, with your team, then the one gold step in the workshop app),
+    and the badge the room earns at the end."""
+    torso = "M-32 0V-26C-32-44-20-52-6-52H6C20-52 32-44 32-26V0Z"
+
+    def body(cx, by, s, fill):
+        return ('<g transform="translate(%.1f %.1f) scale(%.2f)"><path class="%s" d="%s"/><circle class="%s" cx="0" cy="-72" r="18"/></g>'
+                % (cx, by, s, fill, torso, fill))
+
+    x0, y0, w, h, gap = 1096, 172, 252, 236, 26
+    out = []
+    for i, (tint, ink) in enumerate((("f-tt", "f-dt"), ("f-ct", "f-dc"), ("f-pol", "f-go"))):
+        x = x0 + i * (w + gap)
+        cx, by = x + w / 2, y0 + h
+        g = ['<clipPath id="ci%d"><rect x="%d" y="%d" width="%d" height="%d" rx="18"/></clipPath>' % (i, x, y0, w, h),
+             '<rect class="%s" x="%d" y="%d" width="%d" height="%d" rx="18"/>' % (tint, x, y0, w, h),
+             '<g clip-path="url(#ci%d)">' % i]
+        if i == 0:
+            g.append(body(cx + 6, by + 2, 1.3, "f-co"))
+            g.append('<rect class="f-cb" x="%.1f" y="%d" width="118" height="72" rx="9"/><rect class="f-pp" x="%.1f" y="%d" width="104" height="58" rx="5"/>' % (cx - 53, by - 78, cx - 46, by - 71))
+        elif i == 1:
+            for dx, s in ((-70, .95), (0, 1.05), (70, .95)):
+                g.append(body(cx + dx, by + 8, s, "f-pr"))
+            g.append('<rect class="f-pp s-cb" stroke-width="4" x="%.1f" y="%d" width="72" height="40" rx="12"/>' % (cx - 104, y0 + 24))
+            g.append('<rect class="f-cb" x="%.1f" y="%d" width="62" height="34" rx="12"/>' % (cx + 40, y0 + 38))
+        else:
+            g.append('<rect class="f-cb" x="%.1f" y="%d" width="172" height="110" rx="10"/><rect class="f-pp" x="%.1f" y="%d" width="156" height="94" rx="5"/>' % (cx - 70, y0 + 30, cx - 62, y0 + 38))
+            g.append('<rect class="f-go" x="%.1f" y="%d" width="156" height="18"/>' % (cx - 62, y0 + 38))
+            for r in range(2):
+                g.append('<rect class="f-rule" x="%.1f" y="%d" width="%d" height="13" rx="4"/>' % (cx - 48, y0 + 72 + r * 26, (120, 92)[r]))
+            g.append('<rect class="f-cb" x="%.1f" y="%d" width="196" height="11" rx="5.5"/>' % (cx - 82, y0 + 140))
+            g.append(body(cx - 72, by + 34, 1.15, "f-co"))
+            g.append('<circle class="f-dt" cx="%.1f" cy="%.1f" r="21"/>' % (cx - 72, by + 34 - 72 * 1.15 - 2))
+        g.append('</g>')
+        num, _ = txt(str(i + 1), "serif", 30, x + 23, by - 13, "f-pp" if i < 2 else "f-t", anchor="middle")
+        g.append('<rect class="%s" x="%d" y="%d" width="46" height="46"/>%s' % (ink, x, by - 46, num))
+        for r, bw in enumerate(((150, 112), (176, 120), (128, 150))[i]):
+            g.append('<rect class="%s" x="%d" y="%d" width="%d" height="%d" rx="%.1f"/>' % ("f-cb" if r == 0 else "f-rule", x, by + 30 + r * 30, bw, 14 if r == 0 else 11, 7 if r == 0 else 5.5))
+        out.append('<g%s>%s</g>' % (A("up", 0.2 + i * 0.18), "".join(g)))
+    # the badge the room earns: a scalloped seal around a gold coin
+    cx, cy = 1902, 182
+    pts = " ".join("%.1f,%.1f" % (cx + (62 if k % 2 else 70) * math.cos(k * math.pi / 20), cy + (62 if k % 2 else 70) * math.sin(k * math.pi / 20)) for k in range(40))
+    seal = ('<polygon class="f-gw" points="%s"/><circle class="f-pp" cx="%d" cy="%d" r="54"/><circle class="f-pol" cx="%d" cy="%d" r="47"/>'
+            '<circle class="f-go s-cb" stroke-width="4" cx="%d" cy="%d" r="28"/><circle class="s-cb" fill="none" stroke-width="2.5" stroke-dasharray="3 5" cx="%d" cy="%d" r="19"/>'
+            % (pts, cx, cy, cx, cy, cx, cy, cx, cy))
+    out.append('<g%s>%s</g>' % (A("stamp", 1.25), seal))
+    return "".join(out)
+
+
 def banner():
     W, H = 2000, 560
     out = []
@@ -591,3 +641,6 @@ if __name__ == "__main__":
     wide("podium-pulse-sketchbook", "paper", "Podium Pulse sketchbook",
          "A check-in that bookends a session: how a room arrives, how it leaves, and the moment it sees the difference.",
          sketchbook(), title_face="serif", line_face="serif-italic", gold_dot=True)
+    wide("clear-instructions", "paper", "Clear Instructions sketchbook",
+         "Who you\u2019re with, where you work, and when to type. Obvious at every step.",
+         clear_instructions(), title_face="serif", line_face="serif-italic", gold_dot=True, max_w=960)

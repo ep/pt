@@ -1,0 +1,783 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Show Me</title>
+<meta name="robots" content="noindex, nofollow">
+<link rel="icon" type="image/svg+xml" href="/pt/assets/favicon/favicon.svg">
+<link rel="icon" type="image/png" sizes="32x32" href="/pt/assets/favicon/favicon-32.png">
+<link rel="apple-touch-icon" sizes="180x180" href="/pt/assets/favicon/apple-touch-icon.png">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;500;600;700&family=Caveat:wght@400;600&display=swap">
+<style>
+:root{
+  --gold:#FFCC00; --wheat:#FFE165; --pollen:#FEF6C9; --sun:#F2C94C;
+  --cobalt:#293851; --aegean:#586A90; --pigeon:#D5D9E3; --mist:#EEF0F5;
+  --coastal:#68BFBD; --glacier:#B3DFDE; --slush:#E4F4F4; --teal:#3E8E8C;
+  --prairie:#D86527; --dust:#EBB293; --blush:#F6E2D5; --clay:#B14E1C;
+  --fern:#90B210; --moss:#C7D887; --leaf:#E9F0CF; --fernInk:#5C7500;
+  --paper:#FFFFFF; --warm:#FBF8F3; --editorial:#F9F6F6; --line:rgba(41,56,81,.14);
+  --sans:'Montserrat','Gotham',Arial,sans-serif; --serif:Georgia,'Gelasio','Times New Roman',serif; --hand:'Caveat',cursive;
+  --spring:cubic-bezier(.22,1,.36,1); --ease:cubic-bezier(.33,1,.68,1);
+}
+*{box-sizing:border-box;margin:0;padding:0;}
+html,body{height:100%;}
+body{font-family:var(--sans);color:var(--cobalt);background:var(--warm);line-height:1.15;-webkit-font-smoothing:antialiased;}
+button{font:inherit;color:inherit;cursor:pointer;border:0;background:none;}
+:focus-visible{outline:3px solid var(--gold);outline-offset:3px;border-radius:6px;}
+svg{display:block;}
+.blink{animation:blink 1.05s steps(1) infinite;}
+@keyframes blink{50%{opacity:0;}}
+@media (prefers-reduced-motion: reduce){ *,*::before,*::after{animation:none !important;transition:none !important;} }
+
+body{background:#ECEAE6;min-height:100%;display:flex;flex-direction:column;}
+.wrap{flex:1;display:grid;place-items:center;padding:16px 16px 0;}
+.stage{container-type:inline-size;width:min(100%, calc((100dvh - 92px) * 16 / 9));aspect-ratio:16/9;background:var(--paper);border-radius:10px;box-shadow:0 12px 40px rgba(41,56,81,.10);position:relative;overflow:hidden;}
+.slide{position:absolute;inset:0;padding:3.4cqw 5cqw 3.4cqw;display:flex;flex-direction:column;}
+.top{display:flex;align-items:center;justify-content:space-between;gap:2cqw;}
+.tabs{display:flex;gap:.4cqw;flex-wrap:wrap;}
+.tabs button{font-size:1.15cqw;font-weight:600;color:var(--aegean);padding:.75cqw 1.2cqw;border-radius:999px;}
+.tabs button[aria-pressed="true"]{background:var(--mist);color:var(--cobalt);}
+.clockbox{display:flex;align-items:center;gap:1cqw;opacity:0;transition:opacity .3s;}
+.clockbox.on{opacity:1;}
+.clockbox svg{width:3.4cqw;height:3.4cqw;}
+.clockbox b{font-family:var(--serif);font-weight:400;font-size:2.6cqw;font-variant-numeric:tabular-nums;min-width:6cqw;}
+.pair{flex:1;display:grid;grid-template-columns:1fr 1fr;gap:3cqw;align-items:center;min-height:0;}
+.side{display:flex;flex-direction:column;gap:1.6cqw;}
+.panel{position:relative;aspect-ratio:16/10.4;border-radius:1.2cqw;overflow:hidden;}
+.panel svg.sc{position:absolute;inset:0;width:100%;height:100%;}
+.dont .panel{background:var(--blush);} .do .panel{background:var(--leaf);}
+.mark{position:absolute;left:1.4cqw;top:1.4cqw;width:3.4cqw;height:3.4cqw;border-radius:50%;display:grid;place-items:center;z-index:2;}
+.mark svg{width:56%;height:56%;}
+.dont .mark{background:var(--prairie);} .do .mark{background:var(--fern);}
+.cap{font-family:var(--serif);font-style:italic;font-size:2.15cqw;line-height:1.2;text-wrap:balance;}
+.dont .cap{color:var(--clay);} .do .cap{color:var(--fernInk);}
+.foot{display:flex;justify-content:space-between;align-items:center;margin-top:1.6cqw;}
+.foot p{font-size:1.15cqw;font-weight:500;color:var(--aegean);}
+.replay{font-size:1.1cqw;font-weight:600;color:var(--cobalt);padding:.7cqw 1.3cqw;border-radius:999px;border:.14cqw solid var(--line);}
+.replay:hover{background:var(--mist);}
+@media (prefers-reduced-motion: reduce){ .rm-hide{display:none;} }
+@media (max-width: 760px){
+  .wrap{padding:12px 12px 0;}
+  .stage{width:100%;aspect-ratio:auto;container-type:normal;}
+  .slide{position:relative;padding:18px;}
+  .top{flex-direction:column;align-items:flex-start;gap:10px;}
+  .tabs button{font-size:13px;padding:8px 12px;}
+  .clockbox svg{width:30px;height:30px;} .clockbox b{font-size:24px;min-width:56px;}
+  .pair{grid-template-columns:1fr;gap:22px;margin-top:16px;}
+  .side{gap:10px;} .panel{border-radius:12px;} .mark{width:34px;height:34px;left:10px;top:10px;}
+  .cap{font-size:19px;} .foot{margin-top:18px;gap:12px;} .foot p{font-size:13px;} .replay{font-size:13px;padding:10px 16px;}
+}
+</style>
+<style id="dyn"></style>
+</head>
+<body>
+<main class="wrap"><section class="stage"><div class="slide">
+  <div class="top"><div class="tabs" id="tabs" role="group" aria-label="Behavior"></div>
+    <div class="clockbox" id="clockbox" aria-hidden="true"><svg viewBox="0 0 40 40"><circle cx="20" cy="20" r="17" fill="#fff" stroke="#293851" stroke-width="2.6"/><line id="hand" x1="20" y1="20" x2="20" y2="7" stroke="#D86527" stroke-width="2.8" stroke-linecap="round"/><circle cx="20" cy="20" r="2.4" fill="#293851"/></svg><b id="clk">0:00</b></div></div>
+  <div class="pair">
+    <div class="side dont"><div class="panel"><span class="mark" aria-label="Not this"><svg viewBox="0 0 20 20"><path d="M5 5l10 10M15 5L5 15" stroke="#fff" stroke-width="3" stroke-linecap="round"/></svg></span><div id="L"></div></div><p class="cap" id="cl"></p></div>
+    <div class="side do"><div class="panel"><span class="mark" aria-label="This"><svg viewBox="0 0 20 20"><path d="M4.5 10.5l3.6 3.6L15.5 6.5" fill="none" stroke="#fff" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"/></svg></span><div id="R"></div></div><p class="cap" id="cr"></p></div>
+  </div>
+  <div class="foot"><p id="where"></p><button class="replay" id="replay">Play again</button></div>
+</div></section></main>
+<script>
+/* ===== EP instruction kit: palette, illustration primitives, scenes, activity data ===== */
+const C = {
+  gold:'#FFCC00', wheat:'#FFE165', pollen:'#FEF6C9', sun:'#F2C94C',
+  cobalt:'#293851', aegean:'#586A90', pigeon:'#D5D9E3', mist:'#EEF0F5',
+  coastal:'#68BFBD', glacier:'#B3DFDE', slush:'#E4F4F4', teal:'#3E8E8C',
+  prairie:'#D86527', dust:'#EBB293', blush:'#F6E2D5', clay:'#B14E1C',
+  fern:'#90B210', moss:'#C7D887', leaf:'#E9F0CF', fernInk:'#5C7500',
+  paper:'#FFFFFF', warm:'#FBF8F3', editorial:'#F9F6F6'
+};
+/* Who is doing it. Color of the people in every picture. */
+const WHO = {
+  you:  { body:C.coastal, hair:C.teal,  ink:C.teal,  tint:C.slush,  word:'On your own' },
+  team: { body:C.prairie, hair:C.clay,  ink:C.clay,  tint:C.blush,  word:'With your team' },
+  room: { body:C.aegean,  hair:C.cobalt,ink:C.cobalt,tint:C.mist,   word:'Everyone' }
+};
+/* where the work happens. Everyone has their own laptop the whole time. */
+const WHERE = {
+  head: 'On your own',
+  talk: 'out loud',
+  chart:'on the flip chart',
+  ai:   'in your AI tool',
+  app:  'in the workshop app'
+};
+const HAND = "Caveat, 'Segoe Print', cursive";
+
+/* ---------- primitives ---------- */
+function hairPath(k, c){
+  switch(k){
+    case 1: return `<path d="M-15.6-61C-16.5-75-7-81 1-80.5 11-80 17.2-73 15.6-62 11-68.5 4-71-2-70.4-8.5-69.8-12.6-66.4-15.6-61Z" fill="${c}"/>`;
+    case 2: return `<circle cx="0" cy="-82.5" r="6.5" fill="${c}"/><path d="M-15.6-61C-16.5-75-7-80.5 0-80.5 8-80.5 16.8-75 15.6-61 11-68 5-70.5 0-70.5-5-70.5-11-68-15.6-61Z" fill="${c}"/>`;
+    case 3: return `<path d="M-15.8-59C-17.5-77-7-81.5 0-81.5 8-81.5 17.5-77 15.8-59L17-45C12.5-46.5 10.2-50 10.4-56 9.6-66.5-9.6-66.5-10.4-56-10.2-50-12.5-46.5-17-45Z" fill="${c}"/>`;
+    case 4: return [[-13,-69],[-8.5,-76],[0,-79],[8.5,-76],[13,-69]].map(([x,y])=>`<circle cx="${x}" cy="${y}" r="6.8" fill="${c}"/>`).join('');
+    case 5: return `<path d="M-15.4-63C-15-73-9-78.6 0-78.6 9-78.6 15-73 15.4-63L12-66.5 6-63.5 0-67.5-6-63.5-12-66.5Z" fill="${c}"/>`;
+    default: return '';
+  }
+}
+/* person: x,y = bottom centre of the torso. arms: [[side, hx, hy], ...] hands relative to person */
+function person(x, y, o={}){
+  const s = o.s || 1, w = WHO[o.who||'you'];
+  const body = o.body || w.body, hair = o.hairC || w.hair;
+  let g = `<g transform="translate(${x} ${y}) scale(${s})" class="${o.cls||''}">`;
+  g += `<path d="M-28 0V-24C-28-38-18-46-5-46H5C18-46 28-38 28-24V0Z" fill="${body}"/>`;
+  g += `<circle cx="0" cy="-63" r="15.2" fill="${body}"/>`;
+  g += hairPath(o.hair ?? 1, hair);
+  (o.arms||[]).forEach(([side,ax,ay,cls])=>{
+    const hx = (ax-x)/s, hy = (ay-y)/s;
+    const sx = side==='L' ? -20 : 20, sy = -35;
+    const bend = side==='L' ? -1 : 1;
+    const mx = (sx+hx)/2 + bend*7, my = (sy+hy)/2 + 9;
+    const d = `M${sx} ${sy}Q${mx} ${my} ${hx} ${hy}`;
+    g += `<g class="${cls||''}"><path d="${d}" stroke="#fff" stroke-width="14.5" fill="none" stroke-linecap="round"/>`;
+    g += `<path d="${d}" stroke="${body}" stroke-width="10" fill="none" stroke-linecap="round"/>`;
+    g += `<circle cx="${hx}" cy="${hy}" r="6.6" fill="${body}" stroke="#fff" stroke-width="2.2"/></g>`;
+  });
+  return g + `</g>`;
+}
+function floor(cx, cy, rx, ry=9){ return `<ellipse cx="${cx}" cy="${cy}" rx="${rx}" ry="${ry}" fill="${C.cobalt}" opacity=".06"/>`; }
+function lines(x, y, w, n, gap=6, c=C.pigeon, sw=2.4){
+  let g=''; for(let i=0;i<n;i++){ const ww = i===n-1 ? w*0.62 : w; g += `<line x1="${x}" y1="${y+i*gap}" x2="${x+ww}" y2="${y+i*gap}" stroke="${c}" stroke-width="${sw}" stroke-linecap="round"/>`; } return g;
+}
+function txt(x, y, t, o={}){
+  return `<text x="${x}" y="${y}" font-family="${o.f||HAND}" font-size="${o.fs||15}" fill="${o.c||C.cobalt}" text-anchor="${o.a||'middle'}" font-weight="${o.w||400}" ${o.rot?`transform="rotate(${o.rot} ${x} ${y})"`:''} class="${o.cls||''}">${t}</text>`;
+}
+
+/* screen contents. x,y,w,h is the inner screen */
+const SCREENS = {
+  blank(){ return ''; },
+  app(x,y,w,h,o={}){
+    let g = `<rect x="${x}" y="${y}" width="${w}" height="${h*0.17}" fill="${C.gold}"/>`;
+    g += `<circle cx="${x+9}" cy="${y+h*0.085}" r="3" fill="#fff"/>`;
+    const rows = o.rows || 3, top = y+h*0.27, rh = h*0.16, gap = h*0.055;
+    for(let i=0;i<rows;i++){
+      const ry = top + i*(rh+gap);
+      g += `<rect x="${x+9}" y="${ry}" width="${w-18}" height="${rh}" rx="3" fill="#fff" stroke="${C.pigeon}" stroke-width="1.6"/>`;
+      if(i < (o.filled??1)) g += lines(x+15, ry+rh/2, (w-34)*(i%2?0.7:0.9), 1, 0, C.aegean, 2);
+      if(i === (o.filled??1)) g += `<rect class="blink" x="${x+15}" y="${ry+rh*0.22}" width="2.2" height="${rh*0.56}" fill="${C.cobalt}"/>`;
+    }
+    return g;
+  },
+  lists(x,y,w,h,o={}){
+    let g = `<rect x="${x}" y="${y}" width="${w}" height="${h*0.17}" fill="${C.gold}"/><circle cx="${x+9}" cy="${y+h*0.085}" r="3" fill="#fff"/>`;
+    const cw = (w-27)/2;
+    [[x+9, o.l||C.slush, o.lk||C.coastal],[x+18+cw, o.r||C.blush, o.rk||C.prairie]].forEach(([cx,fill,k],j)=>{
+      g += `<rect x="${cx}" y="${y+h*0.26}" width="${cw*0.55}" height="4" rx="2" fill="${k}"/>`;
+      const n = j===0 ? (o.nl??3) : (o.nr??2);
+      for(let i=0;i<n;i++) g += `<rect x="${cx}" y="${y+h*0.38+i*h*0.17}" width="${cw}" height="${h*0.12}" rx="2.5" fill="${fill}"/>`;
+    });
+    return g;
+  },
+  chooser(x,y,w,h){
+    let g = `<rect x="${x}" y="${y}" width="${w}" height="${h*0.17}" fill="${C.gold}"/><circle cx="${x+9}" cy="${y+h*0.085}" r="3" fill="#fff"/>`;
+    const tw=(w-18-8)/3, th=h*0.28;
+    for(let i=0;i<6;i++){ const cx=x+9+(i%3)*(tw+4), cy=y+h*0.27+Math.floor(i/3)*(th+5);
+      const sel = i===1; g += `<rect x="${cx}" y="${cy}" width="${tw}" height="${th}" rx="3" fill="${sel?C.cobalt:'#fff'}" stroke="${sel?C.cobalt:C.pigeon}" stroke-width="1.6"/>`;
+      g += `<circle cx="${cx+tw/2}" cy="${cy+th/2}" r="${th*0.17}" fill="${sel?'#fff':C.pigeon}"/>`; }
+    return g;
+  },
+  ai(x,y,w,h,o={}){
+    let g = `<rect x="${x}" y="${y}" width="${w}" height="${h*0.12}" fill="${C.mist}"/>`;
+    g += `<rect x="${x+w*0.38}" y="${y+h*0.2}" width="${w*0.55}" height="${h*0.2}" rx="6" fill="${C.pigeon}"/>`;
+    g += lines(x+w*0.43, y+h*0.27, w*0.42, 2, h*0.07, '#fff', 2);
+    const av = o.robot ? robotMini(x+w*0.12, y+h*0.6, h*0.12) : `<circle cx="${x+w*0.12}" cy="${y+h*0.6}" r="${h*0.08}" fill="${C.coastal}"/>`;
+    g += av + `<rect x="${x+w*0.22}" y="${y+h*0.48}" width="${w*0.62}" height="${h*0.36}" rx="6" fill="${C.slush}"/>`;
+    g += lines(x+w*0.27, y+h*0.57, w*0.5, 3, h*0.085, C.coastal, 2);
+    if(o.shot) g += `<rect x="${x+w*0.42}" y="${y+h*0.17}" width="${w*0.2}" height="${h*0.13}" rx="2" fill="${C.aegean}" opacity=".55"/>`;
+    return g;
+  },
+  value(x,y,w,h){
+    let g = `<rect x="${x}" y="${y}" width="${w}" height="${h*0.17}" fill="${C.gold}"/><circle cx="${x+9}" cy="${y+h*0.085}" r="3" fill="#fff"/>`;
+    g += `<rect x="${x+9}" y="${y+h*0.3}" width="${w-18}" height="${h*0.52}" rx="3" fill="#fff" stroke="${C.pigeon}" stroke-width="1.6"/>`;
+    g += txt(x+15, y+h*0.48, 'My role exists to', {fs:h*0.12, a:'start', c:C.aegean});
+    g += lines(x+15, y+h*0.6, w*0.55, 1, 0, C.cobalt, 1.6);
+    g += txt(x+15, y+h*0.75, 'so that', {fs:h*0.12, a:'start', c:C.aegean});
+    g += `<rect class="blink" x="${x+15+h*0.38}" y="${y+h*0.66}" width="2" height="${h*0.12}" fill="${C.cobalt}"/>`;
+    return g;
+  },
+  two(x,y,w,h){
+    let g = `<rect x="${x}" y="${y}" width="${w}" height="${h*0.17}" fill="${C.gold}"/><circle cx="${x+9}" cy="${y+h*0.085}" r="3" fill="#fff"/>`;
+    const cw=(w-24)/2;
+    g += `<rect x="${x+9}" y="${y+h*0.3}" width="${cw}" height="${h*0.5}" rx="4" fill="${C.blush}"/>`;
+    g += `<rect x="${x+15+cw}" y="${y+h*0.3}" width="${cw}" height="${h*0.5}" rx="4" fill="${C.slush}"/>`;
+    g += lines(x+15, y+h*0.45, cw-14, 2, h*0.11, C.prairie, 2);
+    g += `<rect class="blink" x="${x+21+cw}" y="${y+h*0.38}" width="2" height="${h*0.13}" fill="${C.cobalt}"/>`;
+    return g;
+  },
+  storyboard(x,y,w,h){
+    let g = `<rect x="${x}" y="${y}" width="${w}" height="${h*0.12}" fill="${C.mist}"/>`;
+    const fw=(w-24)/2, fh=(h*0.8-10)/2;
+    for(let i=0;i<4;i++){ g += `<rect x="${x+8+(i%2)*(fw+8)}" y="${y+h*0.17+Math.floor(i/2)*(fh+6)}" width="${fw}" height="${fh}" rx="2" fill="${C.glacier}"/>`; }
+    return g;
+  }
+};
+function laptop(x, y, o={}){
+  const w = o.w||140, h = Math.round(w*0.62), top = y-8-h;
+  let g = `<g class="${o.cls||''}">`;
+  if(o.glow) g += `<rect x="${x-w/2-7}" y="${top-7}" width="${w+14}" height="${h+14}" rx="12" fill="${C.gold}" opacity=".35"/>`;
+  g += `<rect x="${x-w/2}" y="${top}" width="${w}" height="${h}" rx="7" fill="${C.cobalt}"/>`;
+  g += `<rect x="${x-w/2+5}" y="${top+5}" width="${w-10}" height="${h-10}" rx="3" fill="#fff"/>`;
+  g += `<g clip-path="none">${(SCREENS[o.screen||'blank'])(x-w/2+5, top+5, w-10, h-10, o)}</g>`;
+  g += `<path d="M${x-w/2-12} ${y-8}H${x+w/2+12}L${x+w/2+5} ${y}H${x-w/2-5}Z" fill="${C.pigeon}" stroke="${C.cobalt}" stroke-width="2" stroke-linejoin="round"/>`;
+  return g + `</g>`;
+}
+/* laptop seen from behind (lid), for "everyone at their own laptop" */
+function lid(x, y, o={}){
+  const w=o.w||62, h=w*0.62;
+  return `<g class="${o.cls||''}"><rect x="${x-w/2}" y="${y-h}" width="${w}" height="${h}" rx="5" fill="${o.fill||C.pigeon}" stroke="${C.cobalt}" stroke-width="2"/>`+
+    (o.icon==='robot' ? robotMini(x, y-h/2, h*0.26) : `<circle cx="${x}" cy="${y-h/2}" r="3.2" fill="#fff"/>`)+
+    `<rect x="${x-w/2-5}" y="${y}" width="${w+10}" height="5" rx="2.5" fill="${C.cobalt}"/></g>`;
+}
+function flipchart(x, y, o={}){
+  const w=o.w||118, h=o.h||104, top=y-h-30;
+  let g = `<g class="${o.cls||''}">`;
+  g += `<line x1="${x-w/2+14}" y1="${top+h-4}" x2="${x-w/2-2}" y2="${y}" stroke="${C.cobalt}" stroke-width="3" stroke-linecap="round"/>`;
+  g += `<line x1="${x+w/2-14}" y1="${top+h-4}" x2="${x+w/2+2}" y2="${y}" stroke="${C.cobalt}" stroke-width="3" stroke-linecap="round"/>`;
+  g += `<line x1="${x}" y1="${top+h-4}" x2="${x}" y2="${y-4}" stroke="${C.cobalt}" stroke-width="3" stroke-linecap="round"/>`;
+  g += `<rect x="${x-w/2}" y="${top}" width="${w}" height="${h}" rx="3" fill="#fff" stroke="${C.cobalt}" stroke-width="2.5"/>`;
+  g += `<rect x="${x-w/2-5}" y="${top-6}" width="${w+10}" height="9" rx="4" fill="${C.cobalt}"/>`;
+  const p=8, gap=6, fw=(w-2*p-gap)/2, fh=(h-2*p-gap)/2;
+  const frames = o.frames ?? 0;
+  for(let i=0;i<4;i++){
+    const fx = x-w/2+p+(i%2)*(fw+gap), fy = top+p+Math.floor(i/2)*(fh+gap);
+    const on = i < frames;
+    g += `<g class="fr fr${i}"><rect x="${fx}" y="${fy}" width="${fw}" height="${fh}" rx="2" fill="${on?C.glacier:'none'}" stroke="${on?'none':C.pigeon}" stroke-width="1.5" stroke-dasharray="${on?'':'3 3'}"/>`;
+    if(on && o.labels && o.labels[i]) g += txt(fx+fw/2, fy+fh/2+4, o.labels[i], {fs:o.lfs||11});
+    else if(on) g += doodle(i, fx, fy, fw, fh);
+    g += `</g>`;
+    const m = o.marks && o.marks[i];
+    if(m==='f') g += `<g class="mk mk${i}">${burst(fx+4, fy+4, 8.5)}</g>`;
+    if(m==='j') g += `<g class="mk mk${i}">${gavel(fx+4, fy+4, 8.5)}</g>`;
+    if(m==='fj') g += `<g class="mk mk${i}">${burst(fx+4, fy+4, 8.5)}${gavel(fx+fw-4, fy+fh-4, 8.5)}</g>`;
+    if(o.circle===i) g += `<ellipse class="ring" cx="${fx+fw/2}" cy="${fy+fh/2}" rx="${fw*0.68}" ry="${fh*0.72}" fill="none" stroke="${C.prairie}" stroke-width="2.6" transform="rotate(-6 ${fx+fw/2} ${fy+fh/2})"/>`;
+  }
+  return g + `</g>`;
+}
+function doodle(i, x, y, w, h){
+  const cx=x+w/2, cy=y+h/2;
+  const k = C.teal;
+  switch(i%4){
+    case 0: return `<rect x="${cx-9}" y="${cy-7}" width="18" height="12" rx="2" fill="none" stroke="${k}" stroke-width="1.8"/><line x1="${cx-12}" y1="${cy+7}" x2="${cx+12}" y2="${cy+7}" stroke="${k}" stroke-width="1.8" stroke-linecap="round"/>`;
+    case 1: return `<circle cx="${cx-6}" cy="${cy-3}" r="4" fill="none" stroke="${k}" stroke-width="1.8"/><circle cx="${cx+6}" cy="${cy-3}" r="4" fill="none" stroke="${k}" stroke-width="1.8"/><path d="M${cx-12} ${cy+8}Q${cx} ${cy+1} ${cx+12} ${cy+8}" fill="none" stroke="${k}" stroke-width="1.8"/>`;
+    case 2: return `<path d="M${cx-11} ${cy+6}L${cx-4} ${cy-2}L${cx+2} ${cy+3}L${cx+11} ${cy-7}" fill="none" stroke="${k}" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/>`;
+    default: return `<path d="M${cx-9} ${cy}l5 5 11-11" fill="none" stroke="${k}" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>`;
+  }
+}
+function burst(cx, cy, r){
+  let d=''; for(let i=0;i<20;i++){ const a=i*Math.PI/10 - Math.PI/2, rr = i%2 ? r*0.62 : r; d += (i?'L':'M')+(cx+rr*Math.cos(a)).toFixed(2)+' '+(cy+rr*Math.sin(a)).toFixed(2); }
+  return `<path d="${d}Z" fill="${C.sun}" stroke="${C.cobalt}" stroke-width="1.3" stroke-linejoin="round"/>`;
+}
+function gavel(cx, cy, r){
+  return `<circle cx="${cx}" cy="${cy}" r="${r}" fill="${C.fern}"/>`+
+   `<g transform="translate(${cx} ${cy}) rotate(-40) scale(${r/10})"><rect x="-6.5" y="-6" width="13" height="6" rx="1.5" fill="#fff"/><rect x="-1.3" y="0" width="2.6" height="8" rx="1.2" fill="#fff"/></g>`;
+}
+function robotMini(cx, cy, r){
+  return `<g><line x1="${cx}" y1="${cy-r*1.05}" x2="${cx}" y2="${cy-r*1.5}" stroke="${C.cobalt}" stroke-width="${Math.max(1,r*0.16)}" stroke-linecap="round"/><circle cx="${cx}" cy="${cy-r*1.6}" r="${r*0.22}" fill="${C.prairie}"/>`+
+   `<rect x="${cx-r}" y="${cy-r}" width="${2*r}" height="${1.8*r}" rx="${r*0.4}" fill="#fff" stroke="${C.cobalt}" stroke-width="${Math.max(1,r*0.16)}"/>`+
+   `<circle cx="${cx-r*0.4}" cy="${cy-r*0.12}" r="${r*0.2}" fill="${C.cobalt}"/><circle cx="${cx+r*0.4}" cy="${cy-r*0.12}" r="${r*0.2}" fill="${C.cobalt}"/>`+
+   `<line x1="${cx-r*0.35}" y1="${cy+r*0.42}" x2="${cx+r*0.35}" y2="${cy+r*0.42}" stroke="${C.cobalt}" stroke-width="${Math.max(1,r*0.14)}" stroke-linecap="round"/></g>`;
+}
+function bubble(x, y, w, h, o={}){
+  const t = o.tail || 'bl', r = Math.min(12, h/2);
+  let tail;
+  if(t==='bl') tail = `M${x+w*0.22} ${y+h-1}L${x+w*0.12} ${y+h+11}L${x+w*0.36} ${y+h-1}`;
+  else if(t==='br') tail = `M${x+w*0.64} ${y+h-1}L${x+w*0.88} ${y+h+11}L${x+w*0.78} ${y+h-1}`;
+  else tail = `M${x+w*0.42} ${y+h-1}L${x+w*0.5} ${y+h+11}L${x+w*0.58} ${y+h-1}`;
+  const fill = o.fill || '#fff';
+  let g = `<g class="${o.cls||''}"><path d="${tail}" fill="${fill}" stroke="${C.cobalt}" stroke-width="2" stroke-linejoin="round"/>`;
+  g += `<rect x="${x}" y="${y}" width="${w}" height="${h}" rx="${r}" fill="${fill}" stroke="${C.cobalt}" stroke-width="2"/>`;
+  g += `<path d="${tail.replace(/^M([\d.]+) ([\d.]+)/, (m,a,b)=>`M${a} ${(+b-2.2)}`)}" fill="${fill}" stroke="none"/>`;
+  if(o.text) g += txt(x+w/2, y+h/2+(o.fs||16)*0.34, o.text, {fs:o.fs||16, c:o.tc||C.cobalt});
+  if(o.inner) g += o.inner;
+  return g + `</g>`;
+}
+function cloud(cx, cy, w, h, inner='', o={}){
+  const pts = [[-0.32,0.1,0.3],[-0.12,-0.22,0.34],[0.18,-0.2,0.32],[0.36,0.06,0.28],[0.12,0.24,0.3],[-0.18,0.24,0.28]];
+  const R = Math.min(w,h);
+  let a='', b='';
+  pts.forEach(([dx,dy,rr])=>{ a += `<circle cx="${cx+dx*w}" cy="${cy+dy*h}" r="${rr*R}" fill="#fff" stroke="${C.cobalt}" stroke-width="4.4"/>`; b += `<circle cx="${cx+dx*w}" cy="${cy+dy*h}" r="${rr*R}" fill="#fff"/>`; });
+  const tx = o.tx ?? -0.45, ty = o.ty ?? 0.55;
+  const dots = `<circle cx="${cx+tx*w}" cy="${cy+ty*h}" r="5" fill="#fff" stroke="${C.cobalt}" stroke-width="2"/><circle cx="${cx+(tx-0.12)*w}" cy="${cy+(ty+0.22)*h}" r="3" fill="#fff" stroke="${C.cobalt}" stroke-width="2"/>`;
+  return `<g class="${o.cls||''}">${dots}${a}${b}${inner}</g>`;
+}
+function sticky(x, y, o={}){
+  const w=o.w||44, h=o.h||w, rot=o.rot||0, c=o.c||C.wheat;
+  return `<g transform="rotate(${rot} ${x+w/2} ${y+h/2})" class="${o.cls||''}"><rect x="${x+1.5}" y="${y+2.5}" width="${w}" height="${h}" fill="${C.cobalt}" opacity=".1"/>`+
+    `<rect x="${x}" y="${y}" width="${w}" height="${h}" fill="${c}"/>`+
+    (o.text ? txt(x+w/2, y+h/2+(o.fs||13)*0.35, o.text, {fs:o.fs||13}) : '')+
+    (o.lines ? lines(x+7, y+h*0.38, w-14, o.lines, 7, C.cobalt, 1.6) : '')+`</g>`;
+}
+function doc(x, y, o={}){
+  const w=o.w||40, h=w*1.28, f=w*0.26;
+  return `<g class="${o.cls||''}"><path d="M${x} ${y}H${x+w-f}L${x+w} ${y+f}V${y+h}H${x}Z" fill="#fff" stroke="${C.cobalt}" stroke-width="2" stroke-linejoin="round"/>`+
+   `<path d="M${x+w-f} ${y}V${y+f}H${x+w}" fill="none" stroke="${C.cobalt}" stroke-width="2" stroke-linejoin="round"/>`+
+   lines(x+w*0.18, y+h*0.38, w*0.62, o.n||4, h*0.13, C.aegean, 1.8)+`</g>`;
+}
+function book(x, y, w){
+  const h=w*0.42;
+  return `<g><path d="M${x} ${y+6}Q${x+w*0.25} ${y-4} ${x+w/2} ${y+6}V${y+h+6}Q${x+w*0.25} ${y+h-4} ${x} ${y+h+6}Z" fill="#fff" stroke="${C.cobalt}" stroke-width="2" stroke-linejoin="round"/>`+
+   `<path d="M${x+w} ${y+6}Q${x+w*0.75} ${y-4} ${x+w/2} ${y+6}V${y+h+6}Q${x+w*0.75} ${y+h-4} ${x+w} ${y+h+6}Z" fill="#fff" stroke="${C.cobalt}" stroke-width="2" stroke-linejoin="round"/>`+
+   lines(x+w*0.08, y+h*0.45, w*0.32, 3, h*0.2, C.aegean, 1.6)+lines(x+w*0.58, y+h*0.45, w*0.32, 3, h*0.2, C.aegean, 1.6)+`</g>`;
+}
+function chartDoc(x, y, w){
+  const h=w*1.25;
+  return `<g><rect x="${x}" y="${y}" width="${w}" height="${h}" rx="2" fill="#fff" stroke="${C.cobalt}" stroke-width="2"/>`+
+   lines(x+w*0.15, y+h*0.14, w*0.5, 1, 0, C.aegean, 1.8)+
+   `<path d="M${x+w*0.15} ${y+h*0.82}L${x+w*0.38} ${y+h*0.6}L${x+w*0.55} ${y+h*0.7}L${x+w*0.85} ${y+h*0.32}" fill="none" stroke="${C.coastal}" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"/>`+
+   `<line x1="${x+w*0.15}" y1="${y+h*0.88}" x2="${x+w*0.85}" y2="${y+h*0.88}" stroke="${C.pigeon}" stroke-width="1.6"/></g>`;
+}
+function arrow(x1, y1, x2, y2, o={}){
+  const bend = o.bend ?? -18, mx=(x1+x2)/2, my=(y1+y2)/2+bend;
+  const ang = Math.atan2(y2-my, x2-mx), L=9;
+  const a1 = ang+Math.PI*0.82, a2 = ang-Math.PI*0.82;
+  const c = o.c || C.prairie;
+  return `<g class="${o.cls||''}"><path d="M${x1} ${y1}Q${mx} ${my} ${x2} ${y2}" fill="none" stroke="${c}" stroke-width="${o.sw||2.6}" stroke-linecap="round"/>`+
+    `<path d="M${x2+L*Math.cos(a1)} ${y2+L*Math.sin(a1)}L${x2} ${y2}L${x2+L*Math.cos(a2)} ${y2+L*Math.sin(a2)}" fill="none" stroke="${c}" stroke-width="${o.sw||2.6}" stroke-linecap="round" stroke-linejoin="round"/></g>`;
+}
+function sun(cx, cy, r){
+  let g = `<circle cx="${cx}" cy="${cy}" r="${r}" fill="${C.sun}"/>`;
+  for(let i=0;i<8;i++){ const a=i*Math.PI/4; g += `<line x1="${cx+Math.cos(a)*r*1.35}" y1="${cy+Math.sin(a)*r*1.35}" x2="${cx+Math.cos(a)*r*1.75}" y2="${cy+Math.sin(a)*r*1.75}" stroke="${C.sun}" stroke-width="2.6" stroke-linecap="round"/>`; }
+  return g;
+}
+function storm(cx, cy, r){
+  return `<g><circle cx="${cx-r*0.5}" cy="${cy}" r="${r*0.6}" fill="${C.aegean}"/><circle cx="${cx+r*0.1}" cy="${cy-r*0.3}" r="${r*0.75}" fill="${C.aegean}"/><circle cx="${cx+r*0.7}" cy="${cy+r*0.05}" r="${r*0.55}" fill="${C.aegean}"/><rect x="${cx-r*1.05}" y="${cy}" width="${r*2.3}" height="${r*0.6}" rx="${r*0.3}" fill="${C.aegean}"/>`+
+   `<path d="M${cx+r*0.05} ${cy+r*0.7}L${cx-r*0.25} ${cy+r*1.25}H${cx+r*0.1}L${cx-r*0.15} ${cy+r*1.75}" fill="none" stroke="${C.sun}" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"/></g>`;
+}
+function card(x, y, w, h, t, o={}){
+  return `<g transform="rotate(${o.rot||0} ${x+w/2} ${y+h/2})" class="${o.cls||''}"><rect x="${x+1.5}" y="${y+2.5}" width="${w}" height="${h}" rx="5" fill="${C.cobalt}" opacity=".1"/><rect x="${x}" y="${y}" width="${w}" height="${h}" rx="5" fill="#fff" stroke="${o.sel?C.prairie:C.cobalt}" stroke-width="${o.sel?3:2}"/>`+
+   txt(x+w/2, y+h/2-2, t[0], {fs:o.fs||13})+(t[1]?txt(x+w/2, y+h/2+12, t[1], {fs:o.fs||13}):'')+`</g>`;
+}
+function thumb(cx, cy, up, c){
+  const s = up ? 1 : -1;
+  return `<g transform="translate(${cx} ${cy}) scale(1 ${s})"><rect x="-9" y="-2" width="6" height="12" rx="2" fill="${c}"/><path d="M-2 -2V10H9C11 10 12 8 12.4 6L13.6-1C14-3 12.6-4.5 10.8-4.5H4L5-10C5.4-12.5 3.5-14 2-13L-2-2Z" fill="${c}"/></g>`;
+}
+function clock(cx, cy, r, o={}){
+  let g = `<g class="${o.cls||''}"><circle cx="${cx}" cy="${cy}" r="${r}" fill="#fff" stroke="${C.cobalt}" stroke-width="2.4"/>`;
+  for(let i=0;i<12;i++){ const a=i*Math.PI/6; g += `<line x1="${cx+Math.cos(a)*r*0.78}" y1="${cy+Math.sin(a)*r*0.78}" x2="${cx+Math.cos(a)*r*0.9}" y2="${cy+Math.sin(a)*r*0.9}" stroke="${C.pigeon}" stroke-width="1.8" stroke-linecap="round"/>`; }
+  g += `<g class="${o.handCls||''}" style="transform-origin:${cx}px ${cy}px"><line x1="${cx}" y1="${cy}" x2="${cx}" y2="${cy-r*0.72}" stroke="${o.hc||C.prairie}" stroke-width="2.6" stroke-linecap="round"/></g>`;
+  g += `<circle cx="${cx}" cy="${cy}" r="2.6" fill="${C.cobalt}"/></g>`;
+  return g;
+}
+function audience(x, y, cols, rows, o={}){
+  let g=''; for(let r=rows-1;r>=0;r--) for(let c=0;c<cols;c++){
+    const px = x + c*34 + (r%2?17:0), py = y + r*22;
+    g += person(px, py, {s:0.44, who:'room', hair:0, body: ['#C9CFDC','#A4AEC5','#7A89A8'][r] || C.aegean});
+  } return g;
+}
+function ladderStep(x, y, w, h, n){ return `<rect x="${x}" y="${y}" width="${w}" height="${h}" rx="4" fill="${C.mist}"/>`+txt(x+12, y+h-10, n, {f:'Georgia, serif', fs:15, c:C.aegean, a:'start'}); }
+function coin(cx, cy, r){ return `<circle cx="${cx}" cy="${cy}" r="${r}" fill="${C.gold}" stroke="${C.cobalt}" stroke-width="2.4"/><circle cx="${cx}" cy="${cy}" r="${r*0.7}" fill="none" stroke="${C.cobalt}" stroke-width="1.6" stroke-dasharray="2 3"/>`; }
+function ore(cx, cy, r){ return `<path d="M${cx-r} ${cy+r*0.3}L${cx-r*0.55} ${cy-r*0.7}L${cx+r*0.35} ${cy-r*0.85}L${cx+r} ${cy-r*0.1}L${cx+r*0.6} ${cy+r*0.8}L${cx-r*0.4} ${cy+r*0.85}Z" fill="${C.pigeon}" stroke="${C.cobalt}" stroke-width="2" stroke-linejoin="round"/><circle cx="${cx-r*0.2}" cy="${cy}" r="${r*0.14}" fill="${C.sun}"/><circle cx="${cx+r*0.35}" cy="${cy+r*0.25}" r="${r*0.1}" fill="${C.sun}"/>`; }
+
+
+/* ---------- people from behind, desks ---------- */
+function personBack(x, y, o={}){
+  const s = o.s || 1, w = WHO[o.who||'you'];
+  const body = o.body || w.body, hair = o.hairC || w.hair, k = o.hair ?? 1;
+  let g = `<g transform="translate(${x} ${y}) scale(${s})" class="${o.cls||''}">`;
+  g += `<path d="M-28 0V-24C-28-38-18-46-5-46H5C18-46 28-38 28-24V0Z" fill="${body}"/>`;
+  g += `<circle cx="-15.2" cy="-61" r="3.8" fill="${body}"/><circle cx="15.2" cy="-61" r="3.8" fill="${body}"/>`;
+  g += `<circle cx="0" cy="-63" r="15.2" fill="${body}"/>`;
+  if(k===3) g += `<path d="M-15.8-64C-15.8-74-8.6-80.4 0-80.4S15.8-74 15.8-64V-44C10-41.5-10-41.5-15.8-44Z" fill="${hair}"/>`;
+  else if(k===4) g += [[-11,-70],[-6,-77],[2,-78.5],[9.5,-74.5],[12.5,-66],[-12.5,-62],[0,-66],[8,-60],[-6,-59]].map(([a,b])=>`<circle cx="${a}" cy="${b}" r="7" fill="${hair}"/>`).join('');
+  else g += `<circle cx="0" cy="-65.4" r="15.4" fill="${hair}"/>` + (k===2 ? `<circle cx="0" cy="-84" r="6.6" fill="${hair}"/>` : '');
+  return g + `</g>`;
+}
+function desk(x1, x2, y){ return `<rect x="${x1}" y="${y}" width="${x2-x1}" height="8" rx="4" fill="${C.cobalt}" opacity=".08"/>`; }
+/* one person at their own laptop, seen over the shoulder, so you can see their screen */
+function atLaptop(screen, o={}){
+  const lx = o.lx ?? 194, w = o.w ?? 172;
+  return desk(16, 304, 150) + laptop(lx, 150, {w, screen, glow:o.glow, robot:o.robot, filled:o.filled, rows:o.rows}) +
+    personBack(o.px ?? 96, 252, {who:o.who||'you', hair:o.hair ?? 2, s:1.42});
+}
+/* three people, each at their own laptop */
+function eachAt(screen, o={}){
+  let g = desk(10, 310, 128);
+  [62,160,258].forEach((x,i)=>{ g += laptop(x, 128, {w:86, screen, glow:o.glow, robot:1, filled:1, rows:2}); });
+  [62,160,258].forEach((x,i)=>{ g += personBack(x-14, 202, {who:o.who||'you', hair:[1,3,4][i], s:.86}); });
+  return g;
+}
+
+/* ---------- scenes (viewBox 0 0 320 200) ---------- */
+const VB = '0 0 320 200';
+const SCENES = {
+  'think-hopes': () => floor(108,190,70)+person(108,178,{who:'you',hair:3})+lid(108,192,{w:78})+
+     cloud(220,70,118,90,`${sun(192,64,12)}${storm(246,60,15)}`,{tx:-0.52,ty:0.62}),
+  'think-ore': () => floor(104,190,70)+person(104,178,{who:'you',hair:5})+lid(104,192,{w:78})+
+     cloud(218,72,122,94,`${doc(182,42,{w:26,n:3})}${doc(194,50,{w:26,n:3})}${ore(244,78,17)}`,{tx:-0.54,ty:0.6}),
+  'two-plays': () => book(22,40,78)+arrow(108,62,134,62,{bend:-10})+bubble(142,30,44,26,{text:'...',fs:20,tail:'bl'})+bubble(162,62,40,24,{fill:C.slush,tail:'br'})+
+     txt(258,64,'doc to dialog',{fs:19,c:C.teal})+
+     doc(30,118,{w:30,n:3})+doc(42,126,{w:30,n:3})+arrow(86,150,118,150,{bend:-10})+chartDoc(128,122,32)+
+     txt(258,146,'make this',{fs:19,c:C.teal})+txt(258,166,'like that',{fs:19,c:C.teal}),
+  'desk-lists':   () => atLaptop('lists', {glow:1, hair:1}),
+  'desk-chooser': () => atLaptop('chooser', {glow:1, hair:2}),
+  'desk-value':   () => atLaptop('value', {glow:1, hair:5}),
+  'desk-two':     () => atLaptop('two', {glow:1, hair:3}),
+  'desk-ai':      () => atLaptop('ai', {robot:1, hair:2}),
+  'each-ai':      () => eachAt('ai'),
+  'each-app':     () => eachAt('app', {glow:1}),
+  'feedback-bonus': () => desk(16,220,150)+laptop(118,150,{w:150,screen:'ai',robot:1})+personBack(52,246,{who:'you',hair:2,s:1.3})+
+     person(262,182,{who:'room',body:C.cobalt,hairC:'#1B2538',hair:5,s:1.02})+bubble(200,40,82,32,{text:'Feedback!',fs:16,tail:'br'}),
+  'pick-one': () => floor(160,190,120)+person(84,186,{who:'you',hair:4,arms:[['R',146,94]]})+
+     `<rect x="150" y="34" width="120" height="146" rx="4" fill="#fff" stroke="${C.cobalt}" stroke-width="2.4"/>`+
+     [0,1,2,3].map(i=>lines(166,62+i*28,88,1,0,C.aegean,2.2)).join('')+
+     `<ellipse cx="210" cy="90" rx="58" ry="14" fill="none" stroke="${C.prairie}" stroke-width="2.6" transform="rotate(-3 210 90)"/>`,
+  'help-ladder': () => ladderStep(20,142,92,48,'1')+ladderStep(116,110,92,80,'2')+ladderStep(212,78,92,112,'3')+
+     laptop(66,142,{w:64,screen:'ai'})+person(148,110,{who:'team',hair:1,s:0.56})+person(184,110,{who:'team',hair:3,s:0.56})+
+     person(258,78,{who:'room',body:C.cobalt,hairC:'#1B2538',hair:5,s:0.6}),
+  'pick-fast': () => floor(160,192,140)+person(64,136,{who:'team',hair:1,s:0.85,arms:[['R',112,128]]})+person(160,118,{who:'team',hair:3,s:0.8})+person(256,136,{who:'team',hair:4,s:0.85})+
+     card(52,148,66,40,['Team','goals'],{rot:-4})+card(127,150,66,40,['Project','intake'],{rot:2,sel:1})+card(202,148,66,40,['Meeting','prep'],{rot:4}),
+  'sketch-4': (v) => v==='virtual' ? SCENES['sketch-ai']() :
+     floor(160,192,140)+flipchart(160,192,{frames:3,w:124,h:108})+person(62,188,{who:'team',hair:2})+person(258,188,{who:'team',hair:1,arms:[['L',206,124]]}),
+  'sketch-ai': () => desk(16,304,150)+laptop(160,150,{w:176,screen:'storyboard'})+personBack(50,246,{who:'team',hair:2,s:1.25})+personBack(270,246,{who:'team',hair:4,s:1.25}),
+  'mark-fj': (v) => v==='virtual' ? desk(16,304,150)+laptop(160,150,{w:176,screen:'storyboard'})+burst(104,58,12)+gavel(214,112,12)+burst(214,58,12)+personBack(50,246,{who:'team',hair:2,s:1.25})+personBack(270,246,{who:'team',hair:4,s:1.25}) :
+     floor(160,192,140)+flipchart(160,192,{frames:4,w:124,h:108,marks:{0:'f',1:'j',3:'f'}})+person(62,188,{who:'team',hair:4})+person(258,188,{who:'team',hair:3,arms:[['L',206,120]]}),
+  'find-it': (v) => v==='virtual' ? desk(16,304,150)+laptop(160,150,{w:176,screen:'storyboard'})+burst(104,58,12)+`<ellipse cx="104" cy="58" rx="24" ry="20" fill="none" stroke="${C.prairie}" stroke-width="2.6"/>`+personBack(50,246,{who:'team',hair:2,s:1.25})+personBack(270,246,{who:'team',hair:4,s:1.25}) :
+     floor(160,192,140)+flipchart(160,192,{frames:4,w:124,h:108,marks:{0:'f',1:'j',3:'f'},circle:0})+person(62,188,{who:'team',hair:4,arms:[['R',104,100]]})+person(258,188,{who:'team',hair:3}),
+  'feed-it': () => desk(16,304,150)+doc(22,56,{w:42})+sticky(44,96,{w:34,c:C.glacier,lines:2,rot:-6})+arrow(84,92,116,98,{bend:-20})+laptop(206,150,{w:160,screen:'ai',robot:1}),
+  'talk-well': () => floor(160,194,140)+person(64,182,{who:'team',hair:1,s:0.9})+person(160,170,{who:'team',hair:3,s:0.85})+person(256,182,{who:'team',hair:4,s:0.9})+
+     lid(64,196,{w:66})+lid(160,184,{w:62})+lid(256,196,{w:66})+
+     bubble(16,16,92,46,{tail:'br',inner:thumb(62,39,false,C.prairie)})+bubble(212,16,92,46,{tail:'bl',inner:thumb(258,39,true,C.teal)}),
+  'jot-5': () => floor(160,194,140)+person(52,182,{who:'team',hair:2,s:0.9})+person(268,182,{who:'team',hair:4,s:0.9})+lid(52,196,{w:66})+lid(268,196,{w:66})+
+     [0,1,2,3,4].map(i=>sticky(104+(i%3)*40, 34+Math.floor(i/3)*58 + (i%2)*6, {w:34, c:[C.glacier,C.blush,C.leaf][i%3], text:String(i+1), fs:16, rot:[-5,3,-2,4,-4][i]})).join(''),
+  'sort-two': () => `<rect x="40" y="22" width="112" height="134" rx="6" fill="${C.blush}"/><rect x="168" y="22" width="112" height="134" rx="6" fill="${C.slush}"/>`+
+     txt(96,48,'easy',{fs:20,c:C.clay})+txt(224,48,'hard',{fs:20,c:C.teal})+
+     sticky(62,64,{w:30,c:'#fff',lines:2,rot:-4})+sticky(100,90,{w:30,c:'#fff',lines:2,rot:3})+sticky(64,116,{w:30,c:'#fff',lines:2,rot:2})+
+     sticky(188,66,{w:30,c:'#fff',lines:2,rot:4})+sticky(226,100,{w:30,c:'#fff',lines:2,rot:-3})+arrow(150,140,190,130,{bend:-18,c:C.cobalt}),
+  'room-share': () => person(160,98,{who:'room',body:C.cobalt,hairC:'#1B2538',hair:5,s:0.9,arms:[['R',192,30]]})+bubble(200,8,96,34,{text:'Here’s ours',fs:16,tail:'bl'})+audience(58,136,7,3)
+};
+function scene(key, variant){ const f = SCENES[key]; return `<svg viewBox="${VB}" xmlns="http://www.w3.org/2000/svg" role="img" aria-hidden="true">${f?f(variant):''}</svg>`; }
+
+/* small glyphs, 40x40 */
+const GLYPH = {
+  head: (k=C.cobalt)=>`<svg viewBox="0 0 40 40"><circle cx="20" cy="14" r="7" fill="${k}"/><path d="M8 34V29C8 23 13 21 20 21S32 23 32 29V34Z" fill="${k}"/></svg>`,
+  team: (k=C.cobalt)=>`<svg viewBox="0 0 40 40"><circle cx="11" cy="15" r="5" fill="${k}"/><circle cx="29" cy="15" r="5" fill="${k}"/><circle cx="20" cy="12" r="6" fill="${k}"/><path d="M3 34V30C3 25 7 23 11 23 15 23 19 25 19 30V34Z" fill="${k}"/><path d="M21 34V30C21 25 25 23 29 23S37 25 37 30V34Z" fill="${k}"/></svg>`,
+  talk: (k=C.cobalt)=>`<svg viewBox="0 0 40 40"><rect x="3" y="6" width="22" height="15" rx="6" fill="none" stroke="${k}" stroke-width="2.6"/><path d="M8 21L6 27L13 21" fill="none" stroke="${k}" stroke-width="2.6" stroke-linejoin="round"/><rect x="16" y="17" width="21" height="14" rx="6" fill="${k}"/><path d="M31 31L33 36L26 31Z" fill="${k}"/></svg>`,
+  chart: (k=C.cobalt)=>`<svg viewBox="0 0 40 40"><rect x="7" y="5" width="26" height="22" rx="2" fill="none" stroke="${k}" stroke-width="2.6"/><line x1="12" y1="27" x2="8" y2="36" stroke="${k}" stroke-width="2.6" stroke-linecap="round"/><line x1="28" y1="27" x2="32" y2="36" stroke="${k}" stroke-width="2.6" stroke-linecap="round"/><rect x="11" y="9" width="8" height="6" fill="${k}" opacity=".5"/><rect x="21" y="9" width="8" height="6" fill="${k}" opacity=".5"/><rect x="11" y="17" width="8" height="6" fill="${k}" opacity=".5"/><rect x="21" y="17" width="8" height="6" fill="${k}" opacity=".5"/></svg>`,
+  ai: (k=C.cobalt)=>`<svg viewBox="0 0 40 40"><rect x="5" y="7" width="30" height="20" rx="3" fill="none" stroke="${k}" stroke-width="2.6"/><path d="M2 32H38L35 28H5Z" fill="${k}"/><rect x="18" y="11" width="13" height="5" rx="2.5" fill="${k}" opacity=".5"/><rect x="9" y="18" width="15" height="5" rx="2.5" fill="${k}"/></svg>`,
+  app: ()=>`<svg viewBox="0 0 40 40"><rect x="5" y="7" width="30" height="20" rx="3" fill="#fff" stroke="${C.cobalt}" stroke-width="2.6"/><rect x="6.3" y="8.3" width="27.4" height="5" fill="${C.gold}"/><rect x="10" y="17" width="20" height="5" rx="1.5" fill="none" stroke="${C.cobalt}" stroke-width="1.6"/><rect x="12" y="18.2" width="1.6" height="2.6" fill="${C.cobalt}"/><path d="M2 32H38L35 28H5Z" fill="${C.cobalt}"/></svg>`,
+  appOff: ()=>`<svg viewBox="0 0 40 40"><rect x="5" y="7" width="30" height="20" rx="3" fill="none" stroke="${C.aegean}" stroke-width="2.2" stroke-dasharray="3 3"/><path d="M2 32H38L35 28H5Z" fill="${C.pigeon}"/></svg>`
+};
+GLYPH.paper = GLYPH.chart;
+
+/* ---------- activity content: WBWAI 201 facilitator slides first, then the play-by-play and take-away ---------- */
+const ACTIVITIES = [
+ { id:'hopes', name:'Hopes and fears', title:'List your hopes and fears', time:180,
+   steps:[
+    { who:'you', where:'head', scene:'think-hopes', short:'Think', t:'Think of a hope and a fear', d:'What are you looking forward to? What worries you?' },
+    { who:'you', where:'app', scene:'desk-lists', short:'Type them in', t:'Type them in', d:'Hopes in one list, fears in the other.' }
+   ],
+   done:['Your hopes and fears are in'], enters:true },
+ { id:'dormant', name:'Dormant resources', title:'List your dormant resources', time:300,
+   steps:[
+    { who:'you', where:'head', scene:'think-ore', short:'Spot the ore', t:'Spot the ore in your work', d:'Things you can’t find fast, or keep recreating.' },
+    { who:'you', where:'head', scene:'two-plays', short:'Pick a play', t:'Match each one to a play', d:'Doc to dialog, or make this like that.' },
+    { who:'you', where:'app', scene:'desk-lists', short:'Type them in', t:'Type them in', d:'One list per play.' }
+   ],
+   done:['6+ resources','At least 1 in each list'], bonus:'Activate one with AI', badge:'gold' },
+ { id:'coach', name:'Feedback coach', title:'Agent practice: create a feedback coach', time:300,
+   steps:[
+    { who:'you', where:'app', scene:'desk-chooser', short:'Choose your AI', t:'Choose your AI', d:'No agent builder at work? Pick “Agent logic, anywhere.”' },
+    { who:'you', where:'ai', scene:'desk-ai', short:'Build it', t:'Build your feedback coach', d:'Everyone builds their own, at the same time.' },
+    { who:'you', where:'ai', scene:'feedback-bonus', short:'Bonus', t:'Bonus: coach the facilitator', d:'Use your coach to give the facilitator feedback.', bonus:true }
+   ],
+   done:['Your coach replies'], badge:'alive' },
+ { id:'agent', name:'An agent others can use', title:'Create an AI agent others can use', time:600,
+   steps:[
+    { who:'you', where:'head', scene:'pick-one', short:'Pick one', t:'Pick one dormant resource', d:'From the list you just made.' },
+    { who:'you', where:'ai', scene:'each-ai', short:'Build it', t:'Build an agent around it', d:'Heads down. Your team is right there.' },
+    { who:'you', where:'ai', scene:'help-ladder', short:'Stuck?', t:'Stuck? Ask your AI first', d:'Then your team. Then the facilitator.', help:true }
+   ],
+   done:['1 agent ready to share'], early:'Done early? Help a teammate.', badge:'alive' },
+ { id:'storyboard', name:'Map out a workflow', title:'Map out a workflow', time:420,
+   steps:[
+    { who:'team', where:'talk', scene:'pick-fast', short:'Pick fast', t:'Pick a workflow, fast', d:'Know one together? Use it. Just met? Grab a card.', time:30 },
+    { who:'team', where:'chart', vwhere:'ai', scene:'sketch-4', short:'Sketch 4', t:'Sketch 4 big phases', d:'How it works today. Pictures beat sentences.', time:180 },
+    { who:'team', where:'chart', vwhere:'ai', scene:'mark-fj', short:'Mark it', t:'Mark friction and judgment', d:'Friction slows it down. Judgment needs a human.', time:210 }
+   ],
+   done:['4 phases','1+ friction point','1+ judgment point'], badge:'wrap' },
+ { id:'build', name:'Build workflow agents', title:'Build agents that improve this workflow', time:600,
+   steps:[
+    { who:'team', where:'chart', vwhere:'ai', scene:'find-it', short:'Find it', t:'Find it', d:'One friction point AI should take over.' },
+    { who:'you', where:'ai', scene:'each-ai', short:'Build it', t:'Build it', d:'Each of you builds an agent for that step.' },
+    { who:'you', where:'ai', scene:'feed-it', short:'Feed it', t:'Feed it', d:'Bonus: give it a great example or template.', bonus:true }
+   ],
+   done:['Your team has 1+ working agent'], badge:'alive' },
+ { id:'value', name:'Core value', title:'Create your value statement and tasks', time:300,
+   steps:[
+    { who:'team', where:'talk', scene:'talk-well', short:'Talk it out', t:'Done poorly? Done well?', d:'What does each look like in your role?' },
+    { who:'you', where:'app', scene:'desk-value', short:'Type it in', t:'Capture your core value', d:'My role exists to ___ so that ___.' },
+    { who:'team', where:'talk', scene:'jot-5', short:'5 tasks', t:'Jot down 5 tasks', d:'The tasks that deliver that value.', line:'With your team, then jot them down' }
+   ],
+   done:['Core value statement in','5+ tasks'], badge:'hear' },
+ { id:'shifts', name:'Value shifts', title:'Categorize your tasks by abundance vs scarcity', time:300,
+   steps:[
+    { who:'team', where:'talk', scene:'sort-two', short:'Sort out loud', t:'Sort your tasks out loud', d:'Easy or abundant now? Or still hard and scarce?' },
+    { who:'you', where:'app', scene:'each-app', short:'Type two', t:'Enter two tasks', d:'One most at risk. One most protected.' }
+   ],
+   done:['Tasks sorted','1 at risk and 1 protected in'], badge:'super' }
+];
+const STORY_WORKFLOWS = ['Setting quarterly team goals','Team meeting prep and execution','Project intake and approval'];
+
+function whereOf(step, setting){ return (setting && setting.delivery==='virtual' && step.vwhere) || step.where; }
+function stepLine(step, setting){
+  if(step.line) return step.line;
+  const w = whereOf(step, setting);
+  if(step.who==='you'){
+    if(w==='head') return 'On your own';
+    if(w==='ai') return 'On your own, in your AI tool';
+    if(w==='app') return 'On your own, in the workshop app';
+  }
+  if(step.who==='team'){
+    if(w==='talk') return 'With your team, out loud';
+    if(w==='chart') return 'Together, on the flip chart';
+    if(w==='ai') return 'Together, in one AI chat';
+  }
+  return WHO[step.who].word;
+}
+/* the big switch line, said with a little personality */
+function cue(step, prev, setting){
+  if(!step) return 'Time! Pens down, eyes up.';
+  const w = whereOf(step, setting);
+  const fromTeam = prev && prev.who==='team';
+  if(w==='app') return fromTeam ? 'Everyone, back to the workshop app.' : 'Workshop app time. Type it in.';
+  if(step.who==='team' && w==='talk') return prev ? 'Eyes up. Your team needs you.' : 'Turn to your team.';
+  if(step.who==='team' && w==='chart') return 'Grab a marker. Make it messy.';
+  if(step.who==='team' && w==='ai') return 'One screen, everyone’s ideas.';
+  if(step.who==='you' && w==='ai') return fromTeam ? 'Split up. Over to your AI tool.' : 'Over to your AI tool.';
+  return 'Quiet time. Think on your own.';
+}
+function fmt(sec){ sec = Math.max(0, Math.ceil(sec)); return Math.floor(sec/60)+':'+String(sec%60).padStart(2,'0'); }
+function esc(s){ return String(s).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;'); }
+
+/* ---------- badges ---------- */
+const BADGES = {
+  gold:  { word:'Gold!',          ring:C.sun,     tint:C.pollen, line:'Six nuggets. You just struck it rich. Shout it!' },
+  alive: { word:'It’s alive!',    ring:C.coastal, tint:C.slush,  line:'Your agent just spoke. Shout it so the room hears!' },
+  wrap:  { word:'That’s a wrap!', ring:C.prairie, tint:C.blush,  line:'Four frames, a snag and a judgment call. Roll credits.' },
+  hear:  { word:'Hear, hear!',    ring:C.fern,    tint:C.leaf,   line:'A value statement worth raising a glass to.' },
+  super: { word:'Superpower!',    ring:C.aegean,  tint:C.mist,   line:'Your most protected task is in. Cape optional.' }
+};
+function badgeArt(kind){
+  const b = BADGES[kind]; let edge = '';
+  for(let i=0;i<48;i++){ const a=i*Math.PI/24, r=i%2?88:96; edge += (i?'L':'M')+(100+r*Math.cos(a)).toFixed(1)+' '+(100+r*Math.sin(a)).toFixed(1); }
+  const icon = {
+    gold: coin(100,100,40),
+    alive: robotMini(100,108,34)+`<path d="M52 66L62 78L54 81L64 94" fill="none" stroke="${C.prairie}" stroke-width="4" stroke-linecap="round" stroke-linejoin="round"/><path d="M148 66L138 78L146 81L136 94" fill="none" stroke="${C.prairie}" stroke-width="4" stroke-linecap="round" stroke-linejoin="round"/>`,
+    wrap: `<g transform="rotate(-8 100 104)"><rect x="58" y="94" width="84" height="52" rx="5" fill="${C.cobalt}"/><g transform="rotate(-14 58 92)"><rect x="58" y="76" width="84" height="15" rx="3" fill="${C.cobalt}"/>${[0,1,2,3].map(i=>`<path d="M${66+i*20} ${76}l10 0l-8 15l-10 0z" fill="#fff"/>`).join('')}</g><line x1="68" y1="112" x2="132" y2="112" stroke="#fff" stroke-width="2" opacity=".45"/></g>`,
+    hear: `<g transform="rotate(-12 82 108)"><path d="M62 80H100V128C100 135 95 140 88 140H74C67 140 62 135 62 128Z" fill="#fff" stroke="${C.cobalt}" stroke-width="3.4"/><rect x="65" y="84" width="32" height="11" fill="${C.moss}"/></g><g transform="rotate(12 118 108)"><path d="M100 80H138V128C138 135 133 140 126 140H112C105 140 100 135 100 128Z" fill="#fff" stroke="${C.cobalt}" stroke-width="3.4"/><rect x="103" y="84" width="32" height="11" fill="${C.moss}"/></g><path d="M100 50V64M84 56L91 68M116 56L109 68" stroke="${C.fern}" stroke-width="3.6" stroke-linecap="round"/>`,
+    super: (()=>{ let d=''; for(let i=0;i<10;i++){ const a=i*Math.PI/5-Math.PI/2, r=i%2?20:46; d+=(i?'L':'M')+(100+r*Math.cos(a)).toFixed(1)+' '+(104+r*Math.sin(a)).toFixed(1);} return `<path d="M74 132Q100 160 126 132L120 98H80Z" fill="${C.prairie}"/><path d="${d}Z" fill="${C.cobalt}"/><circle cx="100" cy="106" r="7" fill="${C.gold}"/>`; })()
+  }[kind];
+  return `<svg viewBox="0 0 200 200" aria-hidden="true"><path d="${edge}Z" fill="${b.ring}"/><circle cx="100" cy="100" r="78" fill="#fff"/><circle cx="100" cy="100" r="70" fill="${b.tint}"/>${icon}</svg>`;
+}
+
+/* ---------- sound: mallets, bells, glass, wood and air, with a little room around them ---------- */
+const Sound = (()=>{
+  let ctx = null, on = true, bus = null, verb = null, run = 0, runAt = 0;
+  const PENTA = [261.63,293.66,329.63,392,440,523.25,587.33,659.25,783.99,880,1046.5,1174.66,1318.51,1567.98];
+  function ac(){
+    if(!ctx){ try{ ctx = new (window.AudioContext||window.webkitAudioContext)();
+      bus = ctx.createGain(); bus.gain.value = .9; bus.connect(ctx.destination);
+      verb = ctx.createConvolver(); const n = ctx.sampleRate*1.8, ir = ctx.createBuffer(2, n, ctx.sampleRate);
+      for(let c=0;c<2;c++){ const d = ir.getChannelData(c); for(let i=0;i<n;i++) d[i] = (Math.random()*2-1)*Math.pow(1-i/n, 3.2); }
+      verb.buffer = ir; const wet = ctx.createGain(); wet.gain.value = .28; verb.connect(wet); wet.connect(bus);
+    }catch(e){ ctx = null; } }
+    if(ctx && ctx.state === 'suspended') ctx.resume();
+    return ctx;
+  }
+  function out(pan=0){ const g = ctx.createGain(); let node = g;
+    if(ctx.createStereoPanner){ const p = ctx.createStereoPanner(); p.pan.value = pan; g.connect(p); node = p; }
+    node.connect(bus); node.connect(verb); return g; }
+  function env(g, t0, peak, dur, att=.004){ g.gain.setValueAtTime(.0001, t0); g.gain.exponentialRampToValueAtTime(peak, t0+att); g.gain.exponentialRampToValueAtTime(.0001, t0+dur); }
+  function partials(f, t, list, {vol=.2, pan=0, type='sine'}={}){
+    const c = ac(); if(!c || !on) return; const t0 = c.currentTime + t, o = out(pan);
+    list.forEach(([m, a, d])=>{ const os = c.createOscillator(), g = c.createGain(); os.type = type; os.frequency.value = f*m; env(g, t0, vol*a, d); os.connect(g); g.connect(o); os.start(t0); os.stop(t0+d+.05); });
+  }
+  const mallet = (f, t=0, o={}) => partials(f, t, [[1,1,o.dur||.9],[3.98,.18,.22],[9.9,.05,.08]], o);
+  const bell   = (f, t=0, o={}) => partials(f, t, [[1,1,o.dur||1.8],[2.76,.32,.9],[5.4,.14,.5],[8.93,.06,.3]], {vol:.15, ...o});
+  const glass  = (f, t=0, o={}) => partials(f, t, [[1,1,.7],[2.32,.5,.45],[4.25,.25,.3],[6.1,.12,.2]], {vol:.09, ...o});
+  function noise(t, dur, f1, f2, vol=.12, q=1.2, pan=0){
+    const c = ac(); if(!c || !on) return; const t0 = c.currentTime + t;
+    const n = Math.floor(c.sampleRate*dur), buf = c.createBuffer(1, n, c.sampleRate), d = buf.getChannelData(0);
+    for(let i=0;i<n;i++) d[i] = Math.random()*2-1;
+    const src = c.createBufferSource(); src.buffer = buf; const bp = c.createBiquadFilter(); bp.type = 'bandpass'; bp.Q.value = q;
+    bp.frequency.setValueAtTime(f1, t0); bp.frequency.exponentialRampToValueAtTime(f2, t0+dur);
+    const g = c.createGain(); g.gain.setValueAtTime(.0001, t0); g.gain.exponentialRampToValueAtTime(vol, t0+dur*.35); g.gain.exponentialRampToValueAtTime(.0001, t0+dur);
+    src.connect(bp); bp.connect(g); g.connect(out(pan)); src.start(t0); src.stop(t0+dur);
+  }
+  function wood(t=0, f=1250, vol=.32){
+    const c = ac(); if(!c || !on) return; const t0 = c.currentTime + t, o = out((Math.random()-.5)*.3);
+    const os = c.createOscillator(), g = c.createGain(); os.type = 'triangle'; os.frequency.setValueAtTime(f, t0); os.frequency.exponentialRampToValueAtTime(f*.62, t0+.07);
+    env(g, t0, vol, .11, .002); os.connect(g); g.connect(o); os.start(t0); os.stop(t0+.15);
+    noise(t, .03, 2400, 1800, .06, 2);
+  }
+  function zap(t=0){
+    const c = ac(); if(!c || !on) return; const t0 = c.currentTime + t, o = out(0);
+    const os = c.createOscillator(), lp = c.createBiquadFilter(), g = c.createGain(); os.type = 'sawtooth';
+    os.frequency.setValueAtTime(140, t0); os.frequency.exponentialRampToValueAtTime(1400, t0+.32);
+    lp.type = 'lowpass'; lp.Q.value = 9; lp.frequency.setValueAtTime(300, t0); lp.frequency.exponentialRampToValueAtTime(3800, t0+.32);
+    env(g, t0, .08, .42, .01); os.connect(lp); lp.connect(g); g.connect(o); os.start(t0); os.stop(t0+.45);
+  }
+  const pick = arr => arr[Math.floor(Math.random()*arr.length)];
+  return {
+    get on(){ return on; }, set on(v){ on = v; },
+    wake(){ ac(); },
+    /* each thing you add climbs one note higher, so a list sounds like it is growing */
+    add(){ const now = performance.now(); run = now - runAt > 6000 ? 0 : Math.min(run+1, 9); runAt = now;
+      mallet(PENTA[4+run], 0, {vol:.22, pan:(Math.random()-.5)*.6}); if(run>=5) glass(PENTA[4+run]*2, .05); },
+    tap(){ mallet(pick(PENTA.slice(5,10)), 0, {vol:.14, pan:(Math.random()-.5)*.5, dur:.5}); },
+    tick(n){ wood(0, n===1 ? 1500 : 1180); },
+    go(){ [0,2,4,7].forEach((k,i)=>mallet(PENTA[3+k], i*.06, {vol:.2, pan:(i-1.5)*.25})); glass(1567.98, .26); },
+    switchTo(mode){
+      noise(0, .55, 380, 3200, .09, .9);
+      if(mode==='team') [0,2,4].forEach((k,i)=>mallet(PENTA[k]*.5, .12+i*.09, {vol:.26, dur:1.2, pan:(i-1)*.3}));
+      else if(mode==='app') { bell(1046.5, .12); bell(1567.98, .26, {vol:.1}); }
+      else [7,9].forEach((k,i)=>mallet(PENTA[k], .12+i*.11, {vol:.2, pan:i?.3:-.3}));
+    },
+    nudge(){ mallet(PENTA[7], 0, {vol:.12, dur:.4}); mallet(PENTA[9], .1, {vol:.1, dur:.4}); },
+    timeUp(){ partials(98, 0, [[1,1,3.4],[1.48,.5,2.6],[2.1,.35,2],[2.83,.22,1.4],[4.1,.1,.9]], {vol:.32}); bell(784, .05, {vol:.1, dur:2.4}); },
+    badge(kind){
+      if(kind==='gold'){ bell(987.77, 0, {vol:.16, dur:.5}); bell(1318.51, .09, {vol:.18, dur:1.6}); [0,1,2,3,4].forEach(i=>glass(pick(PENTA.slice(9))*2, .25+i*.07, {pan:(Math.random()-.5)})); }
+      else if(kind==='alive'){ zap(0); [0,2,4,7].forEach((k,i)=>mallet(PENTA[5+k], .36+i*.08, {vol:.2})); }
+      else if(kind==='wrap'){ wood(0, 900, .4); noise(0, .06, 1800, 1200, .12, 1); [0,4,7].forEach((k,i)=>mallet(PENTA[2+k], .18+i*.12, {vol:.22, dur:1.3})); }
+      else if(kind==='hear'){ glass(2093, 0); glass(2349, .12); glass(2637, .5, {vol:.07}); mallet(523.25, .32, {vol:.12, dur:1.2}); }
+      else { noise(0, .5, 300, 4200, .1, .8); [0,2,4,5,7].forEach((k,i)=>mallet(PENTA[4+k], .28+i*.07, {vol:.2})); bell(2093, .7, {vol:.06}); }
+      [0,1,2].forEach(i=>glass(pick(PENTA.slice(10))*2, .9+i*.12, {vol:.05, pan:(Math.random()-.5)}));
+    }
+  };
+})();
+['pointerdown','keydown','touchend'].forEach(e=>window.addEventListener(e, ()=>Sound.wake(), {passive:true}));
+
+/* brand confetti: circles, once */
+function confetti(host){
+  if(matchMedia('(prefers-reduced-motion: reduce)').matches) return;
+  const cols=[C.sun,C.coastal,C.prairie,C.sun,C.fern];
+  const box=(host||document.body).getBoundingClientRect();
+  for(let i=0;i<46;i++){ const d=document.createElement('i'); const s=8+Math.random()*22;
+    d.style.cssText=`position:fixed;z-index:60;pointer-events:none;border-radius:50%;width:${s}px;height:${s}px;background:${cols[i%cols.length]};left:${box.left+Math.random()*box.width}px;top:${box.bottom-10}px;opacity:.95;transition:transform ${2.6+Math.random()*1.4}s cubic-bezier(.2,.8,.3,1), opacity 1s ease ${2.4+Math.random()}s;`;
+    document.body.appendChild(d);
+    requestAnimationFrame(()=>requestAnimationFrame(()=>{ d.style.transform=`translate(${(Math.random()-.5)*360}px, ${-box.height*(0.55+Math.random()*0.5)}px)`; d.style.opacity='0'; }));
+    setTimeout(()=>d.remove(),4800);
+  }
+}
+/* the little sound switch every page carries */
+function soundToggle(el){
+  const paint = ()=>{ el.textContent = Sound.on ? 'Sound on' : 'Sound off'; el.setAttribute('aria-pressed', Sound.on); };
+  el.addEventListener('click', ()=>{ Sound.on = !Sound.on; paint(); if(Sound.on) Sound.tap(); }); paint();
+}
+
+const LOOP = 9;
+let css = '', uid = 0, t0 = performance.now(), pi = 0;
+function A(tin, tout=95, kind='pop'){
+  const n = 'k'+(++uid), a = Math.max(0, tin-0.01), b = Math.min(99, tin+4), c = Math.max(b, tout), d = Math.min(100, c+3);
+  const from = kind==='pop' ? 'opacity:0;transform:scale(.55)' : kind==='flash' ? 'opacity:0' : 'opacity:0;transform:translateY(6px)';
+  if(kind==='stay') css += `@keyframes ${n}{0%,${tout}%{opacity:1}${Math.min(100,tout+3)}%,100%{opacity:0}}`;
+  else if(kind==='flash') css += `@keyframes ${n}{0%,${a}%{opacity:0}${tin+1}%{opacity:.95}${tin+5}%,100%{opacity:0}}`;
+  else css += `@keyframes ${n}{0%,${a}%{${from}}${b}%{opacity:1;transform:none}${c}%{opacity:1;transform:none}${d}%,100%{opacity:0;transform:none}}`;
+  css += `.${n}{animation:${n} ${LOOP}s linear infinite both;transform-box:fill-box;transform-origin:center;}`;
+  return n;
+}
+const g = (cls, inner) => `<g class="${cls} rm-hide">${inner}</g>`;
+const gk = (cls, inner) => `<g class="${cls}">${inner}</g>`; /* stays in reduced motion */
+const FC = { x:160, y:192, w:124, h:108 };
+function frameBox(i){ const p=8,gap=6,fw=(FC.w-2*p-gap)/2, fh=(FC.h-2*p-gap)/2, top=FC.y-FC.h-30; return { x:FC.x-FC.w/2+p+(i%2)*(fw+gap), y:top+p+Math.floor(i/2)*(fh+gap), w:fw, h:fh }; }
+function fill(i, label){ const b = frameBox(i); const ls = label.split('|');
+  return `<rect x="${b.x}" y="${b.y}" width="${b.w}" height="${b.h}" rx="2" fill="${C.glacier}"/>` + ls.map((l,k)=>txt(b.x+b.w/2, b.y+b.h/2+4+(k-(ls.length-1)/2)*13, l, {fs:13})).join(''); }
+function markAt(i, kind){ const b = frameBox(i); return kind==='f' ? burst(b.x+5, b.y+5, 10) : gavel(b.x+b.w-5, b.y+b.h-5, 10); }
+const chart = () => flipchart(FC.x, FC.y, {w:FC.w, h:FC.h, frames:0});
+const today = ['Order|laptop','Day one','First real|work','Check-ins'];
+const svg = inner => `<svg class="sc" viewBox="0 0 320 200" aria-hidden="true">${inner}</svg>`;
+
+const PAIRS = [
+ { tab:'Pick fast', clock:210, where:'From Map out a workflow', dont:'Debate which workflow to pick', do:'Choose one in under a minute and start',
+   L(){ return svg(floor(160,194,148)+chart()+person(44,190,{who:'team',hair:1,s:.86})+person(276,190,{who:'team',hair:4,s:.86})+
+      [[ 'Hiring?',48,10,'bl',2,17],['Budget?',242,14,'br',15,31],['Or sales?',46,6,'bl',29,46],['Hmm...',246,10,'br',44,62],['Let’s vote',44,10,'bl',60,78],['Wait...',246,14,'br',76,94]]
+      .map(([t,x,y,tail,a,b])=>g(A(a,b), bubble(x,y,72,30,{text:t,fs:15,tail}))).join('')); },
+   R(){ return svg(floor(160,194,148)+chart()+[0,1,2,3].map(i=>gk(A(24+i*13), fill(i, today[i]))).join('')+
+      person(44,190,{who:'team',hair:1,s:.86})+person(276,190,{who:'team',hair:4,s:.86,arms:[['L',212,128]]})+
+      g(A(3,21), bubble(48,8,92,32,{text:'Intake. Go!',fs:16,tail:'bl'}))); } },
+ { tab:'Map today', clock:0, where:'From Map out a workflow', dont:'Brainstorm future improvements', do:'Describe how things work today',
+   L(){ const fut=['Robots do|it all','No more|meetings','Magic|button','AI runs|the show'];
+      return svg(floor(160,194,148)+chart()+[0,1,2,3].map(i=>gk(A(24+i*13), fill(i, fut[i])+sparkle(frameBox(i).x+frameBox(i).w-6, frameBox(i).y+6))).join('')+
+      person(44,190,{who:'team',hair:2,s:.86})+person(276,190,{who:'team',hair:3,s:.86,arms:[['L',212,128]]})+
+      g(A(3,21), bubble(48,6,104,32,{text:'What if AI...',fs:16,tail:'bl'}))); },
+   R(){ return svg(floor(160,194,148)+chart()+[0,1,2,3].map(i=>gk(A(24+i*13), fill(i, today[i]))).join('')+
+      person(44,190,{who:'team',hair:2,s:.86})+person(276,190,{who:'team',hair:3,s:.86,arms:[['L',212,128]]})+
+      g(A(3,21), bubble(48,6,122,32,{text:'What happens now?',fs:15,tail:'bl'}))); } },
+ { tab:'Mark both', clock:0, where:'From Map out a workflow', dont:'Capture only the friction points', do:'Capture friction and judgment points',
+   L(){ return svg(floor(160,194,148)+chart()+[0,1,2,3].map(i=>fill(i, today[i])).join('')+
+      gk(A(22), markAt(0,'f'))+gk(A(40), markAt(2,'f'))+gk(A(58), markAt(3,'f'))+
+      person(44,190,{who:'team',hair:5,s:.86})+person(276,190,{who:'team',hair:1,s:.86,arms:[['L',212,128]]})); },
+   R(){ return svg(floor(160,194,148)+chart()+[0,1,2,3].map(i=>fill(i, today[i])).join('')+
+      gk(A(22), markAt(0,'f'))+gk(A(36), markAt(1,'j'))+gk(A(50), markAt(3,'f'))+gk(A(64), markAt(2,'j'))+
+      person(44,190,{who:'team',hair:5,s:.86})+person(276,190,{who:'team',hair:1,s:.86,arms:[['L',212,128]]})); } },
+ { tab:'Talk, then type', clock:0, where:'From Value shifts', dont:'Type while your team is still talking', do:'Talk it through, then each of you types',
+   L(){ return svg(floor(160,194,150)+
+      person(64,174,{who:'team',hair:1,s:.86})+lid(64,190,{w:66})+person(160,174,{who:'team',hair:3,s:.86})+lid(160,190,{w:66})+
+      desk(208,312,150)+laptop(266,150,{w:84,screen:'app',glow:1})+personBack(252,212,{who:'team',hair:4,s:.82})+
+      g(A(4,40), bubble(48,12,96,30,{text:'What about...',fs:15,tail:'bl'}))+g(A(36,70), bubble(118,10,86,30,{text:'Or maybe...',fs:15,tail:'b'}))+
+      g(A(66,95), bubble(214,26,60,30,{text:'Huh?',fs:16,tail:'br'}))); },
+   R(){ return svg(floor(160,194,150)+
+      g(A(0,50,'stay'), person(64,174,{who:'team',hair:1,s:.86})+lid(64,190,{w:66})+person(160,174,{who:'team',hair:3,s:.86})+lid(160,190,{w:66})+person(256,174,{who:'team',hair:4,s:.86})+lid(256,190,{w:66})+
+        bubble(48,12,90,30,{text:'Easy now',fs:15,tail:'bl'})+bubble(206,14,96,30,{text:'Still hard',fs:15,tail:'br'}))+
+      gk(A(46), desk(10,310,128)+[62,160,258].map(x=>laptop(x,128,{w:86,screen:'app',glow:1,rows:2})).join('')+[62,160,258].map((x,i)=>personBack(x-14,202,{who:'you',hair:[1,3,4][i],s:.86})).join(''))); } },
+ { tab:'Stuck?', clock:120, where:'From An agent others can use', dont:'Wait for the facilitator', do:'Ask your AI first, with a screenshot',
+   L(){ return svg(floor(110,194,90)+lid(110,190,{w:76})+
+      person(110,150,{who:'you',hair:2,s:.9,arms:[['R',150,58]]})+
+      floor(256,128,50,6)+person(232,126,{who:'team',hair:1,s:.5})+person(282,126,{who:'team',hair:4,s:.5})+person(257,120,{who:'room',body:C.cobalt,hairC:'#1B2538',hair:5,s:.56})+
+      g(A(8,40), bubble(160,8,64,30,{text:'Um...',fs:16,tail:'bl'}))+g(A(48,94), bubble(160,8,72,30,{text:'Hello?',fs:16,tail:'bl'}))+
+      g(A(30,95), bubble(218,30,80,26,{text:'one sec...',fs:14,tail:'b'}))); },
+   R(){ const sx=106, sy=90, sw=140, sh=83;
+      const err = `<rect x="${sx}" y="${sy}" width="${sw}" height="${sh}" fill="#fff"/><circle cx="${sx+sw/2}" cy="${sy+sh/2}" r="14" fill="${C.prairie}"/><rect x="${sx+sw/2-1.8}" y="${sy+sh/2-8}" width="3.6" height="10" rx="1.8" fill="#fff"/><circle cx="${sx+sw/2}" cy="${sy+sh/2+6.5}" r="2" fill="#fff"/>`;
+      const chat = `<rect x="${sx}" y="${sy}" width="${sw}" height="${sh}" fill="#fff"/><rect x="${sx}" y="${sy}" width="${sw}" height="${sh*0.12}" fill="${C.mist}"/>`+
+        `<rect x="${sx+sw*0.38}" y="${sy+sh*0.2}" width="${sw*0.55}" height="${sh*0.2}" rx="6" fill="${C.pigeon}"/><rect x="${sx+sw*0.42}" y="${sy+sh*0.235}" width="${sw*0.18}" height="${sh*0.13}" rx="2" fill="${C.aegean}" opacity=".6"/>${lines(sx+sw*0.66, sy+sh*0.3, sw*0.22, 1, 0, '#fff', 2)}`;
+      const reply = robotMini(sx+sw*0.12, sy+sh*0.62, sh*0.12)+`<rect x="${sx+sw*0.22}" y="${sy+sh*0.48}" width="${sw*0.62}" height="${sh*0.36}" rx="6" fill="${C.slush}"/>`+lines(sx+sw*0.27, sy+sh*0.57, sw*0.5, 3, sh*0.085, C.coastal, 2);
+      return svg(floor(160,190,130)+laptop(176,186,{w:150,screen:'blank'})+
+        gk(A(0,18,'stay'), err)+gk(A(20), chat)+gk(A(40), reply)+g(A(14,0,'flash'), `<rect x="${sx}" y="${sy}" width="${sw}" height="${sh}" fill="#fff"/>`)+
+        g(A(0,60,'stay'), person(66,176,{who:'you',hair:2,arms:[['R',112,178]]}))+
+        gk(A(62), person(66,176,{who:'you',hair:2,arms:[['L',30,104],['R',102,104]]}))+
+        g(A(66,94), bubble(100,14,84,30,{text:'Fixed it!',fs:16,tail:'bl'}))); } }
+];
+function sparkle(x,y){ return `<path d="M${x} ${y-5}V${y+5}M${x-5} ${y}H${x+5}" stroke="${C.prairie}" stroke-width="2" stroke-linecap="round"/>`; }
+
+function show(i){
+  pi = i; css = ''; uid = 0;
+  const p = PAIRS[i];
+  document.getElementById('L').innerHTML = p.L();
+  document.getElementById('R').innerHTML = p.R();
+  document.getElementById('cl').textContent = p.dont;
+  document.getElementById('cr').textContent = p.do;
+  document.getElementById('where').textContent = p.where;
+  document.getElementById('dyn').textContent = css;
+  document.getElementById('clockbox').classList.toggle('on', !!p.clock);
+  document.querySelectorAll('#tabs button').forEach((b,k)=>b.setAttribute('aria-pressed', k===i));
+  restart();
+}
+function restart(){
+  const dyn = document.getElementById('dyn'), keep = dyn.textContent; dyn.textContent = ''; void document.body.offsetWidth; dyn.textContent = keep;
+  t0 = performance.now();
+}
+function tick(now){
+  const p = PAIRS[pi];
+  if(p.clock){
+    const f = ((now - t0)/1000 % LOOP) / LOOP, prog = Math.min(1, f/0.92);
+    document.getElementById('clk').textContent = fmt(prog * p.clock);
+    const ang = prog * p.clock / 60 * 360;
+    const h = document.getElementById('hand'); h.setAttribute('transform', `rotate(${ang.toFixed(1)} 20 20)`);
+  }
+  requestAnimationFrame(tick);
+}
+document.getElementById('tabs').innerHTML = PAIRS.map((p,i)=>`<button data-i="${i}">${esc(p.tab)}</button>`).join('');
+document.querySelectorAll('#tabs button').forEach(b=>b.addEventListener('click',()=>show(+b.dataset.i)));
+document.getElementById('replay').addEventListener('click', restart);
+document.addEventListener('keydown', e=>{ if(e.key==='ArrowRight') show((pi+1)%PAIRS.length); if(e.key==='ArrowLeft') show((pi-1+PAIRS.length)%PAIRS.length); });
+show(0);
+if(!matchMedia('(prefers-reduced-motion: reduce)').matches) requestAnimationFrame(tick);
+else { document.getElementById('clockbox').classList.remove('on'); document.getElementById('replay').hidden = true; }
+</script>
+</body>
+</html>

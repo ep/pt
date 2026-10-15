@@ -42,8 +42,7 @@ There is no homepage at the repo root by design. Each project lives in its own f
 
 <p align="center">
 <a href="https://ep.github.io/pt/design-ideas/room-pulse/"><img src="assets/readme/podium-pulse-sketchbook.svg" width="98%" alt="Podium Pulse sketchbook: design ideas for a check-in that bookends a session."></a>
-<a href="https://ep.github.io/pt/design-ideas/wbwai-ai-guide/"><img src="assets/readme/wbwai-ai-guide.svg" width="49%" alt="Working with AI sketchbook: five ways to make one guide, with a side for participants and a side for facilitators."></a>
-<a href="https://ep.github.io/pt/design-ideas/wbwai-icebreakers/"><img src="assets/readme/wbwai-icebreakers.svg" width="49%" alt="Icebreaker sketchbook: nine ways a room of strangers becomes teams, each with a name and a mission."></a>
+<a href="https://ep.github.io/pt/design-ideas/clear-instructions/"><img src="assets/readme/clear-instructions.svg" width="98%" alt="Clear Instructions sketchbook: who you're with, where you work, and when to type, obvious at every step."></a>
 </p>
 
 <details>
@@ -64,8 +63,7 @@ There is no homepage at the repo root by design. Each project lives in its own f
 - https://ep.github.io/pt/podium-for-partners/ : Positioning Podium with IP-holder partner prospects.
 - https://ep.github.io/pt/podium-for-partners-ideo/ : Positioning Podium, IDEO version.
 - https://ep.github.io/pt/design-ideas/room-pulse/ : Podium pulse activity interaction, reveal, and design ideas.
-- https://ep.github.io/pt/design-ideas/wbwai-ai-guide/ : Working with AI sketchbook, five design directions for a double-sided guide to working with AI, for Work Better with AI 201 participants and facilitators.
-- https://ep.github.io/pt/design-ideas/wbwai-icebreakers/ : Icebreaker sketchbook, nine team-forming mechanics for open enrollment workshops, three of them playable.
+- https://ep.github.io/pt/design-ideas/clear-instructions/ : Clear Instructions sketchbook, design ideas for activity instructions nobody can misread: who you're with, where you work, and when to type in the workshop app (built from the WBWAI 201 activities).
 - https://ep.github.io/pt/Logistics/EC/In-Person/ : Support's experimental logistics checklist.
 - https://ep.github.io/pt/t3/wbwai-curveballroleplay/ : Experimental T3 artefact: WBWAI Curveball Roleplay.
 - https://ep.github.io/pt/t3/wbwai-prepskillbuilder/ : Experimental T3 artefact: WBWAI Prep Skill Builder.
@@ -77,7 +75,7 @@ There is no homepage at the repo root by design. Each project lives in its own f
 
 Pages deploys from the root of `main`. Any folder with an `index.html` is published at `https://ep.github.io/pt/<folder>/`. The empty `.nojekyll` file stops Pages from rendering this README as a root homepage, so `https://ep.github.io/pt/` returns 404 on purpose.
 
-Folder conventions: interactive field tools (games, diagnostics, workshop tools) live under `field-tools/`, one folder per tool. Other kinds of test tools get their own top-level folders. Shared assets that more than one project uses (the favicon set, for now) live under `assets/`; a page links them by absolute path, `/pt/assets/favicon/favicon.svg`. The cards at the top of this README live in `assets/readme/`, one SVG each, with their words drawn as shapes so they look the same on every screen.
+Folder conventions: interactive field tools (games, diagnostics, workshop tools) live under `field-tools/`, one folder per tool. Design sketchbooks (a cover page plus live concept pages, with screenshot thumbnails in a `thumbs/` folder) live under `design-ideas/`, one folder per sketchbook. Other kinds of test tools get their own top-level folders. Shared assets that more than one project uses (the favicon set, for now) live under `assets/`; a page links them by absolute path, `/pt/assets/favicon/favicon.svg`. The cards at the top of this README live in `assets/readme/`, one SVG each, with their words drawn as shapes so they look the same on every screen. To add or change a card, edit `assets/readme/build/build.py` and run it; the note at the top of that file lists what to install.
 
 To add a project: create a folder, add an `index.html`, commit. Add it to the list under Every project too; a card is optional. 
 
