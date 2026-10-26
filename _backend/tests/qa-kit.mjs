@@ -105,7 +105,7 @@ const k = (root, name) => root.querySelector(`[data-k="${name}"]`);
   check("feedback-ui.js: talks only to the pt worker, plus reading its own page once", (ui.match(/fetch\(/g) || []).length === 2 && /fetch\(API \+ path/.test(ui) && /fetch\(location\.pathname/.test(ui));
   check("no email address is written in any kit file", !/[a-z0-9._-]+@[a-z0-9-]+\.[a-z]{2,}/i.test(src("feedback.js") + ui));
   const boot = src("feedback.js").replace(/\/\*[\s\S]*?\*\//, "");
-  check("feedback.js stays small for everyone (code under 7 KB)", boot.length < 7168, boot.length);
+  check("feedback.js stays small for everyone (code under 7.5 KB)", boot.length < 7680, boot.length);
 }
 
 /* =================== dormant: no ?feedback =================== */
@@ -142,15 +142,36 @@ const k = (root, name) => root.querySelector(`[data-k="${name}"]`);
 /* =================== replay: the board rebuilds a screen =================== */
 {
   const w = makePage("about:blank", { before: (win) => { win.EPKitReplay = { screen: "ladder", settings: { mode: "team" }, scroll: 0 }; } });
-  let got = null, msg = null;
-  w.EPKit = { tool: { id: "test-tool", restore: (o) => { got = o; return true; } } };
-  w.addEventListener("message", (e) => { msg = e.data; });
+  let got = null; const msgs = [];
+  w.EPKit = { tool: { id: "test-tool", restore: (o) => { got = o; return true; },
+    sections: () => [{ name: "Set up", screens: ["cover"] }, { name: "1. Better way", screens: ["ladder", 42] }, { name: "x".repeat(200), screens: [] }] } };
+  w.addEventListener("message", (e) => { msgs.push(e.data); });
   w.scrollTo = () => {};
   runKit(w, "feedback.js");
-  await until(() => msg, 3000);
+  await until(() => msgs.some((m) => m.type === "epkit-replay"), 3000);
+  const map = msgs.find((m) => m.type === "epkit-map"), msg = msgs.find((m) => m.type === "epkit-replay");
   check("replay: the tool is asked to open that screen with those settings", got && got.screen === "ladder" && got.settings.mode === "team");
-  check("replay: the frame tells the board it is ready, and how big it is", msg && msg.type === "epkit-replay" && msg.ok === true && msg.w > 0);
+  check("replay: the frame tells the board it is ready, and how big it is", msg && msg.ok === true && msg.w > 0);
+  check("replay: the tool's sections go to the board first (the board cleans them up)", map && msgs.indexOf(map) < msgs.indexOf(msg) && map.sections.length === 3 && map.sections[1].name === "1. Better way" && map.sections[1].screens.join() === "ladder,42", JSON.stringify(map));
   check("replay: no bar, nothing recorded", !w.document.querySelector("[data-epkit]") && w.EPKit.feedback.on === false);
+}
+{
+  const w = makePage("about:blank", { before: (win) => { win.EPKitReplay = { map: true }; } });
+  let restored = false; const msgs = [];
+  w.EPKit = { tool: { id: "test-tool", restore: () => { restored = true; return true; }, sections: [{ name: "Only part", screens: ["a"] }] } };
+  w.addEventListener("message", (e) => { msgs.push(e.data); });
+  runKit(w, "feedback.js");
+  await until(() => msgs.length, 3000); await tick(700);
+  check("map only: the board can ask just for the sections, and nothing else runs", msgs.length === 1 && msgs[0].type === "epkit-map" && msgs[0].sections[0].name === "Only part" && !restored);
+}
+{
+  const w = makePage("about:blank", { before: (win) => { win.EPKitReplay = { map: true }; } });
+  const msgs = [];
+  w.EPKit = { tool: { id: "test-tool", sections: () => { throw new Error("nope"); } } };
+  w.addEventListener("message", (e) => { msgs.push(e.data); });
+  runKit(w, "feedback.js");
+  await until(() => msgs.length, 3000);
+  check("map only: a tool without working sections says so instead of breaking", msgs[0].type === "epkit-map" && msgs[0].sections === null);
 }
 
 /* =================== a tester's whole session =================== */
@@ -158,7 +179,8 @@ let CODE = (await team("POST", "/api/fb/code", {})).data.code;
 check("setup: the team has a tester code", /^[A-Z0-9]{6}$/.test(CODE || ""));
 const URL1 = `https://ep.github.io/pt/field-tools/test-tool/?host=ABCD&k=SECRETKEY99&feedback=${CODE.toLowerCase()}#tok=abc`;
 const w = makePage(URL1);
-w.EPKit = { tool: { id: "test-tool", name: "Test Tool", version: "v9", screen: () => w.currentScreen, state: () => ({ mode: "team", link: "https://x/?k=SECRETKEY99" }) } };
+w.EPKit = { tool: { id: "test-tool", name: "Test Tool", version: "v9", screen: () => w.currentScreen, state: () => ({ mode: "team", link: "https://x/?k=SECRETKEY99" }),
+  sections: () => [{ name: "Set up", screens: ["cover"] }, { name: "2. Why it exists", screens: ["ladder"] }] } };
 w.currentScreen = "cover";
 const pageKeys = [];
 w.document.addEventListener("keydown", (e) => pageKeys.push(e.key));
@@ -221,6 +243,7 @@ check("post: the comment reaches the worker straight away", list.length === 1 &&
 check("post: it says Posted, and the bar counts it", /Posted/.test(root.querySelector(".toast").textContent) && k(root, "count") && k(root, "count").textContent === "1");
 check("post: where it points, as pixels and as shares of the window", c1.where.x === 796 && c1.where.w === 168 && c1.where.vw === 1024 && Math.abs(c1.where.xp - 77.7) < 0.2 && c1.where.el.path === "footer#bottom > button#nextBtn" && c1.where.el.text === "Next", JSON.stringify(c1.where));
 check("post: the screen and the file version", c1.screen === "ladder" && c1.ver === "git:" + PAGE_SHA);
+check("post: the part of the tool the screen belongs to", c1.ctx.section === "2. Why it exists", c1.ctx.section);
 check("post: context with keys, codes and the tester code removed", c1.ctx.page === "https://ep.github.io/pt/field-tools/test-tool/?host=[removed]&k=[removed]&feedback#[removed]" && c1.ctx.settings.link.includes("k=[removed]"), c1.ctx.page);
 check("post: nothing secret anywhere in what was sent", !JSON.stringify(c1).includes("SECRETKEY99") && !JSON.stringify(c1).includes(CODE) && !JSON.stringify(c1).includes("secret answer") && !JSON.stringify(c1).includes("tok=abc"));
 check("post: the box and the comment box close", boxEl.hidden && root.querySelector(".card").hidden && shield.hidden && k(root, "comment").textContent === "Comment");

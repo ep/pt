@@ -42,6 +42,13 @@ function toolId() {
 }
 function toolName() { return clip(T().name || doc.title || toolId(), 80); }
 function screenId() { return clip(scrub(hook("screen")), 80); }
+/* The name of the part of the tool a screen belongs to, if the tool says. */
+function sectionName(id) {
+  var list = hook("sections");
+  if (!Array.isArray(list) || !id) return "";
+  for (var i = 0; i < list.length; i++) { var s = list[i]; if (s && Array.isArray(s.screens) && s.screens.indexOf(id) > -1) return clip(scrub(s.name), 80); }
+  return "";
+}
 function cleanUrl(href) {
   try {
     var u = new URL(href), keep = T().safeParams || [], parts = [];
@@ -96,7 +103,7 @@ function context() {
   var tz = ""; try { tz = Intl.DateTimeFormat().resolvedOptions().timeZone || ""; } catch (e) {}
   return {
     name: toolName(), version: clip(hook("version"), 40), kit: FB.kit, page: cleanUrl(location.href),
-    heading: clip(scrub(heading()), 120), settings: settings(), at: Date.now(), tz: tz,
+    heading: clip(scrub(heading()), 120), section: sectionName(screenId()), settings: settings(), at: Date.now(), tz: tz,
     scroll: Math.round(win.scrollY || win.pageYOffset || 0), device: device(),
     actions: FB.actions.slice(-10).map(function (a) { return { t: a.t, what: a.what, screen: a.screen }; }),
     errors: FB.errors.slice(-6).map(function (a) { return { t: a.t, what: a.what, screen: a.screen }; })

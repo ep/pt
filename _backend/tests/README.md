@@ -10,7 +10,8 @@ fifteen minutes to find, or miss entirely.
   sessions, open sessions (code-only reads and writes under the opened paths, key
   for everything else), seat claiming, path validation, the origin lock, the write
   times a read can carry for presence, the feedback routes (tester codes, comments
-  testers can change only for themselves, the team key, reviews, caps), and the
+  testers can change only for themselves, the team key, reviews with Ignore and still
+  open, caps), and the
   retention sweeps. No Cloudflare
   account or network needed.
 - `qa-pyc.js` tests `../../field-tools/chips/index.html` (Place Your Chips) in a
@@ -66,7 +67,9 @@ fifteen minutes to find, or miss entirely.
   reactions, the four moves, the new flow, the people and the first test) and a whole solo
   session (no team-only screens), one screen at a time with at most one filled button. It
   checks that typed text never runs as code, print, the outcome image, Email this with the
-  real send kit, picking up after a reload, and clear with undo.
+  real send kit, picking up after a reload, clear with undo, and the hooks the feedback
+  board uses: its parts (every screen in exactly one) and opening any screen with made-up
+  content.
 - `qa-kit.mjs` tests the shared kits in `../../assets/kit/` in a simulated browser, against
   the real worker code with the fake database: the feedback kit (`feedback.js`, and the
   comment bar it loads only in feedback mode) and the Email this kit (`send.js`). It covers
@@ -76,16 +79,19 @@ fifteen minutes to find, or miss entirely.
   the context every comment carries (keys and codes removed, typed words never recorded,
   the file's Git fingerprint), pins, editing and deleting your own comments, waiting
   offline and posting later, Done, a bad or retired link, phones, a file opened from a
-  computer, the replay the board uses, keys that never reach the tool behind the bar, the
+  computer, the replay the board uses (and the tool's sections it reports), keys that never reach the tool behind the bar, the
   Email this links and share sheet, and that the kit files are plain ASCII, never write
   HTML from strings and talk only to the pt worker.
 - `qa-feedback-board.mjs` tests `../../feedback/index.html` (the feedback board) in a
   simulated browser, against the real worker code with the fake database and a fake GitHub
-  history. It covers signing in with the team key, tools and screens with their counts, the
-  rebuilt screen (sandboxed, told which screen to open, the right version of the code) and
-  the numbered boxes, versions, Must, Should, Could and Won't, team notes, repeats, filters,
-  Copy for AI (what goes in, in what order, what is left out), the tester link and a new
-  code, deleting, escaping, and that the team key never travels in an address.
+  history. It covers signing in with the team key, the overview grouped by the tool's own
+  parts (read from the tool through a hidden frame), one comment at a time with Previous,
+  Next and the arrow keys, the rebuilt screen (sandboxed, told which screen to open, the
+  right version of the code) and its boxes, Must, Should, Could and Ignore, team notes and
+  removing them, earlier versions with Then and Now and still open, reviews saved by the
+  first board, Copy for AI (what goes in, in what order, what is left out, no names), the
+  tester link and a new code, deleting, small screens, more than one tool, escaping, no
+  dropdowns, and that the team key never travels in an address.
 - `fake-db.mjs` is the shared fake database the worker, pair-poll and room-pulse suites use.
   It also counts the rows each request touches, so the worker suite can check what a read costs.
 

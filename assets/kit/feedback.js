@@ -28,6 +28,9 @@
        state: function () { ... },   // a few settings worth knowing: {mode: "team"}
        restore: function (o) { ... },// opens screen o.screen with o.settings and made-up
                                      // content, so the board can rebuild it; return true
+       sections: function () { ... },// the tool's major parts, in order, so the board can
+                                     // group comments: [{name: "1. Better way",
+                                     //   screens: ["c1", "spin"]}, ...]
        safeParams: ["mode"],         // address parts safe to keep (others are removed)
        dot: "bottom-left"            // where the bar sits: bottom-left, bottom-right,
                                      // bottom-center, top-left, top-right
@@ -45,7 +48,7 @@
   "use strict";
   var K = window.EPKit = window.EPKit || {};
   if (K.feedback) return;
-  var KIT = "2026-10-26", FLAG = "ep-feedback", CODE = "ep-feedback-code";
+  var KIT = "2026-10-26b", FLAG = "ep-feedback", CODE = "ep-feedback-code";
 
   function ss(fn) { try { return fn(window.sessionStorage); } catch (e) { return null; } }
 
@@ -54,15 +57,20 @@
     return String(s == null ? "" : s).replace(/([?&#;]\s*(?:k|fk|key|host|join|session|code|token|sid|auth|me|feedback)=)[^&#\s"'<>]*/gi, "$1[removed]");
   };
 
-  /* The feedback board opens a tool inside a frame to rebuild one screen. */
+  /* The board frames a tool to rebuild a screen, or only to read its sections (map). */
   var replay = window.EPKitReplay;
   if (replay && typeof replay === "object") {
     K.feedback = { on: false, kit: KIT, replay: true, actions: [], errors: [] };
+    var send = function (o) { try { window.parent.postMessage(o, "*"); } catch (e) {} };
     var answered = false, tell = function (ok) {
-      if (answered) return; answered = true;
-      try { window.parent.postMessage({ type: "epkit-replay", ok: !!ok, w: window.innerWidth, h: window.innerHeight }, "*"); } catch (e) {}
+      if (!answered) send({ type: "epkit-replay", ok: !!ok, w: window.innerWidth, h: window.innerHeight });
+      answered = true;
     };
     var go = function () {
+      var s = null;
+      try { s = K.tool.sections; s = typeof s === "function" ? s() : s; } catch (e) {}
+      send({ type: "epkit-map", sections: Array.isArray(s) ? s : null });
+      if (replay.map) return;
       var ok = false;
       try { var t = K.tool; if (t && typeof t.restore === "function") ok = t.restore({ screen: String(replay.screen || ""), settings: replay.settings || {} }) !== false; } catch (e) { ok = false; }
       setTimeout(function () { try { window.scrollTo(0, +replay.scroll || 0); } catch (e) {} tell(ok); }, 500);

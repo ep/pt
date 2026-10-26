@@ -34,7 +34,9 @@
     POST /api/fb/delete {tool, code, id, edit}    -> delete your own comment (the team key deletes any)
     GET  /api/fb/tools                            -> team key: tools with comments, and the tester code
     GET  /api/fb/list?tool=reimagination-lab      -> team key: every comment and the team's review of it
-    POST /api/fb/review {tool, id, review}        -> team key: priority, team notes, "same as"
+    POST /api/fb/review {tool, id, review}        -> team key: weight (Must, Should, Could or
+                                                    Ignore), team notes, and "still open" for
+                                                    a comment made on an earlier version
     POST /api/fb/code                             -> team key: a new tester code; old links stop posting
     Testers carry one tester code in their link (?feedback=CODE); it lets them add
     comments and change or delete only their own (each comment has its own edit
@@ -446,11 +448,13 @@ async function feedback(request, env, url, json) {
     if (!team()) return json({ error: 'locked' }, 401);
     var rv = body.review;
     if (!rv || typeof rv !== 'object') return json({ error: 'bad review' }, 400);
-    var pri = ['must', 'should', 'could', 'wont', ''].indexOf(rv.priority) > -1 ? rv.priority : '';
+    var p0 = rv.priority === 'wont' ? 'ignore' : rv.priority;
+    var pri = ['must', 'should', 'could', 'ignore', ''].indexOf(p0) > -1 ? p0 : '';
+    var open = typeof rv.open === 'string' && /^git:[0-9a-f]{40}$/.test(rv.open) ? rv.open : '';
     var notes = (Array.isArray(rv.notes) ? rv.notes : []).slice(0, 20).map(function (n) {
       return { name: clipText(n && n.name, 60), text: clipText(n && n.text, 1000), at: +(n && n.at) || Date.now() };
     }).filter(function (n) { return n.text; });
-    var clean = { priority: pri, same: fbId(rv.same) || '', notes: notes, by: clipText(rv.by, 60), at: Date.now() };
+    var clean = { priority: pri, open: open, notes: notes, by: clipText(rv.by, 60), at: Date.now() };
     if (JSON.stringify(clean).length > 8000) return json({ error: 'too big' }, 400);
     if (!(await row(room, 'c/' + id))) return json({ error: 'no such comment' }, 404);
     await put(room, 'r/' + id, clean);

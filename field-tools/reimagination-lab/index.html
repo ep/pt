@@ -1120,8 +1120,14 @@ function okPhoto(v){ return typeof v==="string" && /^data:image\/(jpeg|png|webp)
 var S=load();
 /* Tells the shared feedback kit what it is looking at (assets/kit/feedback.js in pt). */
 (window.EPKit=window.EPKit||{}).tool={
-  id:"reimagination-lab", name:"Reimagination Lab", version:"v3", dot:"bottom-center",
+  id:"reimagination-lab", name:"Reimagination Lab", version:"v4", dot:"bottom-center",
   screen:function(){ return S.at; },
+  /* The board groups comments by these, in this order: set up, the six chapters, finish. */
+  sections:function(){
+    var out=CHN.map(function(n,i){ return {name:i?i+". "+n:n, screens:[]}; }).concat([{name:"Finish", screens:[]}]);
+    SCREENS.forEach(function(s){ out[Math.max(0,Math.min(out.length-1,s.ch|0))].screens.push(s.id); });
+    return out;
+  },
   state:function(){ return {mode:S.mode, place:S.place, theme:S.theme, sound:S.sfx?"on":"off", music:S.music?"on":"off", step:(idx()+1)+" of "+vis().length}; },
   restore:function(o){ return restoreDemo(o||{}); }
 };

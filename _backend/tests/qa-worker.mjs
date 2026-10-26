@@ -321,10 +321,19 @@ check('7-day sweep keeps live sessions', [...db2._rows.keys()].some(k=>k.startsW
   q=await fb('GET','/api/fb/tools',null,TK);
   check('the tools list counts comments and shows the tester code', q.data.tools.length===1 && q.data.tools[0].tool==='reimagination-lab' && q.data.tools[0].n===1 && q.data.code===CODE);
 
-  q=await fb('POST','/api/fb/review',{tool:'reimagination-lab',id:'c1a2b3c4d5',review:{priority:'must',same:'',notes:[{name:'Rowan',text:'Layout shift when the timer mounts.'}],by:'Rowan'}},TK);
-  check('the team sets a priority and a note', q.data.ok===true && q.data.review.priority==='must' && q.data.review.notes[0].text==='Layout shift when the timer mounts.');
+  q=await fb('POST','/api/fb/review',{tool:'reimagination-lab',id:'c1a2b3c4d5',review:{priority:'must',same:'c9z9z9z9z9',notes:[{name:'Rowan',text:'Layout shift when the timer mounts.'}],by:'Rowan'}},TK);
+  check('the team sets a weight and a note', q.data.ok===true && q.data.review.priority==='must' && q.data.review.notes[0].text==='Layout shift when the timer mounts.');
+  check('"same as" is no longer kept', !('same' in q.data.review));
   q=await fb('POST','/api/fb/review',{tool:'reimagination-lab',id:'c1a2b3c4d5',review:{priority:'urgent!!'}},TK);
-  check('an unknown priority is stored as none', q.data.review.priority==='');
+  check('an unknown weight is stored as none', q.data.review.priority==='');
+  q=await fb('POST','/api/fb/review',{tool:'reimagination-lab',id:'c1a2b3c4d5',review:{priority:'ignore'}},TK);
+  check('Ignore is a weight of its own', q.data.review.priority==='ignore');
+  q=await fb('POST','/api/fb/review',{tool:'reimagination-lab',id:'c1a2b3c4d5',review:{priority:'wont'}},TK);
+  check("an old Won't is kept as Ignore", q.data.review.priority==='ignore');
+  q=await fb('POST','/api/fb/review',{tool:'reimagination-lab',id:'c1a2b3c4d5',review:{priority:'',open:'git:'+'ab'.repeat(20)}},TK);
+  check('still open holds the live version it was marked on', q.data.review.open==='git:'+'ab'.repeat(20));
+  q=await fb('POST','/api/fb/review',{tool:'reimagination-lab',id:'c1a2b3c4d5',review:{open:'git:<b>nope</b>'}},TK);
+  check('still open takes only a real version', q.data.review.open==='');
   q=await fb('POST','/api/fb/review',{tool:'reimagination-lab',id:'c1a2b3c4d5',review:{priority:'must'}});
   check('reviews need the team key', q.status===401);
   q=await fb('POST','/api/fb/review',{tool:'reimagination-lab',id:'nothere99',review:{priority:'must'}},TK);

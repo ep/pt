@@ -73,6 +73,7 @@ There is no homepage at the repo root by design. Each project lives in its own f
 - https://ep.github.io/pt/t3/wbwai-curveballroleplay/ : Experimental T3 artefact: WBWAI Curveball Roleplay.
 - https://ep.github.io/pt/t3/wbwai-prepskillbuilder/ : Experimental T3 artefact: WBWAI Prep Skill Builder.
 - https://ep.github.io/pt/webinars/reimagine-with-ai/ : Reimagine with AI webinar survey results (totals only).
+- https://ep.github.io/pt/feedback/ : Feedback board, where the team reads tester comments on any tool, grouped by its parts, and copies them for an AI (needs the team key).
 
 </details>
 
@@ -82,7 +83,7 @@ Pages deploys from the root of `main`. Any folder with an `index.html` is publis
 
 Folder conventions: interactive field tools (games, diagnostics, workshop tools) live under `field-tools/`, one folder per tool. Design sketchbooks (a cover page plus live concept pages, with screenshot thumbnails in a `thumbs/` folder) live under `design-ideas/`, one folder per sketchbook. Other kinds of test tools get their own top-level folders. Shared assets that more than one project uses (the favicon set and the kits below) live under `assets/`; a page links them by absolute path, `/pt/assets/favicon/favicon.svg`. The cards at the top of this README live in `assets/readme/`, one SVG each, with their words drawn as shapes so they look the same on every screen. To add or change a card, edit `assets/readme/build/build.py` and run it; the note at the top of that file lists what to install.
 
-Two shared kits live in `assets/kit/`, each switched on by one line in a page. The feedback kit (`feedback.js`) lets testers comment on any tool: they open it with their tester link, which ends in `?feedback=` and a code, click Comment, click the area of the page they mean, and post. Comments go to the backend below with the screen, the settings and the device, and no picture is taken. Without `?feedback` the kit does nothing. The team reads and sorts comments on the feedback board at `ep.github.io/pt/feedback/`, which needs the team key and rebuilds each screen from the tool's own code. The Email this kit (`send.js`) lets people email a tool's output from their own email. How to add, set up and remove each kit is in the comment at the top of its file.
+Two shared kits live in `assets/kit/`, each switched on by one line in a page. The feedback kit (`feedback.js`) lets testers comment on any tool: they open it with their tester link, which ends in `?feedback=` and a code, click Comment, click the area of the page they mean, and post. Comments go to the backend below with the screen, the settings and the device, and no picture is taken. Without `?feedback` the kit does nothing. The team reads comments on the feedback board at `ep.github.io/pt/feedback/`, which needs the team key: comments are grouped by the parts of each tool, each screen is rebuilt from the tool's own code, and comments on an earlier version of a tool stay out of what is copied for an AI unless the team marks them still open. The Email this kit (`send.js`) lets people email a tool's output from their own email. How to add, set up and remove each kit is in the comment at the top of its file.
 
 To add a project: create a folder, add an `index.html`, commit. Add it to the list under Every project too; a card is optional. 
 
