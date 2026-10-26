@@ -1,7 +1,8 @@
 // Tests for field-tools/reimagination-lab/index.html (the Reimagination Lab) in a
 // simulated browser with jsdom. It walks a whole team session on a call and a whole
-// solo session, checks escaping, print, the outcome image, Email this (with the real
-// send kit from assets/kit/), picking up after a reload, and clear with undo.
+// solo session, checks the timers, reveals through Next, escaping, print, the outcome
+// image, Email this (with the real send kit from assets/kit/), picking up after a
+// reload, and clear with undo.
 //   node _backend/tests/qa-reimagination-lab.mjs
 import { JSDOM, VirtualConsole } from "jsdom";
 import fs from "node:fs";
@@ -63,7 +64,8 @@ function openLab(store, url) {
 const cur = (w) => { const s = w.document.querySelectorAll("#stage .scene"); return s.length ? s[s.length - 1].getAttribute("data-id") : null; };
 const $ = (w, s) => w.document.querySelector(s);
 const $$ = (w, s) => Array.from(w.document.querySelectorAll(s));
-async function next(w) { w.__skip(1200); $(w, "#nextBtn").click(); await sleep(60); }
+async function next(w) { w.__skip(2000); $(w, "#nextBtn").click(); await sleep(60); }
+async function back(w) { w.__skip(2000); $(w, "#backBtn").click(); await sleep(60); }
 async function at(w, id, label) { const ok = await until(() => cur(w) === id, 4000); if (!ok) check(`${label}: reached ${id}`, false, "at " + cur(w)); return ok; }
 function type(w, el, v) { el.focus(); el.value = v; el.dispatchEvent(new w.Event("input", { bubbles: true })); }
 function key(w, el, k, extra = {}) { el.dispatchEvent(new w.KeyboardEvent("keydown", Object.assign({ key: k, bubbles: true, cancelable: true }, extra))); }
@@ -103,71 +105,130 @@ const w = openLab();
   const L = "team";
   await at(w, "cover", L);
   check("start: the cover, with no errors", cur(w) === "cover" && w.__errors.length === 0, w.__errors.join(" | "));
+  check("cover: plain words, no “single sitting”", /Bring one workflow that bugs you\.\s*Leave with a better one\./.test($(w, ".cover .sub").textContent) && !/single sitting/.test(HTML));
   const T = w.EPKit && w.EPKit.tool;
-  check("kit hook: names the tool and the screen", T && T.id === "reimagination-lab" && T.screen() === "cover" && T.dot === "bottom-center");
-  check("kit hook: reports a few settings and the step", T && T.state().mode === "team" && T.state().step === "1 of 51", JSON.stringify(T && T.state()));
+  check("kit hook: names the tool, its version and the screen", T && T.id === "reimagination-lab" && T.version === "v5" && T.screen() === "cover" && T.dot === "bottom-center");
+  check("kit hook: reports a few settings and the step", T && T.state().mode === "team" && T.state().step === "1 of 48", JSON.stringify(T && T.state()));
   const secs = T && T.sections();
   check("kit hook: names its parts for the board: set up, the six chapters, finish", secs && secs.map((s) => s.name).join("|") === "Set up|1. Better way|2. Why it exists|3. Draw it|4. Judge it|5. Reimagine it|6. Share it|Finish", secs && secs.map((s) => s.name).join("|"));
   const all = secs ? secs.reduce((a, s) => a.concat(s.screens), []) : [];
-  check("kit hook: every screen sits in exactly one part, in the Lab's order", all.length === new Set(all).size && all.length >= 51 && secs[0].screens[0] === "cover" && secs[1].screens.includes("b-share") && secs[2].screens.includes("ladder") && secs[7].screens.join() === "finish", all.length);
+  check("kit hook: every screen sits in exactly one part, in the Lab's order", all.length === new Set(all).size && all.length === 49 && secs[0].screens[0] === "cover" && secs[1].screens.includes("b-share") && secs[2].screens.includes("ladder") && secs[7].screens.join() === "finish", all.length);
+  check("this round: the dial2, dot and break screens are gone", !["dial2", "dot", "brk"].some((id) => all.includes(id)));
+
+  // settings sit behind a gear, with who's here first
+  $(w, "#menuBtn").click(); await sleep(60);
+  check("settings: the gear opens Settings, with who's here first", $(w, "#menuBtn").getAttribute("aria-label") === "Settings" && $(w, "#mpanel h4").textContent === "Settings" && $(w, "#mpanel .mlab").textContent === "Who’s here" && $$(w, "#mpanel .mch").length === 8);
+  key(w, w.document.body, "Escape"); await sleep(60);
+
   $(w, "[data-act=begin]").click();
   await at(w, "who", L);
-  $(w, '[data-v="team-virtual"]').click();
+  check("who: no extra line under the question", !$(w, ".scene:last-child .frame .sub"));
+  $(w, '[data-v="team-room"]').click();
   await at(w, "gather", L);
-  check("who: picking team on a call moves on by itself", cur(w) === "gather" && stored(w).mode === "team" && stored(w).place === "virtual");
-  $$(w, ".check")[0].click();
-  await next(w); await at(w, "roles", L);
+  check("who: picking a team moves on by itself", cur(w) === "gather" && stored(w).mode === "team" && stored(w).place === "room");
+  check("gather: dot stickers are off the list", !/Dot stickers/.test($(w, ".checks").textContent) && /Something to drink/.test($(w, ".checks").textContent));
+  const checks = $$(w, ".check");
+  checks[0].click(); checks[1].click(); checks[2].click(); await sleep(30);
+  check("gather: each item fills in as it's ticked", checks.slice(0, 3).every((c) => c.getAttribute("aria-pressed") === "true") && !$(w, ".checks.all"));
+  checks[3].click(); await sleep(60);
+  check("gather: the last tick says All set", $(w, ".gath-h").textContent === "All set." && !!$(w, ".checks.all"));
+  check("gather: then moves on by itself", await until(() => cur(w) === "roles", 4000));
+  check("roles: the lead's line moved to the notes", !$(w, ".scene:last-child .frame .sub") && /You’re the lead/.test($(w, "#drawerBody").textContent));
+  await back(w); await at(w, "gather", L);
+  $(w, '.check[data-k="r-cup"]').click(); await sleep(30);
+  check("gather: unticking one undoes All set", $(w, ".gath-h").textContent === "Grab a few things.");
+  await sleep(2100);
+  check("gather: and stays put", cur(w) === "gather");
+  $(w, '.check[data-k="r-cup"]').click(); await until(() => cur(w) === "roles", 4000);
+
+  // switch to a call for the rest of the session
+  $(w, "#menuBtn").click(); await sleep(60);
+  $(w, '#mpanel [data-m="who"][data-v="team-virtual"]').click(); await sleep(60);
+  key(w, w.document.body, "Escape"); await sleep(60);
+  check("settings: switching to a call keeps your place", cur(w) === "roles" && stored(w).place === "virtual");
   await next(w); await at(w, "agenda", L);
+  check("agenda: about 45 minutes, no break", $(w, ".total b").getAttribute("data-count") === "45" && !/Break/.test($(w, ".agenda").textContent));
   await next(w); await at(w, "c1", L);
   await next(w); await at(w, "spin", L);
   await next(w); await at(w, "b-think", L);
+  check("timer: 90 seconds to write, with a quiet minus beside the plus", $(w, "[data-timer]").getAttribute("data-sec") === "90" && !!$(w, "[data-timer] [data-act=tminus]") && !!$(w, "[data-timer] [data-act=tplus]") && !$(w, ".tline"));
   $(w, "[data-timer] [data-act=tgo]").click(); await sleep(80);
   check("timer: starting the think timer opens the big timer", $(w, "#focus").classList.contains("open"));
+  $(w, "#focusMinus").click(); await sleep(30);
+  check("timer: minus 30 on the big timer takes time off", /^(1:00|0:59|0:58)$/.test($(w, "#focusT").textContent), $(w, "#focusT").textContent);
   key(w, w.document.body, "Escape"); await sleep(80);
   check("timer: Escape closes the big timer", !$(w, "#focus").classList.contains("open"));
+  for (let i = 0; i < 4; i++) { $(w, "[data-timer] [data-act=tminus]").click(); await sleep(10); }
+  check("timer: never drops below 10 seconds", /^0:(10|09|08)$/.test($(w, "[data-timer] .tt").textContent), $(w, "[data-timer] .tt").textContent);
+  await back(w); await at(w, "spin", L);
+  check("timer: going back keeps it running, with the small chip", !$(w, "#mini").hidden);
+  await next(w); await at(w, "b-think", L);
   await next(w); await at(w, "b-share", L);
-  check("timer: the small chip shows once you leave a running timer", !$(w, "#mini").hidden);
+  check("timer: moving on past its screen ends it", $(w, "#mini").hidden && !$(w, "[data-timer].running"));
+  check("b-share: 90 seconds for the round", $(w, "[data-timer]").getAttribute("data-sec") === "90");
   await addNotes(w, ["A report no one reads but everyone updates", "The weekly status meeting", XSS, "Approvals that need three signatures for a $40 purchase"]);
   check("b-share: notes go on the wall", stored(w).cands.length === 4, stored(w).cands.length);
   check("b-share: typed text is shown as text, never run", !w.__xss && !$(w, ".note img"));
   await next(w); await at(w, "dial1", L);
+  check("dial: the size example reads as a note, colored by its zone", /dial-note z0/.test($(w, ".dial-note").className) && /performance-management/.test($(w, ".dial-note").textContent));
+  const rng = $(w, ".dial input[type=range]"); rng.value = "50"; rng.dispatchEvent(new w.Event("input", { bubbles: true })); await sleep(20);
+  check("dial: just right turns the note gold", /z1/.test($(w, ".dial-note").className) && /quarterly performance review/.test($(w, ".dial-note").textContent));
   await next(w); await at(w, "b-vote", L);
+  check("b-vote: Next reads Next before any votes", $(w, "#nextBtn").textContent === "Next");
   const nv = (i) => $$(w, ".vnote")[i].click();
   nv(0); nv(0); nv(0); nv(1); nv(2); await sleep(40);
   let c = screenChecks(w);
-  check("b-vote: one filled button, Reveal the winner", c.prim.length === 1 && c.prim[0] === "Reveal the winner", JSON.stringify(c.prim));
-  $(w, "[data-act=reveal]").click();
+  check("b-vote: no Reveal button on the page; Next reads Reveal and turns gold", !$(w, ".frame [data-act=reveal]") && c.prim.length === 1 && c.prim[0] === "Reveal" && $(w, "#nextBtn").classList.contains("reveal"), JSON.stringify(c.prim));
+  w.__skip(1200); $(w, "#nextBtn").click();
   const win = await until(() => $(w, ".vnote.win"), 6000);
-  check("b-vote: the most votes wins", win && /A report no one reads/.test(win.textContent), win && win.textContent);
-  await next(w); await at(w, "r1", L);
+  check("b-vote: Next reveals, and the most votes wins", win && /A report no one reads/.test(win.textContent), win && win.textContent);
+  check("b-vote: after the reveal, the Lab moves on by itself", await until(() => cur(w) === "r1", 5000), cur(w));
   check("r1: the group's own words come back", /A report no one reads/.test($(w, ".quote").textContent));
   await next(w); await at(w, "c2", L);
   await next(w); await at(w, "quiz", L);
+  check("quiz: the middle option fits on one line like the others", $$(w, ".qopt .qt")[1].textContent === "Help sales leaders spot stuck deals and act early");
   $(w, "[data-v=ok]").click(); await sleep(40);
   await next(w); await at(w, "climb", L);
+  check("climb: one centered example ladder, the top rung too far, no timer", $$(w, ".exl li").length === 7 && !!$(w, ".exl li.too .toofar") && !$(w, ".scene:last-child [data-timer]") && !$(w, ".scene:last-child .split"));
   await next(w); await at(w, "ladder", L);
+  check("ladder: 2 minutes, and the next rung waits until the top one has words", $(w, "[data-timer]").getAttribute("data-sec") === "120" && $(w, ".rung.ghost").disabled);
   type(w, $(w, '[data-bind="ladder.0"]'), "Show leaders the pipeline every Monday");
+  check("ladder: an empty top rung keeps it locked", $(w, ".rung.ghost").disabled);
   type(w, $(w, '[data-bind="ladder.1"]'), "Help leaders see where deals are stuck");
-  $(w, "[data-act=climb]").click(); await sleep(40);
+  check("ladder: filling the top rung unlocks the next", !$(w, ".rung.ghost").disabled && /Climb another rung/.test($(w, ".rung.ghost").textContent));
+  $(w, ".rung.ghost").click(); await sleep(40);
+  check("ladder: climbing adds a rung and puts you in it", stored(w).ladder.length === 3 && w.document.activeElement === $(w, '[data-bind="ladder.2"]') && $(w, ".rung.ghost").disabled);
   type(w, $(w, '[data-bind="ladder.2"]'), "Grow revenue");
   check("ladder: three rungs saved", stored(w).ladder.filter(Boolean).length === 3, JSON.stringify(stored(w).ladder));
   w.document.activeElement.blur();
   await next(w); await at(w, "pick", L);
   const vp = (i) => $$(w, ".vrow [data-act=vplus]")[i].click();
-  vp(1); vp(1); vp(1); vp(0);
-  $(w, "[data-act=reveal]").click();
-  await until(() => stored(w).purpose, 6000);
-  check("pick: the purpose is the winning rung", /where deals are stuck/.test(stored(w).purpose), stored(w).purpose);
-  await next(w); await at(w, "r2", L);
+  vp(1); vp(0);
+  check("pick: Next reads Reveal once votes are in", $(w, "#nextBtn").textContent === "Reveal");
+  w.__skip(1200); $(w, "#nextBtn").click();
+  await until(() => $$(w, ".vrow.tie").length === 2, 6000);
+  check("pick: a tie asks for a pick and waits", $$(w, ".vrow.tie").length === 2 && /tie/.test($(w, ".vmsg").textContent) && $(w, "#nextBtn").textContent === "Next");
+  await sleep(1200);
+  check("pick: and does not move on by itself", cur(w) === "pick");
+  $$(w, ".vrow.tie").find((r) => /where deals are stuck/.test(r.textContent)).click(); await sleep(60);
+  check("pick: tapping a finalist settles it", /where deals are stuck/.test(stored(w).purpose), stored(w).purpose);
+  check("pick: then the Lab moves on", await until(() => cur(w) === "r2", 5000), cur(w));
   await next(w); await at(w, "c3", L);
-  await next(w); await at(w, "dial2", L);
   await next(w); await at(w, "ends", L);
+  check("ends: the sizing hint lives here now", /4 to 8 steps/.test($(w, ".scene:last-child .sub").textContent));
   type(w, $(w, "[data-bind=start]"), "a sales leader asks for the pipeline view");
   type(w, $(w, "[data-bind=end]"), "the leader decides which deals to step into");
   w.document.activeElement.blur();
   await next(w); await at(w, "mode", L);
   $(w, "[data-v=sketch]").click();
   await at(w, "make", L);
+  check("make: 4 minutes, who does what, and four drawn frames as the example", $(w, "[data-timer]").getAttribute("data-sec") === "240" && $$(w, ".ministeps.who li").length === 3 && /Everyone:/.test($(w, ".ministeps").textContent) && $$(w, ".story4 figure").length === 4);
+  await back(w); await at(w, "mode", L);
+  $(w, "[data-v=act]").click(); await at(w, "make", L);
+  const actSec = $(w, "[data-timer]").getAttribute("data-sec");
+  check("make: acting it out gets the same time, and a five-step example on one row", actSec === "240" && $$(w, ".strip.ex .fr").length === 5, actSec);
+  await back(w); await at(w, "mode", L);
+  $(w, "[data-v=sketch]").click(); await at(w, "make", L);
   await next(w); await at(w, "capture", L);
   const steps = ["Export opportunities", "Clean the data in Excel", XSS, "Build 14 slides", "Email the deck", "Walk through every slide", "Leaders ask for the riskiest deals"];
   for (const s of steps) {
@@ -176,30 +237,45 @@ const w = openLab();
   }
   check("capture: seven steps saved", stored(w).frames.filter((f) => f.t).length === 7, stored(w).frames.length);
   w.document.activeElement.blur();
+  const id2 = stored(w).frames[1].id;
+  $(w, `[data-act=sdown][data-id="${id2}"]`).click(); await sleep(60);
+  check("capture: a moved step stays lit", stored(w).frames[2].id === id2 && $(w, ".step.moved") && $(w, ".step.moved").getAttribute("data-fid") === id2);
+  $(w, `[data-act=sup][data-id="${id2}"]`).click(); await sleep(60);
+  check("capture: moving it again keeps it lit", stored(w).frames[1].id === id2 && $$(w, ".step.moved").length === 1);
+  $(w, ".frame [data-act=sadd]").click(); await sleep(60);
+  check("capture: doing something else clears it", !$(w, ".step.moved"));
+  $(w, ".step:last-child [data-act=sdel]").click(); await sleep(60);
+  w.document.activeElement.blur();
   await next(w); await at(w, "r3", L);
+  check("r3: no photo, no print frame", !$(w, ".polaroid"));
   await next(w); await at(w, "c4", L);
   await next(w); await at(w, "lenses", L);
-  await next(w); await at(w, "dot", L);
   await next(w); await at(w, "tally", L);
+  check("judge: one screen, who does what, a 2:30 timer and the steps to count", $$(w, ".ministeps.who li").length === 3 && /Lead:/.test($(w, ".ministeps").textContent) && $(w, "[data-timer]").getAttribute("data-sec") === "150" && $$(w, ".jrow").length === 7 && !/sticker/i.test($(w, ".scene:last-child").textContent));
   const tap = (row, k, n) => { for (let i = 0; i < n; i++) $$(w, ".jrow")[row].querySelector(".jb." + k).click(); };
   tap(1, "f", 4); tap(3, "c", 3); tap(5, "f", 2); tap(0, "d", 1);
-  check("tally: reactions are counted per step", stored(w).frames[1].f === 4 && stored(w).frames[3].c === 3);
+  check("judge: reactions are counted per step", stored(w).frames[1].f === 4 && stored(w).frames[3].c === 3);
   await next(w); await at(w, "hot", L);
-  check("hot: the three hottest steps get a why card", $$(w, "[data-bwhy]").length === 3, $$(w, "[data-bwhy]").length);
+  check("hot: the three hottest steps get a why card, 2 minutes", $$(w, "[data-bwhy]").length === 3 && $(w, "[data-timer]").getAttribute("data-sec") === "120", $$(w, "[data-bwhy]").length);
   type(w, $(w, "[data-bwhy]"), "Nobody trusts the export, so we rebuild it");
   w.document.activeElement.blur();
   await next(w); await at(w, "r4", L);
-  await next(w); await at(w, "brk", L);
   await next(w); await at(w, "stories", L);
   await next(w); await at(w, "tesla", L);
-  check("tesla: the film is on the page", !!$(w, ".film") && !!$(w, ".film .poster"));
+  check("tesla: the film is on the page", !!$(w, ".film") && !!$(w, ".film .poster") && /About a minute/.test($(w, ".film .poster").textContent));
   await next(w); await at(w, "mlb", L);
   await next(w); await at(w, "poll", L);
-  $$(w, "[data-act=pplus]")[0].click(); $$(w, "[data-act=pplus]")[0].click(); $$(w, "[data-act=pplus]")[1].click();
-  $(w, "[data-act=reveal]").click(); await sleep(200);
-  await next(w); await at(w, "c5", L);
+  $$(w, "[data-act=pplus]")[0].click(); $$(w, "[data-act=pplus]")[0].click(); $$(w, "[data-act=pplus]")[1].click(); await sleep(30);
+  check("poll: Next reads Reveal once hands are counted", $(w, "#nextBtn").textContent === "Reveal" && !$(w, ".frame [data-act=reveal]"));
+  w.__skip(1200); $(w, "#nextBtn").click();
+  await until(() => stored(w).revealed && stored(w).revealed.story, 6000);
+  check("poll: Next shows the split", !!$(w, ".dv") && stored(w).revealed.story === true);
+  check("poll: then moves on to chapter 5", await until(() => cur(w) === "c5", 6000), cur(w));
+  check("c5: the bigger entrance", $$(w, "#stage .scene").pop().classList.contains("grand"));
   await next(w); await at(w, "moves", L);
-  await next(w); await at(w, "mv-sub", L); await addNotes(w, ["Drop the 14 slides", "Stop the Monday walkthrough"]);
+  await next(w); await at(w, "mv-sub", L);
+  check("moves: one minute each, with who does what", $(w, "[data-timer]").getAttribute("data-sec") === "60" && $$(w, ".ministeps.who li").length === 3 && /Together:/.test($(w, ".ministeps").textContent));
+  await addNotes(w, ["Drop the 14 slides", "Stop the Monday walkthrough"]);
   await next(w); await at(w, "mv-shr", L); await addNotes(w, ["Auto-clean the export"]);
   await next(w); await at(w, "mv-amp", L); await addNotes(w, ["More time on the riskiest deals"]);
   await next(w); await at(w, "mv-inv", L); await addNotes(w, ["An agent flags stuck deals daily", XSS]);
@@ -207,24 +283,38 @@ const w = openLab();
   await next(w); await at(w, "ideas", L);
   const ni = (i) => $$(w, ".vnote")[i].click();
   ni(0); ni(0); ni(3); ni(4); ni(4);
-  $(w, "[data-act=reveal]").click(); await sleep(300);
-  await next(w); await at(w, "newflow", L);
+  c = screenChecks(w);
+  check("ideas: Next reads Reveal; no other filled button", c.prim.length === 1 && c.prim[0] === "Reveal", JSON.stringify(c.prim));
+  w.__skip(1200); $(w, "#nextBtn").click();
+  await until(() => stored(w).revealed && stored(w).revealed.ideas, 6000);
+  check("ideas: Next reveals what made the cut", $$(w, ".vnote.kept").length === 3);
+  check("ideas: then moves on by itself", await until(() => cur(w) === "newflow", 6000), cur(w));
+  check("newflow: 3 minutes", $(w, "[data-timer]").getAttribute("data-sec") === "180");
   $$(w, ".carry button[data-act=carry]")[0].click(); await sleep(30);
   $$(w, ".carry button[data-act=carryidea]")[0].click(); await sleep(30);
   check("newflow: today's steps and kept ideas carry into the new flow", stored(w).newFrames.length === 2, stored(w).newFrames.length);
+  const nf0 = stored(w).newFrames[0].id;
+  $(w, `[data-act=sdown][data-id="${nf0}"]`).click(); await sleep(60);
+  check("newflow: the moved step stays lit", $(w, ".step.moved") && $(w, ".step.moved").getAttribute("data-fid") === nf0 && stored(w).newFrames[1].id === nf0);
   await next(w); await at(w, "r5", L);
+  check("r5: before and after, with the new steps marked", $$(w, "#baNew .fr").length === 2 && $$(w, "#baNew .fr.new").length === 1);
   await next(w); await at(w, "c6", L);
   await next(w); await at(w, "lww", L);
   await next(w); await at(w, "people", L);
   type(w, $(w, '[data-bind="people.0.who"]'), "Head of sales ops");
   w.document.activeElement.blur();
   await next(w); await at(w, "rehearse", L);
+  check("rehearse: 2 minutes", $(w, "[data-timer]").getAttribute("data-sec") === "120");
+  $(w, "[data-timer] [data-act=tgo]").click(); await sleep(40);
   await next(w); await at(w, "test", L);
   check("test: the last step says Finish", $(w, "#nextBtn").textContent === "Finish");
   type(w, $(w, "[data-bind=test]"), "Send leaders a one-line list of the riskiest deals next Monday");
   type(w, $(w, "[data-bind=owner]"), "Sam"); type(w, $(w, "[data-bind=when]"), "next Monday");
   w.document.activeElement.blur();
   await next(w); await at(w, "finish", L);
+  check("finish: no timer left running", $(w, "#mini").hidden && !$(w, "#burn i").style.width.replace(/^0(px|%)?$/, ""), $(w, "#burn i").style.width);
+  check("finish: all six chapter stamps", $$(w, ".stamps i.got").length === 6);
+  check("finish: four workshop cards on one aligned track", $$(w, ".phases .ws").length === 4 && $$(w, ".phases .phase").length === 3 && ["c1", "c2", "c3", "c4"].every((k) => $(w, ".phases .ws." + k)) && !$(w, ".ws-row"));
   c = screenChecks(w);
   check("finish: one filled button, Save as image", c.prim.length === 1 && c.prim[0] === "Save as image", JSON.stringify(c.prim));
   check("whole session: typed code never ran anywhere", !w.__xss && !c.imgs);
@@ -237,7 +327,7 @@ const w = openLab();
   check("finish: Save as image downloads the card", w.downloads[0] && w.downloads[0].download === "reimagination-lab.png");
   $(w, "[data-act=print]").click(); await sleep(200);
   const pr = $(w, "#printout").innerHTML;
-  check("print: opens the print dialog with every chapter", w.__printed === 1 && /Isn\u2019t there a better way\?/.test(pr) && /Share it/.test(pr));
+  check("print: opens the print dialog with every chapter", w.__printed === 1 && /Isn’t there a better way\?/.test(pr) && /Share it/.test(pr));
   check("print: leaves room for like, wish, wonder", /I wonder/.test(pr));
   check("print: typed text is escaped", !/<img src=x/.test(pr) && /&lt;img src=x/.test(pr));
 
@@ -274,6 +364,28 @@ const w = openLab();
   $(w2, "#toastA").click(); await sleep(200);
   check("menu: Undo brings them back", /A report no one reads/.test(JSON.parse(w2.localStorage.getItem("rlab-v3") || "{}").eyeroll || ""));
   check("reload: no page errors", w2.__errors.length === 0, w2.__errors.join(" | "));
+  const o = JSON.parse(saved); o.at = "dot";
+  const w3 = openLab({ "rlab-v3": JSON.stringify(o) });
+  check("reload: a session left on a screen that is gone picks up where it went", await until(() => cur(w3) === "tally", 3000), cur(w3));
+  o.at = "r3"; o.photoOld = "data:image/png;base64,iVBORw0KGgo=";
+  const w4 = openLab({ "rlab-v3": JSON.stringify(o) });
+  await at(w4, "r3", "reload");
+  check("r3: shows the group's photo as a print", !!$(w4, ".polaroid img") && $(w4, ".polaroid img").getAttribute("src") === o.photoOld);
+  check("reload: no page errors on either", w3.__errors.length === 0 && w4.__errors.length === 0, w3.__errors.concat(w4.__errors).join(" | "));
+  // a tied eye-roller vote waits for the lead to pick, then moves on
+  const t = { at: "b-vote", mode: "team", place: "room", cands: [{ id: "k1", t: "The Friday report" }, { id: "k2", t: "Three sign-offs" }, { id: "k3", t: "Copying notes" }], votes: { eyeroll: { k1: 2, k2: 2, k3: 1 } } };
+  const w5 = openLab({ "rlab-v3": JSON.stringify(t) });
+  await at(w5, "b-vote", "tie");
+  check("b-vote tie: Next reads Reveal", $(w5, "#nextBtn").textContent === "Reveal");
+  w5.__skip(2000); $(w5, "#nextBtn").click();
+  await until(() => $$(w5, ".vnote.tie").length === 2, 6000);
+  check("b-vote tie: both finalists wobble and Next goes back to Next", $$(w5, ".vnote.tie").length === 2 && $(w5, "#nextBtn").textContent === "Next");
+  await sleep(1500);
+  check("b-vote tie: nothing moves on until someone picks", cur(w5) === "b-vote");
+  $$(w5, ".vnote.tie").find((n) => /Three sign-offs/.test(n.textContent)).click(); await sleep(60);
+  check("b-vote tie: the pick becomes the eye-roller", stored(w5).eyeroll === "Three sign-offs");
+  check("b-vote tie: then the Lab moves on", await until(() => cur(w5) === "r1", 5000), cur(w5));
+  check("b-vote tie: no page errors", w5.__errors.length === 0, w5.__errors.join(" | "));
 }
 
 /* =================== a solo session, start to finish =================== */
@@ -284,7 +396,7 @@ const w = openLab();
   $(s, "[data-v=solo]").click();
   await until(() => cur(s) !== "who", 3000);
   const seen = [];
-  let multi = [];
+  let multi = [], soloMake = "", soloMins = "";
   for (let guard = 0; guard < 60; guard++) {
     const id = cur(s); if (!id) break;
     if (seen.includes(id) && id !== "finish") { check("solo: never stuck", false, "stuck at " + id); break; }
@@ -293,6 +405,8 @@ const w = openLab();
     if (id === "ladder") { type(s, $(s, '[data-bind="ladder.0"]'), "Share updates"); type(s, $(s, '[data-bind="ladder.1"]'), "Keep everyone on the same priorities"); s.document.activeElement.blur(); }
     if (id === "pick") { $$(s, ".vrow.pick")[0].click(); await sleep(60); }
     if (id === "mode") { $(s, "[data-v=sticky]").click(); await until(() => cur(s) !== "mode", 3000); continue; }
+    if (id === "make") { soloMake = $(s, "[data-timer]").getAttribute("data-sec") + ":" + $$(s, ".strip.ex .fr").length; }
+    if (id === "agenda") { soloMins = $(s, ".total b").getAttribute("data-count"); }
     if (id === "capture") { for (const t of ["Book the room", "Read updates aloud", "Notes go out by email"]) { const f = $$(s, "[data-bstep]").pop(); type(s, f, t); key(s, f, "Enter"); await sleep(30); } s.document.activeElement.blur(); }
     if (id && id.indexOf("mv-") === 0) await addNotes(s, ["Idea for " + id]);
     if (id === "test") { type(s, $(s, "[data-bind=test]"), "Try written updates for two weeks"); s.document.activeElement.blur(); }
@@ -303,7 +417,9 @@ const w = openLab();
     await until(() => cur(s) !== id, 3000);
   }
   check("solo: reaches the finish screen", seen[seen.length - 1] === "finish", seen.join(" "));
-  check("solo: team-only screens never show", !seen.some((id) => ["roles", "b-think", "b-share", "b-vote", "dot", "brk", "rehearse"].includes(id)), seen.join(" "));
+  check("solo: team-only screens never show", !seen.some((id) => ["roles", "b-think", "b-share", "b-vote", "rehearse"].includes(id)), seen.join(" "));
+  check("solo: about 30 minutes", soloMins === "30", soloMins);
+  check("solo: 3 minutes to map, with a five-step example", soloMake === "180:5", soloMake);
   check("solo: one screen at a time, at most one filled button", multi.length === 0, multi.join(", "));
   check("solo: the kit hook reports solo", s.EPKit.tool.state().mode === "solo");
   check("solo: no page errors", s.__errors.length === 0, s.__errors.join(" | "));

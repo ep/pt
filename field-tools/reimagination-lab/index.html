@@ -5,7 +5,7 @@
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
 <meta name="robots" content="noindex, nofollow">
 <title>Reimagination Lab</title>
-<meta name="description" content="Rethink one workflow in a single sitting. A hands-on lab from ExperiencePoint.">
+<meta name="description" content="Bring one workflow that bugs you. Leave with a better one. A hands-on lab from ExperiencePoint.">
 <meta name="theme-color" content="#111A2B">
 <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Crect width='32' height='32' rx='8' fill='%23111A2B'/%3E%3Ccircle cx='16' cy='16' r='7' fill='%23FFCC00'/%3E%3C/svg%3E">
 <link rel="preconnect" href="https://fonts.googleapis.com">
@@ -83,7 +83,7 @@ img{max-width:100%;display:block}
 .bar.top::before,.bar.bottom::before{content:"";position:absolute;inset:0;z-index:-1;transition:opacity .5s;pointer-events:none}
 .bar.top::before{background:linear-gradient(to bottom,var(--bg) 40%,transparent)}
 .bar.bottom::before{background:linear-gradient(to top,var(--bg) 45%,transparent)}
-body.is-night .bar.top::before{background:linear-gradient(to bottom,rgba(10,16,30,.62),rgba(10,16,30,0))}
+body.is-night .bar.top::before{background:linear-gradient(to bottom,rgba(10,16,30,.94),rgba(10,16,30,.7));-webkit-backdrop-filter:blur(8px);backdrop-filter:blur(8px);-webkit-mask-image:linear-gradient(to bottom,#000 58%,transparent);mask-image:linear-gradient(to bottom,#000 58%,transparent)}
 body.is-night .bar.bottom::before{background:linear-gradient(to top,rgba(10,16,30,.7),rgba(10,16,30,0))}
 body.focus-on .bar{opacity:0;pointer-events:none}
 
@@ -125,6 +125,7 @@ body.focus-on .bar{opacity:0;pointer-events:none}
 .btn.ghost.sm{padding:0 10px}
 .btn[disabled]{opacity:0;pointer-events:none}
 .bar.bottom .btn{min-width:120px}
+#nextBtn.reveal:not(.sec){background:var(--gold);color:#141C2C;box-shadow:0 0 0 6px rgba(255,204,0,.2)}
 .bar.bottom #backBtn{min-width:0}
 
 .burn{position:fixed;left:0;right:0;bottom:0;height:4px;z-index:35;pointer-events:none}
@@ -146,6 +147,14 @@ body.focus-on .bar{opacity:0;pointer-events:none}
 @keyframes dissolve{to{opacity:0;filter:blur(6px)}}
 .scene.iris{clip-path:circle(0px at var(--ix,50%) var(--iy,0px))}
 .scene.iris.open{clip-path:circle(var(--ir,150vmax) at var(--ix,50%) var(--iy,0px));transition:clip-path .95s cubic-bezier(.7,0,.18,1)}
+.scene.iris.grand.open{transition:clip-path 1.65s cubic-bezier(.65,0,.2,1)}
+.grand .wr .w{overflow:visible}
+.grand .wr .w>span{transform:none;opacity:0;animation:wordGrand 1.4s var(--spring) forwards;animation-delay:calc(var(--i)*120ms + 700ms)}
+@keyframes wordGrand{from{opacity:0;transform:translateY(34%) scale(1.32);filter:blur(14px)}to{opacity:1;transform:none;filter:none}}
+.grand .pools i{opacity:.9}
+.shock{position:fixed;width:40px;height:40px;margin:-20px 0 0 -20px;border-radius:50%;border:2px solid var(--gold);box-shadow:0 0 30px 4px rgba(255,204,0,.45);z-index:66;pointer-events:none;animation:shock 1.7s cubic-bezier(.2,.7,.2,1) both}
+.shock.two{border-color:rgba(255,204,0,.6)}
+@keyframes shock{0%{transform:scale(.3);opacity:1}100%{transform:scale(70);opacity:0}}
 
 /* light pools on beats */
 .pools{position:absolute;inset:0;pointer-events:none;overflow:hidden}
@@ -233,18 +242,25 @@ body.focus-on .bar{opacity:0;pointer-events:none}
 /* checklist */
 .checks{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:14px;margin-top:30px;text-align:left}
 @media (max-width:700px){.checks{grid-template-columns:1fr}}
-.check{display:grid;grid-template-columns:52px 1fr 30px;gap:14px;align-items:center;padding:16px 18px;border-radius:18px;background:var(--card);box-shadow:inset 0 0 0 1.5px var(--line);text-align:left;transition:box-shadow .25s,transform .2s}
+.check{--tint:var(--s1);display:grid;grid-template-columns:52px 1fr 30px;gap:14px;align-items:center;padding:16px 18px;border-radius:18px;background:var(--card);box-shadow:inset 0 0 0 1.5px var(--line);text-align:left;transition:box-shadow .25s,transform .2s,background-color .35s,color .35s}
+.check.k2{--tint:var(--s2)}.check.k3{--tint:var(--s3)}.check.k4{--tint:var(--s4)}
 .check:hover{transform:translateY(-2px)}
-.check .ci{width:52px;height:52px;border-radius:14px;display:grid;place-items:center;background:var(--line);color:var(--ink)}
+.check .ci{width:52px;height:52px;border-radius:14px;display:grid;place-items:center;background:var(--tint);color:var(--sInk);transition:background-color .35s}
 .check .ci svg{width:28px;height:28px}
 .check b{display:block;font-weight:650;font-size:17px;line-height:1.3}
-.check small{display:block;font-size:14.5px;color:var(--ink2);line-height:1.4;margin-top:2px}
+.check small{display:block;font-size:14.5px;color:var(--ink2);line-height:1.4;margin-top:2px;transition:color .35s}
 .check .tick{width:28px;height:28px;border-radius:50%;box-shadow:inset 0 0 0 1.5px var(--line2);display:grid;place-items:center;transition:all .3s var(--spring)}
-.check .tick svg{width:15px;height:15px;opacity:0;transform:scale(.4);transition:all .3s var(--spring);color:var(--bg)}
-.check[aria-pressed="true"]{box-shadow:inset 0 0 0 1.5px var(--line2)}
-.check[aria-pressed="true"] .tick{background:var(--ink);box-shadow:none}
+.check .tick svg{width:15px;height:15px;opacity:0;transform:scale(.4);transition:all .3s var(--spring);color:#fff}
+.check[aria-pressed="true"]{background:var(--tint);color:var(--sInk);box-shadow:0 14px 26px -18px rgba(0,0,0,.45)}
+.check[aria-pressed="true"] small{color:rgba(35,36,30,.72)}
+.check[aria-pressed="true"] .ci{background:rgba(255,255,255,.6)}
+.check[aria-pressed="true"] .tick{background:var(--sInk);box-shadow:none}
 .check[aria-pressed="true"] .tick svg{opacity:1;transform:none}
-.check[aria-pressed="true"] b{opacity:.55}
+.check.popped .ci{animation:tilePop .55s cubic-bezier(.3,1.6,.5,1)}
+@keyframes tilePop{0%{transform:scale(.8) rotate(0)}45%{transform:scale(1.18) rotate(-7deg)}100%{transform:none}}
+.checks.all .check{animation:allSet .7s var(--spring) both;animation-delay:calc(var(--i)*70ms)}
+@keyframes allSet{40%{transform:translateY(-6px) rotate(-1deg)}100%{transform:none}}
+.gath-h{transition:color .3s}
 
 /* roles */
 .roles{display:grid;grid-template-columns:1fr 1fr;gap:18px;margin-top:30px}
@@ -295,7 +311,14 @@ body.focus-on .bar{opacity:0;pointer-events:none}
 @keyframes spark{0%{opacity:0;transform:translate(0,0) scale(.3)}25%{opacity:1}100%{opacity:0;transform:translate(var(--sx),var(--sy)) scale(1)}}
 .dial-ring{fill:none;stroke:var(--nightInk2);stroke-width:2.5;stroke-dasharray:6 9;transition:stroke .4s}
 .dial.fit .dial-ring{stroke:var(--gold);stroke-dasharray:none;stroke-width:4}
-.dial-ex{display:block;min-height:1.3em;margin-top:6px;font-family:var(--display);font-weight:520;font-size:clamp(22px,2.4vw,36px);line-height:1.18;letter-spacing:-.015em;text-wrap:balance;transition:opacity .2s}
+.dial{position:relative}
+.dial-note{position:absolute;right:-2%;top:9%;width:clamp(170px,19vw,230px);min-height:118px;padding:16px 16px 18px;border-radius:3px 3px 16px 3px;background:var(--s3);color:var(--sInk);text-align:left;transform:rotate(3deg);box-shadow:0 22px 34px -20px rgba(0,0,0,.7);font-family:var(--hand);font-weight:600;font-size:clamp(23px,2vw,28px);line-height:1.08;transition:background-color .35s}
+.dial-note.z1{background:var(--s1);transform:rotate(-2deg)}
+.dial-note.z2{background:var(--s2);transform:rotate(2deg)}
+.dial-note.slap{animation:noteSlap .45s cubic-bezier(.3,1.5,.5,1)}
+@keyframes noteSlap{from{opacity:.4;transform:translateY(-14px) rotate(-6deg) scale(1.06)}}
+.dial-ex{display:block;overflow-wrap:anywhere}
+@media (max-width:760px){.dial-note{position:relative;right:auto;top:auto;margin:6px auto 4px;width:min(260px,80%);min-height:0}}
 .dial input[type=range]{-webkit-appearance:none;appearance:none;width:100%;height:44px;background:transparent;margin:10px 0 0;cursor:pointer}
 .dial input[type=range]::-webkit-slider-runnable-track{height:10px;border-radius:999px;background:linear-gradient(90deg,var(--clayM) 0 33.3%,var(--gold) 33.3% 66.6%,var(--tealM) 66.6% 100%)}
 .dial input[type=range]::-moz-range-track{height:10px;border-radius:999px;background:linear-gradient(90deg,var(--clayM) 0 33.3%,var(--gold) 33.3% 66.6%,var(--tealM) 66.6% 100%)}
@@ -318,14 +341,17 @@ body.focus-on .bar{opacity:0;pointer-events:none}
 .timer.running .tf{stroke:var(--gold)}
 .timer.done .tf{stroke:var(--clayM)}
 .tring .tt{position:absolute;inset:0;display:grid;place-items:center;font-family:var(--display);font-weight:540;font-size:25px;font-variant-numeric:tabular-nums;letter-spacing:-.02em}
-.tline{margin:0 0 10px;font-size:16px;line-height:1.45;color:var(--ink2);max-width:34ch}
-.tbtns{display:flex;flex-wrap:wrap;gap:6px;align-items:center}
+.tbtns{display:flex;flex-direction:column;align-items:flex-start;gap:2px}
+.tmain,.tfine{display:flex;flex-wrap:wrap;gap:4px;align-items:center}
+.tfine{margin-left:-2px}
+.tfine .btn.ghost.sm{height:36px;padding:0 8px;font-size:14px;font-variant-numeric:tabular-nums}
+.tadj{display:inline-flex;align-items:center}
+.tadj [data-act="tminus"]{opacity:.72}
 .timer.xl{flex-direction:column;gap:22px;margin:40px auto 0}
 .timer.xl .tring{width:min(220px,46vw);height:min(220px,46vw)}
 .timer.xl .tring circle{stroke-width:4}
 .timer.xl .tt{font-size:clamp(42px,5.4vw,62px)}
-.timer.xl .tline{text-align:center;margin:0 auto 14px;font-size:18px}
-.timer.xl .tbtns{justify-content:center}
+.timer.xl .tbtns{align-items:center}
 
 /* focus overlay */
 .focus{position:fixed;inset:0;z-index:60;display:grid;place-items:center;background:radial-gradient(900px 600px at 50% 40%,rgba(88,106,144,.22),transparent 65%),var(--night);color:var(--nightInk);opacity:0;pointer-events:none;visibility:hidden;transition:opacity .6s ease,visibility 0s linear .6s;
@@ -456,7 +482,7 @@ body.focus-on .bar{opacity:0;pointer-events:none}
 /* =========================================================
    QUIZ
    ========================================================= */
-.quiz{display:grid;gap:14px;margin-top:30px}
+.quiz{display:grid;grid-auto-rows:1fr;gap:14px;margin-top:30px}
 .qopt{display:grid;grid-template-columns:28px 1fr auto;gap:16px;align-items:center;padding:22px 24px;border-radius:18px;background:var(--card);box-shadow:inset 0 0 0 1.5px var(--line),var(--shadow);text-align:left;transition:all .35s var(--spring)}
 .qopt:hover{transform:translateY(-2px)}
 .qopt .qd{width:22px;height:22px;border-radius:50%;box-shadow:inset 0 0 0 2px var(--line2);transition:all .3s}
@@ -472,26 +498,37 @@ body.focus-on .bar{opacity:0;pointer-events:none}
 /* =========================================================
    LADDER
    ========================================================= */
-.ladder{position:relative;display:flex;flex-direction:column-reverse;gap:0;padding-left:46px}
-.ladder::before,.ladder::after{content:"";position:absolute;top:10px;bottom:30px;width:3px;border-radius:2px;background:var(--line2)}
-.ladder::before{left:6px}.ladder::after{left:30px}
-.rung{position:relative;padding:4px 0 6px}
-.rung::before{content:"";position:absolute;left:-40px;top:42px;width:27px;height:3px;border-radius:2px;background:var(--ink)}
-.rung .lbl{margin:0 0 0;font-weight:600}
-.rung .big{font-size:clamp(22px,2.3vw,32px)}
-.rung .rx{position:absolute;right:0;top:0;width:40px;height:40px;border-radius:50%;color:var(--ink2);font-size:20px}
-.rung .rx:hover{color:var(--ink);background:var(--line)}
-.joiner{font-family:var(--hand);font-size:26px;color:var(--ink2);margin:6px 0 4px;line-height:1}
-.ground{position:relative;margin-top:14px;padding-top:16px;border-top:2.5px solid var(--ink);font-family:var(--hand);font-size:clamp(26px,2.3vw,34px);line-height:1.1;color:var(--ink);overflow-wrap:anywhere}
-.climb{margin-bottom:16px;align-self:flex-start}
+.ladder{position:relative}
+.climbs{position:relative;display:flex;flex-direction:column-reverse;padding:0 0 4px}
+.climbs::before,.climbs::after{content:"";position:absolute;top:-8px;bottom:0;width:6px;border-radius:3px;background:var(--line2)}
+.climbs::before{left:16px}.climbs::after{right:16px}
+.rung{position:relative;z-index:1;padding:4px 50px 6px 36px;border-radius:14px;background:var(--card);box-shadow:inset 0 0 0 1.5px var(--line2),0 10px 22px -18px rgba(17,26,43,.5);transition:box-shadow .25s}
+.rung::before,.rung::after{content:"";position:absolute;top:50%;width:9px;height:9px;margin-top:-4.5px;border-radius:50%;background:var(--line2)}
+.rung::before{left:14.5px}.rung::after{right:14.5px}
+.rung:focus-within{box-shadow:inset 0 0 0 2px var(--ink),0 0 0 4px rgba(255,204,0,.28)}
+.rung .big{font-size:clamp(21px,2.1vw,29px);border-bottom:0;padding:8px 2px}
+.rung .rx{position:absolute;right:30px;top:50%;margin-top:-20px;width:40px;height:40px;border-radius:50%;color:var(--ink2);font-size:20px;opacity:.6}
+.rung .rx:hover{opacity:1;color:var(--ink);background:var(--line)}
+.rung.ghost{display:flex;align-items:center;justify-content:center;gap:10px;width:100%;min-height:62px;padding:10px 40px;background:transparent;box-shadow:none;border:2px dashed var(--line2);font-weight:650;font-size:16px;color:var(--ink);transition:border-color .25s,color .25s,background-color .25s,opacity .25s}
+.rung.ghost::before,.rung.ghost::after{display:none}
+.rung.ghost .pl{width:24px;height:24px;border-radius:50%;display:grid;place-items:center;background:var(--ink);color:var(--bg);font-size:17px;line-height:1}
+.rung.ghost:not([disabled]):hover{border-color:var(--ink);background:var(--line)}
+.rung.ghost[disabled]{opacity:.5;cursor:default;color:var(--ink2)}
+.rung.ghost[disabled] .pl{background:var(--line2)}
+.joiner{position:relative;z-index:1;text-align:center;font-family:var(--hand);font-size:24px;color:var(--ink2);padding:8px 0;line-height:1}
+.ground{position:relative;padding-top:14px;border-top:3px solid var(--ink);font-family:var(--hand);font-size:clamp(26px,2.3vw,34px);line-height:1.1;color:var(--ink);text-align:center;overflow-wrap:anywhere}
 
-/* climb example */
-.exl{list-style:none;padding:0;margin:34px auto 0;display:flex;flex-direction:column-reverse;align-items:center;gap:6px;max-width:720px}
-.exl li{opacity:0;animation:fadeIn .6s var(--spring) forwards;animation-delay:calc(var(--i)*480ms + 300ms);font-family:var(--display);font-size:clamp(22px,2.4vw,34px);line-height:1.2;text-align:center}
-.exl li.j{font-family:var(--hand);font-size:clamp(22px,2vw,30px);color:var(--nightInk2)}
-.exl li.too{opacity:0;color:var(--nightInk2);text-decoration:line-through;text-decoration-color:var(--clayM);text-decoration-thickness:3px}
-.exl li.right{position:relative;padding:0 0 0 34px}
-.exl li.right::before{content:"";position:absolute;left:0;top:50%;width:18px;height:18px;margin-top:-9px;border-radius:50%;background:var(--gold)}
+/* climb: the example ladder, read bottom up */
+.climbscreen .exl{position:relative;list-style:none;padding:0;margin:30px auto 0;width:min(100%,660px);display:flex;flex-direction:column-reverse;align-items:stretch}
+.climbscreen .exl::before,.climbscreen .exl::after{content:"";position:absolute;top:-12px;bottom:-12px;width:5px;border-radius:3px;background:rgba(242,244,248,.24)}
+.climbscreen .exl::before{left:14px}.climbscreen .exl::after{right:14px}
+.climbscreen .exl li{position:relative;z-index:1;opacity:0;animation:fadeIn .6s var(--spring) forwards;animation-delay:calc(var(--i)*420ms + 300ms)}
+.climbscreen .exl li:not(.j){padding:13px 44px;border-radius:12px;background:var(--night2);box-shadow:inset 0 0 0 1.5px rgba(242,244,248,.2);font-family:var(--display);font-size:clamp(19px,1.9vw,26px);line-height:1.25;text-align:center;text-wrap:balance}
+.climbscreen .exl li.j{padding:7px 0;font-family:var(--hand);font-size:clamp(22px,1.9vw,27px);color:var(--nightInk2);text-align:center}
+.climbscreen .exl li.right{box-shadow:inset 0 0 0 2px var(--gold),0 0 0 6px rgba(255,204,0,.14)}
+.climbscreen .exl li.too{background:transparent;box-shadow:inset 0 0 0 1.5px rgba(242,244,248,.16)}
+.climbscreen .exl li.too span{color:var(--nightInk2);text-decoration:line-through;text-decoration-color:var(--clayM);text-decoration-thickness:3px}
+.toofar{position:absolute;right:26px;top:-18px;font-family:var(--hand);font-style:normal;font-weight:700;font-size:clamp(24px,2vw,30px);line-height:1;color:var(--clayM);transform:rotate(-7deg)}
 
 /* =========================================================
    BOOKENDS, PEOPLE
@@ -524,6 +561,9 @@ body.focus-on .bar{opacity:0;pointer-events:none}
 .step .sb button svg{width:17px;height:17px}
 .step:hover .sb button,.step:focus-within .sb button{opacity:1}
 .step .sb button:hover{background:var(--line);color:var(--ink)}
+.step{transition:box-shadow .3s,background-color .3s}
+.step.moved{background:color-mix(in srgb,var(--gold) 12%,var(--card));box-shadow:inset 0 0 0 2px var(--gold),0 0 0 5px rgba(255,204,0,.16)}
+.step.moved .sn{background:var(--gold);color:#141C2C}
 .carry{display:flex;flex-wrap:wrap;gap:8px;margin:0 0 20px}
 .carry button{padding:9px 14px;border-radius:12px;box-shadow:inset 0 0 0 1.5px var(--line2);font-size:15.5px;font-weight:550;text-align:left;transition:all .2s}
 .carry button:hover{box-shadow:inset 0 0 0 1.5px var(--ink)}
@@ -545,12 +585,27 @@ body.focus-on .bar{opacity:0;pointer-events:none}
 .fr.cut.struck .pic::before{transform:rotate(-12deg) scaleX(1)}
 .strip.hold .fr{opacity:0;transform:translateY(12px)}
 .strip .fr{transition:opacity .5s ease,transform .5s var(--spring)}
+.strip.popin.hold .fr{transform:scale(.55)}
+.strip.popin .fr{transition:opacity .35s ease,transform .65s cubic-bezier(.3,1.6,.5,1)}
+.fr.cut.fall{transform:translateY(16px) rotate(-5deg);opacity:.55;transition:transform .8s var(--spring),opacity .8s}
+.fr.new.glow .pic{animation:newGlow 1.5s ease-out both}
+@keyframes newGlow{0%{box-shadow:0 0 0 0 rgba(255,204,0,.9),0 0 26px rgba(255,204,0,.7)}100%{box-shadow:0 0 0 14px rgba(255,204,0,0),0 0 0 rgba(255,204,0,0)}}
+.scene.refreshed .fr{transition:none!important}
 .strip.small{margin:6px 0 0;justify-content:flex-start}
 .strip.small .fr{flex:1 1 88px;min-width:84px;max-width:140px;padding:11px 4px}
 .strip.small .fr::before,.strip.small .fr::after{height:5px}
 .strip.small .fr .pic{min-height:64px;padding:8px}
 .strip.small .fr .ft{font-size:12.5px}
 .strip.small .fr .fn{font-size:12px}
+.strip.ex{flex-wrap:nowrap;margin-top:10px}
+.strip.ex .fr{flex:1 1 0;min-width:0;max-width:none}
+.strip.ex .fr .ft{font-size:12.5px;overflow-wrap:break-word;hyphens:auto}
+.story4{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:10px;margin-top:10px}
+.story4 figure{margin:0;padding:10px 8px 8px;border-radius:10px;background:#fff;color:#1A2234;box-shadow:inset 0 0 0 1.5px rgba(41,56,81,.14)}
+.story4 svg{display:block;width:100%;height:auto}
+.story4 .g{fill:var(--gold);stroke:none}
+.story4 figcaption{font-family:var(--hand);font-weight:600;font-size:19px;line-height:1.05;text-align:center;margin-top:4px}
+@media (max-width:520px){.story4{grid-template-columns:1fr 1fr}}
 
 .ba{display:grid;gap:30px;width:100%;margin-top:34px}
 .ba .row{display:grid;grid-template-columns:150px 1fr;gap:20px;align-items:center;text-align:left}
@@ -571,6 +626,12 @@ body.focus-on .bar{opacity:0;pointer-events:none}
 .photo-has .pacts{display:flex;gap:6px;margin-top:10px}
 .photo-has label{cursor:pointer}
 .photo-has input{position:absolute;width:1px;height:1px;opacity:0}
+
+.polaroid{display:inline-block;margin:26px auto 0;padding:12px 12px 38px;background:#fff;border-radius:3px;transform:rotate(-2.5deg);box-shadow:0 30px 60px -30px rgba(0,0,0,.8),0 2px 6px rgba(0,0,0,.3);animation:polaroidIn .9s cubic-bezier(.3,1.4,.5,1) .35s both}
+.polaroid img{max-height:min(24vh,220px);width:auto;max-width:min(72vw,440px);border-radius:1px}
+.r3 .polaroid{margin-top:18px}
+.r3 .strip.small{justify-content:center;margin:22px auto 0;max-width:900px;width:100%}
+@keyframes polaroidIn{from{opacity:0;transform:translateY(-34px) rotate(-12deg) scale(1.08)}to{opacity:1;transform:rotate(-2.5deg)}}
 
 /* =========================================================
    JUDGE
@@ -673,6 +734,10 @@ svg .n1{fill:var(--s1)} svg .n2{fill:var(--s2)} svg .n3{fill:var(--s3)} svg .n4{
 .ministeps{list-style:none;margin:6px 0 0;padding:0;counter-reset:ms;display:grid;gap:14px}
 .ministeps li{display:grid;grid-template-columns:40px 1fr;gap:14px;align-items:start;font-size:clamp(17px,1.4vw,20px);line-height:1.45}
 .ministeps li::before{counter-increment:ms;content:counter(ms);width:40px;height:40px;border-radius:50%;display:grid;place-items:center;font-family:var(--display);font-weight:560;font-size:19px;background:var(--line)}
+.ministeps.who{gap:10px;margin-bottom:4px}
+.ministeps.who li{font-size:clamp(16.5px,1.3vw,19px);color:var(--ink2)}
+.ministeps.who b{color:var(--ink);font-weight:650}
+.legend{margin:16px 0 0;font-size:16px;color:var(--ink2)}
 
 /* =========================================================
    FILMS
@@ -762,6 +827,19 @@ svg .n1{fill:var(--s1)} svg .n2{fill:var(--s2)} svg .n3{fill:var(--s3)} svg .n4{
 /* =========================================================
    FINISH
    ========================================================= */
+.scene.finale{background:var(--night)}
+.dawn{position:absolute;left:0;right:0;top:0;height:max(150vh,1000px);pointer-events:none;overflow:hidden;background:linear-gradient(to bottom,#0B1222 0%,#141C36 24%,#2B2645 42%,#5A3442 56%,#9A5233 66%,#5E3426 78%,rgba(11,18,34,0) 100%);animation:sunrise 3.2s cubic-bezier(.2,.7,.2,1) .1s both}
+.dawn i{position:absolute;left:50%;top:66%;width:150vmax;height:80vmax;margin:-40vmax 0 0 -75vmax;border-radius:50%;background:radial-gradient(closest-side,rgba(255,214,90,.62),rgba(255,170,60,.3) 32%,rgba(216,101,39,.1) 62%,transparent)}
+@keyframes sunrise{from{transform:translateY(16%);opacity:0}to{transform:none;opacity:1}}
+body.on-finish .bar.bottom::before{opacity:0}
+.stamps{position:relative;display:flex;gap:clamp(8px,1.3vw,16px);justify-content:center;margin:0 0 clamp(20px,3.6vh,36px)}
+.stamps i{width:clamp(36px,3.4vw,48px);height:clamp(36px,3.4vw,48px);border-radius:50%;display:grid;place-items:center;font-style:normal;font-family:var(--display);font-weight:600;font-size:clamp(16px,1.5vw,21px);color:var(--nightInk2);box-shadow:inset 0 0 0 2px rgba(242,244,248,.26)}
+.stamps i.got{background:var(--gold);color:#141C2C;box-shadow:0 0 0 5px rgba(255,204,0,.16);transform:rotate(-8deg)}
+.stamps.play i.got{animation:stamp .5s cubic-bezier(.3,1.5,.5,1) both;animation-delay:calc(var(--i)*230ms + 300ms)}
+.finale .frame>.hero{position:relative}
+.finale.play .ocard{animation:cardRise 1.2s var(--spring) 1.6s both}
+@keyframes cardRise{from{opacity:0;transform:translateY(70px) scale(.95)}to{opacity:1;transform:none}}
+.finale.play .exports{animation:fadeIn .7s ease 2.5s both}
 .ocard{position:relative;width:min(100%,860px);margin:40px auto 0;border-radius:28px;overflow:hidden;background:var(--paper,#fff);color:var(--cobalt);text-align:left;box-shadow:0 50px 90px -40px rgba(0,0,0,.75)}
 .ocard .oh{position:relative;padding:30px 32px 28px;background:radial-gradient(700px 300px at 0% 0%,rgba(88,106,144,.4),transparent 60%),#16213A;color:#F2F4F8}
 .ocard .oh .wm{font-size:18px}
@@ -779,17 +857,26 @@ svg .n1{fill:var(--s1)} svg .n2{fill:var(--s2)} svg .n3{fill:var(--s3)} svg .n4{
 .exports{display:flex;flex-wrap:wrap;gap:10px;justify-content:center;margin-top:28px}
 .path{width:100%;max-width:1180px;margin:110px auto 0;text-align:left}
 .path .ask{text-align:left;max-width:20ch}
-.phases{display:grid;grid-template-columns:2fr 1fr 1fr;gap:18px;margin-top:34px}
-@media (max-width:900px){.phases{grid-template-columns:1fr}}
-.phase h4{display:flex;align-items:center;gap:10px;margin:0 0 14px;font-family:var(--display);font-weight:500;font-size:20px;color:var(--nightInk2)}
-.phase h4::before{content:"";width:12px;height:12px;border-radius:50%;background:var(--nightInk2)}
-.phase:last-child h4::before{background:var(--gold)}
-.phase .ws-row{display:grid;grid-template-columns:repeat(auto-fit,minmax(220px,1fr));gap:18px}
+.phases{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:18px;margin-top:38px}
+.phase{grid-row:1;position:relative;padding-top:18px;border-top:2px solid rgba(242,244,248,.22)}
+.phase.p1{grid-column:1/3}.phase.p2{grid-column:3}.phase.p3{grid-column:4}
+.phase::before{content:"";position:absolute;left:0;top:-7px;width:12px;height:12px;border-radius:50%;background:var(--nightInk2)}
+.phase.p3{border-top-color:rgba(255,204,0,.55)}
+.phase.p3::before{background:var(--gold)}
+.phase h4{margin:0;font-family:var(--display);font-weight:500;font-size:20px;line-height:1.2;color:var(--nightInk2)}
+.phases .ws{grid-row:2}
+.ws.c1{grid-column:1}.ws.c2{grid-column:2}.ws.c3{grid-column:3}.ws.c4{grid-column:4}
+@media (max-width:900px){
+  .phases{grid-template-columns:1fr;gap:14px}
+  .phase,.phases .ws{grid-column:1!important;grid-row:auto}
+  .phase{margin-top:16px}
+  .phase.p1{order:1}.ws.c1{order:2}.ws.c2{order:3}.phase.p2{order:4}.ws.c3{order:5}.phase.p3{order:6}.ws.c4{order:7}
+}
 .ws{display:flex;flex-direction:column;gap:8px;padding:24px;border-radius:22px;background:rgba(242,244,248,.06);box-shadow:inset 0 0 0 1.5px var(--nightLine);text-decoration:none;color:var(--nightInk);transition:transform .25s var(--spring),box-shadow .25s;height:100%}
 .ws:hover{transform:translateY(-3px);box-shadow:inset 0 0 0 1.5px rgba(242,244,248,.4)}
-.ws b{font-family:var(--display);font-weight:600;font-size:24px;line-height:1.12;letter-spacing:-.01em}
+.ws b{font-family:var(--display);font-weight:600;font-size:clamp(21px,1.8vw,24px);line-height:1.12;letter-spacing:-.01em}
 .ws span{font-size:15.5px;color:var(--nightInk2);line-height:1.45}
-.ws em{font-style:normal;margin-top:auto;padding-top:12px;font-family:var(--display);font-size:18px;line-height:1.3;color:var(--nightInk)}
+.ws em{font-style:normal;margin-top:auto;padding-top:12px;font-family:var(--display);font-size:17px;line-height:1.3;color:var(--nightInk)}
 .contact{display:flex;flex-wrap:wrap;gap:14px 22px;align-items:center;margin-top:40px}
 .contact a.mail{font-weight:600;color:var(--nightInk2);text-decoration:none;border-bottom:1.5px solid var(--nightLine)}
 .contact a.mail:hover{color:var(--nightInk)}
@@ -858,13 +945,11 @@ body.on-cover .lockup{visibility:hidden}
 .prompt-note{width:min(100%,400px);aspect-ratio:1/1;margin:6px auto 0;background:var(--s1);color:var(--sInk);border-radius:4px 4px 30px 4px;transform:rotate(-2.5deg);box-shadow:0 34px 60px -30px rgba(0,0,0,.55);display:flex;align-items:flex-end;padding:34px;font-family:var(--hand);font-weight:600;font-size:clamp(34px,3.3vw,50px);line-height:1.04}
 .prompt-note span{display:block}
 .center .timer{justify-content:center;text-align:left}
-.climb-q{margin:26px auto 0;max-width:40ch}
-.spin-sub{margin-top:30px}
+.lede.spin-sub{margin-top:26px;font-size:clamp(19px,1.7vw,25px);max-width:30ch}
 .moves-sub,.lww-sub{margin-top:34px}
 .reel{color:var(--gold)}
 .filmscreen .ask{font-size:clamp(28px,3.4vw,50px);max-width:24ch;margin-left:auto;margin-right:auto}
 .filmscreen .more{margin-left:auto;margin-right:auto}
-.climb{margin-bottom:18px}
 .addstep{margin-top:14px}
 .single.wide{max-width:1140px}
 .vact{justify-content:flex-start}
@@ -880,7 +965,7 @@ body.on-cover .lockup{visibility:hidden}
 .r-hold{opacity:0}
 .stage .scene .frame>.single:first-child,.stage .scene .frame>.split:first-child{margin-top:0}
 .scene.refreshed .quote.write,.scene.refreshed .exl li,.scene.refreshed .fadein,.scene.refreshed .agenda li,.scene.refreshed .agenda .seg,.scene.refreshed .draw-in .s,.scene.refreshed .draw-in .pop{animation:none!important;opacity:1;clip-path:none;stroke-dashoffset:0}
-.scene.refreshed .stamp.drop{animation:none!important}
+.scene.refreshed .stamp.drop,.scene.refreshed .polaroid,.scene.refreshed .stamps i,.scene.refreshed .ocard,.scene.refreshed .exports,.scene.refreshed .dawn{animation:none!important}
 .ws em{font-style:normal}
 
 
@@ -893,13 +978,6 @@ body.on-cover .lockup{visibility:hidden}
 .idea-groups .vote-grid{flex-direction:column;align-items:stretch;gap:14px}
 .idea-groups .note{width:100%}
 .idea-groups .groupl{margin:0 0 4px}
-.climbscreen .split{align-items:center}
-.climbscreen .exl{align-items:flex-start;margin:0;max-width:none}
-.climbscreen .exl li{text-align:left;padding-left:34px}
-.climbscreen .exl li.right{padding-left:34px}
-.climbscreen .exl li.j{padding-left:2px}
-.climbscreen .climb-q{margin:18px 0 0;max-width:36ch}
-.climbscreen .timer{justify-content:flex-start}
 .ba{gap:22px;margin-top:26px}
 .ba .row{grid-template-columns:120px 1fr}
 .ba .row .lab b{font-size:clamp(34px,3.4vw,50px)}
@@ -911,7 +989,6 @@ body.on-cover .lockup{visibility:hidden}
 .r5 .stamp{margin-top:22px}
 .ministeps li>span{display:block;padding-top:7px}
 textarea.big{overflow:hidden}
-.rung .big{padding-right:42px}
 .hint{margin:14px 0 0;font-size:15.5px;color:var(--ink2)}
 .hint b{color:var(--ink);font-weight:650}
 
@@ -934,6 +1011,10 @@ textarea.big{overflow:hidden}
   .bar.bottom{height:78px}
   .bar.bottom .btn{min-width:0}
   .note{width:calc(50% - 8px)}
+  .climbs::before{left:10px}.climbs::after{right:10px}
+  .rung{padding-left:28px;padding-right:44px}.rung::before{left:8.5px}.rung::after{right:8.5px}.rung .rx{right:22px}
+  .climbscreen .exl li:not(.j){padding:11px 34px}
+  .toofar{right:12px}
 }
 @media (max-width:420px){.ib{width:40px}}
 
@@ -983,8 +1064,8 @@ textarea.big{overflow:hidden}
       <svg class="s-on" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round"><path d="M4 9.5h3.5L12 5v14l-4.5-4.5H4z"/><path d="M15.5 9a4 4 0 0 1 0 6"/><path d="M18.5 6.5a7.5 7.5 0 0 1 0 11"/></svg>
       <svg class="s-off" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round"><path d="M4 9.5h3.5L12 5v14l-4.5-4.5H4z"/><path d="M16 9.5l5 5M21 9.5l-5 5"/></svg>
     </button>
-    <button class="ib" id="menuBtn" type="button" aria-label="Menu" aria-haspopup="dialog">
-      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round"><path d="M4 7h16M4 12h16M4 17h10"/></svg>
+    <button class="ib" id="menuBtn" type="button" aria-label="Settings" aria-haspopup="dialog">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linejoin="round"><path d="M10.36 4.89L10.58 2.51L13.42 2.51L13.64 4.89A7.3 7.3 0 0 1 15.87 5.81L17.71 4.28L19.72 6.29L18.19 8.13A7.3 7.3 0 0 1 19.11 10.36L21.49 10.58L21.49 13.42L19.11 13.64A7.3 7.3 0 0 1 18.19 15.87L19.72 17.71L17.71 19.72L15.87 18.19A7.3 7.3 0 0 1 13.64 19.11L13.42 21.49L10.58 21.49L10.36 19.11A7.3 7.3 0 0 1 8.13 18.19L6.29 19.72L4.28 17.71L5.81 15.87A7.3 7.3 0 0 1 4.89 13.64L2.51 13.42L2.51 10.58L4.89 10.36A7.3 7.3 0 0 1 5.81 8.13L4.28 6.29L6.29 4.28L8.13 5.81A7.3 7.3 0 0 1 10.36 4.89Z"/><circle cx="12" cy="12" r="3"/></svg>
     </button>
   </div>
 </header>
@@ -1012,7 +1093,8 @@ textarea.big{overflow:hidden}
     <p class="focus-line" id="focusLine"></p>
     <div class="focus-ctl">
       <button class="btn sec sm" id="focusPause" type="button">Pause</button>
-      <button class="btn ghost sm" id="focusPlus" type="button">+30s</button>
+      <button class="btn ghost sm" id="focusMinus" type="button" aria-label="30 seconds less">&minus;30s</button>
+      <button class="btn ghost sm" id="focusPlus" type="button" aria-label="30 seconds more">+30s</button>
     </div>
   </div>
 </div>
@@ -1024,7 +1106,7 @@ textarea.big{overflow:hidden}
   <div id="drawerBody"></div>
 </aside>
 
-<div class="menu" id="menu" role="dialog" aria-modal="true" aria-label="Menu" aria-hidden="true">
+<div class="menu" id="menu" role="dialog" aria-modal="true" aria-label="Settings" aria-hidden="true">
   <div class="mpanel" id="mpanel"></div>
 </div>
 
@@ -1032,8 +1114,8 @@ textarea.big{overflow:hidden}
 <canvas id="fx" aria-hidden="true"></canvas>
 <div id="printout"></div>
 
-<template id="film-tesla"><div class="film" role="region" aria-label="Tesla Model 3, an animated story"><div class="stage2"><div class="scn" data-cap="Automation was a key part of the Tesla Model 3 production ramp."><svg viewBox="0 0 640 360" aria-hidden="true"><path class="ln dim" d="M20 238 H620"/><g class="a-belt"><rect class="lnf" x="-130" y="196" width="96" height="34" rx="5"/><path class="ln teal" d="M-116 213 h20 M-86 213 h20"/><rect class="lnf" x="20" y="196" width="96" height="34" rx="5"/><path class="ln teal" d="M34 213 h20 M64 213 h20"/><rect class="lnf" x="170" y="196" width="96" height="34" rx="5"/><path class="ln teal" d="M184 213 h20 M214 213 h20"/><rect class="lnf" x="320" y="196" width="96" height="34" rx="5"/><path class="ln teal" d="M334 213 h20 M364 213 h20"/><rect class="lnf" x="470" y="196" width="96" height="34" rx="5"/><path class="ln teal" d="M484 213 h20 M514 213 h20"/><rect class="lnf" x="620" y="196" width="96" height="34" rx="5"/><path class="ln teal" d="M634 213 h20 M664 213 h20"/></g><rect class="ln" x="30" y="230" width="580" height="16" rx="8"/><g class="a-swing"><path class="ln" d="M300 30 h60"/><path class="ln" d="M330 30 v40 l30 40 l-18 40"/><circle class="lnf" cx="330" cy="70" r="7"/><circle class="lnf" cx="360" cy="110" r="7"/><path class="ln teal" d="M328 150 l-10 14 M352 150 l10 14 M330 150 h22"/></g><g class="a-swing" style="animation-delay:-.8s"><path class="ln" d="M450 30 h60"/><path class="ln" d="M480 30 v40 l30 40 l-18 40"/><circle class="lnf" cx="480" cy="70" r="7"/><circle class="lnf" cx="510" cy="110" r="7"/><path class="ln teal" d="M478 150 l-10 14 M502 150 l10 14 M480 150 h22"/></g><g class="a-spin"><circle class="ln gold" cx="575" cy="70" r="20" stroke-dasharray="7 5" stroke-width="7"/></g><circle class="ln gold" cx="575" cy="70" r="6"/><text class="a-fade" style="--d:.4s" x="40" y="70" font-size="14" font-weight="700" fill="#FFCC00">“The machine that</text><text class="a-fade" style="--d:.6s" x="40" y="90" font-size="14" font-weight="700" fill="#FFCC00">builds the machine”</text></svg></div><div class="scn" data-cap="A stubborn bottleneck: a robot that kept fumbling the soft, fluffy fiberglass mats it had to place on each battery pack."><svg viewBox="0 0 640 360" aria-hidden="true"><rect class="lnf" x="200" y="190" width="240" height="50" rx="6"/><path class="ln teal" d="M230 215 h60 M310 215 h60 M390 215 h20"/><text x="320" y="262" text-anchor="middle" font-size="14" fill="#A9B3C9" font-weight="600">Battery pack</text><path class="ln" d="M320 20 v40 l40 36 l-30 34"/><circle class="lnf" cx="320" cy="60" r="7"/><circle class="lnf" cx="360" cy="96" r="7"/><path class="ln teal" d="M318 130 h26 M318 130 l-8 14 M344 130 l8 14"/><g class="a-drop" style="--d:.3s"><g class="a-wobble"><path class="ln gold" d="M294 162 q-14 -16 4 -24 q2 -18 22 -12 q10 -14 26 -2 q20 -8 24 12 q16 6 4 26 z"/></g></g><g class="a-blink" style="--d:.3s"><circle class="ln org" cx="500" cy="110" r="28" stroke-width="4"/><path class="ln org" stroke-width="4" d="M488 98 l24 24 M512 98 l-24 24"/><text x="500" y="164" text-anchor="middle" font-size="14" font-weight="700" fill="#E8804A">Line stopped</text></g><text class="a-fade" x="70" y="100" font-size="13" fill="#A9B3C9">attempt</text><text class="a-fade serif" x="70" y="136" font-size="34" fill="#EEF1F6">#47</text></svg></div><div class="scn" data-cap="Engineers tried to make the robot faster and better. Then leadership asked a different question: what are these mats actually for?"><svg viewBox="0 0 640 360" aria-hidden="true"><path class="ln gold" d="M280 182 q-14 -16 4 -24 q2 -18 22 -12 q10 -14 26 -2 q20 -8 24 12 q16 6 4 26 z"/><text class="a-pop serif" style="--d:.2s" x="320" y="128" text-anchor="middle" font-size="100" fill="#FFCC00">?</text><text class="a-fade serif" style="--d:.8s" x="320" y="230" text-anchor="middle" font-size="26" fill="#EEF1F6">Why does this exist?</text></svg></div><div class="scn" data-cap="The noise-and-vibration team believed the mats were there for fire safety. The battery-safety team believed they reduced noise."><svg viewBox="0 0 640 360" aria-hidden="true"><circle class="ln" cx="150" cy="150" r="16"/><path class="ln" d="M124 220 q0 -46 26 -46 q26 0 26 46"/><circle class="ln" cx="490" cy="150" r="16"/><path class="ln" d="M464 220 q0 -46 26 -46 q26 0 26 46"/><text x="150" y="250" text-anchor="middle" font-size="14" fill="#A9B3C9" font-weight="600">Noise team</text><text x="490" y="250" text-anchor="middle" font-size="14" fill="#A9B3C9" font-weight="600">Battery team</text><g class="a-pop" style="--d:.2s"><path class="ln" d="M80 40 h170 a10 10 0 0 1 10 10 v44 a10 10 0 0 1 -10 10 h-90 l-14 18 l-4 -18 h-62 a10 10 0 0 1 -10 -10 v-44 a10 10 0 0 1 10 -10z"/><path class="ln org" d="M106 88 q-12 -14 0 -30 q2 10 8 10 q0 -10 8 -16 q10 16 0 36 z"/><text x="136" y="78" font-size="15" font-weight="600">Fire safety</text></g><g class="a-pop" style="--d:1.2s"><path class="ln" d="M390 40 h170 a10 10 0 0 1 10 10 v44 a10 10 0 0 1 -10 10 h-62 l-4 18 l-14 -18 h-90 a10 10 0 0 1 -10 -10 v-44 a10 10 0 0 1 10 -10z"/><path class="ln teal" d="M412 64 v20 M422 58 v32 M432 66 v16"/><text x="446" y="78" font-size="15" font-weight="600">Noise</text></g><g class="a-pop" style="--d:2.2s"><path class="ln gold" d="M260 180 h120 M268 172 l-8 8 l8 8 M372 172 l8 8 l-8 8"/><text x="320" y="166" text-anchor="middle" font-size="13" fill="#FFCC00" font-weight="700">“It’s theirs.”</text></g></svg></div><div class="scn" data-cap="So they tested two cars, one with mats and one without, with microphones in both. No discernible difference."><svg viewBox="0 0 640 360" aria-hidden="true"><path class="ln" d="M80 210 v-22 q0 -10 10 -12 l30 -4 l34 -30 h70 l40 34 q26 4 26 20 v14 z"/><circle class="lnf" cx="120" cy="212" r="15"/><circle class="lnf" cx="220" cy="212" r="15"/><path class="ln" d="M170 70 v24"/><rect class="lnf" x="162" y="48" width="16" height="26" rx="8"/><rect class="a-eq fteal" style="--d:-0.00s" x="136" y="104" width="8" height="30" rx="3"/><rect class="a-eq fteal" style="--d:-0.13s" x="150" y="104" width="8" height="30" rx="3"/><rect class="a-eq fteal" style="--d:-0.26s" x="164" y="104" width="8" height="30" rx="3"/><rect class="a-eq fteal" style="--d:-0.39s" x="178" y="104" width="8" height="30" rx="3"/><rect class="a-eq fteal" style="--d:-0.52s" x="192" y="104" width="8" height="30" rx="3"/><rect class="a-eq fteal" style="--d:-0.65s" x="206" y="104" width="8" height="30" rx="3"/><path class="ln" d="M380 210 v-22 q0 -10 10 -12 l30 -4 l34 -30 h70 l40 34 q26 4 26 20 v14 z"/><circle class="lnf" cx="420" cy="212" r="15"/><circle class="lnf" cx="520" cy="212" r="15"/><path class="ln" d="M470 70 v24"/><rect class="lnf" x="462" y="48" width="16" height="26" rx="8"/><rect class="a-eq fteal" style="--d:-0.00s" x="436" y="104" width="8" height="30" rx="3"/><rect class="a-eq fteal" style="--d:-0.13s" x="450" y="104" width="8" height="30" rx="3"/><rect class="a-eq fteal" style="--d:-0.26s" x="464" y="104" width="8" height="30" rx="3"/><rect class="a-eq fteal" style="--d:-0.39s" x="478" y="104" width="8" height="30" rx="3"/><rect class="a-eq fteal" style="--d:-0.52s" x="492" y="104" width="8" height="30" rx="3"/><rect class="a-eq fteal" style="--d:-0.65s" x="506" y="104" width="8" height="30" rx="3"/><text x="170" y="256" text-anchor="middle" font-size="14" fill="#A9B3C9" font-weight="600">With mats</text><text x="470" y="256" text-anchor="middle" font-size="14" fill="#A9B3C9" font-weight="600">Without</text><text class="a-pop serif" style="--d:1.4s" x="320" y="190" text-anchor="middle" font-size="64" fill="#FFCC00">=</text></svg></div><div class="scn" data-cap="Delete the mats. Delete the process. Delete the robot. Tesla said it bypassed roughly $2 million of robotics and removed the bottleneck."><svg viewBox="0 0 640 360" aria-hidden="true"><path class="ln dim" d="M110 132 q-14 -16 4 -24 q2 -18 22 -12 q10 -14 26 -2 q20 -8 24 12 q16 6 4 26 z"/><path class="ln dim" d="M280 120 h80 M350 110 l10 10 l-10 10"/><circle class="ln dim" cx="270" cy="120" r="6"/><path class="ln dim" d="M470 70 h50 M495 70 v26 l26 24 l-16 22"/><path class="ln dim" d="M496 144 h20"/><path class="a-draw ln org" stroke-width="5" style="--d:.2s;--len:130" d="M95 85 L205 160"/><path class="a-draw ln org" stroke-width="5" style="--d:.8s;--len:130" d="M260 85 L380 160"/><path class="a-draw ln org" stroke-width="5" style="--d:1.4s;--len:130" d="M450 60 L560 160"/><text class="a-pop serif" style="--d:2.1s" x="320" y="236" text-anchor="middle" font-size="50" fill="#FFCC00">~$2M</text><text class="a-fade" style="--d:2.4s" x="320" y="262" text-anchor="middle" font-size="14" fill="#A9B3C9" font-weight="600">of robotics avoided</text></svg></div><div class="scn" data-cap=""><div class="lesson"><p class="q a-fade" style="--d:.3s">Before asking how to automate something, ask why you’re doing it at all.</p></div></div></div><div class="bars" aria-hidden="true"><i><b></b></i><i><b></b></i><i><b></b></i><i><b></b></i><i><b></b></i><i><b></b></i><i><b></b></i></div><div class="cap" aria-live="polite"><span></span></div><div class="ctl"><button type="button" data-f="prev" aria-label="Previous scene"><svg viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M6 5h2v14H6zM20 5v14L9 12z"/></svg></button><button type="button" data-f="toggle" aria-label="Play or pause"><svg class="ic-play" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M7 4v16l13-8z"/></svg><svg class="ic-pause" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M6 4h4v16H6zM14 4h4v16h-4z"/></svg></button><button type="button" data-f="next" aria-label="Next scene"><svg viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M16 5h2v14h-2zM4 5v14l11-7z"/></svg></button><button type="button" data-f="replay" aria-label="Replay from the start"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" aria-hidden="true"><path d="M4 12a8 8 0 1 0 2.5-5.8"/><path d="M4 4v4h4"/></svg></button><span class="ct"></span></div><button type="button" class="poster" style="background-image:var(--poster-tesla)" aria-label="Play the Tesla Model 3 story"><span class="pp"><svg viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M7 4v16l13-8z"/></svg></span><span class="pt"><b>Tesla Model 3</b><span>41 seconds</span></span></button></div></template>
-<template id="film-mlb"><div class="film" role="region" aria-label="Major League Baseball, an animated story"><div class="stage2"><div class="scn" data-cap="MLB had the technology to call every ball and strike automatically."><svg viewBox="0 0 640 360" aria-hidden="true"><rect class="ln teal" x="250" y="60" width="140" height="170" stroke-dasharray="6 6"/><path class="ln teal" stroke-width="1.5" opacity=".5" d="M296 60 v170"/><path class="ln teal" stroke-width="1.5" opacity=".5" d="M344 60 v170"/><path class="ln teal" stroke-width="1.5" opacity=".5" d="M250 117 h140"/><path class="ln teal" stroke-width="1.5" opacity=".5" d="M250 173 h140"/><g class="a-pitch" style="--d:.3s"><circle class="lnf" cx="320" cy="150" r="16"/><path class="ln" stroke-width="2" d="M310 140 q10 10 0 20 M330 140 q-10 10 0 20"/></g><g class="a-pop" style="--d:1.5s"><circle class="ln gold" cx="320" cy="150" r="28"/><path class="ln gold" d="M320 112 v14 M320 174 v14 M282 150 h14 M344 150 h14"/></g><g class="a-pop" style="--d:1.9s"><rect class="fteal" x="420" y="128" width="150" height="40" rx="6"/><text x="495" y="153" text-anchor="middle" font-size="14" font-weight="700" fill="#141C2C">Auto: strike</text></g><path class="ln dim" d="M290 262 h60 l-10 14 h-40 z"/></svg></div><div class="scn" data-cap="But players, coaches and fans preferred keeping the human umpire involved. Accuracy alone didn’t make a better game."><svg viewBox="0 0 640 360" aria-hidden="true"><circle class="ln" cx="320" cy="80" r="22"/><path class="ln" stroke-width="2" d="M304 74 h32 M304 86 h32 M320 64 v36"/><path class="ln" d="M282 200 v-70 q0 -24 38 -24 q38 0 38 24 v70"/><rect class="lnf" x="296" y="122" width="48" height="60" rx="8"/><path class="ln a-swing" style="transform-origin:bottom left" d="M358 128 l34 -44"/><text class="a-pop serif" style="--d:.3s" x="420" y="72" font-size="24" fill="#FFCC00">“Strike!”</text><circle class="ln dim" cx="70" cy="246" r="11"/><circle class="ln dim" cx="114" cy="246" r="11"/><circle class="ln dim" cx="158" cy="246" r="11"/><circle class="ln dim" cx="202" cy="246" r="11"/><circle class="ln dim" cx="246" cy="246" r="11"/><circle class="ln dim" cx="290" cy="246" r="11"/><circle class="ln dim" cx="334" cy="246" r="11"/><circle class="ln dim" cx="378" cy="246" r="11"/><circle class="ln dim" cx="422" cy="246" r="11"/><circle class="ln dim" cx="466" cy="246" r="11"/><circle class="ln dim" cx="510" cy="246" r="11"/><circle class="ln dim" cx="554" cy="246" r="11"/><circle class="ln dim" cx="598" cy="246" r="11"/><path class="a-float forg" style="--d:0s" d="M114 226 c-8 -8 -16 -2 -10 6 l10 10 l10 -10 c6 -8 -2 -14 -10 -6z"/><path class="a-float forg" style="--d:0.7s" d="M202 226 c-8 -8 -16 -2 -10 6 l10 10 l10 -10 c6 -8 -2 -14 -10 -6z"/><path class="a-float forg" style="--d:0.3s" d="M422 226 c-8 -8 -16 -2 -10 6 l10 10 l10 -10 c6 -8 -2 -14 -10 -6z"/><path class="a-float forg" style="--d:1.1s" d="M510 226 c-8 -8 -16 -2 -10 6 l10 10 l10 -10 c6 -8 -2 -14 -10 -6z"/><path class="a-float forg" style="--d:1.5s" d="M158 226 c-8 -8 -16 -2 -10 6 l10 10 l10 -10 c6 -8 -2 -14 -10 -6z"/><path class="a-float forg" style="--d:1.8s" d="M554 226 c-8 -8 -16 -2 -10 6 l10 10 l10 -10 c6 -8 -2 -14 -10 -6z"/></svg></div><div class="scn" data-cap="So MLB asked a more interesting question: what could technology add?"><svg viewBox="0 0 640 360" aria-hidden="true"><text x="320" y="96" text-anchor="middle" font-size="30" class="serif" fill="#7D89A3">Replace</text><path class="a-draw ln org" stroke-width="4" style="--d:.3s;--len:150" d="M245 86 h150"/><text class="a-pop serif" style="--d:.9s" x="320" y="160" text-anchor="middle" font-size="54" fill="#FFCC00">Add</text><g class="a-fade" style="--d:1.4s"><circle class="ln" cx="230" cy="220" r="16"/><path class="ln" d="M204 262 q0 -26 26 -26 q26 0 26 26"/><path class="ln gold" stroke-width="4" d="M320 214 v28 M306 228 h28"/><rect class="ln teal" x="386" y="202" width="60" height="44" rx="5"/><path class="ln teal" d="M402 262 h28 M416 246 v16"/></g></svg></div><div class="scn" data-cap="The umpire still calls every pitch. But a batter, pitcher or catcher can tap their cap to challenge it."><svg viewBox="0 0 640 360" aria-hidden="true"><circle class="ln" cx="320" cy="96" r="24"/><path class="ln gold" d="M296 88 q24 -34 48 0 z M336 88 h22"/><path class="ln" d="M276 230 q0 -100 44 -100 q44 0 44 100"/><path class="ln a-tap" style="--d:.4s" d="M360 160 q30 -30 0 -76"/><text class="a-pop" style="--d:.2s" x="130" y="120" text-anchor="middle" font-size="14" fill="#A9B3C9" font-weight="600">Umpire:</text><text class="a-pop serif" style="--d:.2s" x="130" y="150" text-anchor="middle" font-size="26" fill="#EEF1F6">“Strike.”</text><g class="a-pop" style="--d:1.6s"><rect class="fgold" x="410" y="50" width="170" height="46" rx="23"/><text x="495" y="80" text-anchor="middle" font-size="18" font-weight="700" fill="#141C2C">Challenge!</text></g></svg></div><div class="scn" data-cap="Within about 15 seconds, a graphic shows whether the pitch clipped the zone. Teams get only two unsuccessful challenges, so strategy matters too."><svg viewBox="0 0 640 360" aria-hidden="true"><rect class="lnf" x="150" y="30" width="340" height="220" rx="12"/><rect class="ln teal" x="250" y="62" width="110" height="150" stroke-dasharray="6 6"/><path class="a-draw ln gold" style="--d:.2s;--len:260" d="M200 40 Q300 60 372 170"/><circle class="a-pop fink" style="--d:.9s" cx="375" cy="172" r="12"/><circle class="ln dim" cx="440" cy="70" r="30"/><circle class="a-ring ln gold" style="--d:.2s;transform:rotate(-90deg);transform-origin:center" cx="440" cy="70" r="30"/><text x="440" y="76" text-anchor="middle" font-size="16" font-weight="700">15s</text><g class="a-pop" style="--d:2.6s"><rect class="forg" x="190" y="214" width="260" height="40" rx="6"/><text x="320" y="240" text-anchor="middle" font-size="15" font-weight="700" fill="#fff">Ball. Call overturned.</text></g><g transform="translate(520 120)"><text font-size="14" fill="#A9B3C9" font-weight="600">Challenges</text><circle class="fgold" cx="14" cy="22" r="9"/><circle class="fgold" cx="40" cy="22" r="9"/></g></svg></div><div class="scn" data-cap="In a 2023 survey, 60% of Triple-A players and coaches preferred the challenge format, against 16% for fully automated calls. MLB adopted it for the 2026 season."><svg viewBox="0 0 640 360" aria-hidden="true"><path class="ln dim" d="M130 236 H510"/><rect class="a-grow fteal" style="--d:.2s" x="170" y="86" width="90" height="150" rx="4"/><rect class="a-grow fdim" style="--d:.5s" x="380" y="196" width="90" height="40" rx="4"/><text class="a-pop serif" style="--d:1.2s" x="215" y="74" text-anchor="middle" font-size="34" fill="#EEF1F6">60%</text><text class="a-pop serif" style="--d:1.4s" x="425" y="184" text-anchor="middle" font-size="34" fill="#A9B3C9">16%</text><text x="215" y="256" text-anchor="middle" font-size="14" fill="#A9B3C9" font-weight="600">Challenge system</text><text x="425" y="256" text-anchor="middle" font-size="14" fill="#A9B3C9" font-weight="600">Fully automated</text></svg></div><div class="scn" data-cap=""><div class="lesson"><p class="q a-fade" style="--d:.3s">Ask what technology can make possible that wasn’t there before.</p></div></div></div><div class="bars" aria-hidden="true"><i><b></b></i><i><b></b></i><i><b></b></i><i><b></b></i><i><b></b></i><i><b></b></i><i><b></b></i></div><div class="cap" aria-live="polite"><span></span></div><div class="ctl"><button type="button" data-f="prev" aria-label="Previous scene"><svg viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M6 5h2v14H6zM20 5v14L9 12z"/></svg></button><button type="button" data-f="toggle" aria-label="Play or pause"><svg class="ic-play" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M7 4v16l13-8z"/></svg><svg class="ic-pause" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M6 4h4v16H6zM14 4h4v16h-4z"/></svg></button><button type="button" data-f="next" aria-label="Next scene"><svg viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M16 5h2v14h-2zM4 5v14l11-7z"/></svg></button><button type="button" data-f="replay" aria-label="Replay from the start"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" aria-hidden="true"><path d="M4 12a8 8 0 1 0 2.5-5.8"/><path d="M4 4v4h4"/></svg></button><span class="ct"></span></div><button type="button" class="poster" style="background-image:var(--poster-mlb)" aria-label="Play the Major League Baseball story"><span class="pp"><svg viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M7 4v16l13-8z"/></svg></span><span class="pt"><b>Major League Baseball</b><span>41 seconds</span></span></button></div></template>
+<template id="film-tesla"><div class="film" role="region" aria-label="Tesla Model 3, an animated story"><div class="stage2"><div class="scn" data-cap="Automation was a key part of the Tesla Model 3 production ramp."><svg viewBox="0 0 640 360" aria-hidden="true"><path class="ln dim" d="M20 238 H620"/><g class="a-belt"><rect class="lnf" x="-130" y="196" width="96" height="34" rx="5"/><path class="ln teal" d="M-116 213 h20 M-86 213 h20"/><rect class="lnf" x="20" y="196" width="96" height="34" rx="5"/><path class="ln teal" d="M34 213 h20 M64 213 h20"/><rect class="lnf" x="170" y="196" width="96" height="34" rx="5"/><path class="ln teal" d="M184 213 h20 M214 213 h20"/><rect class="lnf" x="320" y="196" width="96" height="34" rx="5"/><path class="ln teal" d="M334 213 h20 M364 213 h20"/><rect class="lnf" x="470" y="196" width="96" height="34" rx="5"/><path class="ln teal" d="M484 213 h20 M514 213 h20"/><rect class="lnf" x="620" y="196" width="96" height="34" rx="5"/><path class="ln teal" d="M634 213 h20 M664 213 h20"/></g><rect class="ln" x="30" y="230" width="580" height="16" rx="8"/><g class="a-swing"><path class="ln" d="M300 30 h60"/><path class="ln" d="M330 30 v40 l30 40 l-18 40"/><circle class="lnf" cx="330" cy="70" r="7"/><circle class="lnf" cx="360" cy="110" r="7"/><path class="ln teal" d="M328 150 l-10 14 M352 150 l10 14 M330 150 h22"/></g><g class="a-swing" style="animation-delay:-.8s"><path class="ln" d="M450 30 h60"/><path class="ln" d="M480 30 v40 l30 40 l-18 40"/><circle class="lnf" cx="480" cy="70" r="7"/><circle class="lnf" cx="510" cy="110" r="7"/><path class="ln teal" d="M478 150 l-10 14 M502 150 l10 14 M480 150 h22"/></g><g class="a-spin"><circle class="ln gold" cx="575" cy="70" r="20" stroke-dasharray="7 5" stroke-width="7"/></g><circle class="ln gold" cx="575" cy="70" r="6"/><text class="a-fade" style="--d:.4s" x="40" y="70" font-size="14" font-weight="700" fill="#FFCC00">“The machine that</text><text class="a-fade" style="--d:.6s" x="40" y="90" font-size="14" font-weight="700" fill="#FFCC00">builds the machine”</text></svg></div><div class="scn" data-cap="A stubborn bottleneck: a robot that kept fumbling the soft, fluffy fiberglass mats it had to place on each battery pack."><svg viewBox="0 0 640 360" aria-hidden="true"><rect class="lnf" x="200" y="190" width="240" height="50" rx="6"/><path class="ln teal" d="M230 215 h60 M310 215 h60 M390 215 h20"/><text x="320" y="262" text-anchor="middle" font-size="14" fill="#A9B3C9" font-weight="600">Battery pack</text><path class="ln" d="M320 20 v40 l40 36 l-30 34"/><circle class="lnf" cx="320" cy="60" r="7"/><circle class="lnf" cx="360" cy="96" r="7"/><path class="ln teal" d="M318 130 h26 M318 130 l-8 14 M344 130 l8 14"/><g class="a-drop" style="--d:.3s"><g class="a-wobble"><path class="ln gold" d="M294 162 q-14 -16 4 -24 q2 -18 22 -12 q10 -14 26 -2 q20 -8 24 12 q16 6 4 26 z"/></g></g><g class="a-blink" style="--d:.3s"><circle class="ln org" cx="500" cy="110" r="28" stroke-width="4"/><path class="ln org" stroke-width="4" d="M488 98 l24 24 M512 98 l-24 24"/><text x="500" y="164" text-anchor="middle" font-size="14" font-weight="700" fill="#E8804A">Line stopped</text></g><text class="a-fade" x="70" y="100" font-size="13" fill="#A9B3C9">attempt</text><text class="a-fade serif" x="70" y="136" font-size="34" fill="#EEF1F6">#47</text></svg></div><div class="scn" data-cap="Engineers tried to make the robot faster and better. Then leadership asked a different question: what are these mats actually for?"><svg viewBox="0 0 640 360" aria-hidden="true"><path class="ln gold" d="M280 182 q-14 -16 4 -24 q2 -18 22 -12 q10 -14 26 -2 q20 -8 24 12 q16 6 4 26 z"/><text class="a-pop serif" style="--d:.2s" x="320" y="128" text-anchor="middle" font-size="100" fill="#FFCC00">?</text><text class="a-fade serif" style="--d:.8s" x="320" y="230" text-anchor="middle" font-size="26" fill="#EEF1F6">Why does this exist?</text></svg></div><div class="scn" data-cap="The noise-and-vibration team believed the mats were there for fire safety. The battery-safety team believed they reduced noise."><svg viewBox="0 0 640 360" aria-hidden="true"><circle class="ln" cx="150" cy="150" r="16"/><path class="ln" d="M124 220 q0 -46 26 -46 q26 0 26 46"/><circle class="ln" cx="490" cy="150" r="16"/><path class="ln" d="M464 220 q0 -46 26 -46 q26 0 26 46"/><text x="150" y="250" text-anchor="middle" font-size="14" fill="#A9B3C9" font-weight="600">Noise team</text><text x="490" y="250" text-anchor="middle" font-size="14" fill="#A9B3C9" font-weight="600">Battery team</text><g class="a-pop" style="--d:.2s"><path class="ln" d="M80 40 h170 a10 10 0 0 1 10 10 v44 a10 10 0 0 1 -10 10 h-90 l-14 18 l-4 -18 h-62 a10 10 0 0 1 -10 -10 v-44 a10 10 0 0 1 10 -10z"/><path class="ln org" d="M106 88 q-12 -14 0 -30 q2 10 8 10 q0 -10 8 -16 q10 16 0 36 z"/><text x="136" y="78" font-size="15" font-weight="600">Fire safety</text></g><g class="a-pop" style="--d:1.2s"><path class="ln" d="M390 40 h170 a10 10 0 0 1 10 10 v44 a10 10 0 0 1 -10 10 h-62 l-4 18 l-14 -18 h-90 a10 10 0 0 1 -10 -10 v-44 a10 10 0 0 1 10 -10z"/><path class="ln teal" d="M412 64 v20 M422 58 v32 M432 66 v16"/><text x="446" y="78" font-size="15" font-weight="600">Noise</text></g><g class="a-pop" style="--d:2.2s"><path class="ln gold" d="M260 180 h120 M268 172 l-8 8 l8 8 M372 172 l8 8 l-8 8"/><text x="320" y="166" text-anchor="middle" font-size="13" fill="#FFCC00" font-weight="700">“It’s theirs.”</text></g></svg></div><div class="scn" data-cap="So they tested two cars, one with mats and one without, with microphones in both. No discernible difference."><svg viewBox="0 0 640 360" aria-hidden="true"><path class="ln" d="M80 210 v-22 q0 -10 10 -12 l30 -4 l34 -30 h70 l40 34 q26 4 26 20 v14 z"/><circle class="lnf" cx="120" cy="212" r="15"/><circle class="lnf" cx="220" cy="212" r="15"/><path class="ln" d="M170 70 v24"/><rect class="lnf" x="162" y="48" width="16" height="26" rx="8"/><rect class="a-eq fteal" style="--d:-0.00s" x="136" y="104" width="8" height="30" rx="3"/><rect class="a-eq fteal" style="--d:-0.13s" x="150" y="104" width="8" height="30" rx="3"/><rect class="a-eq fteal" style="--d:-0.26s" x="164" y="104" width="8" height="30" rx="3"/><rect class="a-eq fteal" style="--d:-0.39s" x="178" y="104" width="8" height="30" rx="3"/><rect class="a-eq fteal" style="--d:-0.52s" x="192" y="104" width="8" height="30" rx="3"/><rect class="a-eq fteal" style="--d:-0.65s" x="206" y="104" width="8" height="30" rx="3"/><path class="ln" d="M380 210 v-22 q0 -10 10 -12 l30 -4 l34 -30 h70 l40 34 q26 4 26 20 v14 z"/><circle class="lnf" cx="420" cy="212" r="15"/><circle class="lnf" cx="520" cy="212" r="15"/><path class="ln" d="M470 70 v24"/><rect class="lnf" x="462" y="48" width="16" height="26" rx="8"/><rect class="a-eq fteal" style="--d:-0.00s" x="436" y="104" width="8" height="30" rx="3"/><rect class="a-eq fteal" style="--d:-0.13s" x="450" y="104" width="8" height="30" rx="3"/><rect class="a-eq fteal" style="--d:-0.26s" x="464" y="104" width="8" height="30" rx="3"/><rect class="a-eq fteal" style="--d:-0.39s" x="478" y="104" width="8" height="30" rx="3"/><rect class="a-eq fteal" style="--d:-0.52s" x="492" y="104" width="8" height="30" rx="3"/><rect class="a-eq fteal" style="--d:-0.65s" x="506" y="104" width="8" height="30" rx="3"/><text x="170" y="256" text-anchor="middle" font-size="14" fill="#A9B3C9" font-weight="600">With mats</text><text x="470" y="256" text-anchor="middle" font-size="14" fill="#A9B3C9" font-weight="600">Without</text><text class="a-pop serif" style="--d:1.4s" x="320" y="190" text-anchor="middle" font-size="64" fill="#FFCC00">=</text></svg></div><div class="scn" data-cap="Delete the mats. Delete the process. Delete the robot. Tesla said it bypassed roughly $2 million of robotics and removed the bottleneck."><svg viewBox="0 0 640 360" aria-hidden="true"><path class="ln dim" d="M110 132 q-14 -16 4 -24 q2 -18 22 -12 q10 -14 26 -2 q20 -8 24 12 q16 6 4 26 z"/><path class="ln dim" d="M280 120 h80 M350 110 l10 10 l-10 10"/><circle class="ln dim" cx="270" cy="120" r="6"/><path class="ln dim" d="M470 70 h50 M495 70 v26 l26 24 l-16 22"/><path class="ln dim" d="M496 144 h20"/><path class="a-draw ln org" stroke-width="5" style="--d:.2s;--len:130" d="M95 85 L205 160"/><path class="a-draw ln org" stroke-width="5" style="--d:.8s;--len:130" d="M260 85 L380 160"/><path class="a-draw ln org" stroke-width="5" style="--d:1.4s;--len:130" d="M450 60 L560 160"/><text class="a-pop serif" style="--d:2.1s" x="320" y="236" text-anchor="middle" font-size="50" fill="#FFCC00">~$2M</text><text class="a-fade" style="--d:2.4s" x="320" y="262" text-anchor="middle" font-size="14" fill="#A9B3C9" font-weight="600">of robotics avoided</text></svg></div><div class="scn" data-cap=""><div class="lesson"><p class="q a-fade" style="--d:.3s">Before asking how to automate something, ask why you’re doing it at all.</p></div></div></div><div class="bars" aria-hidden="true"><i><b></b></i><i><b></b></i><i><b></b></i><i><b></b></i><i><b></b></i><i><b></b></i><i><b></b></i></div><div class="cap" aria-live="polite"><span></span></div><div class="ctl"><button type="button" data-f="prev" aria-label="Previous scene"><svg viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M6 5h2v14H6zM20 5v14L9 12z"/></svg></button><button type="button" data-f="toggle" aria-label="Play or pause"><svg class="ic-play" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M7 4v16l13-8z"/></svg><svg class="ic-pause" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M6 4h4v16H6zM14 4h4v16h-4z"/></svg></button><button type="button" data-f="next" aria-label="Next scene"><svg viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M16 5h2v14h-2zM4 5v14l11-7z"/></svg></button><button type="button" data-f="replay" aria-label="Replay from the start"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" aria-hidden="true"><path d="M4 12a8 8 0 1 0 2.5-5.8"/><path d="M4 4v4h4"/></svg></button><span class="ct"></span></div><button type="button" class="poster" style="background-image:var(--poster-tesla)" aria-label="Play the Tesla Model 3 story"><span class="pp"><svg viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M7 4v16l13-8z"/></svg></span><span class="pt"><b>Tesla Model 3</b><span>About a minute</span></span></button></div></template>
+<template id="film-mlb"><div class="film" role="region" aria-label="Major League Baseball, an animated story"><div class="stage2"><div class="scn" data-cap="MLB had the technology to call every ball and strike automatically."><svg viewBox="0 0 640 360" aria-hidden="true"><rect class="ln teal" x="250" y="60" width="140" height="170" stroke-dasharray="6 6"/><path class="ln teal" stroke-width="1.5" opacity=".5" d="M296 60 v170"/><path class="ln teal" stroke-width="1.5" opacity=".5" d="M344 60 v170"/><path class="ln teal" stroke-width="1.5" opacity=".5" d="M250 117 h140"/><path class="ln teal" stroke-width="1.5" opacity=".5" d="M250 173 h140"/><g class="a-pitch" style="--d:.3s"><circle class="lnf" cx="320" cy="150" r="16"/><path class="ln" stroke-width="2" d="M310 140 q10 10 0 20 M330 140 q-10 10 0 20"/></g><g class="a-pop" style="--d:1.5s"><circle class="ln gold" cx="320" cy="150" r="28"/><path class="ln gold" d="M320 112 v14 M320 174 v14 M282 150 h14 M344 150 h14"/></g><g class="a-pop" style="--d:1.9s"><rect class="fteal" x="420" y="128" width="150" height="40" rx="6"/><text x="495" y="153" text-anchor="middle" font-size="14" font-weight="700" fill="#141C2C">Auto: strike</text></g><path class="ln dim" d="M290 262 h60 l-10 14 h-40 z"/></svg></div><div class="scn" data-cap="But players, coaches and fans preferred keeping the human umpire involved. Accuracy alone didn’t make a better game."><svg viewBox="0 0 640 360" aria-hidden="true"><circle class="ln" cx="320" cy="80" r="22"/><path class="ln" stroke-width="2" d="M304 74 h32 M304 86 h32 M320 64 v36"/><path class="ln" d="M282 200 v-70 q0 -24 38 -24 q38 0 38 24 v70"/><rect class="lnf" x="296" y="122" width="48" height="60" rx="8"/><path class="ln a-swing" style="transform-origin:bottom left" d="M358 128 l34 -44"/><text class="a-pop serif" style="--d:.3s" x="420" y="72" font-size="24" fill="#FFCC00">“Strike!”</text><circle class="ln dim" cx="70" cy="246" r="11"/><circle class="ln dim" cx="114" cy="246" r="11"/><circle class="ln dim" cx="158" cy="246" r="11"/><circle class="ln dim" cx="202" cy="246" r="11"/><circle class="ln dim" cx="246" cy="246" r="11"/><circle class="ln dim" cx="290" cy="246" r="11"/><circle class="ln dim" cx="334" cy="246" r="11"/><circle class="ln dim" cx="378" cy="246" r="11"/><circle class="ln dim" cx="422" cy="246" r="11"/><circle class="ln dim" cx="466" cy="246" r="11"/><circle class="ln dim" cx="510" cy="246" r="11"/><circle class="ln dim" cx="554" cy="246" r="11"/><circle class="ln dim" cx="598" cy="246" r="11"/><path class="a-float forg" style="--d:0s" d="M114 226 c-8 -8 -16 -2 -10 6 l10 10 l10 -10 c6 -8 -2 -14 -10 -6z"/><path class="a-float forg" style="--d:0.7s" d="M202 226 c-8 -8 -16 -2 -10 6 l10 10 l10 -10 c6 -8 -2 -14 -10 -6z"/><path class="a-float forg" style="--d:0.3s" d="M422 226 c-8 -8 -16 -2 -10 6 l10 10 l10 -10 c6 -8 -2 -14 -10 -6z"/><path class="a-float forg" style="--d:1.1s" d="M510 226 c-8 -8 -16 -2 -10 6 l10 10 l10 -10 c6 -8 -2 -14 -10 -6z"/><path class="a-float forg" style="--d:1.5s" d="M158 226 c-8 -8 -16 -2 -10 6 l10 10 l10 -10 c6 -8 -2 -14 -10 -6z"/><path class="a-float forg" style="--d:1.8s" d="M554 226 c-8 -8 -16 -2 -10 6 l10 10 l10 -10 c6 -8 -2 -14 -10 -6z"/></svg></div><div class="scn" data-cap="So MLB asked a more interesting question: what could technology add?"><svg viewBox="0 0 640 360" aria-hidden="true"><text x="320" y="96" text-anchor="middle" font-size="30" class="serif" fill="#7D89A3">Replace</text><path class="a-draw ln org" stroke-width="4" style="--d:.3s;--len:150" d="M245 86 h150"/><text class="a-pop serif" style="--d:.9s" x="320" y="160" text-anchor="middle" font-size="54" fill="#FFCC00">Add</text><g class="a-fade" style="--d:1.4s"><circle class="ln" cx="230" cy="220" r="16"/><path class="ln" d="M204 262 q0 -26 26 -26 q26 0 26 26"/><path class="ln gold" stroke-width="4" d="M320 214 v28 M306 228 h28"/><rect class="ln teal" x="386" y="202" width="60" height="44" rx="5"/><path class="ln teal" d="M402 262 h28 M416 246 v16"/></g></svg></div><div class="scn" data-cap="The umpire still calls every pitch. But a batter, pitcher or catcher can tap their cap to challenge it."><svg viewBox="0 0 640 360" aria-hidden="true"><circle class="ln" cx="320" cy="96" r="24"/><path class="ln gold" d="M296 88 q24 -34 48 0 z M336 88 h22"/><path class="ln" d="M276 230 q0 -100 44 -100 q44 0 44 100"/><path class="ln a-tap" style="--d:.4s" d="M360 160 q30 -30 0 -76"/><text class="a-pop" style="--d:.2s" x="130" y="120" text-anchor="middle" font-size="14" fill="#A9B3C9" font-weight="600">Umpire:</text><text class="a-pop serif" style="--d:.2s" x="130" y="150" text-anchor="middle" font-size="26" fill="#EEF1F6">“Strike.”</text><g class="a-pop" style="--d:1.6s"><rect class="fgold" x="410" y="50" width="170" height="46" rx="23"/><text x="495" y="80" text-anchor="middle" font-size="18" font-weight="700" fill="#141C2C">Challenge!</text></g></svg></div><div class="scn" data-cap="Within about 15 seconds, a graphic shows whether the pitch clipped the zone. Teams get only two unsuccessful challenges, so strategy matters too."><svg viewBox="0 0 640 360" aria-hidden="true"><rect class="lnf" x="150" y="30" width="340" height="220" rx="12"/><rect class="ln teal" x="250" y="62" width="110" height="150" stroke-dasharray="6 6"/><path class="a-draw ln gold" style="--d:.2s;--len:260" d="M200 40 Q300 60 372 170"/><circle class="a-pop fink" style="--d:.9s" cx="375" cy="172" r="12"/><circle class="ln dim" cx="440" cy="70" r="30"/><circle class="a-ring ln gold" style="--d:.2s;transform:rotate(-90deg);transform-origin:center" cx="440" cy="70" r="30"/><text x="440" y="76" text-anchor="middle" font-size="16" font-weight="700">15s</text><g class="a-pop" style="--d:2.6s"><rect class="forg" x="190" y="214" width="260" height="40" rx="6"/><text x="320" y="240" text-anchor="middle" font-size="15" font-weight="700" fill="#fff">Ball. Call overturned.</text></g><g transform="translate(520 120)"><text font-size="14" fill="#A9B3C9" font-weight="600">Challenges</text><circle class="fgold" cx="14" cy="22" r="9"/><circle class="fgold" cx="40" cy="22" r="9"/></g></svg></div><div class="scn" data-cap="In a 2023 survey, 60% of Triple-A players and coaches preferred the challenge format, against 16% for fully automated calls. MLB adopted it for the 2026 season."><svg viewBox="0 0 640 360" aria-hidden="true"><path class="ln dim" d="M130 236 H510"/><rect class="a-grow fteal" style="--d:.2s" x="170" y="86" width="90" height="150" rx="4"/><rect class="a-grow fdim" style="--d:.5s" x="380" y="196" width="90" height="40" rx="4"/><text class="a-pop serif" style="--d:1.2s" x="215" y="74" text-anchor="middle" font-size="34" fill="#EEF1F6">60%</text><text class="a-pop serif" style="--d:1.4s" x="425" y="184" text-anchor="middle" font-size="34" fill="#A9B3C9">16%</text><text x="215" y="256" text-anchor="middle" font-size="14" fill="#A9B3C9" font-weight="600">Challenge system</text><text x="425" y="256" text-anchor="middle" font-size="14" fill="#A9B3C9" font-weight="600">Fully automated</text></svg></div><div class="scn" data-cap=""><div class="lesson"><p class="q a-fade" style="--d:.3s">Ask what technology can make possible that wasn’t there before.</p></div></div></div><div class="bars" aria-hidden="true"><i><b></b></i><i><b></b></i><i><b></b></i><i><b></b></i><i><b></b></i><i><b></b></i><i><b></b></i></div><div class="cap" aria-live="polite"><span></span></div><div class="ctl"><button type="button" data-f="prev" aria-label="Previous scene"><svg viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M6 5h2v14H6zM20 5v14L9 12z"/></svg></button><button type="button" data-f="toggle" aria-label="Play or pause"><svg class="ic-play" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M7 4v16l13-8z"/></svg><svg class="ic-pause" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M6 4h4v16H6zM14 4h4v16h-4z"/></svg></button><button type="button" data-f="next" aria-label="Next scene"><svg viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M16 5h2v14h-2zM4 5v14l11-7z"/></svg></button><button type="button" data-f="replay" aria-label="Replay from the start"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" aria-hidden="true"><path d="M4 12a8 8 0 1 0 2.5-5.8"/><path d="M4 4v4h4"/></svg></button><span class="ct"></span></div><button type="button" class="poster" style="background-image:var(--poster-mlb)" aria-label="Play the Major League Baseball story"><span class="pp"><svg viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M7 4v16l13-8z"/></svg></span><span class="pt"><b>Major League Baseball</b><span>About a minute</span></span></button></div></template>
 <script>
 /* Reimagination Lab. ExperiencePoint. Proprietary; please don't copy or redistribute. */
 (function(){
@@ -1096,6 +1178,7 @@ function load(){
   }
   STR_KEYS.forEach(function(k){ s[k]=str(s[k]).slice(0,600); });
   s.at=str(s.at)||"cover";
+  var MOVED={dial2:"ends",dot:"tally",brk:"stories"}; if(MOVED[s.at]) s.at=MOVED[s.at];
   if(["team","solo"].indexOf(s.mode)<0) s.mode="team";
   if(["room","virtual"].indexOf(s.place)<0) s.place="virtual";
   if(["auto","light","dark"].indexOf(s.theme)<0) s.theme="auto";
@@ -1120,7 +1203,7 @@ function okPhoto(v){ return typeof v==="string" && /^data:image\/(jpeg|png|webp)
 var S=load();
 /* Tells the shared feedback kit what it is looking at (assets/kit/feedback.js in pt). */
 (window.EPKit=window.EPKit||{}).tool={
-  id:"reimagination-lab", name:"Reimagination Lab", version:"v4", dot:"bottom-center",
+  id:"reimagination-lab", name:"Reimagination Lab", version:"v5", dot:"bottom-center",
   screen:function(){ return S.at; },
   /* The board groups comments by these, in this order: set up, the six chapters, finish. */
   sections:function(){
@@ -1230,11 +1313,12 @@ var SFX={
     o.connect(g); g.connect(sfxBus); o.start(t); o.stop(t+.42); noise(t,.06,.05,2000,800);
   },
   snap:function(a,t){ tone(1318.5,t,.18,"sine",.09); tone(1975.5,t+.05,.35,"sine",.065); tone(2637,t+.1,.55,"sine",.028); },
+  grand:function(a,t){ noise(t,1.7,.03,110,4200); [130.81,196,261.63,392,523.25,783.99].forEach(function(f,i){ tone(f,t+.12+i*.15,2.4-i*.18,"sine",.075-i*.008); tone(f*2,t+.12+i*.15,.9,"triangle",.012); }); },
   reel:function(a,t){ var gap=.04; for(var i=0;i<14;i++){ tone(1500,t,.03,"triangle",.032); t+=gap; gap*=1.15; } }
 };
 function sfx(n){ if(!S.sfx) return; var a=ac(); if(!a) return; try{ if(SFX[n]) SFX[n](a,a.currentTime+.005); }catch(e){} }
 
-/* calm generative music for quiet work and breaks */
+/* calm generative music for quiet work */
 var MUS=null;
 var CHORDS=[[220,277.18,329.63,415.3],[185,220,277.18,329.63],[146.83,185,220,277.18],[164.81,246.94,329.63,369.99]];
 var BELLS=[880,987.77,1108.73,1318.51,1479.98,659.25,739.99];
@@ -1344,7 +1428,8 @@ var ICON={
   cam:ic('<path d="M4 8h3l2-3h6l2 3h3v11H4z"/><circle cx="12" cy="13" r="3.5"/>'),
   up:ic('<path d="M12 19V5M6 11l6-6 6 6"/>'),
   down:ic('<path d="M12 5v14M6 13l6 6 6-6"/>'),
-  x:ic('<path d="M6 6l12 12M18 6L6 18"/>')
+  x:ic('<path d="M6 6l12 12M18 6L6 18"/>'),
+  cup:ic('<path d="M5 9h11v5a5 5 0 0 1-5 5h-1a5 5 0 0 1-5-5z"/><path d="M16 11h1.5a2.5 2.5 0 0 1 0 5H16"/><path d="M8.5 3.5c-.8 1 .8 2 0 3M12 3.5c-.8 1 .8 2 0 3"/>')
 };
 var A_OPEN='<svg viewBox="0 0 220 150" fill="none" stroke="currentColor" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">';
 var ART={
@@ -1354,7 +1439,10 @@ var ART={
   sketch: A_OPEN+'<rect class="s" x="16" y="14" width="164" height="118" rx="4" style="--len:570"/><path class="s" d="M98 14v118M16 73h164" style="--len:290;--d:.35s"/><circle class="s" cx="46" cy="38" r="9" style="--len:60;--d:.8s"/><path class="s" d="M30 62c8-10 24-10 32 0" style="--len:40;--d:.9s"/><path class="s" d="M114 34h46M114 46h32M114 58h40" style="--len:120;--d:1.05s"/><path class="s" d="M30 118l16-18 12 9 18-22" style="--len:80;--d:1.2s"/><rect class="s" x="116" y="90" width="44" height="28" rx="2" style="--len:150;--d:1.35s"/><path class="s" d="M170 140l32-32 9 9-32 32-12 3z" style="--len:130;--d:1.5s"/><circle class="g pop" cx="160" cy="98" r="6" style="--d:1.9s"/></svg>',
   act: A_OPEN+'<circle class="s" cx="46" cy="34" r="12" style="--len:80"/><path class="s" d="M46 46v44M46 90l-15 36M46 90l15 36M46 62l30 8" style="--len:200;--d:.2s"/><circle class="s" cx="174" cy="34" r="12" style="--len:80;--d:.4s"/><path class="s" d="M174 46v44M174 90l-15 36M174 90l15 36M174 62l-30 8" style="--len:200;--d:.6s"/><g class="relay"><rect class="s n1" x="74" y="60" width="26" height="20" rx="2" style="--len:100;--d:.9s"/></g><path class="s" d="M88 22c14-12 30-12 44 0" style="--len:60;--d:1.1s"/><circle class="g pop" cx="110" cy="12" r="6" style="--d:1.4s"/></svg>',
   sticky: A_OPEN+'<rect class="s n1 pop" x="10" y="44" width="56" height="56" rx="3" style="--d:.1s"/><path class="s" d="M20 62h34M20 74h24" style="--len:60;--d:.4s"/><path class="s" d="M70 72h10" style="--len:12;--d:.6s"/><rect class="s n2 pop" x="82" y="44" width="56" height="56" rx="3" style="--d:.7s"/><path class="s" d="M92 62h34M92 74h20" style="--len:60;--d:1s"/><path class="s" d="M142 72h10" style="--len:12;--d:1.2s"/><rect class="s n3 pop" x="154" y="44" width="56" height="56" rx="3" style="--d:1.3s"/><path class="s" d="M164 62h30M164 74h24" style="--len:60;--d:1.6s"/><circle class="g pop" cx="200" cy="52" r="6" style="--d:1.9s"/></svg>',
-  rehearse: A_OPEN+'<circle class="s" cx="50" cy="56" r="12" style="--len:80"/><path class="s" d="M24 136c0-28 11-44 26-44s26 16 26 44" style="--len:150;--d:.2s"/><circle class="s" cx="170" cy="56" r="12" style="--len:80;--d:.3s"/><path class="s" d="M144 136c0-28 11-44 26-44s26 16 26 44" style="--len:150;--d:.5s"/><path class="s" d="M66 14h58a6 6 0 0 1 6 6v20a6 6 0 0 1-6 6H86l-10 10v-10H66a6 6 0 0 1-6-6V20a6 6 0 0 1 6-6z" style="--len:250;--d:.7s"/><path class="s" d="M76 30h40" style="--len:40;--d:1s"/><path class="s" d="M136 66h44a6 6 0 0 1 6 6v18a6 6 0 0 1-6 6h-6v10l-10-10h-28a6 6 0 0 1-6-6V72a6 6 0 0 1 6-6z" style="--len:220;--d:1.1s"/><circle class="g pop" cx="158" cy="81" r="6" style="--d:1.5s"/></svg>'
+  rehearse: A_OPEN+'<circle class="s" cx="52" cy="68" r="12" style="--len:80"/><path class="s" d="M26 142c0-28 11-44 26-44s26 16 26 44" style="--len:150;--d:.2s"/><path class="s" d="M72 116l15-9" style="--len:20;--d:.45s"/>'+
+    '<circle class="s" cx="168" cy="68" r="12" style="--len:80;--d:.3s"/><path class="s" d="M142 142c0-28 11-44 26-44s26 16 26 44" style="--len:150;--d:.5s"/><path class="s" d="M153 120l30-8M153 112l30 8" style="--len:70;--d:.7s"/>'+
+    '<path class="s" d="M70 14h56a7 7 0 0 1 7 7v20a7 7 0 0 1-7 7H86l-12 10V48h-4a7 7 0 0 1-7-7V21a7 7 0 0 1 7-7z" style="--len:250;--d:.8s"/><path class="s" d="M76 26h44M76 36h30" style="--len:80;--d:1.1s"/>'+
+    '<path class="s" d="M150 6h44a7 7 0 0 1 7 7v16a7 7 0 0 1-7 7h-14l-6 8-4-8h-20a7 7 0 0 1-7-7V13a7 7 0 0 1 7-7z" style="--len:200;--d:1.2s"/><path class="s" d="M167 15c1-5 10-5 10 1 0 4-5 4-5 8" style="--len:30;--d:1.5s"/><circle class="g pop" cx="172" cy="29.5" r="2.6" style="--d:1.7s"/></svg>'
 };
 var GLYPH={
   sub:'<svg viewBox="0 0 64 64" fill="none" stroke="currentColor" stroke-width="2.6" stroke-linecap="round" aria-hidden="true"><circle cx="32" cy="32" r="20" stroke-dasharray="4 6"/><path d="M14 50L50 14" stroke="var(--clayM)" stroke-width="5"/></svg>',
@@ -1382,7 +1470,7 @@ function field(path,ph,max,label){ return '<input class="field" type="text" maxl
 function emptyBox(msg){ return '<div class="wall-empty">'+msg+'</div>'; }
 function stripHTML(arr,o){
   o=o||{}; var f=filled(arr); if(!f.length) return "";
-  return '<div class="strip'+(o.mini?' small':'')+(o.hold?' hold':'')+'"'+(o.id?' id="'+o.id+'"':'')+'>'+f.map(function(x,i){
+  return '<div class="strip'+(o.mini?' small':'')+(o.ex?' ex':'')+(o.hold?' hold':'')+(o.pop?' popin':'')+'"'+(o.id?' id="'+o.id+'"':'')+'>'+f.map(function(x,i){
     var c='fr'; if(o.cut&&o.cut[x.id]) c+=' cut'+(o.struck?' struck':''); if(o.nw&&o.nw[x.id]) c+=' new';
     return '<div class="'+c+'"><div class="pic"><span class="fn">'+(i+1)+'</span><span class="ft">'+esc(x.t)+'</span></div></div>';
   }).join("")+'</div>';
@@ -1415,14 +1503,15 @@ function timerHTML(key,sec,kind,line,o){
   var cls='timer'+(o.xl?' xl':'')+(eff&&eff.running?' running':'')+(eff&&eff.done?' done':'');
   return '<div class="'+cls+'" data-timer="'+key+'" data-sec="'+sec+'" data-kind="'+kind+'" data-line="'+esc(line)+'">'+
     '<div class="tring"><svg viewBox="0 0 100 100" aria-hidden="true"><circle class="tb" cx="50" cy="50" r="44"/><circle class="tf" cx="50" cy="50" r="44" stroke-dasharray="'+RING+'" stroke-dashoffset="'+(RING*(1-left/total)).toFixed(1)+'"/></svg><span class="tt">'+(st&&st.done?"Time":fmt(left))+'</span></div>'+
-    '<div class="tside">'+(line?'<p class="tline">'+esc(line)+'</p>':'')+'<div class="tbtns">'+timerBtns(eff)+'</div></div></div>';
+    '<div class="tside"><div class="tbtns">'+timerBtns(eff)+'</div></div></div>';
 }
 function tSig(st){ return !st?"idle":(st.done?"done":(st.running?"run":"pause")); }
+var TADJ='<span class="tadj"><button class="btn ghost sm" type="button" data-act="tminus" aria-label="30 seconds less">&minus;30s</button><button class="btn ghost sm" type="button" data-act="tplus" aria-label="30 seconds more">+30s</button></span>';
 function timerBtns(st){
-  if(!st) return '<button class="btn ghost sm" type="button" data-act="tplus">+30s</button><button class="btn sm" type="button" data-act="tgo">Start timer</button>';
-  if(st.done) return '<button class="btn ghost sm" type="button" data-act="treset">Reset</button><button class="btn ghost sm" type="button" data-act="tgo">Run again</button>';
+  if(!st) return '<div class="tmain"><button class="btn sm" type="button" data-act="tgo">Start timer</button></div><div class="tfine">'+TADJ+'</div>';
+  if(st.done) return '<div class="tmain"><button class="btn sec sm" type="button" data-act="tgo">Run again</button></div><div class="tfine"><button class="btn ghost sm" type="button" data-act="treset">Reset</button></div>';
   var big=(st.kind==="think"||st.kind==="break")?'<button class="btn ghost sm" type="button" data-act="tbig">Big timer</button>':'';
-  return '<button class="btn sec sm" type="button" data-act="tgo">'+(st.running?"Pause":"Resume")+'</button><button class="btn ghost sm" type="button" data-act="tplus">+30s</button>'+big+'<button class="btn ghost sm" type="button" data-act="treset">Reset</button>';
+  return '<div class="tmain"><button class="btn sec sm" type="button" data-act="tgo">'+(st.running?"Pause":"Resume")+'</button></div><div class="tfine">'+TADJ+big+'<button class="btn ghost sm" type="button" data-act="treset">Reset</button></div>';
 }
 function askText(){ var a=curEl&&$(".frame .ask, .frame .hero",curEl); return a?a.textContent.trim():""; }
 function tFromEl(el){ return {key:el.getAttribute("data-timer"), sec:+el.getAttribute("data-sec"), kind:el.getAttribute("data-kind"), line:el.getAttribute("data-line")||""}; }
@@ -1448,9 +1537,20 @@ function tEnd(){
 }
 function tPause(){ if(!TM||!TM.running) return; TM.left=Math.max(0,(TM.endAt-Date.now())/1000); TM.running=false; clearInterval(TM.iv); musicStop(); tPaint(); }
 function tToggle(o){ if(TM&&TM.key===o.key&&TM.running){ tPause(); sfx("tick"); } else tStart(o); }
-function tPlus(o){
+/* plus or minus 30 seconds, never below 10 */
+function tAdj(o,d){
   if(!TM||TM.key!==o.key){ tKill(); TM={key:o.key,total:o.sec,left:o.sec,running:false,done:false,kind:o.kind,line:o.line,ask:askText(),sid:S.at,iv:null,idle:true}; }
-  TM.left+=30; TM.total=Math.max(TM.total,TM.left); if(TM.running) TM.endAt+=30000; TM.done=false; sfx("tick"); tPaint();
+  if(TM.running) TM.left=Math.max(0,(TM.endAt-Date.now())/1000);
+  if(d<0&&TM.left<=10) return;
+  var nl=Math.max(10,Math.round(TM.left)+d);
+  if(TM.running) TM.endAt=Date.now()+nl*1000;
+  TM.left=nl; TM.total=(TM.idle||TM.done)?nl:Math.max(TM.total,nl); TM.done=false;
+  sfx("tick"); tPaint();
+}
+/* moving on past a timer's screen ends that timer */
+function leaveTimer(from,to){
+  if(!TM) return; var v=vis(), ti=-1; v.forEach(function(x,k){ if(x.id===TM.sid) ti=k; });
+  if(ti<0||to>ti) tKill();
 }
 function tKill(){ if(TM){ clearInterval(TM.iv); if(TM.running) musicStop(); } TM=null; if(focusOpen) closeFocus(); tPaint(); }
 function tPaint(){
@@ -1473,7 +1573,7 @@ function tPaint(){
     $("#orbArc").setAttribute("stroke-dashoffset",(ORB*(1-TM.left/TM.total)).toFixed(1));
     var f=$("#focus"); f.classList.toggle("paused", !TM.running && !TM.done);
     $("#focusPause").textContent = TM.running ? "Pause" : "Resume";
-    $("#focusPause").hidden = TM.done; $("#focusPlus").hidden = TM.done;
+    $("#focusPause").hidden = TM.done; $("#focusPlus").hidden = TM.done; $("#focusMinus").hidden = TM.done;
   }
   paintNext();
 }
@@ -1490,7 +1590,8 @@ function closeFocus(){
 }
 $("#focusX").addEventListener("click", closeFocus);
 $("#focusPause").addEventListener("click", function(){ if(!TM) return; if(TM.running){ tPause(); sfx("tick"); } else tStart({key:TM.key,sec:TM.total,kind:TM.kind,line:TM.line}); });
-$("#focusPlus").addEventListener("click", function(){ if(TM) tPlus({key:TM.key,sec:TM.total,kind:TM.kind,line:TM.line}); });
+$("#focusPlus").addEventListener("click", function(){ if(TM) tAdj({key:TM.key,sec:TM.total,kind:TM.kind,line:TM.line},30); });
+$("#focusMinus").addEventListener("click", function(){ if(TM) tAdj({key:TM.key,sec:TM.total,kind:TM.kind,line:TM.line},-30); });
 $("#mini").addEventListener("click", function(){
   if(!TM) return;
   if(TM.sid!==S.at){ jumpTo(TM.sid); return; }
@@ -1518,14 +1619,14 @@ function voteNotes(g,items,opts){
       '<span class="stk" aria-hidden="true">'+vdots(n)+'</span><button type="button" class="vm" data-act="vminus" data-group="'+g+'" data-id="'+esc(it.id)+'" aria-label="Remove a vote"'+(n&&!done?'':' hidden')+'>&minus;</button><em class="vn" aria-hidden="true">'+(n||"")+'</em></div>';
   });
   h+='</div>';
-  return h+voteActs(g,v,done,tie,"Reveal the winner");
+  return h+voteActs(g,v,done,tie);
 }
-function voteActs(g,v,done,tie,label){
+function voteActs(g,v,done,tie){
   var any=false; for(var k in v){ if(v[k]>0) any=true; }
   var msg = (tie&&!done) ? 'It’s a tie. Tap the one the group is going with.' : '';
   var h='<p class="vmsg" aria-live="polite">'+msg+'</p><div class="vact">';
   if(done||tie) h+='<button class="btn ghost sm" type="button" data-act="vclear" data-group="'+g+'">Clear votes</button><button class="btn ghost sm" type="button" data-act="recount" data-group="'+g+'">Count again</button>';
-  else h+=(any?'<button class="btn ghost sm" type="button" data-act="vclear" data-group="'+g+'">Clear votes</button>':'')+'<button class="btn" type="button" data-act="reveal" data-group="'+g+'">'+label+'</button>';
+  else if(any) h+='<button class="btn ghost sm" type="button" data-act="vclear" data-group="'+g+'">Clear votes</button>';
   return h+'</div>';
 }
 function voteRows(g,items,mode,opts){
@@ -1544,7 +1645,7 @@ function voteRows(g,items,mode,opts){
     h+='</div>';
   });
   h+='</div>';
-  return mode==="count" ? h+voteActs(g,v,done,tie,"Reveal the winner") : h;
+  return mode==="count" ? h+voteActs(g,v,done,tie) : h;
 }
 function flip(mutate){
   var first={};
@@ -1566,18 +1667,27 @@ function countUp(el,to,ms,suffix){
   (function step(now){ var k=Math.min(1,(now-t0)/ms), e=1-Math.pow(1-k,3); el.textContent=Math.round(to*e)+suffix; if(k<1) requestAnimationFrame(step); })(t0);
 }
 function voteTotal(g){ var v=S.votes[g]||{}, n=0; for(var k in v) n+=v[k]||0; return n; }
-function reveal(g,btn){
+/* votes on things that are still there (a removed note keeps no say) */
+function liveVotes(g){ var v=S.votes[g]||{}, n=0; voteItems(g).forEach(function(it){ n+=v[it.id]||0; }); return n; }
+/* the vote on this screen that Next should reveal, if any */
+function pendingReveal(s){
+  var g=s&&s.vote; if(!g||!team()||!liveVotes(g)) return null;
+  if(g==="ideas"||g==="story") return S.revealed[g]?null:g;
+  return (S.picks[g]||S.ties[g])?null:g;
+}
+var HOLD={eyeroll:2800,rung:2800,story:3600,ideas:3800};
+function reveal(g){
   var v=S.votes[g]||{}, items=voteItems(g), max=0, ids=[];
   items.forEach(function(it){ var c=v[it.id]||0; if(c>max){ max=c; ids=[it.id]; } else if(c===max&&c>0) ids.push(it.id); });
   if(!max){ toast(g==="story"?"No votes yet. Tap + on each side to count them.":"No votes yet. Tap once for each vote."); return; }
-  if(btn) btn.disabled=true;
+  lock(1750); clearTimeout(autoT);
   var box=$('[data-vgroup="'+g+'"]',curEl); if(box) box.classList.add("rolling");
   sfx("drum");
   var sid=S.at;
   setTimeout(function(){
     if(S.at!==sid) return;
-    if(g==="ideas"||g==="story"){ S.revealed[g]=true; save(); revealing=g; flip(refresh); revealing=null; afterReveal(g); return; }
-    if(ids.length===1){ doPick(g,ids[0]); flip(refresh); sfx("fanfare"); var w=$(".win",curEl); if(w){ countUp($(".vn",w)||$(".v",w),max,900); setTimeout(function(){ burstAt(w,90,.9); },380); } }
+    if(g==="ideas"||g==="story"){ S.revealed[g]=true; save(); revealing=g; flip(refresh); revealing=null; afterReveal(g); autoNext(HOLD[g]); return; }
+    if(ids.length===1){ doPick(g,ids[0]); flip(refresh); sfx("fanfare"); var w=$(".win",curEl); if(w){ countUp($(".vn",w)||$(".v",w),max,900); setTimeout(function(){ burstAt(w,90,.9); },380); } autoNext(HOLD[g]); }
     else { S.ties[g]=ids; delete S.picks[g]; save(); refresh(); sfx("select"); }
   },1600);
 }
@@ -1609,30 +1719,43 @@ var CHN=["Set up","Better way","Why it exists","Draw it","Judge it","Reimagine i
 var SPINS=["A report no one reads.","A meeting that chews up an hour for ten minutes of work.","A form asking for information everyone already has.","An approval that exists simply because it always has.","A status update that’s out of date the moment it’s sent.","Copying the same numbers into three different systems.","A reply-all thread that should have been a decision.","A template with 40 fields, 6 of which anyone uses."];
 var spinI=0;
 var DIALS={
-  eye:["Your performance-management process","Your quarterly performance review","Writing one paragraph of a review"],
-  flow:["Win and serve a new client","Create and approve a client proposal","Enter opportunity data into Salesforce"]
+  eye:["Your performance-management process","Your quarterly performance review","Writing one paragraph of a review"]
 };
+/* every way of mapping gets the same time */
 var DRAW={
-  sketch:{t:"Sketch it",p:"Draw each step as a quick picture on paper. Stick figures welcome.",sec:480,kind:"think"},
-  act:{t:"Act it out",p:"Walk through the flow out loud, playing the people in it. Waits and handoffs jump out fast.",sec:360,kind:"talk"},
-  sticky:{t:"Sticky-note it",p:"One step per note, laid out in order on a wall, a desk or a whiteboard.",sec:420,kind:"think"}
+  sketch:{t:"Sketch it",p:"A quick picture for each step. Stick figures welcome.",kind:"think"},
+  act:{t:"Act it out",p:"Play the people in it, out loud. Handoffs jump out fast.",kind:"talk"},
+  sticky:{t:"Sticky-note it",p:"One step per note, in order, on a wall or desk.",kind:"think"}
 };
+var EX5=[{id:"x1",t:"Client asks for a proposal"},{id:"x2",t:"Draft it"},{id:"x3",t:"Manager reviews"},{id:"x4",t:"Revise"},{id:"x5",t:"Send it"}];
+/* the sketch example: four drawn frames */
+function storyEx(){
+  var o='<svg viewBox="0 0 80 60" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">';
+  var F=[["Client asks",'<rect x="14" y="16" width="52" height="32" rx="3"/><path d="M14 19l26 17 26-17"/><circle class="g" cx="64" cy="15" r="5"/>'],
+    ["Draft it",'<path d="M20 8h24l9 9v35H20z"/><path d="M44 8v9h9M27 26h18M27 33h18M27 40h10"/><path d="M47 50l15-15 5 5-15 15-7 2z"/>'],
+    ["Manager reviews",'<rect x="14" y="8" width="30" height="42" rx="2"/><path d="M20 18h18M20 25h18M20 32h10"/><circle cx="50" cy="36" r="10"/><path d="M57 43l9 9"/>'],
+    ["Send it",'<path d="M12 31l54-20-15 41-11-15z"/><path d="M40 37l26-26"/><path d="M6 46c6-1 10-5 15-3" stroke-dasharray="3 4"/><circle class="g" cx="66" cy="11" r="4"/>']];
+  return '<div class="story4">'+F.map(function(f){ return '<figure>'+o+f[1]+'</svg><figcaption>'+f[0]+'</figcaption></figure>'; }).join("")+'</div>';
+}
 function qv(v,fb){ return has(v)?esc(str(v).trim()):fb; }
 function drawSteps(){
   var m=S.drawMode||"sketch", who=qv(S.cast,"the people in it"), a='<strong>'+qv(S.start,"the start")+'</strong>', b='<strong>'+qv(S.end,"the end")+'</strong>';
   if(m==="sketch"){
-    if(!team()) return ["Fold a sheet of paper into 8 boxes.","Sketch one step per box, from "+a+" to "+b+".","Under each box, write a few words about what’s happening."];
-    if(S.place==="room") return ["Everyone folds a sheet into 8 boxes and sketches the flow alone. No talking.","Lay the sheets side by side. Where do they differ? That’s the interesting part.","Merge into one version on the flip chart, one picture per step."];
-    return ["Everyone folds a sheet into 8 boxes and sketches the flow alone, cameras on, mics off.","At the chime, each person holds their sketch up to the camera and talks it through in 30 seconds.","The lead merges the steps into one version on the whiteboard."];
+    if(!team()) return ["Fold a sheet of paper into 8 boxes.","Sketch one step per box, from "+a+" to "+b+".","Add a few words under each box."];
+    return [P("<b>Everyone:</b> fold a sheet into 8 boxes.","<b>Everyone:</b> fold a sheet into 8 boxes. Cameras on, mics off."),
+      "<b>Alone, no talking:</b> sketch one step per box, from "+a+" to "+b+".",
+      P("<b>Together:</b> compare sketches. Where they differ, ask why.","<b>Together:</b> hold sketches up to the camera. Where they differ, ask why.")];
   }
   if(m==="act"){
-    if(!team()) return ["Use objects on your desk to stand in for "+who+".","Narrate the flow out loud from "+a+" to "+b+", moving the objects as the work passes between people.","Each time you say “and then”, jot that step down."];
-    if(S.place==="room") return ["Cast it: each person plays someone in the flow ("+who+"). Chairs and desks are props.","Walk it through from "+a+" to "+b+", handing a real object along as the work moves.","One person watches and writes each step on a sticky note."];
-    return ["Cast it: each person plays someone in the flow ("+who+").","Go in order. Each person narrates their part, then says who they hand it to.","The lead writes each step on the whiteboard as it’s narrated."];
+    if(!team()) return ["Let objects on your desk stand in for "+who+".","Narrate the flow out loud from "+a+" to "+b+", moving them as the work changes hands.","Each time you say “and then”, jot the step down."];
+    return ["<b>Cast it:</b> each person plays someone in the flow ("+who+").",
+      P("<b>Walk it through</b> from "+a+" to "+b+", passing a real object along as the work moves.","<b>In order,</b> each person narrates their part, then says who they hand it to."),
+      P("<b>One person</b> writes each step on a sticky note.","<b>The lead</b> jots down each step as it’s said.")];
   }
-  if(!team()) return ["Write one step per sticky note, verb first: “Draft the proposal”.","Lay them out in order on your desk or a wall, from "+a+" to "+b+".","Add a tiny doodle to each one. It helps more than you’d think."];
-  if(S.place==="room") return ["Everyone writes steps on sticky notes alone, one per note.","Put them all up on the wall and cluster the duplicates.","Arrange them in order, from "+a+" to "+b+"."];
-  return ["Everyone adds sticky notes to the shared whiteboard alone, one step per note.","Cluster the duplicates together.","Arrange them in order, from "+a+" to "+b+"."];
+  if(!team()) return ["Write one step per sticky note, verb first: “Draft the proposal”.","Lay them out in order, from "+a+" to "+b+".","Add a tiny doodle to each one. It helps more than you’d think."];
+  return [P("<b>Alone:</b> write steps on sticky notes, one per note.","<b>Alone:</b> add steps to the shared whiteboard, one per note."),
+    P("<b>Together:</b> put them on the wall and stack the duplicates.","<b>Together:</b> stack the duplicates."),
+    "<b>Then</b> arrange them in order, from "+a+" to "+b+"."];
 }
 function judgeTop(kind){
   var key = kind==="d" ? function(x){ return x.d||0; } : kind==="f" ? function(x){ return x.f||0; } : function(x){ return (x.f||0)+(x.c||0); };
@@ -1640,9 +1763,9 @@ function judgeTop(kind){
 }
 function rungItems(){ return S.ladder.map(function(t,i){ return {id:"r"+i,t:t}; }).filter(function(x){ return has(x.t); }).reverse(); }
 var MOVES=[
-  {k:"sub",name:"Subtract",q:"What should disappear entirely? Start with the steps that annoy or confuse.",ph:"What goes away…"},
-  {k:"shr",name:"Shrink",q:"What still matters but could take far less time or effort? This is often where AI takes on work people shouldn’t spend energy on.",ph:"What gets smaller…"},
-  {k:"amp",name:"Amplify",q:"What creates real value and deserves more room? Think judgment, conversation, creativity, the personal touch.",ph:"What gets more room…"},
+  {k:"sub",name:"Subtract",q:"What should disappear entirely? Start with what annoys or confuses.",ph:"What goes away…"},
+  {k:"shr",name:"Shrink",q:"What still matters but could take far less effort? Often a job for AI.",ph:"What gets smaller…"},
+  {k:"amp",name:"Amplify",q:"What creates real value and deserves more room? Think judgment, conversation, care.",ph:"What gets more room…"},
   {k:"inv",name:"Invent",q:"What could you add that wasn’t practical before? Treat AI as a new capability.",ph:"What becomes newly possible…"}
 ];
 function ideaItems(){ var out=[]; MOVES.forEach(function(m){ S.ideas[m.k].forEach(function(i){ out.push({id:i.id,t:i.t,cls:MOVE_CLS[m.k],move:m.k}); }); }); return out; }
@@ -1654,14 +1777,15 @@ function matchSets(){
   return {olds:olds,news:news,cut:cut,nw:nw,nCut:Object.keys(cut).length,nNew:Object.keys(nw).length};
 }
 function materials(){
-  if(!team()) return [["s-paper","paper","Paper and a pen","A few plain sheets for sketching."],["s-sticky","sticky","Sticky notes, if you have them","Scrap paper works too."],["s-phone","phone","Your phone","To snap what you sketch."],["s-work","loop","One real workflow","Something recurring that you could actually change."]];
-  if(S.place==="room") return [["r-flip","flip","A flip chart or whiteboard","Somewhere the whole group can stand around."],["r-sticky","sticky","Sticky notes and markers","A pad and a thick marker for everyone."],["r-dots","dots","Dot stickers in three colors","Gold, orange and teal, or three colored markers."],["r-phone","phone","One phone","To photograph the wall at the end."]];
+  if(!team()) return [["s-paper","paper","Paper and a pen","A few plain sheets for sketching."],["s-sticky","sticky","Sticky notes, if you have them","Scrap paper works too."],["s-phone","phone","Your phone","To snap what you sketch."],["s-work","loop","One real workflow","Something recurring you could actually change."]];
+  if(S.place==="room") return [["r-flip","flip","A flip chart or whiteboard","Somewhere the whole group can stand around."],["r-sticky","sticky","Sticky notes and markers","A pad and a thick marker for everyone."],["r-cup","cup","Something to drink","45 minutes goes faster with coffee."],["r-phone","phone","One phone","To photograph the wall at the end."]];
   return [["v-board","board","A shared whiteboard","Miro, Mural, FigJam or Teams Whiteboard, open in another tab."],["v-paper","paper","Paper and a pen for everyone","Sketches happen on paper, then go up to the camera."],["v-sound","sound","Share sound","Tick it when you share your screen, so everyone hears the timers."],["v-cam","camera","Cameras on","So everyone can see reactions as they happen."]];
 }
 
 /* =========================================================
    SCREEN BUILDERS
    ========================================================= */
+function steps3(list,cls){ return '<ol class="ministeps'+(cls?' '+cls:'')+'">'+list.map(function(x){ return '<li><span>'+x+'</span></li>'; }).join("")+'</ol>'; }
 function split(lead,work){ return '<div class="split"><div class="lead">'+lead+'</div><div class="work">'+work+'</div></div>'; }
 function chap(n,title,lede,extra){
   var d='<div class="cdots" aria-hidden="true">'; for(var c=1;c<=6;c++) d+='<i class="'+(c<n?'done':(c===n?'on':''))+'" style="--i:'+c+'"></i>'; d+='</div>';
@@ -1687,7 +1811,7 @@ var SCREENS=[
   html:function(){
     return '<p class="cover-ep">ExperiencePoint<sup>&reg;</sup></p><h1 class="hero" aria-label="Reimagination Lab"><span class="wm" aria-hidden="true"><span class="nw">Re<span class="di">&#305;</span>magination</span><br>Lab</span></h1>'+
       '<p class="lede fadein">AI’s greatest opportunity is rethinking the work.</p>'+
-      '<p class="sub fadein">Pick one workflow and rethink it in a single sitting.</p>'+
+      '<p class="sub fadein">Bring one workflow that bugs you.<br>Leave with a better one.</p>'+
       '<div class="cta fadein"><button class="btn" type="button" data-act="begin">Begin</button><p class="quiet">Best with sound on.</p></div>'+
       '<div class="cluster" aria-hidden="true"><i></i><i></i><i></i><i></i><i></i></div>';
   },
@@ -1697,7 +1821,7 @@ var SCREENS=[
   html:function(){
     var card=function(v,art,t,d){ var on = v==="solo" ? !team() : (team() && S.place===(v==="team-room"?"room":"virtual"));
       return '<button class="choice" type="button" data-act="who" data-v="'+v+'" aria-pressed="'+on+'"><span class="art">'+ART[art]+'</span><span class="ct">'+t+'</span><span class="cd">'+d+'</span></button>'; };
-    return '<div class="single wide"><h2 class="ask">Who’s here?</h2><p class="sub">The lab words every instruction, timer and activity for your setup.</p><div class="choices">'+
+    return '<div class="single wide"><h2 class="ask">Who’s here?</h2><div class="choices">'+
       card("team-room","room","My team, in one room","Sticky notes, a flip chart, one screen everyone can see.")+
       card("team-virtual","call","My team, on a call","One shared screen, paper at every desk.")+
       card("solo","solo","Just me","Work through it at my own pace.")+'</div></div>';
@@ -1706,27 +1830,28 @@ var SCREENS=[
 },
 {id:"gather", ch:0,
   html:function(){
-    return '<div class="single wide"><h2 class="ask">Grab a few things.</h2><p class="sub">Two minutes now saves hunting for a pen later.</p><div class="checks">'+
-      materials().map(function(m){ var on=!!S.got[m[0]]; return '<button class="check" type="button" data-act="got" data-k="'+m[0]+'" aria-pressed="'+on+'"><span class="ci">'+ICON[m[1]]+'</span><span><b>'+m[2]+'</b><small>'+m[3]+'</small></span><span class="tick">'+ICON.tick+'</span></button>'; }).join("")+'</div></div>';
+    var ms=materials(), all=allGot();
+    return '<div class="single wide"><h2 class="ask gath-h" aria-live="polite">'+(all?'All set.':'Grab a few things.')+'</h2><p class="sub">Two minutes now saves hunting for a pen later.</p><div class="checks'+(all?' all':'')+'">'+
+      ms.map(function(m,i){ var on=!!S.got[m[0]]; return '<button class="check k'+(i+1)+'" style="--i:'+i+'" type="button" data-act="got" data-k="'+m[0]+'" aria-pressed="'+on+'"><span class="ci">'+ICON[m[1]]+'</span><span><b>'+m[2]+'</b><small>'+m[3]+'</small></span><span class="tick">'+ICON.tick+'</span></button>'; }).join("")+'</div></div>';
   },
-  notes:function(){ return [P("No paper? Any notebook or the back of a printout works.","Drop the whiteboard link in the chat now."),"Tap each item as it lands. Skip anything you don’t need."]; }
+  notes:function(){ return [P("No paper? Any notebook or the back of a printout works.","Drop the whiteboard link in the chat now."),"Tap each item as it lands. Once all four are in, the lab moves on by itself.","Missing something? Press Next anyway."]; }
 },
 {id:"roles", ch:0, show:team,
   html:function(){
-    return '<div class="single wide"><h2 class="ask">Ask for two volunteers.</h2><p class="sub">You’re the lead. You drive this screen and type what the group decides.</p><div class="roles">'+
-      '<div class="role">'+ICON.clock+'<h3>Timekeeper</h3><p>Watches the clock and calls time, kindly but firmly. Allowed to say “Let’s park that.”</p></div>'+
-      '<div class="role">'+ICON.voice+'<h3>Voice of the people</h3><p>Speaks up for the people this work affects who aren’t here: customers, other teams, the new hire.</p></div></div></div>';
+    return '<div class="single wide"><h2 class="ask">Ask for two volunteers.</h2><div class="roles">'+
+      '<div class="role">'+ICON.clock+'<h3>Timekeeper</h3><p>Calls time, kindly but firmly.</p></div>'+
+      '<div class="role">'+ICON.voice+'<h3>Voice of the people</h3><p>Speaks for the people this work affects who aren’t here.</p></div></div></div>';
   },
-  notes:["Only two of you? Skip the timekeeper. The chimes will do it.","Rotate the voice of the people at the break if you like."]
+  notes:["You’re the lead. You drive this screen and type what the group decides.","The timekeeper is allowed to say “Let’s park that.”","The voice of the people speaks for customers, other teams, the new hire.","Only two of you? Skip the timekeeper. The chimes will do it."]
 },
 {id:"agenda", ch:0, night:true, center:true,
   html:function(){
-    var rows = team() ? [[1,"Isn’t there a better way?",7],[2,"Why does this exist?",7],[3,"Draw it",10],[4,"Judge it",9],[0,"Break",5],[0,"Two stories",5],[5,"Reimagine it",15],[6,"Share it",7]]
-                      : [[1,"Isn’t there a better way?",4],[2,"Why does this exist?",4],[3,"Draw it",8],[4,"Judge it",5],[0,"Two stories",4],[5,"Reimagine it",10],[6,"Share it",4]];
+    var rows = team() ? [[1,"Isn’t there a better way?",6],[2,"Why does this exist?",5],[3,"Draw it",8],[4,"Judge it",6],[0,"Two stories",3],[5,"Reimagine it",12],[6,"Share it",5]]
+                      : [[1,"Isn’t there a better way?",3],[2,"Why does this exist?",4],[3,"Draw it",7],[4,"Judge it",4],[0,"Two stories",3],[5,"Reimagine it",6],[6,"Share it",3]];
     var tot=0; rows.forEach(function(r){ tot+=r[2]; });
-    return '<h2 class="ask">Two questions, four actions.</h2><p class="sub">Hold one workflow in mind all the way through. Each step builds on the last.</p>'+
+    return '<h2 class="ask">Two questions, four actions.</h2><p class="sub">Hold one workflow in mind the whole way through.</p>'+
       '<ol class="agenda">'+rows.map(function(r,i){ return '<li class="'+(r[0]?'':'inter')+'" style="--m:'+r[2]+';--i:'+i+'"><span class="seg" aria-hidden="true"></span>'+(r[0]?'<span class="n">'+r[0]+'</span>':'')+'<b>'+r[1]+'</b><em>'+r[2]+' min</em></li>'; }).join("")+'</ol>'+
-      '<p class="total">About <b data-count="'+T(70,40)+'">'+T(70,40)+'</b> minutes'+T(", with a break",", at your own pace")+'.</p>'+
+      '<p class="total">About <b data-count="'+T(45,30)+'">'+T(45,30)+'</b> minutes'+T("",", at your own pace")+'.</p>'+
       promo("If AI itself is the unfamiliar part, start one step back.","This lab assumes a rough sense of what AI can do. If that’s the shaky bit, Building AI Confidence is the hands-on crash course, practised on your own real work in under two hours.","Building AI Confidence","After one session with senior leaders, daily AI usage went from 13% to 60%.");
   },
   notes:["Read the six chapter names out loud. It sets expectations.","Need two sessions? Stop after Judge it. Answers stay saved in this browser."]
@@ -1742,25 +1867,25 @@ var SCREENS=[
     return '<h2 class="ask">Think of one thing at work that makes you roll your eyes.</h2>'+
       '<div class="reel" aria-live="polite"><div class="reel-strip"><div class="reel-item">'+esc(SPINS[spinI])+'</div></div></div>'+
       '<button class="btn sec" type="button" data-act="spin">Spin again</button>'+
-      '<p class="sub spin-sub">Don’t think about AI yet. Look for the symptom: slow, clunky, repetitive, or just plain silly.</p>';
+      '<p class="lede spin-sub">Forget AI for now.<br>Notice what’s slow, clunky or silly.</p>';
   },
   notes:["Spin two or three times. Laughter means people recognize the eye-rollers.","Remind people to name the symptom. Solving comes later."]
 },
 {id:"b-think", ch:1, show:team,
   html:function(){
-    return split('<h2 class="ask">Write your own eye-roller.</h2><p class="sub">On a sticky note or paper, on your own. One line, the way you’d say it out loud.</p>'+
-      timerHTML("t-eye",120,"think","Silent writing. One each, two if you’re on a roll."),
+    return split('<h2 class="ask">Write your own eye-roller.</h2><p class="sub">'+P("On a sticky note, on your own.","On paper, on your own.")+' One line, the way you’d say it.</p>'+
+      timerHTML("t-eye",90,"think","Silent writing. One each, two if you’re on a roll."),
       '<div class="prompt-note" aria-hidden="true"><span>The thing that makes me roll my eyes is…</span></div>');
   },
   notes:function(){ return ["Start the timer and stay quiet yourself. Silence is the point.",P("Hand out sticky notes before you start.","Ask people to mute and keep cameras on.")]; }
 },
 {id:"b-share", ch:1, show:team,
   html:function(){
-    return split('<h2 class="ask">'+P("Go around the room.","Go around the call.")+'</h2><p class="sub">Each person reads theirs out in 20 seconds or less. Lead, add each one as you hear it.</p>'+
-      timerHTML("t-share",180,"talk","Round robin. Listen now, discuss later."),
+    return split('<h2 class="ask">'+P("Go around the room.","Go around the call.")+'</h2><p class="sub">Read yours out in one breath. Discuss later.</p>'+
+      timerHTML("t-share",90,"talk","Round robin. Listen now, discuss later."),
       wallHTML("cands","Type an eye-roller"));
   },
-  notes:["Go in a fixed order so nobody has to decide when to jump in.","Duplicates are a signal. Add them once and note the energy."]
+  notes:["Type each one as you hear it.","Go in a fixed order so nobody has to decide when to jump in.","Duplicates are a signal. Add them once and note the energy."]
 },
 {id:"b-solo", ch:1, show:function(){ return !team(); }, focusField:true,
   html:function(){
@@ -1772,16 +1897,16 @@ var SCREENS=[
 },
 {id:"dial1", ch:1, night:true, center:true,
   html:function(){
-    return '<h2 class="ask">Size it like Goldilocks.</h2><p class="sub">'+T("Before you vote, check the sizes. Drag to find one you could change in one sitting.","Is yours the right size? Drag to find one you could change in one sitting.")+'</p>'+dialHTML("eye");
+    return '<h2 class="ask">Size it like Goldilocks.</h2><p class="sub">Too big and you’ll stall. Too small and nobody will notice.</p>'+dialHTML("eye");
   },
-  notes:["Hand the dial to the group: what would be too big for us? Too small?"]
+  notes:["Drag through all three sizes and read each note out.","Then ask: what would be too big for us? Too small?"]
 },
-{id:"b-vote", ch:1, show:team,
+{id:"b-vote", ch:1, show:team, vote:"eyeroll",
   html:function(){
-    return '<div class="single wide"><h2 class="ask">Which one do we fix today?</h2><p class="sub">'+P("Two votes each. Hold up fingers while the lead taps a note once per vote.","Two votes each. Raise a hand or type in the chat while the lead taps a note once per vote.")+' Go for one that’s Goldilocks-sized and bugs the most people.</p>'+
-      voteNotes("eyeroll",S.cands,{empty:"Go back one screen and add the group’s eye-rollers first."})+'</div>';
+    return '<div class="single wide"><h2 class="ask">Which one do we fix today?</h2><p class="sub">'+P("Two votes each, by show of hands.","Two votes each, by raised hand or chat.")+'</p>'+
+      voteNotes("eyeroll",S.cands,{empty:"Go back two screens and add the group’s eye-rollers first."})+'</div>';
   },
-  notes:["Count out loud as you tap. It keeps it fun and transparent.","On a tie, the tool asks you to choose. Or give each finalist 15 seconds to make the case."]
+  notes:["Tap a note once per vote and count out loud. It keeps it fun and transparent.","Steer toward one that’s Goldilocks-sized and bugs the most people.","Press Reveal when the votes are in. On a tie, you’ll pick between the finalists."]
 },
 {id:"r1", ch:1, night:true, center:true, pools:true, reflect:1,
   html:function(){ return reflect(1,T("That’s the one.","That’s a real eye-roller."),"eyeroll",T("Vote on the last screen, or type it here.","Name it on the earlier screen, or type it here."),"Notice the friction. Don’t solve it yet.","","The eye-roller is…"); },
@@ -1795,45 +1920,44 @@ var SCREENS=[
 },
 {id:"quiz", ch:2,
   html:function(){
-    var o=[["lo","Produce a weekly 12-page sales report","Too low"],["ok","Help sales leaders see where deals are stuck and decide where to intervene","Just right"],["hi","Grow the business","Too high"]];
+    var o=[["lo","Produce a weekly 12-page sales report","Too low"],["ok","Help sales leaders spot stuck deals and act early","Just right"],["hi","Grow the business","Too high"]];
     var a=S.quiz, right=a==="ok";
-    return '<div class="single"><h2 class="ask">Which purpose is just right?</h2><p class="sub">'+T("Point at the one you’d pick. Lead, tap the group’s answer.","Tap your answer.")+'</p>'+
+    return '<div class="single"><h2 class="ask">Which purpose is just right?</h2><p class="sub">'+T("Point at the one you’d pick.","Tap your answer.")+'</p>'+
       '<div class="quiz'+(a?' answered':'')+'">'+o.map(function(x){ return '<button class="qopt'+(x[0]==="ok"&&a?' right':'')+(a===x[0]?' tapped':'')+'" type="button" data-act="quiz" data-v="'+x[0]+'"><span class="qd" aria-hidden="true"></span><span class="qt">'+x[1]+'</span><span class="ql">'+x[2]+'</span></button>'; }).join("")+'</div>'+
       '<p class="quizfb" aria-live="polite">'+(a?(right?"Exactly. Specific enough to design around, big enough to matter.":"Close. Look for the one you could design a better workflow around."):"")+'</p></div>';
   },
-  notes:["Let a couple of people commit before you tap. Disagreement here is useful."]
+  notes:["Let a couple of people commit before you tap the group’s answer. Disagreement here is useful."]
 },
-{id:"climb", ch:2, night:true, cls:"climbscreen",
+{id:"climb", ch:2, night:true, center:true, cls:"climbscreen",
   html:function(){
-    var L=[["","We produce a weekly 12-page sales report."],["j","in order to?"],["","Give sales leaders a view of the pipeline."],["j","in order to?"],["right","Help them see where deals are stuck and decide where to intervene."],["j","in order to?"],["too","Grow the business."]];
-    return split('<h2 class="ask">Climb the ladder.</h2><p class="sub">Finish the sentence “We do this in order to…”. Then keep asking “In order to?”</p>'+
-      '<p class="quiet climb-q">Reach “grow the business” and you’ve gone too far. Come back down a rung.</p>'+
-      (team()?timerHTML("t-lad",120,"think","Each person writes their own ladder on paper first."):""),
-      '<ol class="exl" aria-label="An example ladder">'+L.map(function(r,i){ return '<li class="'+r[0]+'" style="--i:'+i+'">'+r[1]+'</li>'; }).join("")+'</ol>');
+    var L=[["","We produce a weekly 12-page sales report."],["j","in order to?"],["","Give sales leaders a view of the pipeline."],["j","in order to?"],["right","Help them spot stuck deals and act early."],["j","in order to?"],["too","Grow the business."]];
+    return '<h2 class="ask">Climb the ladder.</h2><p class="sub">Keep asking: in order to?</p>'+
+      '<ol class="exl" aria-label="An example ladder, read from the bottom up">'+L.map(function(r,i){ return '<li class="'+r[0]+'" style="--i:'+i+'">'+(r[0]==="j"?r[1]:'<span>'+r[1]+'</span>')+(r[0]==="too"?'<em class="toofar">too far</em>':'')+'</li>'; }).join("")+'</ol>';
   },
-  notes:["The silent first pass matters. You’ll get more varied rungs than if the group climbs together from the start."]
+  notes:["Read the example from the bottom up.","Reach something like “grow the business” and you’ve gone too far. Come back down a rung."]
 },
 {id:"ladder", ch:2,
   html:function(){
-    var g='<div class="ground">'+(has(S.eyeroll)?escBr(S.eyeroll):'Your eye-roller')+'</div>', r='';
+    var n=S.ladder.length, r='';
     S.ladder.forEach(function(v,i){
       r+='<div class="joiner">'+(i===0?"We do this in order to…":"in order to?")+'</div><div class="rung">'+
         bigInput("ladder."+i,i===0?"say what it produces or enables":"climb one rung higher",200)+
-        (S.ladder.length>1?'<button class="rx" type="button" data-act="unrung" data-i="'+i+'" aria-label="Remove this rung">&times;</button>':'')+'</div>';
+        (n>1?'<button class="rx" type="button" data-act="unrung" data-i="'+i+'" aria-label="Remove this rung">&times;</button>':'')+'</div>';
     });
-    return split('<h2 class="ask">'+T("Build the ladder together.","Build your ladder.")+'</h2><p class="sub">Start from the eye-roller. Each rung answers one question: in order to?</p>'+
-      (team()?timerHTML("t-ladt",240,"talk","Share your ladders. The lead types the rungs the group agrees on."):"")+
+    if(n<5) r+='<div class="joiner ghostj" aria-hidden="true">in order to?</div>'+ghostRung();
+    return split('<h2 class="ask">'+T("Build the ladder together.","Build your ladder.")+'</h2><p class="sub">Start at the bottom. Keep asking: in order to?</p>'+
+      (team()?timerHTML("t-ladt",120,"talk","Call out rungs. The lead types the ones you agree on."):"")+
       promo("There’s a bigger question hiding under this one.","You’ve found what your workflow is for. The workshop asks what that’s worth now: when AI makes something easy and abundant, where does the value go?","Finding AI Use Cases"),
-      (S.ladder.length<5?'<button class="btn sec sm climb" type="button" data-act="climb">Climb another rung</button>':'')+'<div class="ladder">'+g+r+'</div>');
+      '<div class="ladder"><div class="climbs">'+r+'</div><div class="ground">'+(has(S.eyeroll)?escBr(S.eyeroll):'Your eye-roller')+'</div></div>');
   },
-  notes:["Ask “in order to?” out loud each time. Make it a rhythm.","Too high? Ask: could we design a workflow around that sentence? If not, come back down."]
+  notes:["Ask “in order to?” out loud each time. Make it a rhythm.","Type the rungs the group agrees on. Fill the top rung to unlock the next.","Too high? Ask: could we design a workflow around that sentence? If not, come back down."]
 },
-{id:"pick", ch:2,
+{id:"pick", ch:2, vote:"rung",
   html:function(){
     return '<div class="single"><h2 class="ask">Which rung is just right?</h2><p class="sub">'+T("One vote each. Specific enough to design around, big enough to matter.","Tap the one specific enough to design around and big enough to matter.")+'</p>'+
       voteRows("rung",rungItems(),T("count","pick"),{empty:"Go back and write at least one rung first."})+'</div>';
   },
-  notes:["If the room splits between two neighboring rungs, the higher one is usually the purpose and the lower one is how you deliver it today."]
+  notes:["Press Reveal when the votes are in.","If the room splits between two neighboring rungs, the higher one is usually the purpose and the lower one is how you deliver it today."]
 },
 {id:"r2", ch:2, night:true, center:true, pools:true, reflect:2,
   html:function(){ return reflect(2,"This is what the work is really for.","purpose","Pick a rung on the last screen, or type it here.","Keep this in view. Everything else is up for change.","","The real purpose is…"); }
@@ -1843,48 +1967,47 @@ var SCREENS=[
 {id:"c3", ch:3, chap:3, night:true, center:true, cls:"chap", pools:true,
   html:function(){ return chap(3,"Draw it.","Map the flow as it happens today, workarounds and all."); }
 },
-{id:"dial2", ch:3, night:true, center:true,
-  html:function(){ return '<h2 class="ask">Size the flow.</h2><p class="sub">Same rule as before. Drag to just right.</p>'+dialHTML("flow"); }
-},
 {id:"ends", ch:3, focusField:true,
   html:function(){
-    return '<div class="single wide"><h2 class="ask">Where does it start and end?</h2><p class="sub">Set the bookends first. Everything you map goes in between.</p>'+
+    return '<div class="single wide"><h2 class="ask">Where does it start and end?</h2><p class="sub">Pick bookends close enough to map in 4 to 8 steps.</p>'+
       '<div class="bookends"><div class="be"><label class="lbl">It starts when</label>'+bigInput("start","a client asks for a proposal",140)+'</div><div class="line" aria-hidden="true"></div><div class="be"><label class="lbl">It ends when</label>'+bigInput("end","the proposal is approved and sent",140)+'</div></div>'+
       '<div class="duo-fields"><div><label class="lbl">Who’s in it?</label>'+field("cast","e.g. an account lead, her manager, legal",140,"Who’s in it")+'</div><div><label class="lbl">Where does it happen?</label>'+field("where","e.g. email, a shared drive, a weekly meeting",140,"Where it happens")+'</div></div></div>';
-  }
+  },
+  notes:["Too big? Move the bookends closer together. A flow you can map in 4 to 8 steps is the right size."]
 },
 {id:"mode", ch:3,
   html:function(){
     var m=S.drawMode;
-    return '<div class="single wide"><h2 class="ask">How will you map it?</h2><p class="sub">The magic is connecting the visual and the verbal. Pick what suits '+T("your group","you")+' today.</p><div class="choices">'+
+    return '<div class="single wide"><h2 class="ask">How will you map it?</h2><p class="sub">Pick what suits '+T("your group","you")+' today.</p><div class="choices">'+
       ["sketch","act","sticky"].map(function(k){ return '<button class="choice" type="button" data-act="dmode" data-v="'+k+'" aria-pressed="'+(m===k)+'"><span class="art">'+ART[k]+'</span><span class="ct">'+DRAW[k].t+'</span><span class="cd">'+DRAW[k].p+'</span></button>'; }).join("")+'</div></div>';
   },
-  notes:["Acting it out works best in a room with three or more people. Sketching works everywhere.","Can’t decide? Sketch it."]
+  notes:["The magic is connecting the visual and the verbal. All three get you there.","Acting it out works best in a room with three or more people. Sketching works everywhere.","Can’t decide? Sketch it."]
 },
 {id:"make", ch:3,
   html:function(){
-    var k=S.drawMode||"sketch", d=DRAW[k], sec=team()?d.sec:Math.round(d.sec*.75/60)*60;
-    return split('<h2 class="ask">'+d.t+'.</h2><ol class="ministeps">'+drawSteps().map(function(s){ return '<li><span>'+s+'</span></li>'; }).join("")+'</ol>'+
-      timerHTML("t-draw-"+k,sec,d.kind,T("Aim for 5 to 10 meaningful steps.","Optional. Aim for 5 to 10 meaningful steps.")),
+    var k=S.drawMode||"sketch", d=DRAW[k], sec=team()?240:180;
+    return split('<h2 class="ask">'+d.t+'.</h2>'+steps3(drawSteps(),team()?"who":"")+
+      timerHTML("t-draw-"+k,sec,d.kind,"Aim for 4 to 8 steps."),
       '<div class="illo draw-in">'+ART[k]+'</div>'+
-      more("Show me an example",'<p>Three steps is probably too high level. Thirty is probably too low. Aim for roughly 5 to 10 meaningful steps, like this:</p>'+stripHTML([{id:"x1",t:"Client need identified"},{id:"x2",t:"Proposal drafted"},{id:"x3",t:"Reviewed"},{id:"x4",t:"Revised"},{id:"x5",t:"Approved"},{id:"x6",t:"Sent"}],{mini:true})));
+      more("Show me an example",'<p>Aim for 4 to 8 steps, like this.</p>'+(k==="sketch"?storyEx():stripHTML(EX5,{mini:true,ex:true}))));
   },
   notes:["Walk around, or watch the cameras. Nudge anyone stuck: what happens right after that?","Map what actually happens, including the workarounds nobody admits to."]
 },
 {id:"capture", ch:3,
   html:function(){
     var lbl={sketch:"Snap your sketch",act:"Snap your props or notes, if you like",sticky:"Snap your sticky wall"}[S.drawMode||"sketch"];
-    return split('<h2 class="ask">Capture it.</h2><p class="sub">'+T("Lead, type each step as the group reads them out, in order.","Type each step in order, one line each.")+'</p>'+photoHTML("photoOld",lbl),
+    return split('<h2 class="ask">Capture it.</h2><p class="sub">'+T("Read the steps out in order while the lead types.","Type each step in order, one line each.")+'</p>'+photoHTML("photoOld",lbl),
       stepsHTML("frames","What happens at this step?"));
   },
   mount:function(){ if(!S.frames.length){ S.frames.push({id:uid(),t:"",d:0,f:0,c:0,why:""}); save(); refresh(); } },
   notes:["Ask one person to read the steps out while you type. Everyone else listens for anything missing."]
 },
-{id:"r3", ch:3, night:true, center:true, pools:true, reflect:3,
+{id:"r3", ch:3, night:true, center:true, pools:true, reflect:3, cls:"r3",
   html:function(){
-    var f=filled(S.frames);
+    var f=filled(S.frames), ph=okPhoto(S.photoOld);
     return '<p class="kick">'+(f.length?plural(f.length,"step","steps"):"Your flow")+', from <span class="hand">'+qv(S.start,"start")+'</span> to <span class="hand">'+qv(S.end,"end")+'</span>.</p>'+
-      (stripHTML(S.frames,{})||'<p class="sub">Go back a screen to add your steps.</p>')+
+      (ph?'<div class="polaroid"><img src="'+S.photoOld+'" alt="Your photo of the flow"></div>':'')+
+      (stripHTML(S.frames,{mini:ph})||'<p class="sub">Go back a screen to add your steps.</p>')+
       '<p class="stopline">That’s the work that delivers the value today.</p>'+stampHTML(3)+
       promo("The storyboard is where the workshop really begins.","In Finding AI Use Cases this map is the starting material: teams tag every step as a friction point or a judgment point, then pick one friction point and build a working AI agent to take that work over.","Finding AI Use Cases","70% arrive new to AI agents. 100% leave having built one.");
   }
@@ -1903,36 +2026,35 @@ var SCREENS=[
       more("Show me an example","<p><strong>If the goal is helping sales leaders decide where to intervene, they might feel…</strong></p><p>Delighted by a conversation about the three deals most at risk. Frustrated compiling data from several systems. Confused by 14 slides nobody discusses.</p>");
   }
 },
-{id:"dot", ch:4, show:team,
-  html:function(){
-    return split('<h2 class="ask">Dot the flow.</h2><p class="sub">'+P("Everyone gets dot stickers: gold for delight, orange for frustration, teal for confusion. Walk up and dot the flip chart.","On the whiteboard, everyone stamps steps with 😍, 😤 or 🤔. No talking yet.")+'</p>'+
-      '<p class="sub"><strong>Voice of the people:</strong> dot it the way the customer or the next team would.</p>'+
-      timerHTML("t-dot",180,"think","Silent dotting. Some steps deserve protecting, so don’t only hunt for problems."),
-      stripHTML(S.frames,{})||emptyBox("Go back to Draw it and add your steps first."));
-  }
-},
 {id:"tally", ch:4,
   html:function(){
-    var f=filled(S.frames), h='<div class="single wide"><h2 class="ask">'+T("Count the dots.","Tag each step.")+'</h2><p class="sub">'+T("Tap once for each dot on each step:","Tap a reaction for any step that earns one:")+' 😍 delighted, 😤 frustrated, 🤔 confused.</p>';
-    if(!f.length) return h+emptyBox("Go back to Draw it and add your steps first.")+'</div>';
-    h+='<div class="jlist">';
-    f.forEach(function(x,i){
-      var heat=Math.min(1,((x.f||0)+(x.c||0))/6), any=(x.d||0)+(x.f||0)+(x.c||0);
-      h+='<div class="jrow" style="--heat:'+heat.toFixed(2)+'"><span class="sn">'+(i+1)+'</span><span class="st">'+esc(x.t)+'</span><span class="jbtns">'+
-        [["d","😍","delighted"],["f","😤","frustrated"],["c","🤔","confused"]].map(function(b){ var v=x[b[0]]||0; return '<button class="jb '+b[0]+(v?' on':'')+'" type="button" data-act="jtap" data-id="'+esc(x.id)+'" data-k="'+b[0]+'" aria-label="'+b[2]+(team()?', '+v:'')+'" aria-pressed="'+(v>0)+'">'+b[1]+(team()?'<span class="c">'+(v||"")+'</span>':'')+'</button>'; }).join("")+
-        (team()&&any?'<button class="jminus" type="button" data-act="jclear" data-id="'+esc(x.id)+'" aria-label="Clear this step’s dots">&times;</button>':'')+'</span></div>';
-    });
-    return h+'</div></div>';
+    var f=filled(S.frames), list;
+    if(!f.length) list=emptyBox("Go back to Draw it and add your steps first.");
+    else {
+      list='<div class="jlist">';
+      f.forEach(function(x,i){
+        var heat=Math.min(1,((x.f||0)+(x.c||0))/6), any=(x.d||0)+(x.f||0)+(x.c||0);
+        list+='<div class="jrow" style="--heat:'+heat.toFixed(2)+'"><span class="sn">'+(i+1)+'</span><span class="st">'+esc(x.t)+'</span><span class="jbtns">'+
+          [["d","😍","delighted"],["f","😤","frustrated"],["c","🤔","confused"]].map(function(b){ var v=x[b[0]]||0; return '<button class="jb '+b[0]+(v?' on':'')+'" type="button" data-act="jtap" data-id="'+esc(x.id)+'" data-k="'+b[0]+'" aria-label="'+b[2]+(team()?', '+v:'')+'" aria-pressed="'+(v>0)+'">'+b[1]+(team()?'<span class="c">'+(v||"")+'</span>':'')+'</button>'; }).join("")+
+          (team()&&any?'<button class="jminus" type="button" data-act="jclear" data-id="'+esc(x.id)+'" aria-label="Clear this step’s counts">&times;</button>':'')+'</span></div>';
+      });
+      list+='</div>';
+    }
+    if(!team()) return '<div class="single wide"><h2 class="ask">Tag each step.</h2><p class="sub">Tap a reaction for any step that earns one: 😍 delighted, 😤 frustrated, 🤔 confused.</p>'+list+'</div>';
+    return split('<h2 class="ask">Judge each step.</h2>'+
+      steps3(["<b>Lead:</b> read each step out.",P("<b>Everyone:</b> raise a hand for each reaction that fits.","<b>Everyone:</b> raise a hand, or react, for each one that fits."),"<b>Lead:</b> tap the count."],"who")+
+      '<p class="legend">😍 delighted &nbsp; 😤 frustrated &nbsp; 🤔 confused</p>'+
+      timerHTML("t-judge",150,"talk","One step at a time. Hands up for each reaction."),list);
   },
-  notes:["Read each step aloud and ask for counts: how many delights on step 3?","The why is worth more than the dot. You’ll capture it next."]
+  notes:["Voice of the people: react the way the customer or the next team would.","Some steps deserve protecting, so don’t only hunt for problems.","The why is worth more than the count. You’ll capture it next."]
 },
 {id:"hot", ch:4,
   html:function(){
     var top=judgeTop("fc"), cards;
     if(!top.length) cards=emptyBox("Nothing tagged as frustrating or confusing yet. Go back a screen to tag steps.");
     else cards='<div class="hot">'+top.map(function(x){ return '<div class="hotc"><h3>'+esc(x.t)+'</h3><p class="rx">'+(x.f?'😤 '+(team()?x.f:''):'')+(x.c?' 🤔 '+(team()?x.c:''):'')+'</p><textarea class="big" rows="1" maxlength="300" data-bwhy="'+esc(x.id)+'" placeholder="Why does it happen?" aria-label="Why does it happen?">'+esc(x.why)+'</textarea></div>'; }).join("")+'</div>';
-    return split('<h2 class="ask">Is it necessary, or inherited?</h2><p class="sub">For each hot spot, ask: why does it happen? Who decided? What would break without it?</p>'+
-      (team()?timerHTML("t-hot",240,"talk","Take the hottest step first. Type the why as you hear it."):""), cards);
+    return split('<h2 class="ask">Is it necessary, or inherited?</h2><p class="sub">Ask why it happens, who decided, and what would break without it.</p>'+
+      (team()?timerHTML("t-hot",120,"talk","Start with the hottest step. Type the why as you hear it."):""), cards);
   },
   notes:["Push for the origin story: when did we start doing this? Often nobody knows. That’s the point.","Voice of the people: does this step matter to anyone downstream?"]
 },
@@ -1941,14 +2063,8 @@ var SCREENS=[
     var top=judgeTop("fc")[0];
     return '<p class="kick">Question this one first.</p>'+(top?'<div class="quote write'+qlen(top.t)+'">'+esc(top.t)+'</div>':'<div class="quote empty">Tag a few steps on the earlier screens first.</div>')+
       '<p class="stopline">'+(top&&has(top.why)?escBr(top.why):"Hold that thought. You’ll need it soon.")+'</p>'+stampHTML(4);
-  }
-},
-{id:"brk", ch:4, show:team, night:true, center:true, pools:true,
-  html:function(){
-    return '<h1 class="hero">Take five.</h1><p class="lede">You’ve picked it, found its purpose, drawn it and judged it. Stretch, refill, and come back for the good part.</p>'+
-      timerHTML("t-break",300,"break","Back when the chime sounds.",{xl:true});
   },
-  notes:["Splitting into two sessions? Stop here. Everything is saved in this browser.","Leave the screen shared so the timer stays visible."]
+  notes:["Splitting into two sessions? Stop here. Everything is saved in this browser."]
 },
 
 /* ---------- STORIES (open chapter 5) ---------- */
@@ -1961,7 +2077,7 @@ var SCREENS=[
     return '<h2 class="ask">Sometimes the best automation is subtraction.</h2><div class="filmwrap" data-film="tesla"></div>'+
       more("Read the story","<p>During the Model 3 ramp, Tesla pushed hard to automate manufacturing. One bottleneck involved fiberglass mats glued on top of the battery pack. Tesla built an elaborate vision-guided robot to place the soft material, and robots are terrible at handling fluff.</p><p>Eventually leadership asked a different question: <strong>what are these mats actually for?</strong> The noise-and-vibration team believed they were for fire safety. The battery-safety team believed they reduced noise. Tesla tested two cars, one with mats and one without, and found no discernible difference.</p><p>Delete the mats. Delete the process. Delete the robot. Tesla later said this let them bypass roughly $2 million of robotics while removing a bottleneck.</p><p><strong>Before asking how to automate something, ask why you’re doing it at all.</strong></p>");
   },
-  notes:["Press play and let it run, about 40 seconds. Don’t narrate over it.","Virtual: check people can hear it. Share sound needs to be on."]
+  notes:["Press play and let it run, about a minute. Don’t narrate over it.","Virtual: check people can hear it. Share sound needs to be on."]
 },
 {id:"mlb", ch:5, night:true, center:true, cls:"filmscreen",
   html:function(){
@@ -1970,7 +2086,7 @@ var SCREENS=[
   },
   notes:["Same again: play it and let it breathe.","Ask: which story sounds more like us?"]
 },
-{id:"poll", ch:5,
+{id:"poll", ch:5, vote:"story",
   html:function(){
     var v=S.votes.story||{}, L=v.tesla||0, R=v.mlb||0, tot=L+R, rev=team()&&!!S.revealed.story, pick=S.picks.story;
     var side=function(k,cls,name,desc){
@@ -1980,7 +2096,7 @@ var SCREENS=[
       return '<div class="'+c+'" data-fid="'+k+'"'+(team()?'':' role="button" tabindex="0" data-act="spick" data-id="'+k+'" aria-pressed="'+(pick===k)+'"')+'>'+GLYPH[k]+'<h3>'+name+'</h3><p>'+desc+'</p>'+
         (team()&&!rev?'<div class="ctr"><button type="button" data-act="pminus" data-id="'+k+'" aria-label="Remove a vote for '+name+'">&minus;</button><span class="v">'+n+'</span><button type="button" data-act="pplus" data-id="'+k+'" aria-label="Add a vote for '+name+'">+</button></div>':'')+'</div>';
     };
-    var h='<div class="single wide"><h2 class="ask">Is your workflow more Tesla or more MLB?</h2><p class="sub">'+T("One vote each. Go with your gut. Most flows need a bit of both.","Go with your gut. Most flows need a bit of both.")+'</p>'+
+    var h='<div class="single wide"><h2 class="ask">Is your workflow more Tesla or more MLB?</h2><p class="sub">'+T("One vote each. Most flows need a bit of both.","Go with your gut. Most flows need a bit of both.")+'</p>'+
       '<div class="duo" data-vgroup="story">'+side("tesla","L","More Tesla","Something should disappear.")+side("mlb","R","More MLB","Something new should be added.")+'</div>';
     if(team()){
       if(rev){
@@ -1990,7 +2106,7 @@ var SCREENS=[
           (L===R?'<p class="split-msg">Split down the middle. Most flows need a bit of both.</p>':'')+
           '<div class="vact"><button class="btn ghost sm" type="button" data-act="precount">Count again</button></div>';
       } else {
-        h+='<div class="vact">'+(tot?'<button class="btn ghost sm" type="button" data-act="pclear">Clear votes</button>':'')+'<button class="btn" type="button" data-act="reveal" data-group="story">Reveal the split</button></div>';
+        h+='<div class="vact">'+(tot?'<button class="btn ghost sm" type="button" data-act="pclear">Clear votes</button>':'')+'</div>';
       }
     }
     return h+promo("Two stories here. A room full of them in the workshop.","Finding AI Use Cases works through a much wider set of real examples, because the fastest way to see the move in your own workflow is to watch other people make it first.","Finding AI Use Cases")+'</div>';
@@ -2001,25 +2117,25 @@ var SCREENS=[
       var wl=$(".dv .wing.L i",el), wr=$(".dv .wing.R i",el); if(wl) wl.style.width=pl+"%"; if(wr) wr.style.width=(tot?100-pl:0)+"%";
       var a=$(".dvn .nl",el), b=$(".dvn .nr",el); if(a) a.textContent=pl+"%"; if(b) b.textContent=(tot?100-pl:0)+"%"; }
   },
-  notes:["No wrong answer. The split tells you which moves to lean on next."]
+  notes:["Count hands for each side, then press Reveal.","No wrong answer. The split tells you which moves to lean on next."]
 },
 
 /* ---------- 5 REIMAGINE ---------- */
-{id:"c5", ch:5, chap:5, night:true, center:true, cls:"chap", pools:true,
+{id:"c5", ch:5, chap:5, grand:true, night:true, center:true, cls:"chap grand", pools:true,
   html:function(){ return chap(5,"Reimagine it.","You don’t have to keep the current workflow. Cross out, combine, reorder and add.",has(S.purpose)?'<p class="remind">In service of: '+esc(S.purpose)+'</p>':''); }
 },
 {id:"moves", ch:5, night:true, center:true,
   html:function(){
     return '<h2 class="ask">Four moves.</h2><div class="moves">'+
       [["sub","Subtract","What should disappear entirely?"],["shr","Shrink","What could take far less time or effort?"],["amp","Amplify","What deserves more room?"],["inv","Invent","What’s newly possible?"]].map(function(m){ return '<div class="mv">'+GLYPH[m[0]]+'<h3>'+m[1]+'</h3><p>'+m[2]+'</p></div>'; }).join("")+
-      '</div><p class="sub moves-sub">You don’t have to use all four. One at a time, next.</p>';
+      '</div><p class="sub moves-sub">One at a time, next. You don’t need all four.</p>';
   }
 },
 moveScreen(0), moveScreen(1), moveScreen(2), moveScreen(3),
-{id:"ideas", ch:5,
+{id:"ideas", ch:5, vote:"ideas",
   html:function(){
     var items=ideaItems(), v=S.votes.ideas||{}, rev=team()&&!!S.revealed.ideas;
-    var h='<div class="single wide"><h2 class="ask">'+T("Which ideas make the cut?","Which ideas will you keep?")+'</h2><p class="sub">'+T("Three votes each. Spread them or stack them. Lead, tap a note once per vote.","Tap the ones worth keeping. Three to five is plenty.")+'</p>';
+    var h='<div class="single wide"><h2 class="ask">'+T("Which ideas make the cut?","Which ideas will you keep?")+'</h2><p class="sub">'+T("Three votes each. Spread them or stack them.","Tap the ones worth keeping. Three to five is plenty.")+'</p>';
     if(!items.length) return h+emptyBox("Go back and add some ideas to the four moves first.")+'</div>';
     var note=function(it){
       var n=v[it.id]||0, c='note vnote '+it.cls;
@@ -2032,26 +2148,26 @@ moveScreen(0), moveScreen(1), moveScreen(2), moveScreen(3),
       h+='<div class="vote-grid" data-vgroup="ideas">'+sorted.map(note).join("")+'</div><p class="vmsg">'+plural(kept,"idea makes","ideas make")+' the cut.</p><div class="vact"><button class="btn ghost sm" type="button" data-act="irecount">Count again</button></div>';
     } else {
       h+='<div class="idea-groups" data-vgroup="ideas">'+MOVES.map(function(m){ var list=items.filter(function(x){ return x.move===m.k; }); if(!list.length) return ""; return '<div class="igroup"><div class="groupl">'+GLYPH[m.k]+m.name+'</div><div class="vote-grid">'+list.map(note).join("")+'</div></div>'; }).join("")+'</div>';
-      if(team()){ var any=voteTotal("ideas")>0; h+='<div class="vact">'+(any?'<button class="btn ghost sm" type="button" data-act="vclear" data-group="ideas">Clear votes</button>':'')+'<button class="btn" type="button" data-act="reveal" data-group="ideas">Reveal the results</button></div>'; }
+      if(team()){ var any=voteTotal("ideas")>0; h+='<div class="vact">'+(any?'<button class="btn ghost sm" type="button" data-act="vclear" data-group="ideas">Clear votes</button>':'')+'</div>'; }
     }
     return h+'</div>';
   },
-  notes:["Tally first, discuss after. It stops the loudest idea winning by volume.","Several ideas can make the cut. There’s no single winner here."]
+  notes:["Tap a note once per vote. Tally first, discuss after. It stops the loudest idea winning by volume.","Press Reveal when the votes are in. Several ideas can make the cut."]
 },
 {id:"newflow", ch:5,
   html:function(){
     var used={}; S.newFrames.forEach(function(f){ used[norm(f.t)]=1; });
     var kept=keptIdeas(), keep=kept.filter(function(k){ return k.move!=="sub"; }), gone=kept.filter(function(k){ return k.move==="sub"; }), today=filled(S.frames);
     var chips=function(list,act){ return '<div class="carry">'+list.map(function(f){ return '<button type="button" class="'+(used[norm(f.t)]?'used':'')+'" data-act="'+act+'" data-id="'+esc(f.id)+'">'+esc(f.t)+'</button>'; }).join("")+'</div>'; };
-    return split('<h2 class="ask">Build the new flow.</h2><p class="sub">Tap a step to carry it over, then edit, reorder and add. Leave out whatever you’re subtracting.</p>'+
+    return split('<h2 class="ask">Build the new flow.</h2><p class="sub">Tap steps to carry them over. Then edit, reorder and add.</p>'+
       (gone.length?'<p class="hint">Subtracting: '+gone.map(function(g){ return '<b>'+esc(g.t)+'</b>'; }).join(", ")+'</p>':'')+
-      (team()?timerHTML("t-flow",300,"talk","Talk it through. The lead edits the steps live."):"")+
+      (team()?timerHTML("t-flow",180,"talk","Talk it through. The lead edits the steps live."):"")+
       promo("You’re sitting on a gold mine.","Nearly every team has a 90-page policy doc nobody reads, three years of post-mortems in a folder, a spreadsheet only opened to add a row. The workshop turns those dormant assets into something your workflow can talk to.","Finding AI Use Cases"),
       (today.length?'<p class="lbl">Today’s steps</p>'+chips(today,"carry"):'')+(keep.length?'<p class="lbl">Ideas you kept</p>'+chips(keep,"carryidea"):'')+
       '<p class="lbl">The new flow</p>'+stepsHTML("newFrames","What happens now?")+
       '<details class="more"><summary><span class="pl" aria-hidden="true">+</span>Add a photo of the new sketch</summary><div>'+photoHTML("photoNew","Snap the reimagined flow")+'</div></details>');
   },
-  notes:["Keep checking against the purpose: does this create the value in a better way?","Read the new flow aloud when you’re done. Does it sound better than the old one?"]
+  notes:["Leave out whatever you’re subtracting.","Keep checking against the purpose: does this create the value in a better way?","Read the new flow aloud when you’re done. Does it sound better than the old one?"]
 },
 {id:"r5", ch:5, night:true, center:true, pools:true, reflect:5, cls:"r5",
   html:function(){
@@ -2059,7 +2175,7 @@ moveScreen(0), moveScreen(1), moveScreen(2), moveScreen(3),
     if(!m.news.length) return '<h1 class="hero">You reimagined it.</h1><p class="lede">Build the new flow on the last screen and the before and after appears here.</p>'+stampHTML(5);
     return '<h1 class="hero">You reimagined it.</h1><p class="lede">'+plural(m.nCut,"step","steps")+' gone, '+m.nNew+' new.</p>'+
       '<div class="ba"><div class="row"><div class="lab"><b data-ba="old">'+m.olds.length+'</b>Today</div>'+stripHTML(m.olds,{cut:m.cut,hold:true,id:"baOld"})+'</div>'+
-      '<div class="row"><div class="lab"><b data-ba="new">'+m.news.length+'</b>Reimagined</div>'+stripHTML(m.news,{nw:m.nw,hold:true,id:"baNew"})+'</div></div>'+
+      '<div class="row"><div class="lab"><b data-ba="new">'+m.news.length+'</b>Reimagined</div>'+stripHTML(m.news,{nw:m.nw,hold:true,pop:true,id:"baNew"})+'</div></div>'+
       '<p class="stopline">All in service of '+(has(S.purpose)?'<span class="hand">'+esc(S.purpose)+'</span>':'the purpose you found')+'.</p>'+
       '<div class="stamp" data-stamp="5" role="img" aria-label="Chapter 5 complete" style="opacity:0">5</div>';
   },
@@ -2076,12 +2192,12 @@ moveScreen(0), moveScreen(1), moveScreen(2), moveScreen(3),
       '<div><div class="e">I like…</div><p>What works for you? Make sure it survives into the next version.</p></div>'+
       '<div><div class="e">I wish…</div><p>What would make it even better?</p></div>'+
       '<div><div class="e">I wonder…</div><p>What worries or intrigues you? Will people trust it? Will quality hold?</p></div></div>'+
-      '<p class="sub lww-sub">The goal is to learn what the better workflow should become, before anyone builds it.</p>';
+      '<p class="sub lww-sub">Learn what the new flow should become, before anyone builds it.</p>';
   }
 },
 {id:"people", ch:6,
   html:function(){
-    var h='<div class="single wide"><h2 class="ask">Who will you ask?</h2><p class="sub">'+T("Three people this affects who weren’t here today. Decide who on the team asks each one.","Three people this workflow affects.")+'</p>';
+    var h='<div class="single wide"><h2 class="ask">Who will you ask?</h2><p class="sub">'+T("Three people this affects who weren’t here. Pick who asks each one.","Three people this workflow affects.")+'</p>';
     S.people.forEach(function(p,i){
       h+='<div class="prow'+(team()?'':' solo')+'"><span class="pn">'+(i+1)+'</span>'+field("people."+i+".who","Name or role",120,"Person "+(i+1)+": name or role")+(team()?field("people."+i+".asker","Who asks them",120,"Person "+(i+1)+": who on the team asks"):'')+field("people."+i+".when","By when",80,"Person "+(i+1)+": by when")+'</div>';
     });
@@ -2090,11 +2206,11 @@ moveScreen(0), moveScreen(1), moveScreen(2), moveScreen(3),
 },
 {id:"rehearse", ch:6, show:team,
   html:function(){
-    return split('<h2 class="ask">Rehearse the toughest one.</h2><p class="sub">One person plays the most skeptical person on your list. Someone else pitches the new flow in 60 seconds, then asks: like, wish, wonder?</p>'+
-      timerHTML("t-reh",180,"talk","Skeptic, stay in character. Pitcher, listen more than you defend."),
+    return split('<h2 class="ask">Rehearse the toughest one.</h2><p class="sub">One person plays the skeptic. Another pitches the new flow in a minute, then asks: like, wish, wonder?</p>'+
+      timerHTML("t-reh",120,"talk","Skeptic, stay in character. Pitcher, listen more than you defend."),
       '<div class="illo draw-in">'+ART.rehearse+'</div>');
   },
-  notes:["Pick the person most likely to enjoy playing the skeptic.","Debrief with one question: what surprised you?"]
+  notes:["Pick the person most likely to enjoy playing the skeptic.","Skeptic, stay in character. Pitcher, listen more than you defend.","Debrief with one question: what surprised you?"]
 },
 {id:"test", ch:6, next:"Finish", focusField:true,
   html:function(){
@@ -2104,20 +2220,26 @@ moveScreen(0), moveScreen(1), moveScreen(2), moveScreen(3),
   },
   notes:["Push for small. A test you can run next week beats a pilot that needs approval."]
 },
-{id:"finish", ch:7, night:true, center:true, pools:true, noNext:true,
+{id:"finish", ch:7, night:true, center:true, cls:"finale", noNext:true,
+  pre:function(){ return '<div class="dawn" aria-hidden="true"><i></i></div>'; },
   html:function(){
-    var ws=function(n,d,p){ return '<a class="ws" href="'+LINKS.ai+'" target="_blank" rel="noopener"><b>'+n+'</b><span>'+d+'</span><em>'+p+'</em></a>'; };
-    return '<h1 class="hero">From eye-roll to better way.</h1><p class="lede">'+T("Not bad for one session. Save the card and post it where the team will see it.","Not bad for one session. Save the card so you can come back to it.")+'</p>'+
+    var ws=function(n,d,p,c){ return '<a class="ws c'+c+'" href="'+LINKS.ai+'" target="_blank" rel="noopener"><b>'+n+'</b><span>'+d+'</span><em>'+p+'</em></a>'; };
+    var st='', got=0; for(var c=1;c<=6;c++){ if(S.done[c]) got++; st+='<i class="'+(S.done[c]?'got':'')+'" style="--i:'+(c-1)+'">'+c+'</i>'; }
+    return '<div class="stamps" role="img" aria-label="'+got+' of 6 chapters complete">'+st+'</div>'+
+      '<h1 class="hero">From eye-roll to better way.</h1><p class="lede">'+T("Not bad for one session. Save the card and post it where the team will see it.","Not bad for one session. Save the card so you can come back to it.")+'</p>'+
       ocardHTML()+
       '<div class="exports"><button class="btn ghost" type="button" data-act="bow">Take a bow</button><button class="btn sec" type="button" data-act="print">Print my answers</button><button class="btn sec" type="button" data-act="email"'+(hasMail()?'':' hidden')+'>Email this</button><button class="btn" type="button" data-act="png">Save as image</button></div>'+
       '<section class="path"><h2 class="ask">This lab is one activity. Our workshops are the whole path.</h2><div class="phases">'+
-        '<div class="phase"><h4>Early friction</h4><div class="ws-row">'+ws("Building AI Confidence","A low-stakes, hands-on crash course in the fundamental tools and frameworks.","After one session with senior leaders, daily AI usage went from 13% to 60%.")+ws("Communicating AI Strategy","Make sense of what AI means for roles and workflows, and leave with a communication plan.","Over 90% report improved change capability in 2 hours.")+'</div></div>'+
-        '<div class="phase"><h4>Optimization</h4><div class="ws-row">'+ws("Finding AI Use Cases","The closest relative of this lab. Find where value is shifting and build working AI agents.","70% arrive new to AI agents. 100% leave having built one.")+'</div></div>'+
-        '<div class="phase"><h4>Reimagination</h4><div class="ws-row">'+ws("Driving AI Innovation","Human-centered innovation methods applied to real strategic challenges.","94% of workshop buyers recommend ExperiencePoint.")+'</div></div>'+
+        '<div class="phase p1"><h4>Early friction</h4></div><div class="phase p2"><h4>Optimization</h4></div><div class="phase p3"><h4>Reimagination</h4></div>'+
+        ws("Building AI Confidence","A low-stakes, hands-on crash course in the fundamental tools and frameworks.","After one session with senior leaders, daily AI usage went from 13% to 60%.",1)+
+        ws("Communicating AI Strategy","Make sense of what AI means for roles and workflows, and leave with a communication plan.","Over 90% report improved change capability in 2 hours.",2)+
+        ws("Finding AI Use Cases","The closest relative of this lab. Find where value is shifting and build working AI agents.","70% arrive new to AI agents. 100% leave having built one.",3)+
+        ws("Driving AI Innovation","Human-centered innovation methods applied to real strategic challenges.","94% of workshop buyers recommend ExperiencePoint.",4)+
       '</div><div class="contact"><a class="btn sec" href="'+LINKS.contact+'" target="_blank" rel="noopener">Contact ExperiencePoint</a><a class="mail" href="mailto:hello@experiencepoint.com">hello@experiencepoint.com</a></div>'+
       '<p class="legal">This is a proprietary ExperiencePoint tool. Please don’t copy or redistribute it.<br>ExperiencePoint&reg; Copyright &copy; ExperiencePoint Inc. 2026, all rights reserved.</p></section>';
   },
   mount:function(el){
+    tKill();
     finishPlay(el);
     var eb=$('[data-act="email"]',el), show=function(){ if(eb) eb.hidden=false; };
     if(hasMail()) show(); else document.addEventListener("epkit:email-ready",show,{once:true});
@@ -2136,7 +2258,8 @@ function moveScreen(i){
       if(m.k==="amp"){ var t3=judgeTop("d"); if(t3.length) ctx='Delights from Judge it: '+t3.map(function(x){ return '<b>'+esc(x.t)+'</b>'; }).join(", "); }
       if(m.k==="inv"&&has(S.purpose)) ctx='In service of: <b>'+esc(S.purpose)+'</b>';
       return split('<div class="mglyph">'+GLYPH[m.k]+'</div><h2 class="ask">'+m.name+'.</h2><p class="sub">'+m.q+'</p>'+(ctx?'<p class="ctx">'+ctx+'</p>':'')+
-        (team()?timerHTML("t-mv-"+m.k,90,"think","Each person writes ideas on sticky notes. Then call them out and the lead adds them here."):""),
+        (team()?steps3([P("<b>Alone:</b> one idea per sticky note.","<b>Alone:</b> jot ideas on paper, one per line."),"<b>Together:</b> read them out in turn.","<b>Lead:</b> add each one to the wall."],"who")+
+          timerHTML("t-mv-"+m.k,60,"think","Alone first. One idea per note, as many as you can."):""),
         wallHTML("ideas."+m.k,m.ph,MOVE_CLS[m.k]));
     },
     notes:["Quantity first. Don’t debate ideas yet; you’ll vote next.","It’s fine if this move gets zero ideas. Not every workflow needs all four."]
@@ -2146,11 +2269,16 @@ function moveScreen(i){
 /* =========================================================
    COMPONENT HTML: dial, photo, steps, outcome card
    ========================================================= */
+function allGot(){ return materials().every(function(m){ return !!S.got[m[0]]; }); }
+/* the next rung up: dashed until the top rung has words on it */
+function ghostCan(){ return S.ladder.length<5 && has(S.ladder[S.ladder.length-1]); }
+function ghostRung(){ var can=ghostCan(); return '<button class="rung ghost" type="button" data-act="climb"'+(can?'':' disabled')+'><span class="pl" aria-hidden="true">+</span><span class="gt">'+(can?'Climb another rung':'Fill the top rung first')+'</span></button>'; }
+function paintGhost(){ var gb=curEl&&$(".rung.ghost",curEl); if(!gb) return; var can=ghostCan(); gb.disabled=!can; $(".gt",gb).textContent=can?"Climb another rung":"Fill the top rung first"; }
 function dialHTML(id){
   var v=S.dial[id]!=null?+S.dial[id]:8, sp="";
   for(var k=0;k<10;k++){ var a=k/10*Math.PI*2, x=(300+Math.cos(a)*112).toFixed(1), y=(150+Math.sin(a)*112).toFixed(1); sp+='<circle class="spark" cx="'+x+'" cy="'+y+'" r="5" style="--sx:'+(Math.cos(a)*34).toFixed(1)+'px;--sy:'+(Math.sin(a)*34).toFixed(1)+'px"/>'; }
   return '<div class="dial" data-dial="'+id+'"><svg class="dial-art" viewBox="0 0 600 300" aria-hidden="true"><circle class="dial-blob" cx="300" cy="150" r="92"/><circle class="dial-ring" cx="300" cy="150" r="92"/>'+sp+'</svg>'+
-    '<span class="dial-ex" aria-live="polite"></span><input type="range" min="0" max="100" step="1" value="'+v+'" aria-label="Size dial, from too big to too small">'+
+    '<div class="dial-note" aria-live="polite"><span class="dial-ex"></span></div><input type="range" min="0" max="100" step="1" value="'+v+'" aria-label="Size dial, from too big to too small">'+
     '<div class="dial-ends"><button type="button">Too big</button><button type="button">Just right</button><button type="button">Too small</button></div></div>';
 }
 function photoHTML(path,label){
@@ -2158,10 +2286,12 @@ function photoHTML(path,label){
   if(okPhoto(src)) return '<div class="photo-has"><img src="'+src+'" alt="Your photo"><div class="pacts"><label class="btn sec sm">Replace<input type="file" accept="image/*" data-photo="'+path+'"></label><button class="btn ghost sm" type="button" data-act="unphoto" data-path="'+path+'">Remove</button></div></div>';
   return '<label class="photo">'+ICON.cam+'<span><b>'+esc(label)+'</b><small>Optional. It stays in this browser and appears in your printout.</small></span><input type="file" accept="image/*" data-photo="'+path+'"></label>';
 }
+var movedId=null;
+function unmark(){ movedId=null; if(curEl) $$(".step.moved",curEl).forEach(function(x){ x.classList.remove("moved"); }); }
 function stepsHTML(path,ph){
   var arr=getP(path)||[], h='<ol class="steps" data-steps="'+path+'">';
   arr.forEach(function(f,i){
-    h+='<li class="step'+(seen[f.id]?'':' fresh')+'"><span class="sn">'+(i+1)+'</span><input type="text" maxlength="120" data-bstep="'+path+'" data-id="'+esc(f.id)+'" value="'+esc(f.t)+'" placeholder="'+esc(ph)+'" aria-label="Step '+(i+1)+'">'+
+    h+='<li class="step'+(seen[f.id]?'':' fresh')+(movedId===f.id?' moved':'')+'" data-fid="'+esc(f.id)+'"><span class="sn">'+(i+1)+'</span><input type="text" maxlength="120" data-bstep="'+path+'" data-id="'+esc(f.id)+'" value="'+esc(f.t)+'" placeholder="'+esc(ph)+'" aria-label="Step '+(i+1)+'">'+
       '<span class="sb"><button type="button" data-act="sup" data-path="'+path+'" data-id="'+esc(f.id)+'" aria-label="Move step '+(i+1)+' up">'+ICON.up+'</button><button type="button" data-act="sdown" data-path="'+path+'" data-id="'+esc(f.id)+'" aria-label="Move step '+(i+1)+' down">'+ICON.down+'</button><button type="button" data-act="sdel" data-path="'+path+'" data-id="'+esc(f.id)+'" aria-label="Remove step '+(i+1)+'">'+ICON.x+'</button></span></li>';
   });
   return h+'</ol><button class="btn sec sm addstep" type="button" data-act="sadd" data-path="'+path+'">Add a step</button>';
@@ -2194,8 +2324,13 @@ function fixAt(){
   for(var k=i;k>=0;k--){ var s=SCREENS[k]; if(!s.show||s.show()){ S.at=s.id; return; } }
   S.at=v[0].id;
 }
+function shock(x,y){
+  if(rm()) return;
+  [0,260].forEach(function(dl,k){ var r=document.createElement("div"); r.className="shock"+(k?" two":""); r.style.left=x+"px"; r.style.top=y+"px"; r.style.animationDelay=dl+"ms"; document.body.appendChild(r); setTimeout(function(){ if(r.parentNode) r.parentNode.removeChild(r); },2200+dl); });
+}
 function render(dir){
   var s=cur(); if(!s) return;
+  movedId=null;
   markSeen();
   var el=document.createElement("section");
   el.className="scene"+(s.night?" night":"")+(s.center?" center":"")+(s.cls?" "+s.cls:"");
@@ -2205,6 +2340,7 @@ function render(dir){
   stage.appendChild(el); curEl=el;
   document.body.classList.toggle("is-night",!!s.night);
   document.body.classList.toggle("on-cover",s.id==="cover");
+  document.body.classList.toggle("on-finish",s.id==="finish");
   chrome();
   if(old){
     $$(".film",old).forEach(function(f){ if(f._stop) f._stop(); });
@@ -2215,8 +2351,8 @@ function render(dir){
       el.style.setProperty("--ir",Math.ceil(Math.hypot(Math.max(x,innerWidth-x),Math.max(y,innerHeight-y)))+"px");
       el.classList.add("iris"); void el.offsetWidth;
       requestAnimationFrame(function(){ el.classList.add("open"); });
-      setTimeout(function(){ if(old.parentNode) old.parentNode.removeChild(old); el.classList.remove("iris","open"); },1000);
-      sfx("swell");
+      setTimeout(function(){ if(old.parentNode) old.parentNode.removeChild(old); el.classList.remove("iris","open"); },s.grand?1750:1000);
+      if(s.grand){ sfx("grand"); shock(x,y); } else sfx("swell");
     } else if(dir===0||rm()){
       if(old.parentNode) old.parentNode.removeChild(old);
     } else {
@@ -2267,16 +2403,20 @@ function lock(ms){ lockT=Date.now()+ms; }
 function go(d){
   if(Date.now()<lockT) return;
   var v=vis(), i=idx(), s=v[i];
+  if(d>0){ var pg=pendingReveal(s); if(pg){ reveal(pg,null,true); return; } }
   if(d>0&&s.id==="mode"&&!S.drawMode) S.drawMode="sketch";
   var n=i+d; if(n<0||n>=v.length) return;
   clearTimeout(autoT);
-  S.at=v[n].id; save(); lock(v[n].chap&&d>0?900:430);
+  leaveTimer(i,n);
+  S.at=v[n].id; save(); lock(v[n].chap&&d>0?(v[n].grand?1500:900):430);
   render(d);
 }
 function jumpTo(id){
   var v=vis(), from=idx(), to=-1; v.forEach(function(x,k){ if(x.id===id) to=k; }); if(to<0) return;
-  closeMenu(); if(to===from) return; S.at=id; save(); lock(430); render(to>from?1:-1);
+  closeMenu(); if(to===from) return; clearTimeout(autoT); leaveTimer(from,to); S.at=id; save(); lock(430); render(to>from?1:-1);
 }
+/* moves on by itself after a reveal or a finished checklist, unless someone moved first */
+function autoNext(ms){ var sid=S.at; clearTimeout(autoT); autoT=setTimeout(function(){ if(S.at===sid&&!menuOpen&&!focusOpen) go(1); },ms); }
 function firstOfCh(c){ var v=vis(); for(var i=0;i<v.length;i++) if(v[i].ch===c) return v[i].id; return null; }
 
 /* chrome */
@@ -2289,13 +2429,14 @@ function chrome(){
   var back=$("#backBtn"), next=$("#nextBtn");
   back.disabled = i===0;
   next.hidden = !!s.noNext;
-  next.textContent = s.next || "Next";
+  nextLabel(s);
   $("#notesBtn").hidden = !team();
   if(!team()) setDrawer(false);
   drawerFill(s);
   var sb=$("#soundBtn"); sb.setAttribute("aria-label",S.sfx?"Sound on. Tap to mute":"Sound off. Tap to turn on"); $(".s-on",sb).style.display=S.sfx?"":"none"; $(".s-off",sb).style.display=S.sfx?"none":"";
   paintNext();
 }
+function nextLabel(s){ s=s||cur(); var next=$("#nextBtn"), pr=!!pendingReveal(s); next.textContent = pr ? "Reveal" : (s.next || "Next"); next.classList.toggle("reveal",pr); }
 function paintNext(){
   var next=$("#nextBtn"); if(!curEl) return;
   var holds=!!$(".frame .btn:not(.sec):not(.ghost):not([disabled])",curEl);
@@ -2326,7 +2467,7 @@ function applyTheme(){ if(S.theme==="auto") document.documentElement.removeAttri
 function mountDial(root){
   $$("[data-dial]",root).forEach(function(d){
     if(d._on) return; d._on=1;
-    var id=d.getAttribute("data-dial"), ex=DIALS[id], r=$("input",d), blob=$(".dial-blob",d), exEl=$(".dial-ex",d), ends=$$(".dial-ends button",d), last=-1, fitDone=false;
+    var id=d.getAttribute("data-dial"), ex=DIALS[id], r=$("input",d), blob=$(".dial-blob",d), exEl=$(".dial-ex",d), note=$(".dial-note",d), ends=$$(".dial-ends button",d), last=-1, fitDone=false;
     var zone=function(v){ return v<34?0:(v<67?1:2); };
     var scale=function(v){ if(v<34) return 1.6-(v/33)*.36; if(v<67) return 1; return .6-((v-67)/33)*.44; };
     var up=function(user){
@@ -2338,6 +2479,7 @@ function mountDial(root){
       r.setAttribute("aria-valuetext",["Too big","Just right","Too small"][z]+": "+ex[z]);
       if(z!==last){
         exEl.textContent=ex[z];
+        note.className="dial-note z"+z; if(last!==-1&&!rm()){ void note.offsetWidth; note.classList.add("slap"); }
         if(user&&last!==-1){
           if(z===1){ sfx("snap"); d.classList.remove("snap"); void d.offsetWidth; d.classList.add("snap"); if(!fitDone){ fitDone=true; burstAt(blob,30,.55); } }
           else sfx("tick");
@@ -2365,7 +2507,7 @@ function spin(el){
   setTimeout(function(){ reel.classList.remove("spinning"); strip.style.transition="none"; strip.style.transform="none"; strip.innerHTML=item(SPINS[target]); spinI=target; sfx("little"); },1800);
 }
 function initFilm(f){
-  var DUR=6000, LAST=5000, scenes=$$(".scn",f), bars=$$(".bars i",f), cap=$(".cap span",f), ct=$(".ctl .ct",f), i=0, timer=null, left=0, startAt=0;
+  var DUR=9000, LAST=8000, scenes=$$(".scn",f), bars=$$(".bars i",f), cap=$(".cap span",f), ct=$(".ctl .ct",f), i=0, timer=null, left=0, startAt=0;
   function show(n){
     i=Math.max(0,Math.min(scenes.length-1,n));
     scenes.forEach(function(s,k){ s.classList.toggle("on",k===i); });
@@ -2400,31 +2542,32 @@ function baPlay(el){
   S.done[5]=1; save();
   var finalState=function(){
     [old,nw].forEach(function(s){ if(s) s.classList.remove("hold"); });
-    $$(".fr.cut",el).forEach(function(f){ f.classList.add("struck"); });
+    $$(".fr.cut",el).forEach(function(f){ f.classList.add("struck","fall"); });
     if(stamp){ stamp.style.opacity=""; }
   };
-  if(celebrated.ba||rm()){ finalState(); return; }
+  if(celebrated.ba||rm()){ el.classList.add("refreshed"); finalState(); return; }
   celebrated.ba=1;
   var t=350, fo=old?$$(".fr",old):[], fn=nw?$$(".fr",nw):[];
   if(oN) oN.textContent="0"; if(nN) nN.textContent="0";
   setTimeout(function(){ if(curEl!==el) return; fo.forEach(function(f,i){ f.style.transitionDelay=(i*70)+"ms"; }); if(old) old.classList.remove("hold"); countUp(oN,m.olds.length,700); },t);
   t+=350+fo.length*70+500;
   var cuts=$$(".fr.cut",el);
-  cuts.forEach(function(f,i){ setTimeout(function(){ if(curEl!==el) return; f.classList.add("struck"); sfx("tick"); },t+i*260); });
-  t+=cuts.length*260+(cuts.length?450:150);
-  setTimeout(function(){ if(curEl!==el) return; fn.forEach(function(f,i){ f.style.transitionDelay=(i*80)+"ms"; }); if(nw) nw.classList.remove("hold"); countUp(nN,m.news.length,800); },t);
-  t+=fn.length*80+700;
+  cuts.forEach(function(f,i){ setTimeout(function(){ if(curEl!==el) return; f.style.transitionDelay="0ms"; f.classList.add("struck"); sfx("tick"); setTimeout(function(){ if(curEl===el) f.classList.add("fall"); },380); },t+i*300); });
+  t+=cuts.length*300+(cuts.length?700:150);
+  setTimeout(function(){ if(curEl!==el) return; fn.forEach(function(f,i){ f.style.transitionDelay=(i*110)+"ms"; setTimeout(function(){ if(curEl!==el) return; sfx(f.classList.contains("new")?"select":"pop"); if(f.classList.contains("new")) f.classList.add("glow"); },i*110+120); }); if(nw) nw.classList.remove("hold"); countUp(nN,m.news.length,800); },t);
+  t+=fn.length*110+800;
   setTimeout(function(){ if(curEl!==el) return; sfx("fanfare"); burst(150); setTimeout(function(){ burst(80,innerWidth*.22,innerHeight*.5); burst(80,innerWidth*.78,innerHeight*.5); },320);
     if(stamp){ stamp.style.opacity=""; stamp.classList.add("drop"); stamp.style.animationDelay="0s"; setTimeout(function(){ sfx("thud"); },350); } },t);
 }
 function finishPlay(el){
   S.done[6]=1; save();
-  var dots=$$(".odots i",el);
-  if(celebrated.fin||rm()){ dots.forEach(function(d){ d.classList.add("done"); }); return; }
-  celebrated.fin=1;
-  dots.forEach(function(d){ d.classList.remove("done"); });
-  dots.forEach(function(d,i){ setTimeout(function(){ if(curEl!==el) return; var c=+d.getAttribute("data-od"); if(S.done[c]){ d.classList.add("done","popd"); sfx(i===5?"thud":"tick"); } },900+i*260); });
-  setTimeout(function(){ if(curEl!==el) return; sfx("fanfare"); burst(170); setTimeout(function(){ burst(90,innerWidth*.2,innerHeight*.5); burst(90,innerWidth*.8,innerHeight*.5); },320); },900+6*260+200);
+  var sts=$$(".stamps i",el), row=$(".stamps",el);
+  sts.forEach(function(d,i){ if(S.done[i+1]) d.classList.add("got"); });
+  if(celebrated.fin||rm()){ el.classList.add("refreshed"); return; }
+  celebrated.fin=1; el.classList.add("play");
+  if(row) row.classList.add("play");
+  sts.forEach(function(d,i){ if(!d.classList.contains("got")) return; setTimeout(function(){ if(curEl!==el) return; sfx(i===5?"thud":"tick"); },300+i*230+260); });
+  setTimeout(function(){ if(curEl!==el) return; sfx("fanfare"); burst(170); setTimeout(function(){ burst(90,innerWidth*.2,innerHeight*.5); burst(90,innerWidth*.8,innerHeight*.5); },320); },2100);
 }
 function autoGrow(t){ if(!t||t.offsetParent===null) return; t.style.height="auto"; t.style.height=Math.min(t.scrollHeight+2,420)+"px"; }
 document.addEventListener("toggle",function(e){ var d=e.target; if(d&&d.tagName==="DETAILS"&&d.open) $$("textarea.big",d).forEach(autoGrow); },true);
@@ -2438,6 +2581,8 @@ document.addEventListener("click",function(e){
   if(b.closest(".frame")&&!curEl.contains(b)) return;
   var a=b.getAttribute("data-act"), path=b.getAttribute("data-path"), id=b.getAttribute("data-id"), g=b.getAttribute("data-group");
   ac();
+  if(curEl&&curEl.contains(b)) clearTimeout(autoT);
+  if(movedId&&a!=="sup"&&a!=="sdown") unmark();
   switch(a){
     case "begin": go(1); break;
     case "who":
@@ -2445,7 +2590,12 @@ document.addEventListener("click",function(e){
       $$(".choice",curEl).forEach(function(c){ c.setAttribute("aria-pressed",c===b?"true":"false"); });
       sfx("select"); chrome(); clearTimeout(autoT); autoT=setTimeout(function(){ if(S.at==="who") go(1); },650); break;
     case "got":
-      var gk=b.getAttribute("data-k"); S.got[gk]=!S.got[gk]; save(); b.setAttribute("aria-pressed",S.got[gk]?"true":"false"); sfx(S.got[gk]?"pop":"tick"); break;
+      var gk=b.getAttribute("data-k"); S.got[gk]=!S.got[gk]; save(); b.setAttribute("aria-pressed",S.got[gk]?"true":"false");
+      if(S.got[gk]&&!rm()){ b.classList.remove("popped"); void b.offsetWidth; b.classList.add("popped"); }
+      var all=allGot(), box=$(".checks",curEl), hh=$(".gath-h",curEl), was=!!(box&&box.classList.contains("all"));
+      if(box) box.classList.toggle("all",all); if(hh) hh.textContent=all?"All set.":"Grab a few things.";
+      if(all&&!was){ sfx("fanfare"); burstAt(box,110,.9); autoNext(1900); } else sfx(S.got[gk]?"pop":"tick");
+      break;
     case "dmode":
       S.drawMode=b.getAttribute("data-v"); save(); $$(".choice",curEl).forEach(function(c){ c.setAttribute("aria-pressed",c===b?"true":"false"); }); sfx("select");
       clearTimeout(autoT); autoT=setTimeout(function(){ if(S.at==="mode") go(1); },650); break;
@@ -2458,7 +2608,7 @@ document.addEventListener("click",function(e){
       if(S.quiz) { if(S.quiz===b.getAttribute("data-v")) break; }
       S.quiz=b.getAttribute("data-v"); save(); refresh();
       if(S.quiz==="ok"){ sfx("little"); burstAt($(".qopt.right",curEl),40,.6); } else sfx("tick"); break;
-    case "climb": if(S.ladder.length<5){ S.ladder.push(""); resetVotes("rung"); save(); sfx("pop"); refresh('[data-bind="ladder.'+(S.ladder.length-1)+'"]'); } break;
+    case "climb": if(ghostCan()){ S.ladder.push(""); resetVotes("rung"); save(); sfx("pop"); refresh('[data-bind="ladder.'+(S.ladder.length-1)+'"]'); } break;
     case "unrung":
       var ri=+b.getAttribute("data-i"); if(S.ladder.length>1){ var was=S.ladder.splice(ri,1)[0]; resetVotes("rung"); save(); refresh(); sfx("tick");
         toast("Rung removed.","Undo",function(){ S.ladder.splice(Math.min(ri,S.ladder.length),0,was); resetVotes("rung"); save(); refresh(); },5000); } break;
@@ -2466,22 +2616,21 @@ document.addEventListener("click",function(e){
       if(e.target.closest(".vm")) break;
       if(S.picks[g]) break;
       if(g==="ideas"&&S.revealed.ideas) break;
-      if(S.ties[g]){ if(S.ties[g].indexOf(id)>-1){ doPick(g,id); sfx("fanfare"); flip(refresh); setTimeout(function(){ burstAt($(".win",curEl),70,.8); },300); } break; }
+      if(S.ties[g]){ if(S.ties[g].indexOf(id)>-1){ doPick(g,id); sfx("fanfare"); flip(refresh); setTimeout(function(){ burstAt($(".win",curEl),70,.8); },300); autoNext(HOLD[g]||2600); } break; }
       vote(g,id,1,b); break;
     case "vplus": vote(g,id,1,b.closest(".vrow")); break;
     case "vminus": e.stopPropagation(); vote(g,id,-1,b.closest(".vnote,.vrow")); break;
-    case "reveal": reveal(g,b); break;
     case "recount": delete S.picks[g]; delete S.ties[g]; save(); flip(refresh); sfx("tick"); break;
     case "vclear":
       var snap=JSON.stringify({v:S.votes[g]||{},p:S.picks[g],t:S.ties[g],r:S.revealed[g]});
       resetVotes(g); save(); refresh(); sfx("tick");
       toast("Votes cleared.","Undo",function(){ var o=JSON.parse(snap); S.votes[g]=o.v; if(o.p) S.picks[g]=o.p; if(o.t) S.ties[g]=o.t; if(o.r) S.revealed[g]=o.r; save(); refresh(); },5000); break;
     case "pick":
-      doPick(g,id); sfx("select"); refresh(); burstAt($('.vrow.win',curEl),36,.6); break;
+      var wasTie=!!S.ties[g]; doPick(g,id); sfx(wasTie?"fanfare":"select"); refresh(); burstAt($('.vrow.win',curEl),wasTie?70:36,wasTie?.8:.6); if(wasTie) autoNext(HOLD[g]||2600); break;
     case "spick": S.picks.story=id; save(); sfx("select"); refresh(); break;
     case "pplus": case "pminus":
       S.votes.story=S.votes.story||{}; S.votes.story[id]=Math.max(0,(S.votes.story[id]||0)+(a==="pplus"?1:-1)); save(); sfx(a==="pplus"?"pop":"tick");
-      var sv=b.parentNode.querySelector(".v"); if(sv) sv.textContent=S.votes.story[id]; paintVact("story"); break;
+      var sv=b.parentNode.querySelector(".v"); if(sv) sv.textContent=S.votes.story[id]; paintVact("story"); nextLabel(); break;
     case "pclear": resetVotes("story"); save(); refresh(); break;
     case "precount": delete S.revealed.story; save(); refresh(); sfx("tick"); break;
     case "irecount": delete S.revealed.ideas; save(); flip(refresh); sfx("tick"); break;
@@ -2494,7 +2643,7 @@ document.addEventListener("click",function(e){
     case "sup": case "sdown":
       var ar=getP(path)||[], ix=-1; ar.forEach(function(x,k){ if(x.id===id) ix=k; }); if(ix<0) break;
       var j=ix+(a==="sup"?-1:1); if(j<0||j>=ar.length) break; var tmp=ar[ix]; ar[ix]=ar[j]; ar[j]=tmp; setP(path,ar); save(); sfx("tick");
-      refresh('[data-act="'+a+'"][data-id="'+id+'"]'); break;
+      movedId=id; flip(function(){ refresh('[data-act="'+a+'"][data-id="'+id+'"]'); }); break;
     case "carry": case "carryidea":
       var src=(a==="carry"?S.frames:ideaItems()).filter(function(x){ return x.id===id; })[0]; if(!src||!has(src.t)) break;
       S.newFrames.push({id:uid(),t:src.t}); save(); sfx("pop"); refresh(); break;
@@ -2508,7 +2657,8 @@ document.addEventListener("click",function(e){
     case "unphoto":
       var wasP=getP(path); setP(path,null); save(); refresh(); toast("Photo removed.","Undo",function(){ setP(path,wasP); save(); refresh(); },5000); break;
     case "tgo": tToggle(tFromEl(b.closest("[data-timer]"))); break;
-    case "tplus": tPlus(tFromEl(b.closest("[data-timer]"))); break;
+    case "tplus": tAdj(tFromEl(b.closest("[data-timer]")),30); break;
+    case "tminus": tAdj(tFromEl(b.closest("[data-timer]")),-30); break;
     case "treset": tKill(); sfx("tick"); break;
     case "tbig": openFocus(); break;
     case "print": doPrint(); break;
@@ -2533,6 +2683,7 @@ function vote(g,id,d,el){
   var t=$(".vt",el); el.setAttribute("aria-label",(t?t.textContent:el.firstChild.textContent)+". "+plural(n,"vote","votes"));
   var va=$(".vact",curEl); if(va){ var any=voteTotal(g)>0, hc=!!$('[data-act="vclear"]',va); if(any!==hc) { var keepFid=el.getAttribute("data-fid"); refresh(); var again=$('[data-fid="'+keepFid+'"]',curEl); if(again&&document.activeElement===document.body) try{ again.focus({preventScroll:true}); }catch(x){} } }
   var msg=$(".vmsg",curEl); if(msg&&d) msg.textContent="";
+  nextLabel();
 }
 function addNote(path,inp){
   var val=(inp&&inp.value||"").trim(); if(!val){ if(inp) inp.focus(); return; }
@@ -2550,11 +2701,11 @@ document.addEventListener("input",function(e){
     setP(p,t.value); save();
     if(t.tagName==="TEXTAREA") autoGrow(t);
     $$('[data-live="'+p+'"]',curEl).forEach(function(q){ var v=t.value, L=str(v).length; q.classList.toggle("empty",!has(v)); q.classList.remove("write"); q.classList.toggle("long",L>64&&L<=140); q.classList.toggle("xlong",L>140); q.innerHTML=has(v)?escBr(v):esc(q.getAttribute("data-empty")); });
-    if(/^ladder\./.test(p)) resetVotes("rung");
+    if(/^ladder\./.test(p)){ resetVotes("rung"); paintGhost(); }
     return;
   }
   var ps=t.getAttribute&&t.getAttribute("data-bstep");
-  if(ps){ var sid=t.getAttribute("data-id"); (getP(ps)||[]).forEach(function(x){ if(x.id===sid) x.t=t.value; }); save(); return; }
+  if(ps){ var sid=t.getAttribute("data-id"); if(movedId&&movedId!==sid) unmark(); (getP(ps)||[]).forEach(function(x){ if(x.id===sid) x.t=t.value; }); save(); return; }
   var pw=t.getAttribute&&t.getAttribute("data-bwhy");
   if(pw){ S.frames.forEach(function(x){ if(x.id===pw) x.why=t.value; }); save(); autoGrow(t); }
 });
@@ -2610,7 +2761,7 @@ document.addEventListener("keydown",function(e){
         var ins=$$("input.big, input.field, textarea.big, textarea.field",curEl).filter(function(x){ return x.offsetParent!==null && !x.hasAttribute("data-add"); }), ix=ins.indexOf(t);
         if(ix>-1&&ix<ins.length-1){ ins[ix+1].focus(); return; }
         var bp=t.getAttribute("data-bind")||"";
-        if(/^ladder\./.test(bp)&&S.ladder.length<5&&has(t.value)){ S.ladder.push(""); resetVotes("rung"); save(); sfx("pop"); refresh('[data-bind="ladder.'+(S.ladder.length-1)+'"]'); return; }
+        if(/^ladder\./.test(bp)&&ghostCan()&&has(t.value)){ S.ladder.push(""); resetVotes("rung"); save(); sfx("pop"); refresh('[data-bind="ladder.'+(S.ladder.length-1)+'"]'); return; }
         t.blur(); go(1); return;
       }
     }
@@ -2638,18 +2789,21 @@ $("#dots").addEventListener("click",function(e){ var b=e.target.closest("button[
    ========================================================= */
 var menuOpen=false, lastFocus=null;
 function openMenu(){
-  var s=cur(), h='<button class="ib x" type="button" data-m="close" aria-label="Close menu" style="float:right">'+ICON.x+'</button><h4>Jump to</h4>';
+  var s=cur(), h='<button class="ib x" type="button" data-m="close" aria-label="Close settings" style="float:right">'+ICON.x+'</button><h4>Settings</h4>';
+  var seg=function(m,v,l,on){ return '<button type="button" data-m="'+m+'" data-v="'+v+'" aria-pressed="'+on+'">'+l+'</button>'; };
+  var jump='<div class="mgroup"><p class="mlab">Jump to</p>';
   [0,1,2,3,4,5,6].forEach(function(c){
     var id=firstOfCh(c); if(!id) return;
     var cls=s.ch>c?' done':(s.ch===c?' on':'');
-    h+='<button class="mch'+cls+'" type="button" data-m="jump" data-id="'+id+'"><i aria-hidden="true"></i><span>'+(c?c+". ":"")+CHN[c]+'</span></button>';
+    jump+='<button class="mch'+cls+'" type="button" data-m="jump" data-id="'+id+'"><i aria-hidden="true"></i><span>'+(c?c+". ":"")+CHN[c]+'</span></button>';
   });
-  var fid=firstOfCh(7); if(fid) h+='<button class="mch'+(s.ch===7?' on':'')+'" type="button" data-m="jump" data-id="'+fid+'"><i aria-hidden="true"></i><span>Finish</span></button>';
-  var seg=function(m,v,l,on){ return '<button type="button" data-m="'+m+'" data-v="'+v+'" aria-pressed="'+on+'">'+l+'</button>'; };
-  h+='<div class="mgroup"><p class="mlab">Who’s here</p><div class="seg">'+seg("who","team-room","Team, in one room",team()&&S.place==="room")+seg("who","team-virtual","Team, on a call",team()&&S.place==="virtual")+seg("who","solo","Just me",!team())+'</div>'+
+  var fid=firstOfCh(7); if(fid) jump+='<button class="mch'+(s.ch===7?' on':'')+'" type="button" data-m="jump" data-id="'+fid+'"><i aria-hidden="true"></i><span>Finish</span></button>';
+  jump+='</div>';
+  h+='<div class="mgroup first"><p class="mlab">Who’s here</p><div class="seg">'+seg("who","team-room","Team, in one room",team()&&S.place==="room")+seg("who","team-virtual","Team, on a call",team()&&S.place==="virtual")+seg("who","solo","Just me",!team())+'</div>'+
     '<p class="mlab">Theme</p><div class="seg">'+seg("theme","auto","Match my device",S.theme==="auto")+seg("theme","light","Light",S.theme==="light")+seg("theme","dark","Dark",S.theme==="dark")+'</div></div>'+
     '<div class="mgroup"><button class="sw" type="button" data-m="sfx" aria-pressed="'+S.sfx+'"><span>Sound effects and chimes</span><i aria-hidden="true"></i></button>'+
-    '<button class="sw" type="button" data-m="music" aria-pressed="'+S.music+'"><span>Calm music during quiet work and breaks</span><i aria-hidden="true"></i></button></div>'+
+    '<button class="sw" type="button" data-m="music" aria-pressed="'+S.music+'"><span>Calm music during quiet work</span><i aria-hidden="true"></i></button></div>'+
+    jump+
     '<div class="mgroup"><div class="macts"><button class="btn sec sm" type="button" data-m="print">Print my answers</button><button class="btn ghost sm" type="button" data-m="clear">Clear my answers</button></div>'+
     '<p class="mnote">Your answers stay in this browser. Nothing is sent anywhere. On a shared computer, clear them when you’re done.</p>'+
     '<p class="mnote">This is a proprietary ExperiencePoint tool. Please don’t copy or redistribute it.</p></div>';

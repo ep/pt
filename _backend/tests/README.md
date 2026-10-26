@@ -62,14 +62,17 @@ fifteen minutes to find, or miss entirely.
   (escaping everything typed; downloads only on the hosted page), picking up after a reload,
   a browser that blocks storage, no analytics or brand names, and one primary button per screen.
 - `qa-reimagination-lab.mjs` tests `../../field-tools/reimagination-lab/index.html` (the
-  Reimagination Lab) in a simulated browser. It walks a whole team session on a call
-  (timers, the wall of eye-rollers, votes and their reveals, the ladder, the steps, the
-  reactions, the four moves, the new flow, the people and the first test) and a whole solo
-  session (no team-only screens), one screen at a time with at most one filled button. It
-  checks that typed text never runs as code, print, the outcome image, Email this with the
-  real send kit, picking up after a reload, clear with undo, and the hooks the feedback
-  board uses: its parts (every screen in exactly one) and opening any screen with made-up
-  content.
+  Reimagination Lab) in a simulated browser. It walks a whole team session, in a room and
+  then on a call (the checklist that moves on by itself, timers that take 30 seconds off or
+  on and end once you move past their screen, the wall of eye-rollers, votes revealed
+  through Next with ties waiting for a pick, the ladder that unlocks one rung at a time, the
+  steps and the one you just moved, the reactions, the four moves, the new flow, the people
+  and the first test) and a whole solo session (no team-only screens), one screen at a time
+  with at most one filled button. It checks that typed text never runs as code, print, the
+  outcome image, Email this with the real send kit, picking up after a reload (including a
+  session left on a screen that has since gone, and a photo of the flow), clear with undo,
+  and the hooks the feedback board uses: its parts (every screen in exactly one) and opening
+  any screen with made-up content.
 - `qa-kit.mjs` tests the shared kits in `../../assets/kit/` in a simulated browser, against
   the real worker code with the fake database: the feedback kit (`feedback.js`, and the
   comment bar it loads only in feedback mode) and the Email this kit (`send.js`). It covers
