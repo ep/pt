@@ -31,11 +31,23 @@ export function FakeDB(){
           },
           async run(){
             if (sql.includes('HAVING MAX')){
-              const cutoff=args[0], maxBy={};
+              /* the session sweep; "(room < ? OR room >= ?)" leaves out the rooms in that range (feedback) */
+              const skip = sql.includes('(room < ? OR room >= ?)') ? [args[0], args[1]] : null;
+              const cutoff = skip ? args[2] : args[0], maxBy={};
               rows.forEach((v,k)=>{ const r=k.split('|')[0]; maxBy[r]=Math.max(maxBy[r]||0, v.updated); });
               let n=0;
-              rows.forEach((v,k)=>{ const r=k.split('|')[0]; if (maxBy[r]<cutoff){ rows.delete(k); n++; } });
+              rows.forEach((v,k)=>{ const r=k.split('|')[0]; if (skip && r>=skip[0] && r<skip[1]) return; if (maxBy[r]<cutoff){ rows.delete(k); n++; } });
               return { meta:{ changes:n } };
+            }
+            if (sql.startsWith('DELETE FROM kv WHERE room >= ?')){
+              /* a ranged delete: rooms in [a0,a1), paths in [a2,a3), last written before a4 */
+              let n=0;
+              rows.forEach((v,k)=>{ const [r,p]=k.split('|'); if (r>=args[0] && r<args[1] && p>=args[2] && p<args[3] && v.updated<args[4]){ rows.delete(k); n++; } });
+              return { meta:{ changes:n } };
+            }
+            if (sql.startsWith('DELETE FROM kv WHERE room = ? AND path = ?')){
+              const had = rows.delete(args[0]+'|'+args[1]);
+              return { meta:{ changes: had?1:0 } };
             }
             if (sql.startsWith('DELETE')){
               const room=args[0]; let n=0;

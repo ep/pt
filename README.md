@@ -43,6 +43,8 @@ There is no homepage at the repo root by design. Each project lives in its own f
 <p align="center">
 <a href="https://ep.github.io/pt/design-ideas/room-pulse/"><img src="assets/readme/podium-pulse-sketchbook.svg" width="98%" alt="Podium Pulse sketchbook: design ideas for a check-in that bookends a session."></a>
 <a href="https://ep.github.io/pt/design-ideas/clear-instructions/"><img src="assets/readme/clear-instructions.svg" width="98%" alt="Clear Instructions sketchbook: who you're with, where you work, and when to type, obvious at every step."></a>
+<a href="https://ep.github.io/pt/design-ideas/wbwai-ai-guide/"><img src="assets/readme/wbwai-ai-guide.svg" width="49%" alt="Working with AI sketchbook: five ways to make one guide, with a side for participants and a side for facilitators."></a>
+<a href="https://ep.github.io/pt/design-ideas/wbwai-icebreakers/"><img src="assets/readme/wbwai-icebreakers.svg" width="49%" alt="Icebreaker sketchbook: nine ways a room of strangers becomes teams, each with a name and a mission."></a>
 </p>
 
 <details>
@@ -54,6 +56,7 @@ There is no homepage at the repo root by design. Each project lives in its own f
 - https://ep.github.io/pt/join/ : the short address participants type to join a poll (forwards to Pair Poll's join screen).
 - https://ep.github.io/pt/field-tools/chips/ : Place Your Chips, a live prioritization game (field tool).
 - https://ep.github.io/pt/field-tools/ai-impact-ladder/ : AI Impact Ladder, a guided conversation about measuring AI adoption and its impact, ending with a plan to share (field tool).
+- https://ep.github.io/pt/field-tools/reimagination-lab/ : Reimagination Lab, rethink one workflow in a single sitting, as a team on one shared screen or on your own (field tool).
 - https://ep.github.io/pt/wbwai201/report-builder/ : Turn the CSV export from WBWAI 201 into a sponsor-ready report.
 - https://ep.github.io/pt/kc/report-builder/ : Turn the CSV export from KickstartChange into a team-by-team report.
 - https://ep.github.io/pt/agents/ : Create Your First Agent. Companion activity for Work Better with AI 201.
@@ -63,6 +66,8 @@ There is no homepage at the repo root by design. Each project lives in its own f
 - https://ep.github.io/pt/podium-for-partners/ : Positioning Podium with IP-holder partner prospects.
 - https://ep.github.io/pt/podium-for-partners-ideo/ : Positioning Podium, IDEO version.
 - https://ep.github.io/pt/design-ideas/room-pulse/ : Podium pulse activity interaction, reveal, and design ideas.
+- https://ep.github.io/pt/design-ideas/wbwai-ai-guide/ : Working with AI sketchbook, five design directions for a double-sided guide to working with AI, for Work Better with AI 201 participants and facilitators.
+- https://ep.github.io/pt/design-ideas/wbwai-icebreakers/ : Icebreaker sketchbook, nine team-forming mechanics for open enrollment workshops, three of them playable.
 - https://ep.github.io/pt/design-ideas/clear-instructions/ : Clear Instructions sketchbook, design ideas for activity instructions nobody can misread: who you're with, where you work, and when to type in the workshop app (built from the WBWAI 201 activities).
 - https://ep.github.io/pt/Logistics/EC/In-Person/ : Support's experimental logistics checklist.
 - https://ep.github.io/pt/t3/wbwai-curveballroleplay/ : Experimental T3 artefact: WBWAI Curveball Roleplay.
@@ -77,7 +82,7 @@ Pages deploys from the root of `main`. Any folder with an `index.html` is publis
 
 Folder conventions: interactive field tools (games, diagnostics, workshop tools) live under `field-tools/`, one folder per tool. Design sketchbooks (a cover page plus live concept pages, with screenshot thumbnails in a `thumbs/` folder) live under `design-ideas/`, one folder per sketchbook. Other kinds of test tools get their own top-level folders. Shared assets that more than one project uses (the favicon set and the kits below) live under `assets/`; a page links them by absolute path, `/pt/assets/favicon/favicon.svg`. The cards at the top of this README live in `assets/readme/`, one SVG each, with their words drawn as shapes so they look the same on every screen. To add or change a card, edit `assets/readme/build/build.py` and run it; the note at the top of that file lists what to install.
 
-Two shared kits live in `assets/kit/`, each switched on by one line in a page. The feedback kit (`feedback.js`) lets testers leave notes on any tool: they open it with `?feedback` on the end of its address, tap a faint dot, point at what the note is about, and type. Notes stay in the tester's browser until they send them from their own email as one PDF. Without `?feedback` the kit does nothing. The Email this kit (`send.js`) lets people email a tool's output from their own email. Neither kit sends anything to a server. How to add, set up and remove each one is in the comment at the top of its file.
+Two shared kits live in `assets/kit/`, each switched on by one line in a page. The feedback kit (`feedback.js`) lets testers comment on any tool: they open it with their tester link, which ends in `?feedback=` and a code, click Comment, click the area of the page they mean, and post. Comments go to the backend below with the screen, the settings and the device, and no picture is taken. Without `?feedback` the kit does nothing. The team reads and sorts comments on the feedback board at `ep.github.io/pt/feedback/`, which needs the team key and rebuilds each screen from the tool's own code. The Email this kit (`send.js`) lets people email a tool's output from their own email. How to add, set up and remove each kit is in the comment at the top of its file.
 
 To add a project: create a folder, add an `index.html`, commit. Add it to the list under Every project too; a card is optional. 
 
@@ -95,7 +100,7 @@ Static pages cannot remember anything or keep a secret, so tools that need share
 - The source of truth for the worker is this repo: `_backend/pt-worker.js` is the code and `_backend/wrangler.toml` is the configuration (name, database binding, cron trigger). Deploys are automatic: when a change under `_backend/` lands on `main`, GitHub Actions runs every test suite and, only if all pass, deploys with wrangler. Nobody edits the worker in the Cloudflare dashboard; a dashboard edit is overwritten by the next push.
 - Tests live in `_backend/tests/` and run on every push and pull request. See `_backend/tests/README.md` to run them locally.
 - Some tools are gated: every session has a key, generated when a facilitator starts it. In a closed session (Place Your Chips) the key rides inside the join link, so participants click and never type, and nobody without the link can touch the session. In an open session (Pair Poll, Room Pulse) the facilitator keeps the key and participants join with a four-letter code instead, by typing it, tapping a link, or scanning a QR; the code lets them read the session and write only the paths the tool opened (ballots, a roster, a presence heartbeat), never anything else. Because a four-letter code can be guessed by machine, a tool only opens paths whose contents are harmless to a stranger: anonymous votes yes, notes about colleagues no. The list of gated tools is the `GATED_TOOLS_DEFAULT` line near the top of the worker file. Tools handling anything sensitive belong on that list, as closed sessions.
-- Session data is temporary by design. Ending a session deletes it immediately, and a daily sweep deletes anything untouched for 7 days. Nothing in the backend is an archive; if a session produced something worth keeping, download the report.
+- Session data is temporary by design. Ending a session deletes it immediately, and a daily sweep deletes anything untouched for 7 days. Nothing in the backend is an archive; if a session produced something worth keeping, download the report. Feedback comments are the one exception: each stays a year after it last changed, so the team can compare comments across versions of a tool.
 
 ## Adding a tool that needs the backend
 

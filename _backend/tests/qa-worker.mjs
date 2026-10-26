@@ -260,6 +260,124 @@ check('7-day sweep keeps live sessions', [...db2._rows.keys()].some(k=>k.startsW
   check('a guest prefix read can carry times too, with nothing internal', q.status===200 && q.body.times.abc123>0 && q.body.state._sk===undefined && q.body.state._open===undefined);
 }
 
+
+/* ---------- feedback: testers comment with a tester code, the team reads with its key ---------- */
+{
+  const TEAM='team-key-0123456789abcdef';
+  const fenv={ DB: FakeDB(), FEEDBACK_KEY: TEAM };
+  const bare={ DB: FakeDB() };
+  async function fb(method, path, body, headers, e){
+    const req=new Request(base+path,{method, headers:Object.assign({'Content-Type':'application/json'},headers||{}), body: body?JSON.stringify(body):undefined});
+    const res=await worker.fetch(req, e||fenv); let data=null; try{ data=await res.json(); }catch(x){}
+    return { status:res.status, data, headers:res.headers };
+  }
+  const TK={'X-Team-Key':TEAM};
+  let q=await fb('GET','/api/health',null,null,bare);
+  check('health says feedback is not set up until the secret exists', q.data.feedback===false);
+  q=await fb('GET','/api/health');
+  check('health says feedback is set up once the secret exists, without showing it', q.data.feedback===true && JSON.stringify(q.data).indexOf(TEAM)===-1);
+  q=await fb('GET','/api/fb/tools',null,TK,bare);
+  check('team reads refuse politely before the secret is set', q.status===503);
+  q=await fb('GET','/api/fb/tools');
+  check('team reads need the team key', q.status===401);
+  q=await fb('GET','/api/fb/tools',null,{'X-Team-Key':'team-key-wrong-wrong-wrong'});
+  check('a wrong team key is refused', q.status===401);
+  q=await fb('GET','/api/fb/tools',null,TK);
+  check('with the key: no tools and no tester code yet', q.status===200 && q.data.tools.length===0 && q.data.code===null);
+  q=await fb('POST','/api/fb/post',{tool:'reimagination-lab',code:'ANYONE',id:'abc12345',edit:'e'.repeat(20),comment:{text:'hi'}});
+  check('nobody can post before a tester code exists', q.status===401);
+  q=await fb('POST','/api/fb/code',{},TK);
+  const CODE=q.data && q.data.code;
+  check('the team makes a six-character tester code', q.data.ok===true && /^[A-HJ-NP-Z2-9]{6}$/.test(CODE));
+  q=await fb('POST','/api/fb/code',{});
+  check('only the team can make a tester code', q.status===401);
+  q=await fb('GET','/api/fb/check?code='+CODE.toLowerCase());
+  check('a tester link can check its code, in any case', q.data.ok===true);
+  q=await fb('GET','/api/fb/check?code=ZZZZZZ');
+  check('a wrong code checks false', q.data.ok===false);
+
+  const C1={tool:'reimagination-lab',code:CODE,id:'c1a2b3c4d5',edit:'Edit0123456789abcdef',comment:{name:'Ana',text:'The Next button jumps.',ver:'git:abc',screen:'b-share',where:{x:10,y:20,w:30,h:40},ctx:{device:{browser:'Chrome 141'}}}};
+  q=await fb('POST','/api/fb/post',C1,{'CF-Connecting-IP':'1.1.1.1'});
+  check('a tester posts a comment with the code', q.data.ok===true && q.data.created>0);
+  const created=q.data.created;
+  q=await fb('POST','/api/fb/post',Object.assign({},C1,{code:'ZZZZZZ'}));
+  check('a wrong tester code cannot post', q.status===401);
+  for (const [label, patch] of [['empty text',{comment:{text:'   '}}],['text over 2,000 characters',{comment:{text:'x'.repeat(2001)}}],['a bad id',{id:'BAD ID!'}],['a bad edit token',{edit:'short'}],['a bad tool id',{tool:'Bad Tool'}]]) {
+    q=await fb('POST','/api/fb/post',Object.assign({},C1,{id:'n'+Math.random().toString(36).slice(2,10)},patch));
+    check('post refuses '+label, q.status===400);
+  }
+  q=await fb('POST','/api/fb/post',Object.assign({},C1,{id:'big12345',comment:{text:'ok',ctx:{x:'y'.repeat(7000)}}}));
+  check('post refuses outsized context', q.status===400);
+  q=await fb('POST','/api/fb/post',Object.assign({},C1,{comment:Object.assign({},C1.comment,{text:'The Next button jumps when the timer starts.'})}),{'CF-Connecting-IP':'1.1.1.1'});
+  check('the tester changes their own comment with its edit token', q.data.ok===true && q.data.created===created);
+  q=await fb('POST','/api/fb/post',Object.assign({},C1,{edit:'Other0123456789abcdef'}));
+  check('nobody else can change it', q.status===401);
+  q=await fb('GET','/api/fb/list?tool=reimagination-lab',null,TK);
+  const got=q.data.comments[0];
+  check('the team reads the comment as written, latest words', q.status===200 && q.data.comments.length===1 && got.text==='The Next button jumps when the timer starts.' && got.name==='Ana' && got.screen==='b-share' && got.where.w===30);
+  check('edit tokens never leave the worker', JSON.stringify(q.data).indexOf('Edit0123456789abcdef')===-1);
+  q=await fb('GET','/api/fb/list?tool=reimagination-lab');
+  check('reading comments needs the team key', q.status===401);
+  q=await fb('GET','/api/fb/tools',null,TK);
+  check('the tools list counts comments and shows the tester code', q.data.tools.length===1 && q.data.tools[0].tool==='reimagination-lab' && q.data.tools[0].n===1 && q.data.code===CODE);
+
+  q=await fb('POST','/api/fb/review',{tool:'reimagination-lab',id:'c1a2b3c4d5',review:{priority:'must',same:'',notes:[{name:'Rowan',text:'Layout shift when the timer mounts.'}],by:'Rowan'}},TK);
+  check('the team sets a priority and a note', q.data.ok===true && q.data.review.priority==='must' && q.data.review.notes[0].text==='Layout shift when the timer mounts.');
+  q=await fb('POST','/api/fb/review',{tool:'reimagination-lab',id:'c1a2b3c4d5',review:{priority:'urgent!!'}},TK);
+  check('an unknown priority is stored as none', q.data.review.priority==='');
+  q=await fb('POST','/api/fb/review',{tool:'reimagination-lab',id:'c1a2b3c4d5',review:{priority:'must'}});
+  check('reviews need the team key', q.status===401);
+  q=await fb('POST','/api/fb/review',{tool:'reimagination-lab',id:'nothere99',review:{priority:'must'}},TK);
+  check('a review needs a real comment', q.status===404);
+  await fb('POST','/api/fb/review',{tool:'reimagination-lab',id:'c1a2b3c4d5',review:{priority:'should',notes:[{name:'Rowan',text:'Check on phones too.'}]}},TK);
+  q=await fb('GET','/api/fb/list?tool=reimagination-lab',null,TK);
+  check('the list carries each review', q.data.reviews.c1a2b3c4d5.priority==='should' && q.data.reviews.c1a2b3c4d5.notes.length===1);
+
+  q=await fb('POST','/api/fb/delete',{tool:'reimagination-lab',code:CODE,id:'c1a2b3c4d5',edit:'Other0123456789abcdef'});
+  check('a tester cannot delete someone else\'s comment', q.status===401);
+  q=await fb('POST','/api/fb/delete',{tool:'reimagination-lab',code:CODE,id:'c1a2b3c4d5',edit:'Edit0123456789abcdef'});
+  q=await fb('GET','/api/fb/list?tool=reimagination-lab',null,TK);
+  check('a tester deletes their own comment, and its review goes with it', q.data.comments.length===0 && Object.keys(q.data.reviews).length===0);
+  await fb('POST','/api/fb/post',Object.assign({},C1,{id:'teamdel01'}),{'CF-Connecting-IP':'1.1.1.1'});
+  q=await fb('POST','/api/fb/delete',{tool:'reimagination-lab',id:'teamdel01'},TK);
+  check('the team can delete any comment', q.data.ok===true && (await fb('GET','/api/fb/list?tool=reimagination-lab',null,TK)).data.comments.length===0);
+
+  /* caps: 60 new comments per visitor per hour; edits do not count */
+  let last=null;
+  for (let i=0;i<61;i++) last=await fb('POST','/api/fb/post',Object.assign({},C1,{id:'rate'+String(i).padStart(4,'0')}),{'CF-Connecting-IP':'9.9.9.9'});
+  check('a visitor is slowed down after 60 new comments in an hour', last.status===429);
+  q=await fb('POST','/api/fb/post',Object.assign({},C1,{id:'other00001'}),{'CF-Connecting-IP':'8.8.8.8'});
+  check('other visitors are not affected', q.data.ok===true);
+  check('visitor addresses are stored only as a short hash', [...fenv.DB._rows.keys()].every(k=>k.indexOf('9.9.9.9')===-1 && k.indexOf('8.8.8.8')===-1));
+  const big=new Request(base+'/api/fb/post',{method:'POST',headers:{'Content-Type':'application/json','content-length':'20000'},body:JSON.stringify(C1)});
+  check('an outsized body is refused before reading', (await worker.fetch(big, fenv)).status===413);
+
+  /* a new tester code retires the old links */
+  const OLD=CODE; q=await fb('POST','/api/fb/code',{},TK);
+  check('a new tester code replaces the old one', q.data.code!==OLD);
+  q=await fb('POST','/api/fb/post',Object.assign({},C1,{id:'oldlink01'}));
+  check('old tester links can no longer post', q.status===401);
+
+  /* the origin lock still applies */
+  q=await fb('POST','/api/fb/post',C1,{'Origin':'https://evil.example'});
+  check('feedback routes keep the origin lock', q.status===403);
+  q=await fb('OPTIONS','/api/fb/list',null,{'Origin':'https://ep.github.io'});
+  check('the board may send the team key header across origins', /X-Team-Key/.test(q.headers.get('Access-Control-Allow-Headers')));
+
+  /* retention: feedback keeps its own clock */
+  const day=24*60*60*1000, rows=fenv.DB._rows;
+  rows.set('pyc:OLDS|meta/stage',{value:'"x"',updated:Date.now()-8*day});
+  rows.set('fb:reimagination-lab|c/stale0001',{value:JSON.stringify({id:'stale0001',text:'old'}),updated:Date.now()-366*day});
+  rows.set('fb:reimagination-lab|r/stale0001',{value:'{}',updated:Date.now()-366*day});
+  rows.set('fb:reimagination-lab|c/keep00001',{value:JSON.stringify({id:'keep00001',text:'recent'}),updated:Date.now()-30*day});
+  rows.set('fb:_admin|rl/oldvisitor',{value:'{"n":3,"t0":0}',updated:Date.now()-3*day});
+  await worker.scheduled({}, fenv, {});
+  check('the daily sweep still ends week-old sessions', !rows.has('pyc:OLDS|meta/stage'));
+  check('feedback survives the 7-day sweep', rows.has('fb:reimagination-lab|c/keep00001') && rows.has('fb:_admin|code'));
+  check('comments and reviews go a year after they last changed', !rows.has('fb:reimagination-lab|c/stale0001') && !rows.has('fb:reimagination-lab|r/stale0001'));
+  check('post counters go after two days', !rows.has('fb:_admin|rl/oldvisitor'));
+}
+
 console.log(failures===0?'\nWORKER TESTS PASSED':'\n'+failures+' FAILURES');
 process.exit(failures===0?0:1);
 })();

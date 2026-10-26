@@ -1,6 +1,6 @@
 # Tests for the pt backend, field tools and shared kits
 
-Eight automated test suites live here. They are robot users: each one loads the real
+Ten automated test suites live here. They are robot users: each one loads the real
 code, clicks through entire sessions in a simulated browser, and checks that
 everything behaves. They catch breakage in seconds that manual testing would take
 fifteen minutes to find, or miss entirely.
@@ -9,7 +9,9 @@ fifteen minutes to find, or miss entirely.
   in-memory database. It covers session creation, the session-key gate for closed
   sessions, open sessions (code-only reads and writes under the opened paths, key
   for everything else), seat claiming, path validation, the origin lock, the write
-  times a read can carry for presence, and the 7-day retention sweep. No Cloudflare
+  times a read can carry for presence, the feedback routes (tester codes, comments
+  testers can change only for themselves, the team key, reviews, caps), and the
+  retention sweeps. No Cloudflare
   account or network needed.
 - `qa-pyc.js` tests `../../field-tools/chips/index.html` (Place Your Chips) in a
   simulated browser. It runs a full rehearsal session: studio setup, facilitator
@@ -58,17 +60,32 @@ fifteen minutes to find, or miss entirely.
   notes (left out of the report unless ticked), the plan fields, the text, report and CSV
   (escaping everything typed; downloads only on the hosted page), picking up after a reload,
   a browser that blocks storage, no analytics or brand names, and one primary button per screen.
-- `qa-kit.mjs` tests the shared kits in `../../assets/kit/` in a simulated browser: the
-  feedback kit (`feedback.js`, and the panel it loads only in feedback mode) and the
-  Email this kit (`send.js`). It covers a normal visit (nothing else loads, nothing is
-  recorded), turning feedback on with `?feedback`, remembering it per tab and turning it
-  off, the intro, pointing and spotlights (place, move, resize, two at most), notes (save,
-  keep a draft, edit, delete, a list), the context every note carries (keys and codes
-  removed, typed words never recorded), the PDF (its structure, its text, nothing secret),
-  the email links for Gmail, Outlook and the email app, the share sheet on a phone, keys
-  that never reach the tool behind the panel, and that the kit files are plain ASCII,
-  never write HTML from strings and send nothing anywhere. Pictures of the tab need a
-  real browser and a real Allow, so they are checked in Chrome before a kit change ships.
+- `qa-reimagination-lab.mjs` tests `../../field-tools/reimagination-lab/index.html` (the
+  Reimagination Lab) in a simulated browser. It walks a whole team session on a call
+  (timers, the wall of eye-rollers, votes and their reveals, the ladder, the steps, the
+  reactions, the four moves, the new flow, the people and the first test) and a whole solo
+  session (no team-only screens), one screen at a time with at most one filled button. It
+  checks that typed text never runs as code, print, the outcome image, Email this with the
+  real send kit, picking up after a reload, and clear with undo.
+- `qa-kit.mjs` tests the shared kits in `../../assets/kit/` in a simulated browser, against
+  the real worker code with the fake database: the feedback kit (`feedback.js`, and the
+  comment bar it loads only in feedback mode) and the Email this kit (`send.js`). It covers
+  a normal visit (nothing else loads, nothing is recorded), the tester link and its code,
+  remembering feedback mode per tab and turning it off, the first tip, pointing (the
+  outline, a click, a drawn box, resizing and moving), posting straight to the worker with
+  the context every comment carries (keys and codes removed, typed words never recorded,
+  the file's Git fingerprint), pins, editing and deleting your own comments, waiting
+  offline and posting later, Done, a bad or retired link, phones, a file opened from a
+  computer, the replay the board uses, keys that never reach the tool behind the bar, the
+  Email this links and share sheet, and that the kit files are plain ASCII, never write
+  HTML from strings and talk only to the pt worker.
+- `qa-feedback-board.mjs` tests `../../feedback/index.html` (the feedback board) in a
+  simulated browser, against the real worker code with the fake database and a fake GitHub
+  history. It covers signing in with the team key, tools and screens with their counts, the
+  rebuilt screen (sandboxed, told which screen to open, the right version of the code) and
+  the numbered boxes, versions, Must, Should, Could and Won't, team notes, repeats, filters,
+  Copy for AI (what goes in, in what order, what is left out), the tester link and a new
+  code, deleting, escaping, and that the team key never travels in an address.
 - `fake-db.mjs` is the shared fake database the worker, pair-poll and room-pulse suites use.
   It also counts the rows each request touches, so the worker suite can check what a read costs.
 
@@ -88,6 +105,8 @@ Then, from anywhere in the repo:
     node _backend/tests/qa-kc-report-builder.mjs
     node _backend/tests/qa-ai-impact-ladder.mjs
     node _backend/tests/qa-kit.mjs
+    node _backend/tests/qa-feedback-board.mjs
+    node _backend/tests/qa-reimagination-lab.mjs
 
 Every line prints PASS or FAIL, and the process exits nonzero on any failure.
 
