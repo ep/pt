@@ -1,6 +1,6 @@
-# Tests for the pt backend and field tools
+# Tests for the pt backend, field tools and shared kits
 
-Seven automated test suites live here. They are robot users: each one loads the real
+Eight automated test suites live here. They are robot users: each one loads the real
 code, clicks through entire sessions in a simulated browser, and checks that
 everything behaves. They catch breakage in seconds that manual testing would take
 fifteen minutes to find, or miss entirely.
@@ -58,6 +58,17 @@ fifteen minutes to find, or miss entirely.
   notes (left out of the report unless ticked), the plan fields, the text, report and CSV
   (escaping everything typed; downloads only on the hosted page), picking up after a reload,
   a browser that blocks storage, no analytics or brand names, and one primary button per screen.
+- `qa-kit.mjs` tests the shared kits in `../../assets/kit/` in a simulated browser: the
+  feedback kit (`feedback.js`, and the panel it loads only in feedback mode) and the
+  Email this kit (`send.js`). It covers a normal visit (nothing else loads, nothing is
+  recorded), turning feedback on with `?feedback`, remembering it per tab and turning it
+  off, the intro, pointing and spotlights (place, move, resize, two at most), notes (save,
+  keep a draft, edit, delete, a list), the context every note carries (keys and codes
+  removed, typed words never recorded), the PDF (its structure, its text, nothing secret),
+  the email links for Gmail, Outlook and the email app, the share sheet on a phone, keys
+  that never reach the tool behind the panel, and that the kit files are plain ASCII,
+  never write HTML from strings and send nothing anywhere. Pictures of the tab need a
+  real browser and a real Allow, so they are checked in Chrome before a kit change ships.
 - `fake-db.mjs` is the shared fake database the worker, pair-poll and room-pulse suites use.
   It also counts the rows each request touches, so the worker suite can check what a read costs.
 
@@ -76,6 +87,7 @@ Then, from anywhere in the repo:
     node _backend/tests/qa-report-builder.mjs
     node _backend/tests/qa-kc-report-builder.mjs
     node _backend/tests/qa-ai-impact-ladder.mjs
+    node _backend/tests/qa-kit.mjs
 
 Every line prints PASS or FAIL, and the process exits nonzero on any failure.
 
