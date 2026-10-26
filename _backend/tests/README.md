@@ -66,9 +66,9 @@ fifteen minutes to find, or miss entirely.
   then on a call (the checklist that moves on by itself, timers that take 30 seconds off or
   on and end once you move past their screen, the wall of eye-rollers, votes revealed
   through Next with ties waiting for a pick, the ladder that unlocks one rung at a time, the
-  steps and the one you just moved, the reactions, the four moves, the new flow, the people
-  and the first test) and a whole solo session (no team-only screens), one screen at a time
-  with at most one filled button. It checks that typed text never runs as code, print, the
+  steps and the one you're working on, the reactions, the four moves, the new flow, the
+  people and the first test) and a whole solo session (no team-only screens, and picks that
+  show plainly and move on), one screen at a time with at most one filled button. It checks that typed text never runs as code, print, the
   outcome image, Email this with the real send kit, picking up after a reload (including a
   session left on a screen that has since gone, and a photo of the flow), clear with undo,
   and the hooks the feedback board uses: its parts (every screen in exactly one) and opening

@@ -107,7 +107,7 @@ const w = openLab();
   check("start: the cover, with no errors", cur(w) === "cover" && w.__errors.length === 0, w.__errors.join(" | "));
   check("cover: plain words, no “single sitting”", /Bring one workflow that bugs you\.\s*Leave with a better one\./.test($(w, ".cover .sub").textContent) && !/single sitting/.test(HTML));
   const T = w.EPKit && w.EPKit.tool;
-  check("kit hook: names the tool, its version and the screen", T && T.id === "reimagination-lab" && T.version === "v5" && T.screen() === "cover" && T.dot === "bottom-center");
+  check("kit hook: names the tool, its version and the screen", T && T.id === "reimagination-lab" && T.version === "v6" && T.screen() === "cover" && T.dot === "bottom-center");
   check("kit hook: reports a few settings and the step", T && T.state().mode === "team" && T.state().step === "1 of 48", JSON.stringify(T && T.state()));
   const secs = T && T.sections();
   check("kit hook: names its parts for the board: set up, the six chapters, finish", secs && secs.map((s) => s.name).join("|") === "Set up|1. Better way|2. Why it exists|3. Draw it|4. Judge it|5. Reimagine it|6. Share it|Finish", secs && secs.map((s) => s.name).join("|"));
@@ -242,12 +242,16 @@ const w = openLab();
   check("capture: a moved step stays lit", stored(w).frames[2].id === id2 && $(w, ".step.moved") && $(w, ".step.moved").getAttribute("data-fid") === id2);
   $(w, `[data-act=sup][data-id="${id2}"]`).click(); await sleep(60);
   check("capture: moving it again keeps it lit", stored(w).frames[1].id === id2 && $$(w, ".step.moved").length === 1);
+  $$(w, "[data-bstep]")[4].focus(); await sleep(30);
+  check("capture: tapping into another step moves the light there", $$(w, ".step.moved").length === 1 && $(w, ".step.moved").getAttribute("data-fid") === stored(w).frames[4].id);
   $(w, ".frame [data-act=sadd]").click(); await sleep(60);
-  check("capture: doing something else clears it", !$(w, ".step.moved"));
+  check("capture: adding a step moves the light to the new one", $$(w, ".step.moved").length === 1 && $(w, ".step.moved").getAttribute("data-fid") === stored(w).frames[stored(w).frames.length - 1].id);
   $(w, ".step:last-child [data-act=sdel]").click(); await sleep(60);
+  check("capture: doing something else clears it", !$(w, ".step.moved"));
   w.document.activeElement.blur();
   await next(w); await at(w, "r3", L);
   check("r3: no photo, no print frame", !$(w, ".polaroid"));
+  check("r3: seven steps sit in two even rows, at most six to a row", /--per:4;--perm:3/.test($(w, ".strip.bal").getAttribute("style")));
   await next(w); await at(w, "c4", L);
   await next(w); await at(w, "lenses", L);
   await next(w); await at(w, "tally", L);
@@ -423,6 +427,33 @@ const w = openLab();
   check("solo: one screen at a time, at most one filled button", multi.length === 0, multi.join(", "));
   check("solo: the kit hook reports solo", s.EPKit.tool.state().mode === "solo");
   check("solo: no page errors", s.__errors.length === 0, s.__errors.join(" | "));
+}
+
+/* =================== solo picks respond plainly =================== */
+{
+  const st = { at: "poll", mode: "solo", place: "virtual", theme: "light", ideas: { sub: [{ id: "a1", t: "Drop the report" }], shr: [], amp: [{ id: "a2", t: "This matters" }], inv: [{ id: "a3", t: "A new check-in" }] }, ladder: ["Share updates", "Keep priorities straight"] };
+  const s2 = openLab({ "rlab-v3": JSON.stringify(st) });
+  await at(s2, "poll", "solo picks");
+  $(s2, ".side.L").click(); await sleep(40);
+  check("solo poll: the pick is marked and the other side steps back", $(s2, ".side.L").classList.contains("sel") && $(s2, ".duo").classList.contains("picked") && stored(s2).picks.story === "tesla");
+  $(s2, ".side.R").click(); await sleep(40);
+  check("solo poll: tapping the other side changes the pick", $(s2, ".side.R").classList.contains("sel") && !$(s2, ".side.L").classList.contains("sel") && stored(s2).picks.story === "mlb");
+  check("solo poll: then the Lab moves on by itself", await until(() => cur(s2) === "c5", 5000), cur(s2));
+  const o2 = Object.assign({}, st, { at: "ideas" });
+  const s3 = openLab({ "rlab-v3": JSON.stringify(o2) });
+  await at(s3, "ideas", "solo picks");
+  const note = () => $$(s3, ".vnote").find((n) => /This matters/.test(n.textContent));
+  note().click(); await sleep(30);
+  check("solo ideas: a tap keeps an idea", note().classList.contains("kept") && note().getAttribute("aria-pressed") === "true" && stored(s3).votes.ideas.a2 === 1);
+  note().click(); await sleep(30);
+  check("solo ideas: a second tap lets it go", !note().classList.contains("kept") && !stored(s3).votes.ideas.a2);
+  check("solo ideas: no moving on while choosing", cur(s3) === "ideas");
+  const o3 = Object.assign({}, st, { at: "pick" });
+  const s4 = openLab({ "rlab-v3": JSON.stringify(o3) });
+  await at(s4, "pick", "solo picks");
+  $$(s4, ".vrow.pick")[0].click(); await sleep(40);
+  check("solo rung: the pick becomes the purpose, then the Lab moves on", stored(s4).purpose === "Keep priorities straight" && await until(() => cur(s4) === "r2", 5000), cur(s4));
+  check("solo picks: no page errors", [s2, s3, s4].every((x) => x.__errors.length === 0), [s2, s3, s4].map((x) => x.__errors.join(" | ")).join(" / "));
 }
 
 /* =================== the feedback board rebuilds a screen =================== */
