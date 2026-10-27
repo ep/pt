@@ -24,7 +24,7 @@
 <html lang="en">
 <head>
 <meta charset="utf-8">
-<meta http-equiv="Content-Security-Policy" content="default-src 'none'; script-src 'sha256-7rycB0bKACzR8oa24sby0aUjA49YFCcE1I9rGnxrCLQ='; style-src 'unsafe-inline'; font-src data:; img-src data:; connect-src 'none'; form-action 'none'; base-uri 'none'; object-src 'none'; frame-src 'none'; worker-src 'none'; media-src 'none'; manifest-src 'none'">
+<meta http-equiv="Content-Security-Policy" content="default-src 'none'; script-src 'sha256-2D7bwEQN/7Zi7f2rOSQze4C4dBEDZ/aurkLUOBf42sk='; style-src 'unsafe-inline'; font-src data:; img-src data:; connect-src 'none'; form-action 'none'; base-uri 'none'; object-src 'none'; frame-src 'none'; worker-src 'none'; media-src 'none'; manifest-src 'none'">
 <meta name="referrer" content="no-referrer">
 <meta name="robots" content="noindex, nofollow">
 <meta name="viewport" content="width=device-width,initial-scale=1">
@@ -131,6 +131,8 @@ button,input{font:inherit;color:inherit}
 
 /* one chapter per team */
 .tchap .sechead h2{font-size:38px}
+.tchap .tchlabel{font-family:var(--sans);font-size:14.5px;font-weight:700;color:var(--aegean);margin:18px 0 0}
+.tchap .tchlabel + .tchange{margin-top:4px}
 .tchap .tchange{font-family:var(--serif);font-size:22px;line-height:1.45;color:var(--cobalt);margin:14px 0 0;max-width:6.3in;white-space:pre-line}
 .tact{break-inside:avoid;padding:22px 0 24px;border-top:1px solid var(--hair)}
 .tact h3{font-family:var(--serif);font-weight:400;font-size:21px;line-height:1.3;margin:0 0 8px}
@@ -353,14 +355,14 @@ button,input{font:inherit;color:inherit}
   "activities": [
     { "id": "preserve", "match": ["Preserve and Let Go", "Preserve & Let Go", "Preserve and Let Go Of"], "headline": "What to preserve, and what to let go", "type": "lists", "lists": ["Preserve", "Let go"] },
     { "id": "change", "match": ["The Change", "Change"], "headline": "The change", "type": "entries", "style": "quote" },
-    { "id": "why", "match": ["Why Change", "Why Change?", "Why"], "headline": "Why the change matters" },
-    { "id": "involved", "match": ["Who's Involved", "Whos Involved", "Who Is Involved"], "headline": "Who the change touches" },
-    { "id": "persona", "match": ["Key Persona"], "headline": "The key persona" },
-    { "id": "wiifm", "match": ["What's In It For Them", "Whats In It For Them", "WIIFM"], "headline": "What's in it for them" },
-    { "id": "behaviors", "match": ["Future Behaviors", "Future Behaviours"], "headline": "What people will do differently" },
-    { "id": "barriers", "match": ["Barriers"], "headline": "What could get in the way" },
+    { "id": "why", "match": ["Why Change", "Why Change?", "Why"], "headline": "Why the change matters", "lists": ["Threats", "Opportunities"] },
+    { "id": "involved", "match": ["Who's Involved", "Whos Involved", "Who Is Involved"], "headline": "Who the change touches", "lists": ["Involve", "Key person"] },
+    { "id": "persona", "match": ["Key Persona"], "headline": "The key persona", "hidden": true },
+    { "id": "wiifm", "match": ["What's In It For Them", "Whats In It For Them", "WIIFM"], "headline": "What's in it for them", "lists": ["Pains", "Gains"] },
+    { "id": "behaviors", "match": ["Future Behaviors", "Future Behaviours"], "headline": "What people will do differently", "lists": ["Behavior", "Behavior"] },
+    { "id": "barriers", "match": ["Barriers"], "headline": "What could get in the way", "lists": ["Barriers", "Key barrier"] },
     { "id": "keybarrier", "match": ["Key Barrier"], "headline": "The barrier that matters most" },
-    { "id": "ideas", "match": ["Barrier Busting Idea", "Barrier-Busting Idea", "Barrier Busting Ideas"], "headline": "Ideas to bust the barrier" },
+    { "id": "ideas", "match": ["Barrier Busting Idea", "Barrier-Busting Idea", "Barrier Busting Ideas"], "headline": "Idea to bust the barrier" },
     { "id": "huddle", "match": ["Hallway Huddle"], "headline": "The Hallway Huddle" }
   ]
 }
@@ -499,6 +501,8 @@ button,input{font:inherit;color:inherit}
     for (var c = 1; c < header.length; c++) {
       var head = String(header[c] || '').trim();
       if (ID_COL.test(head)) continue;
+      var known = findConf(head);
+      if (known && known.conf.hidden) continue; // "hidden": true in LABELS leaves the column out of the report
       var col = c;
       if (!head && body.every(function (r) { return !String(r[col] || '').trim(); })) continue;
       cols.push({ head: head || 'Column ' + (c + 1), c: c });
@@ -566,6 +570,9 @@ button,input{font:inherit;color:inherit}
     });
   }
 
+
+  // The label shown before each team's change; it comes from the change activity's headline above.
+  var CHANGE_LABEL = (LABELS.activities.find(function (a) { return a.id === 'change'; }) || {}).headline || 'The change';
 
   function changeAct() { return state.model ? state.model.acts.find(function (a) { return a.id === 'change' && a.entries; }) : null; }
   function teamChange(p) {
@@ -795,7 +802,9 @@ button,input{font:inherit;color:inherit}
     var t = teamParts(p);
     if (!t.parts.length && !t.change) return null;
     var sec = h('section', { class: 'rsec tchap' },
-      h('header', { class: 'sechead' }, h('h2', { text: label(p) }), t.change ? h('p', { class: 'tchange', text: t.change }) : null));
+      h('header', { class: 'sechead' }, h('h2', { text: label(p) }),
+        t.change ? h('p', { class: 'tchlabel', text: CHANGE_LABEL }) : null,
+        t.change ? h('p', { class: 'tchange', text: t.change }) : null));
     var sides = ['L', 'R', 'X'];
     t.parts.forEach(function (x, i) {
       var a = x.a, ans = x.ans, body;
@@ -857,7 +866,8 @@ button,input{font:inherit;color:inherit}
       var t = teamParts(p);
       if (!t.parts.length && !t.change) return;
       o += '<h2 style="' + S + C + 'font-weight:normal;font-size:24pt;margin:30pt 0 4pt">' + esc(label(p)) + '</h2>';
-      if (t.change) o += '<p style="' + S + C + 'font-size:14pt;margin:0 0 12pt">' + para(t.change) + '</p>';
+      if (t.change) o += '<p style="' + A + 'font-weight:bold;margin:8pt 0 2pt">' + esc(CHANGE_LABEL) + '</p>'
+        + '<p style="' + S + C + 'font-size:14pt;margin:0 0 12pt">' + para(t.change) + '</p>';
       t.parts.forEach(function (x) {
         o += '<h3 style="' + S + C + 'font-weight:normal;font-size:15pt;margin:16pt 0 4pt">' + esc(x.a.headline) + '</h3>';
         if (x.ans.text !== undefined) o += '<p style="margin:0 0 8pt">' + para(x.ans.text) + '</p>';
@@ -877,7 +887,7 @@ button,input{font:inherit;color:inherit}
       var tp = teamParts(p);
       if (!tp.parts.length && !tp.change) return;
       t.push('', '', label(p));
-      if (tp.change) t.push('The change: ' + tp.change);
+      if (tp.change) t.push(CHANGE_LABEL + ': ' + tp.change);
       tp.parts.forEach(function (x) {
         t.push('', x.a.headline);
         if (x.ans.text !== undefined) t.push(x.ans.text);
