@@ -2,14 +2,18 @@
 
    What it does
    Testers open a tool with their tester link, which ends in ?feedback=CODE. A
-   small bar appears with a Comment button. They click Comment, click the area of
-   the page they mean (it outlines as they point, and the box can be resized), type
-   and Post. Each comment goes straight to the pt worker with what the tool knows
-   about that moment: the screen, the tool's settings, the window size, the device,
-   the last few clicks (by label, never typed words), page errors, and which
-   version of the file was open. No picture is taken: the feedback board in
-   feedback/ rebuilds the screen from the tool's own code. Testers can edit or
-   delete their own comments; Done shows how many were sent.
+   small bar appears with a Comment button. They click Comment, the pointer becomes
+   a comment bubble, and whatever is under it outlines; one click picks that part
+   of the page (or the whole screen), then they type and Post. Each comment goes
+   straight to the pt worker with what the tool knows about that moment: the part
+   of the page it is about (so the board can find it again), the screen, the tool's
+   settings, the window size, the device, the last few clicks (by label, never typed
+   words), page errors, and which version of the file was open. No picture is taken:
+   the feedback board in feedback/ rebuilds the screen from the tool's own code.
+   Nothing typed is lost: an unsent comment is kept in the browser until it posts,
+   and so is a half-written one. Testers can edit or delete their own comments,
+   clear their own list with a three-second hold (the board keeps every comment;
+   only the team changes the board), and Done shows how many were sent.
 
    Everyone else: this file reads the address, finds no ?feedback, and stops.
    Nothing else loads and nothing is recorded.
@@ -36,47 +40,42 @@
                                      // bottom-center, top-left, top-right
      };
    Anything marked data-feedback-private is never named in a comment's context.
+   Parts with an id, data-id or data-act are found again most reliably when the
+   board rebuilds a screen, even after the tool changes.
 
    Remove it: delete the script line. The tool hook can stay; it does nothing alone.
    Turn it off in a tab: ?feedback=off, or Done, then Turn off feedback.
 
    Files: feedback.js (this, loaded by every page that carries the line),
-   feedback-ui.js (the bar and comments, loaded only in feedback mode), send.js
+   feedback-ui.js (the bar and comments, loaded only in feedback mode),
+   feedback-replay.js (loaded only when the board rebuilds a screen), send.js
    (Email this, for outputs). The worker routes are described in
    _backend/pt-worker.js under FEEDBACK. Tests: _backend/tests/qa-kit.mjs. */
 (function () {
   "use strict";
   var K = window.EPKit = window.EPKit || {};
   if (K.feedback) return;
-  var KIT = "2026-10-26b", FLAG = "ep-feedback", CODE = "ep-feedback-code";
+  var KIT = "2026-10-27", FLAG = "ep-feedback", CODE = "ep-feedback-code";
 
   function ss(fn) { try { return fn(window.sessionStorage); } catch (e) { return null; } }
+  function load(file) {
+    var me = document.currentScript, base = (me && me.src) ? me.src.replace(/[^\/]*$/, "") : "/pt/assets/kit/";
+    var s = document.createElement("script");
+    s.src = base + file + "?v=" + KIT; s.async = true; s.setAttribute("data-epkit", file);
+    (document.head || document.documentElement).appendChild(s);
+    return base;
+  }
 
   /* Removes the values of anything that could be a key or a code. */
   K.scrub = function (s) {
     return String(s == null ? "" : s).replace(/([?&#;]\s*(?:k|fk|key|host|join|session|code|token|sid|auth|me|feedback)=)[^&#\s"'<>]*/gi, "$1[removed]");
   };
 
-  /* The board frames a tool to rebuild a screen, or only to read its sections (map). */
-  var replay = window.EPKitReplay;
-  if (replay && typeof replay === "object") {
+  /* The board frames a tool to rebuild a screen, or only to read its sections (map).
+     feedback-replay.js does that work. */
+  if (window.EPKitReplay && typeof window.EPKitReplay === "object") {
     K.feedback = { on: false, kit: KIT, replay: true, actions: [], errors: [] };
-    var send = function (o) { try { window.parent.postMessage(o, "*"); } catch (e) {} };
-    var answered = false, tell = function (ok) {
-      if (!answered) send({ type: "epkit-replay", ok: !!ok, w: window.innerWidth, h: window.innerHeight });
-      answered = true;
-    };
-    var go = function () {
-      var s = null;
-      try { s = K.tool.sections; s = typeof s === "function" ? s() : s; } catch (e) {}
-      send({ type: "epkit-map", sections: Array.isArray(s) ? s : null });
-      if (replay.map) return;
-      var ok = false;
-      try { var t = K.tool; if (t && typeof t.restore === "function") ok = t.restore({ screen: String(replay.screen || ""), settings: replay.settings || {} }) !== false; } catch (e) { ok = false; }
-      setTimeout(function () { try { window.scrollTo(0, +replay.scroll || 0); } catch (e) {} tell(ok); }, 500);
-    };
-    if (document.readyState === "complete") setTimeout(go, 50); else window.addEventListener("load", function () { setTimeout(go, 50); });
-    setTimeout(function () { tell(false); }, 8000);
+    load("feedback-replay.js");
     return;
   }
 
@@ -97,8 +96,6 @@
   if (!on) return;
   fb.code = ss(function (s) { return s.getItem(CODE); }) || "";
 
-  var me = document.currentScript, base = (me && me.src) ? me.src.replace(/[^\/]*$/, "") : "/pt/assets/kit/";
-  fb.base = base;
 
   function clip(t, n) { t = String(t == null ? "" : t).replace(/\s+/g, " ").trim(); return t.length > n ? t.slice(0, n - 1) + "\u2026" : t; }
   function now() { var d = new Date(), p = function (x) { return (x < 10 ? "0" : "") + x; }; return p(d.getHours()) + ":" + p(d.getMinutes()) + ":" + p(d.getSeconds()); }
@@ -166,7 +163,5 @@
     return ce.apply(console, arguments);
   };
 
-  var s = document.createElement("script");
-  s.src = base + "feedback-ui.js?v=" + KIT; s.async = true; s.setAttribute("data-epkit", "feedback-ui.js");
-  (document.head || document.documentElement).appendChild(s);
+  fb.base = load("feedback-ui.js");
 })();

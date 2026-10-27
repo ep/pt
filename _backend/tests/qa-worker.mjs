@@ -306,8 +306,18 @@ check('7-day sweep keeps live sessions', [...db2._rows.keys()].some(k=>k.startsW
     q=await fb('POST','/api/fb/post',Object.assign({},C1,{id:'n'+Math.random().toString(36).slice(2,10)},patch));
     check('post refuses '+label, q.status===400);
   }
-  q=await fb('POST','/api/fb/post',Object.assign({},C1,{id:'big12345',comment:{text:'ok',ctx:{x:'y'.repeat(7000)}}}));
-  check('post refuses outsized context', q.status===400);
+  /* a comment is never refused for its context: too much is trimmed, the words stay whole */
+  const longWords='\u{1F600} '.repeat(665)+'end';
+  q=await fb('POST','/api/fb/post',Object.assign({},C1,{id:'big12345',comment:{text:longWords,where:{x:1,y:2,w:3,h:4,el:{tag:'p',text:'t',path:'p'.repeat(900),sel:'s'.repeat(900),junk:'j'.repeat(3000)},extra:'e'.repeat(3000)},ctx:{name:'Lab',heading:'H',settings:{a:'1'},actions:Array.from({length:40},(_, i)=>({what:'clicked '+'x'.repeat(200)+i})),errors:[{what:'boom'}],x:'y'.repeat(7000)}}}),{'CF-Connecting-IP':'1.1.1.1'});
+  check('an outsized context is trimmed, never refused', q.status===200 && q.data.ok===true, q.status);
+  let bigC=(await fb('GET','/api/fb/list?tool=reimagination-lab',null,TK)).data.comments.find(c=>c.id==='big12345');
+  check('trimming keeps the tester\'s words whole and the screen\'s name', bigC && bigC.text===longWords && bigC.ctx.name==='Lab' && bigC.ctx.heading==='H' && bigC.ctx.trimmed===true && !('x' in bigC.ctx), bigC && JSON.stringify(bigC.ctx).slice(0,200));
+  check('trimming keeps where it points, with long paths cut short', bigC && bigC.where.x===1 && bigC.where.el.tag==='p' && bigC.where.el.path.length<=400 && !('junk' in bigC.where.el) && JSON.stringify(bigC.where).length<=2000, bigC && JSON.stringify(bigC.where).slice(0,200));
+  q=await fb('POST','/api/fb/post',Object.assign({},C1,{id:'mid12345',comment:{text:'ok',ctx:{name:'Lab',settings:{a:'1'},actions:Array.from({length:40},(_, i)=>({what:'clicked '+'x'.repeat(200)+i})),errors:[{what:'boom'}]}}}),{'CF-Connecting-IP':'1.1.1.1'});
+  bigC=(await fb('GET','/api/fb/list?tool=reimagination-lab',null,TK)).data.comments.find(c=>c.id==='mid12345');
+  check('trimming drops the oldest clicks first and keeps the settings', bigC && bigC.ctx.actions.length===4 && bigC.ctx.settings.a==='1' && !bigC.ctx.trimmed, bigC && JSON.stringify(bigC.ctx).slice(0,120));
+  await fb('POST','/api/fb/delete',{tool:'reimagination-lab',id:'big12345'},TK);
+  await fb('POST','/api/fb/delete',{tool:'reimagination-lab',id:'mid12345'},TK);
   q=await fb('POST','/api/fb/post',Object.assign({},C1,{comment:Object.assign({},C1.comment,{text:'The Next button jumps when the timer starts.'})}),{'CF-Connecting-IP':'1.1.1.1'});
   check('the tester changes their own comment with its edit token', q.data.ok===true && q.data.created===created);
   q=await fb('POST','/api/fb/post',Object.assign({},C1,{edit:'Other0123456789abcdef'}));
@@ -358,7 +368,7 @@ check('7-day sweep keeps live sessions', [...db2._rows.keys()].some(k=>k.startsW
   q=await fb('POST','/api/fb/post',Object.assign({},C1,{id:'other00001'}),{'CF-Connecting-IP':'8.8.8.8'});
   check('other visitors are not affected', q.data.ok===true);
   check('visitor addresses are stored only as a short hash', [...fenv.DB._rows.keys()].every(k=>k.indexOf('9.9.9.9')===-1 && k.indexOf('8.8.8.8')===-1));
-  const big=new Request(base+'/api/fb/post',{method:'POST',headers:{'Content-Type':'application/json','content-length':'20000'},body:JSON.stringify(C1)});
+  const big=new Request(base+'/api/fb/post',{method:'POST',headers:{'Content-Type':'application/json','content-length':'40000'},body:JSON.stringify(C1)});
   check('an outsized body is refused before reading', (await worker.fetch(big, fenv)).status===413);
 
   /* a new tester code retires the old links */

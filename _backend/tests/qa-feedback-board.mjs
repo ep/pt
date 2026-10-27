@@ -135,11 +135,12 @@ check("sections: remembered here for next time", /"1\. Better way"/.test(w.local
 
 /* ---- the overview: the forest first ---- */
 check("overview: grouped by the tool's own parts, in the tool's order, with counts", heads().join() === "Set up|1,1. Better way|2,2. Why it exists|1", heads().join());
-check("overview: every comment on one page, in the order of the tool", rowsText().join(" / ") === "The welcome takes too long to read. / Next jumps when the timer appears. / MustThe Next button moves when I start the timer. / Too small on my phone.", rowsText().join(" / "));
+check("overview: every comment on one page, in the order of the tool", rowsText().join(" / ") === "The welcome takes too long to read. / Next jumps when the timer appears. / The Next button moves when I start the timer. / Too small on my phone.", rowsText().join(" / "));
+check("overview: each comment is its own card, in a list per part", $$(".grp .rows > li > .crow").length === 4 && !$("#list").classList.contains("sheet") && /\.rows\{[^}]*gap:8px/.test(HTML));
 check("overview: a one-line summary of who said how much", $("#summary").textContent === "4 comments from 3 testers.", $("#summary").textContent);
-check("overview: the weight shows as a word at the start", row("c2bbbbbbbb").querySelector(".wt.must").textContent === "Must");
+check("overview: the weight shows as a word at the end of the card, and colours its edge", row("c2bbbbbbbb").querySelector(".meta .wt.must").textContent === "Must" && row("c2bbbbbbbb").classList.contains("must") && row("c2bbbbbbbb").querySelector(".meta").lastChild.classList.contains("wt") && !row("c1aaaaaaaa").querySelector(".wt"));
 check("overview: an old \"same as\" is simply dropped", !/same as/i.test($("#list").textContent));
-check("overview: each row says where, who and when", /^Write your eye-rollers, Sam, \d+ \w+ \d\d:\d\d$/.test(row("c2bbbbbbbb").querySelector(".meta").textContent), row("c2bbbbbbbb").querySelector(".meta").textContent);
+check("overview: each card says where, who and when", /^Write your eye-rollers, Sam, \d+ \w+ \d\d:\d\d$/.test(row("c2bbbbbbbb").querySelector(".meta .m").textContent), row("c2bbbbbbbb").querySelector(".meta .m").textContent);
 check("overview: earlier versions sit in their own tab, with counts", !$("#tabs").hidden && $("#tabLive").textContent === "Live version4" && $("#tabEarlier").textContent === "Earlier versions3" && $("#tabLive").getAttribute("aria-selected") === "true");
 check("overview: nothing is open yet, so the list has the whole width", $("#detail").hidden && !$("#main").classList.contains("split"));
 
@@ -159,19 +160,28 @@ let sd = F.iframe.getAttribute("srcdoc") || "";
 check("rebuild: the live code, told which screen and settings to open", /live version/.test(sd) && /window\.EPKitReplay=\{"screen":"b-share","settings":\{"mode":"team","place":"virtual"\}/.test(sd), sd.slice(0, 300));
 check("rebuild: relative links resolve to the tool's own folder", /<base href="https:\/\/ep\.github\.io\/pt\/field-tools\/reimagination-lab\/">/.test(sd));
 check("rebuild: says it is working on it", !F.load.hidden && /Rebuilding this screen/.test(F.load.textContent));
+check("rebuild: the screen is told which comment to find, and the others made on that screen", /"focus":"c1aaaaaaaa","targets":\[\{"id":"c1aaaaaaaa"/.test(sd) && /"id":"c2bbbbbbbb"/.test(sd) && /"path":"footer#bottom > button#nextBtn"/.test(sd) && !/"id":"c4dddddddd"/.test(sd));
+check("boxes: nothing is drawn until the rebuilt screen says where things are", $$(".cbox").length === 0);
+const RECTS1 = { c1aaaaaaaa: { x: 600, y: 650, w: 120, h: 44 }, c2bbbbbbbb: { x: 600, y: 650, w: 120, h: 44 } };
+w.dispatchEvent(new w.MessageEvent("message", { data: { type: "epkit-rects", focus: "c1aaaaaaaa", rects: RECTS1, found: true } }));
 w.dispatchEvent(new w.MessageEvent("message", { data: { type: "epkit-replay", ok: true, w: 1280, h: 800 } }));
-check("rebuild: a ready message from anywhere else is ignored", !F.load.hidden);
+check("rebuild: messages from anywhere else are ignored", !F.load.hidden && $$(".cbox").length === 0);
+w.dispatchEvent(new w.MessageEvent("message", { data: { type: "epkit-rects", focus: "c1aaaaaaaa", rects: RECTS1, found: true }, source: F.iframe.contentWindow }));
 w.dispatchEvent(new w.MessageEvent("message", { data: { type: "epkit-replay", ok: true, w: 1280, h: 800 }, source: F.iframe.contentWindow }));
 check("rebuild: the frame's ready message clears the wait", F.load.hidden);
 check("rebuild: the note says it is made-up content at that size", $("#dNote").textContent === "Rebuilt with made-up content at 1280 \u00d7 800.", $("#dNote").textContent);
 let bx = $$(".cbox");
-check("boxes: this comment's box, plus another comment made on the same spot", bx.length === 2 && bx.filter((b) => b.classList.contains("sel")).length === 1 && Math.abs(parseFloat($(".cbox.sel").style.left) - 796.2) < 1);
+check("boxes: the box goes around the part where the rebuilt screen found it, not where it sat for the tester", bx.length === 2 && bx.filter((b) => b.classList.contains("sel")).length === 1 && $(".cbox.sel").style.left === "596px" && $(".cbox.sel").style.top === "646px" && $(".cbox.sel").style.width === "128px", $(".cbox.sel") && $(".cbox.sel").style.cssText);
 $(".cbox:not(.sel)").click(); await tick(5);
 check("boxes: clicking the other box opens that comment", B.S.sel === "c2bbbbbbbb" && $("#pos").textContent === "3 of 4");
-check("detail: the same screen keeps its frame", B.frame() === F);
+check("detail: the same screen keeps its frame, and asks it again where things are", B.frame() === F && B.frame().focus === "c2bbbbbbbb" && B.frame().pending === true && $$(".cbox").length === 0);
+w.dispatchEvent(new w.MessageEvent("message", { data: { type: "epkit-rects", focus: "c2bbbbbbbb", rects: RECTS1, found: true }, source: F.iframe.contentWindow }));
+check("boxes: drawn again once the screen answers for this comment", $$(".cbox").length === 2 && $(".cbox.sel").getAttribute("data-id") === "c2bbbbbbbb" && $(".cbox.sel").style.left === "596px");
 $("#nextBtn").click(); await tick(5);
 check("next: moves through the list", B.S.sel === "c4dddddddd" && $("#pos").textContent === "4 of 4" && $("#nextBtn").disabled);
 check("rebuild: a phone comment rebuilds at the phone's size", B.frame().iframe.getAttribute("width") === "390");
+w.dispatchEvent(new w.MessageEvent("message", { data: { type: "epkit-rects", focus: "c4dddddddd", rects: { c4dddddddd: null }, found: false }, source: B.frame().iframe.contentWindow }));
+check("boxes: a part the rebuilt screen can't find keeps the spot the tester pointed at, and says so", Math.abs(parseFloat($(".cbox.sel").style.left) - 10.14) < 0.1 && / The part they pointed at isn't on this screen now, so the box shows where it was\.$/.test($("#dNote").textContent), $("#dNote").textContent);
 $("#prevBtn").click(); await tick(5);
 check("previous: back one", B.S.sel === "c2bbbbbbbb");
 press("ArrowLeft"); await tick(5);
@@ -190,7 +200,13 @@ $("#dWeight .must").click();
 await until(() => $("#dWeight .must").getAttribute("aria-pressed") === "true");
 let L = await list();
 check("weight: one click saves Must for the whole team", L.reviews.c1aaaaaaaa.priority === "must" && L.reviews.c1aaaaaaaa.by === "Rowan");
-check("weight: the row shows it straight away, without moving", row("c1aaaaaaaa").querySelector(".wt.must") && rowsText()[1] === "MustNext jumps when the timer appears.");
+check("weight: the card shows it straight away, without moving", row("c1aaaaaaaa").querySelector(".wt.must") && row("c1aaaaaaaa").classList.contains("must") && rowsText()[1] === "Next jumps when the timer appears.");
+check("weight: each button names its key", $$("#dWeight button").map((b) => b.title).join() === "Must (1),Should (2),Could (3),Ignore (4)");
+press("2");
+await until(() => $("#dWeight .should").getAttribute("aria-pressed") === "true");
+check("weight: the number keys weigh the open comment", (await list()).reviews.c1aaaaaaaa.priority === "should" && row("c1aaaaaaaa").classList.contains("should"));
+press("1");
+await until(() => $("#dWeight .must").getAttribute("aria-pressed") === "true");
 $("#dWeight .must").click();
 await until(() => $("#dWeight .must").getAttribute("aria-pressed") === "false");
 check("weight: clicking it again clears it", (await list()).reviews.c1aaaaaaaa.priority === "");
@@ -217,7 +233,7 @@ $("#dNotes .addnote button").click();
 await until(() => $("#dNotes .nlist li"));
 L = await list();
 check("notes: a comment on the comment, signed with the reviewer's name", L.reviews.c1aaaaaaaa.notes.length === 1 && L.reviews.c1aaaaaaaa.notes[0].name === "Rowan" && /Keep Next fixed/.test(L.reviews.c1aaaaaaaa.notes[0].text) && L.reviews.c1aaaaaaaa.priority === "must");
-check("notes: shown with the comment, and counted in its row", /^Rowan: Layout shift/.test($("#dNotes .nlist li span").textContent) && /1 team note$/.test(row("c1aaaaaaaa").querySelector(".meta").textContent) && $("#dNotes textarea").value === "");
+check("notes: shown with the comment, and counted in its row", /^Rowan: Layout shift/.test($("#dNotes .nlist li span").textContent) && /1 team note$/.test(row("c1aaaaaaaa").querySelector(".meta .m").textContent) && $("#dNotes textarea").value === "");
 $("#dNotes textarea").value = "Second thought."; $("#dNotes textarea").dispatchEvent(new w.Event("input", { bubbles: true })); $("#dNotes .addnote button").click();
 await until(() => $$("#dNotes .nlist li").length === 2);
 let rm = $$("#dNotes .nlist li")[1].querySelector("button");
@@ -240,9 +256,12 @@ check("earlier: says which version, by date and commit", !$("#dEarlier").hidden 
 check("earlier: Then and Now, starting on Then", !$("#dSwitch").hidden && $("#thenBtn").getAttribute("aria-pressed") === "true");
 await until(() => B.frame().iframe.getAttribute("srcdoc"));
 check("then: the screen the tester saw, from that commit", /old version/.test(B.frame().iframe.getAttribute("srcdoc")) && $("#dNote").textContent === "Rebuilt with made-up content at 1280 \u00d7 800, on the version it was made on.");
+w.dispatchEvent(new w.MessageEvent("message", { data: { type: "epkit-rects", focus: "c3cccccccc", rects: { c3cccccccc: { x: 600, y: 500, w: 100, h: 50 } }, found: true }, source: B.frame().iframe.contentWindow }));
+check("then: an older box drawn by hand keeps its size, moved onto the part it was drawn over", Math.abs(parseFloat($(".cbox.sel").style.left) - 450.24) < 0.5 && Math.abs(parseFloat($(".cbox.sel").style.top) - 450) < 0.5 && Math.abs(parseFloat($(".cbox.sel").style.width) - 299.52) < 0.5, $(".cbox.sel").style.cssText);
 $("#nowBtn").click(); await tick(5);
 await until(() => /live version/.test(B.frame().iframe.getAttribute("srcdoc") || ""));
-check("now: the same screen on the live version, with the old box dashed", $("#nowBtn").getAttribute("aria-pressed") === "true" && $(".cbox.sel").classList.contains("then") && $("#dNote").textContent === "Rebuilt with made-up content at 1280 \u00d7 800, on the live version.");
+w.dispatchEvent(new w.MessageEvent("message", { data: { type: "epkit-rects", focus: "c3cccccccc", rects: { c3cccccccc: { x: 600, y: 500, w: 100, h: 50 } }, found: true }, source: B.frame().iframe.contentWindow }));
+check("now: the same screen on the live version, with the old box dashed", $("#nowBtn").getAttribute("aria-pressed") === "true" && $(".cbox.sel").classList.contains("then") && $("#dNote").textContent === "Rebuilt with made-up content at 1280 \u00d7 800, on the live version.", $("#dNote").textContent);
 $("#dOpen").click();
 await until(() => $("#dOpen").getAttribute("aria-pressed") === "true");
 check("still open: saved against the live version", (await list()).reviews.c3cccccccc.open === LIVE);
@@ -313,6 +332,18 @@ check("delete: asks for a second click", del.textContent === "Click again to del
 del.click();
 await until(() => /Deleted/.test($("#toast").textContent));
 check("delete: gone for everyone, and the next comment opens", !(await list()).comments.some((c) => c.id === "c4dddddddd") && B.S.sel && B.S.sel !== "c4dddddddd" && $("#delBtn").textContent === "Delete comment");
+
+/* ---- a new comment arrives, about the whole screen ---- */
+await post("c8hhhhhhhh", { name: "Max", text: "The whole screen feels slow.", screen: "b-share", where: { x: 0, y: 0, w: 1280, h: 800, vw: 1280, vh: 800, xp: 0, yp: 0, wp: 100, hp: 100, area: false, whole: true, sy: 0, el: { tag: "page", text: "", path: "" } } });
+B.pull();
+await until(() => row("c8hhhhhhhh"));
+check("arrivals: a new comment shows up on its own, glowing for a moment, with a note", row("c8hhhhhhhh").classList.contains("fresh") && /1 new comment/.test($("#toast").textContent));
+row("c8hhhhhhhh").click(); await tick(5);
+w.dispatchEvent(new w.MessageEvent("message", { data: { type: "epkit-rects", focus: "c8hhhhhhhh", rects: { c8hhhhhhhh: null }, found: false }, source: B.frame().iframe.contentWindow }));
+check("whole screen: no box, and the note says what it is about", !$(".cbox.sel") && / The comment is about the whole screen\.$/.test($("#dNote").textContent), $("#dNote").textContent);
+check("whole screen: Copy for AI says so too", /"The whole screen feels slow\."\n   Where: screen b-share \("Write your eye-rollers"\), the whole screen, 1280\u00d7800 window/.test(B.aiText({ all: true }).text));
+await tick(3100);
+check("arrivals: the glow fades", !row("c8hhhhhhhh").classList.contains("fresh") || !B.S.fresh.c8hhhhhhhh);
 
 /* ---- small screens ---- */
 w.innerWidth = 800; w.dispatchEvent(new w.Event("resize"));

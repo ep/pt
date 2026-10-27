@@ -458,16 +458,16 @@ const w = openLab();
 
 /* =================== the feedback board rebuilds a screen =================== */
 {
-  const BOOT = fs.readFileSync(path.join(KIT, "feedback.js"), "utf8");
+  const BOOT = fs.readFileSync(path.join(KIT, "feedback.js"), "utf8"), REPLAY = fs.readFileSync(path.join(KIT, "feedback-replay.js"), "utf8");
   async function replay(screen, settings) {
     const errors = [];
     const vc = new VirtualConsole();
     vc.on("jsdomError", (e) => { if (!/getContext|Not implemented/.test(e.message)) errors.push(e.message); });
     const dom = new JSDOM(HTML, { url: URL0, runScripts: "dangerously", pretendToBeVisual: true, virtualConsole: vc, beforeParse: (r) => { prepare(r); r.EPKitReplay = { screen, settings, scroll: 0 }; r.scrollTo = () => {}; } });
     const r = dom.window; let msg = null, map = null;
-    r.addEventListener("message", (e) => { if (e.data.type === "epkit-map") map = e.data; else msg = e.data; });
+    r.addEventListener("message", (e) => { if (e.data.type === "epkit-map") map = e.data; else if (e.data.type === "epkit-replay") msg = e.data; });
     await until(() => r.document.readyState === "complete", 3000);
-    r.eval(BOOT);
+    r.eval(BOOT); r.eval(REPLAY);
     await until(() => msg, 4000);
     return { r, msg, map, errors };
   }

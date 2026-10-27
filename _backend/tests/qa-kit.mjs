@@ -66,6 +66,7 @@ function makePage(url, opts = {}) {
       throw new Error("unexpected request " + u);
     }
     if (offline) throw new Error("offline");
+    if (o.keepalive) (w.kept = w.kept || []).push(u);
     const req = new Request(u, { method: o.method || "GET", headers: Object.assign({ Origin: "https://ep.github.io", "CF-Connecting-IP": "10.0.0.1" }, o.headers || {}), body: o.body });
     const res = await worker.fetch(req, env);
     const text = await res.text();
@@ -90,7 +91,7 @@ const k = (root, name) => root.querySelector(`[data-k="${name}"]`);
 
 /* =================== static checks on the kit files =================== */
 {
-  for (const f of ["feedback.js", "feedback-ui.js", "send.js"]) {
+  for (const f of ["feedback.js", "feedback-ui.js", "feedback-replay.js", "send.js"]) {
     const s = src(f);
     check(`${f}: plain ASCII, so it reads the same under any page encoding`, /^[\x09\x0a\x0d\x20-\x7e]*$/.test(s), (s.match(/[^\x09\x0a\x0d\x20-\x7e]/) || [])[0]);
     check(`${f}: no em or en dashes`, !/[\u2013\u2014]|\\u201[34]/.test(s));
@@ -102,7 +103,10 @@ const k = (root, name) => root.querySelector(`[data-k="${name}"]`);
   }
   const ui = src("feedback-ui.js");
   check("feedback-ui.js: no pictures of the screen and no PDF", !/getDisplayMedia|toDataURL|application\/pdf/.test(ui));
-  check("feedback-ui.js: talks only to the pt worker, plus reading its own page once", (ui.match(/fetch\(/g) || []).length === 2 && /fetch\(API \+ path/.test(ui) && /fetch\(location\.pathname/.test(ui));
+  check("feedback-ui.js: talks only to the pt worker, plus reading its own page once", (ui.match(/fetch\(/g) || []).length === 2 && /fetch\(API \+ path/.test(ui) && /fetch\(from, \{ cache: "force-cache"/.test(ui));
+  const rp = src("feedback-replay.js");
+  check("feedback-replay.js: talks to nothing, only to the board that framed it", !/fetch\(|XMLHttpRequest|localStorage|sessionStorage|document\.cookie/.test(rp) && /win\.parent\.postMessage/.test(rp));
+  check("feedback-replay.js: listens only to the board that framed it", /e\.source !== win\.parent/.test(rp));
   check("no email address is written in any kit file", !/[a-z0-9._-]+@[a-z0-9-]+\.[a-z]{2,}/i.test(src("feedback.js") + ui));
   const boot = src("feedback.js").replace(/\/\*[\s\S]*?\*\//, "");
   check("feedback.js stays small for everyone (code under 7.5 KB)", boot.length < 7680, boot.length);
@@ -148,19 +152,22 @@ const k = (root, name) => root.querySelector(`[data-k="${name}"]`);
   w.addEventListener("message", (e) => { msgs.push(e.data); });
   w.scrollTo = () => {};
   runKit(w, "feedback.js");
+  const loaded = Array.from(w.document.querySelectorAll("script[data-epkit]")).map((s) => s.src);
+  check("replay: feedback.js loads only the replay part, from beside itself", loaded.length === 1 && /^https:\/\/ep\.github\.io\/pt\/assets\/kit\/feedback-replay\.js\?v=/.test(loaded[0]), loaded.join(" "));
+  runKit(w, "feedback-replay.js");
   await until(() => msgs.some((m) => m.type === "epkit-replay"), 3000);
   const map = msgs.find((m) => m.type === "epkit-map"), msg = msgs.find((m) => m.type === "epkit-replay");
   check("replay: the tool is asked to open that screen with those settings", got && got.screen === "ladder" && got.settings.mode === "team");
   check("replay: the frame tells the board it is ready, and how big it is", msg && msg.ok === true && msg.w > 0);
   check("replay: the tool's sections go to the board first (the board cleans them up)", map && msgs.indexOf(map) < msgs.indexOf(msg) && map.sections.length === 3 && map.sections[1].name === "1. Better way" && map.sections[1].screens.join() === "ladder,42", JSON.stringify(map));
-  check("replay: no bar, nothing recorded", !w.document.querySelector("[data-epkit]") && w.EPKit.feedback.on === false);
+  check("replay: no bar, nothing recorded", !w.document.querySelector('[data-epkit="feedback"]') && w.EPKit.feedback.on === false);
 }
 {
   const w = makePage("about:blank", { before: (win) => { win.EPKitReplay = { map: true }; } });
   let restored = false; const msgs = [];
   w.EPKit = { tool: { id: "test-tool", restore: () => { restored = true; return true; }, sections: [{ name: "Only part", screens: ["a"] }] } };
   w.addEventListener("message", (e) => { msgs.push(e.data); });
-  runKit(w, "feedback.js");
+  runKit(w, "feedback.js"); runKit(w, "feedback-replay.js");
   await until(() => msgs.length, 3000); await tick(700);
   check("map only: the board can ask just for the sections, and nothing else runs", msgs.length === 1 && msgs[0].type === "epkit-map" && msgs[0].sections[0].name === "Only part" && !restored);
 }
@@ -169,9 +176,63 @@ const k = (root, name) => root.querySelector(`[data-k="${name}"]`);
   const msgs = [];
   w.EPKit = { tool: { id: "test-tool", sections: () => { throw new Error("nope"); } } };
   w.addEventListener("message", (e) => { msgs.push(e.data); });
-  runKit(w, "feedback.js");
+  runKit(w, "feedback.js"); runKit(w, "feedback-replay.js");
   await until(() => msgs.length, 3000);
   check("map only: a tool without working sections says so instead of breaking", msgs[0].type === "epkit-map" && msgs[0].sections === null);
+}
+
+/* =================== replay: finding what each comment is about =================== */
+{
+  const html = `<!doctype html><html><head><title>Lab</title></head><body><main id="stage">
+    <section data-id="cover" class="scene" style="overflow-y:auto"><div class="frame">
+      <h1 class="hero">Made-up title</h1>
+      <div class="cta"><button class="go">Begin</button><p class="quiet">Best with sound on.</p></div>
+      <ul class="steps"><li>Made-up one</li><li>Made-up two</li><li>Made-up three</li></ul>
+      <p class="other">Another line</p>
+    </div></section></main></body></html>`;
+  const T = (o) => Object.assign({ x: 0, y: 0, w: 10, h: 10 }, o);
+  const targets = [
+    T({ id: "fresh", tag: "p", text: "Best with sound on.", path: "main#stage > section.scene > div.frame > div.cta > p.quiet", sel: '#stage > section[data-id="cover"] > div > div > p', sy: 253 }),
+    T({ id: "older", tag: "button", text: "Begin", path: "main#stage > section.scene.night > div.frame > div.cta.fadein > button.go" }),
+    T({ id: "madeup", tag: "li", text: "The tester's real step two", path: "main#stage > section.scene > div.frame > ul.steps > li", x: 100, y: 330, w: 200, h: 30 }),
+    T({ id: "gone", tag: "p", text: "A line that isn't here", path: "aside.gone > p", sel: "#nope > p" }),
+    T({ id: "words", tag: "p", text: "Another line", path: "section.moved > p" }),
+    T({ id: "screen", whole: true, tag: "page", text: "", path: "" })
+  ];
+  const w = makePage("about:blank", { html, before: (win) => { win.EPKitReplay = { screen: "cover", settings: {}, scroll: 0, focus: "fresh", targets }; } });
+  const d = w.document, scene = d.querySelector("section");
+  const lay = { h1: [0, 40, 1280, 300], "button.go": [560, 420, 140, 60], "p.quiet": [560, 490, 160, 22], li: null, "p.other": [400, 600, 300, 22], section: [0, 0, 1280, 640], ".frame": [64, 0, 1152, 900], ".cta": [500, 410, 280, 110], "ul.steps": [100, 280, 400, 120], main: [0, 0, 1280, 640] };
+  for (const k of Object.keys(lay)) if (lay[k]) d.querySelectorAll(k).forEach((n) => rect(n, ...lay[k]));
+  d.querySelectorAll("li").forEach((n, i) => rect(n, 100, 290 + i * 40, 200, 30));
+  Object.defineProperty(scene, "scrollHeight", { configurable: true, value: 900 }); Object.defineProperty(scene, "clientHeight", { configurable: true, value: 640 });
+  const scrolled = []; w.HTMLElement.prototype.scrollIntoView = function () { scrolled.push(this.className); };
+  w.scrollTo = () => {};
+  const msgs = []; w.addEventListener("message", (e) => msgs.push(e.data));
+  w.EPKit = { tool: { id: "lab", restore: () => true } };
+  runKit(w, "feedback.js"); runKit(w, "feedback-replay.js");
+  await until(() => msgs.some((m) => m.type === "epkit-rects"), 3000);
+  const r = msgs.find((m) => m.type === "epkit-rects");
+  check("find: a new comment's exact place is found, even with made-up content around it", r.rects.fresh && r.rects.fresh.x === 560 && r.rects.fresh.y === 490 && r.found === true && r.focus === "fresh", JSON.stringify(r.rects.fresh));
+  check("find: the screen scrolls inside itself the way the tester had it", scene.scrollTop === 253, scene.scrollTop);
+  check("find: an older comment with only a path is found by its words, even when the classes changed", r.rects.older && r.rects.older.x === 560 && r.rects.older.y === 420, JSON.stringify(r.rects.older));
+  check("find: with made-up words, the same kind of part nearest the spot is used", r.rects.madeup && r.rects.madeup.y === 330, JSON.stringify(r.rects.madeup));
+  check("find: a part that isn't there is not guessed at", r.rects.gone === null);
+  check("find: a part that moved is found by its exact words", r.rects.words && r.rects.words.y === 600, JSON.stringify(r.rects.words));
+  check("find: a whole-screen comment has no box", r.rects.screen === null);
+  check("find: the rebuilt screen says it is ready after saying where things are", msgs.findIndex((m) => m.type === "epkit-rects") < msgs.findIndex((m) => m.type === "epkit-replay"));
+  /* the board picks another comment on the same screen */
+  msgs.length = 0;
+  w.dispatchEvent(new w.MessageEvent("message", { data: { type: "epkit-locate", focus: "older", targets }, source: w.parent }));
+  await until(() => msgs.some((m) => m.type === "epkit-rects" && m.focus === "older"), 2000);
+  check("locate: the board can ask again for another comment, without rebuilding", msgs.some((m) => m.type === "epkit-rects" && m.focus === "older" && m.rects.older && m.found));
+  msgs.length = 0;
+  w.dispatchEvent(new w.MessageEvent("message", { data: { type: "epkit-locate", focus: "fresh", targets }, source: null }));
+  await tick(60);
+  check("locate: a request from anywhere but the board is ignored", !msgs.some((m) => m.type === "epkit-rects" && m.focus === "fresh"));
+  const off = d.querySelector("p.other"); rect(off, 400, 1400, 300, 22);
+  w.dispatchEvent(new w.MessageEvent("message", { data: { type: "epkit-locate", focus: "words", targets }, source: w.parent }));
+  await until(() => scrolled.includes("other"), 1500);
+  check("locate: a part out of view is scrolled into view", scrolled.includes("other"));
 }
 
 /* =================== a tester's whole session =================== */
@@ -198,37 +259,42 @@ check("bar: one host, masked from Clarity", !!root && hostEl.getAttribute("data-
 check("bar: checks the tester link with the worker", UI.link() === true);
 check("bar: Comment and Done, in plain words", k(root, "comment").textContent === "Comment" && k(root, "done").textContent === "Done" && !k(root, "count"));
 check("bar: sits bottom left unless the tool says otherwise", root.querySelector(".bar").classList.contains("bl"));
-check("first visit: one tip points at Comment", /^Click Comment, then the area you mean\.OK$/.test(root.querySelector(".tip").textContent) && !root.querySelector(".tip").hidden);
+check("first visit: one tip points at Comment", /^Click Comment, then what your comment is about\.OK$/.test(root.querySelector(".tip").textContent) && !root.querySelector(".tip").hidden);
 check("version: the comment will carry the file's Git fingerprint", UI.version() === "git:" + PAGE_SHA, UI.version());
 check("actions: clicks by label, private ones unnamed, typed words never", FB.actions.some((a) => a.what === 'clicked button "Start the round"') && FB.actions.some((a) => a.what === "clicked a private button") && FB.actions.some((a) => a.what === "edited Your answer") && !JSON.stringify(FB.actions).includes("secret"));
 check("errors: kept, with keys removed", FB.errors.length === 1 && /app\.js:12/.test(FB.errors[0].what) && !FB.errors[0].what.includes("SECRETKEY99"));
 
-// Comment: point, outline, click, box
-const nextBtn = w.document.getElementById("nextBtn");
-rect(nextBtn, 800, 700, 120, 44);
-w.document.elementsFromPoint = (x, y) => (x >= 800 && x <= 920 && y >= 700 && y <= 744) ? [nextBtn, w.document.getElementById("bottom"), w.document.body] : [w.document.getElementById("stage"), w.document.body];
+// Comment: the pointer becomes a comment bubble, parts outline as it moves, a click picks one
+const nextBtn = w.document.getElementById("nextBtn"), startBtn = w.document.getElementById("start");
+rect(nextBtn, 800, 700, 120, 44); rect(startBtn, 40, 120, 100, 40);
 rect(w.document.getElementById("stage"), 0, 0, 1024, 690);
+w.document.elementsFromPoint = (x, y) => (x >= 800 && x <= 920 && y >= 700 && y <= 744) ? [nextBtn, w.document.getElementById("bottom"), w.document.body]
+  : (x >= 40 && x <= 140 && y >= 120 && y <= 160) ? [startBtn, w.document.getElementById("stage"), w.document.body] : [w.document.getElementById("stage"), w.document.body];
 k(root, "comment").click(); await settle();
-const shield = root.querySelector(".shield"), boxEl = root.querySelector(".box");
-check("comment mode: one short instruction", root.querySelector(".tip p").textContent === "Click the area your feedback is about." && root.querySelector(".tip").textContent.indexOf("OK") < 0);
+const shield = root.querySelector(".shield"), boxEl = root.querySelector(".box"), CSSX = root.querySelector("style").textContent;
+check("comment mode: one short instruction, and a way to pick the whole screen", root.querySelector(".tip p").textContent === "Click what your comment is about." && !!k(root.querySelector(".tip"), "whole") && root.querySelector(".tip").textContent.indexOf("OK") < 0);
+check("comment mode: the pointer becomes a comment bubble", /\.shield\{[^}]*cursor:url\("data:image\/svg\+xml,[^"]+"\) 4 26, crosshair/.test(CSSX));
 check("comment mode: Comment turns into Cancel", k(root, "comment").textContent === "Cancel" && !shield.hidden);
 check("comment mode: the first tip is not shown again", w.localStorage.getItem("ep-feedback-coach") === "1");
 pointer(w, shield, "pointermove", 850, 720);
 const hv = root.querySelector(".hover");
-check("pointing: the area under the pointer is outlined", !hv.hidden && hv.style.left === "796px" && hv.style.width === "128px" && hv.style.height === "52px", hv.style.cssText);
+check("pointing: the part under the pointer is outlined", !hv.hidden && hv.style.left === "796px" && hv.style.width === "128px" && hv.style.height === "52px" && !hv.classList.contains("whole"), hv.style.cssText);
 pointer(w, shield, "pointermove", 300, 300);
-check("pointing: a big container is never the whole page, just the spot", hv.style.width === "180px" && hv.style.height === "120px", hv.style.cssText);
-pointer(w, shield, "pointerdown", 850, 720); pointer(w, shield, "pointerup", 850, 720); await settle();
+check("pointing: empty space, or a container as big as the window, means the whole screen", hv.classList.contains("whole") && hv.style.left === "0px" && hv.style.width === "1024px" && hv.style.height === "768px", hv.style.cssText);
+pointer(w, shield, "pointerdown", 300, 300); pointer(w, shield, "pointermove", 600, 500); pointer(w, shield, "pointermove", 840, 710);
+check("no drawing: dragging across the page draws no box", boxEl.hidden);
+pointer(w, shield, "pointerup", 850, 720); await settle();
 let card = root.querySelector(".card");
-check("click: the area gets a square box with four corner handles", !boxEl.hidden && boxEl.style.left === "796px" && boxEl.querySelectorAll(".h").length === 4);
+check("click: the part itself is outlined, with nothing to drag or resize", !boxEl.hidden && boxEl.style.left === "796px" && boxEl.style.width === "128px" && boxEl.querySelectorAll(".h").length === 0 && /\.box\{[^}]*pointer-events:none/.test(CSSX), boxEl.style.cssText);
 const nameIn = card.querySelector('input[placeholder="Your name"]'), ta = card.querySelector('textarea[placeholder="Add a comment"]');
 check("click: a comment box opens, asking a name the first time", !!nameIn && !!ta && k(card, "post").textContent === "Post" && k(card, "post").disabled);
 check("click: nothing else to read", !card.querySelector("p"));
-pointer(w, boxEl.querySelector(".se"), "pointerdown", 924, 748); pointer(w, boxEl, "pointermove", 964, 768); pointer(w, boxEl, "pointerup", 964, 768);
-check("box: dragging a corner resizes it", boxEl.style.width === "168px" && boxEl.style.height === "72px", boxEl.style.cssText);
-pointer(w, boxEl, "pointerdown", 850, 720); pointer(w, boxEl, "pointermove", 750, 700); pointer(w, boxEl, "pointerup", 750, 700);
-check("box: dragging the middle moves it", boxEl.style.left === "696px" && boxEl.style.top === "676px", boxEl.style.cssText);
-pointer(w, boxEl, "pointerdown", 800, 700); pointer(w, boxEl, "pointermove", 900, 720); pointer(w, boxEl, "pointerup", 900, 720);
+typeIn(w, ta, "Draft words");
+check("half-written words are kept in this browser as they are typed", JSON.parse(w.localStorage.getItem("ep-feedback-draft")).text === "Draft words");
+pointer(w, shield, "pointerdown", 60, 130); pointer(w, shield, "pointerup", 60, 130); await settle();
+check("while writing, a click on another part moves the comment there and keeps the words", boxEl.style.left === "36px" && UI.state.target.el === startBtn && root.querySelector(".card textarea").value === "Draft words", boxEl.style.cssText);
+pointer(w, shield, "pointerdown", 850, 720); pointer(w, shield, "pointerup", 850, 720); await settle();
+check("and back again", UI.state.target.el === nextBtn && boxEl.style.left === "796px");
 pageKeys.length = 0;
 press(w, ta, "ArrowRight"); press(w, ta, " ");
 check("keys typed in a comment never reach the tool", pageKeys.length === 0, pageKeys.join(","));
@@ -236,41 +302,98 @@ const NOTE1 = 'Next jumps when the timer appears <img src=x onerror="window.pwne
 typeIn(w, nameIn, "Ana"); typeIn(w, ta, NOTE1);
 check("Post turns on once there are words", !k(card, "post").disabled);
 k(card, "post").click();
+check("post: the part flashes once as it is sent", !!root.querySelector(".flash"));
+check("post: the count steps up with a small bump", !!k(root, "count") && k(root, "count").classList.contains("bump"));
 await until(() => UI.mine()[0] && UI.mine()[0].status === "posted");
 let list = (await team("GET", "/api/fb/list?tool=test-tool")).data.comments;
 const c1 = list[0];
 check("post: the comment reaches the worker straight away", list.length === 1 && c1.text === NOTE1 && c1.name === "Ana", JSON.stringify(list).slice(0, 200));
-check("post: it says Posted, and the bar counts it", /Posted/.test(root.querySelector(".toast").textContent) && k(root, "count") && k(root, "count").textContent === "1");
-check("post: where it points, as pixels and as shares of the window", c1.where.x === 796 && c1.where.w === 168 && c1.where.vw === 1024 && Math.abs(c1.where.xp - 77.7) < 0.2 && c1.where.el.path === "footer#bottom > button#nextBtn" && c1.where.el.text === "Next", JSON.stringify(c1.where));
+await until(() => /Posted/.test(root.querySelector(".toast").textContent));
+check("post: it says Posted, with a tick, and the bar counts it", /^Posted$/.test(root.querySelector(".toast").textContent) && !!root.querySelector(".toast svg") && k(root, "count").textContent === "1");
+check("post: what it is about, as an exact place, a readable path and its box in the window", c1.where.x === 796 && c1.where.w === 128 && c1.where.vw === 1024 && Math.abs(c1.where.xp - 77.7) < 0.2 && c1.where.el.path === "footer#bottom > button#nextBtn" && c1.where.el.sel === "#nextBtn" && c1.where.el.text === "Next" && c1.where.whole === false && c1.where.area === false && c1.where.sy === 0, JSON.stringify(c1.where));
 check("post: the screen and the file version", c1.screen === "ladder" && c1.ver === "git:" + PAGE_SHA);
 check("post: the part of the tool the screen belongs to", c1.ctx.section === "2. Why it exists", c1.ctx.section);
 check("post: context with keys, codes and the tester code removed", c1.ctx.page === "https://ep.github.io/pt/field-tools/test-tool/?host=[removed]&k=[removed]&feedback#[removed]" && c1.ctx.settings.link.includes("k=[removed]"), c1.ctx.page);
 check("post: nothing secret anywhere in what was sent", !JSON.stringify(c1).includes("SECRETKEY99") && !JSON.stringify(c1).includes(CODE) && !JSON.stringify(c1).includes("secret answer") && !JSON.stringify(c1).includes("tok=abc"));
-check("post: the box and the comment box close", boxEl.hidden && root.querySelector(".card").hidden && shield.hidden && k(root, "comment").textContent === "Comment");
+check("post: the half-written copy is cleared once it is sent", w.localStorage.getItem("ep-feedback-draft") === null);
+check("post: the outline and the comment box close", boxEl.hidden && root.querySelector(".card").hidden && shield.hidden && k(root, "comment").textContent === "Comment");
 check("the name is kept for next time", w.localStorage.getItem("ep-feedback-name") === "Ana");
-const pin = root.querySelector(".pin");
-check("pins: this screen shows a numbered pin for it", pin && pin.textContent === "1" && /^Comment 1: Next jumps/.test(pin.getAttribute("aria-label")));
+let pin = root.querySelector(".pin");
+check("pins: a numbered pin lands just outside the part's corner", pin && pin.textContent === "1" && pin.style.left === "792px" && pin.style.top === "692px" && pin.classList.contains("pop") && !pin.classList.contains("wait") && /^Comment 1: Next jumps/.test(pin.getAttribute("aria-label")), pin && pin.style.cssText);
 check("typed text is never run as HTML", !root.querySelector("img") && w.pwned === undefined);
+rect(nextBtn, 700, 650, 120, 44); w.document.dispatchEvent(new w.Event("scroll")); await tick(40);
+check("pins: the pin follows its part as the page moves, and stays the same pin", root.querySelector(".pin") === pin && pin.style.left === "692px" && pin.style.top === "642px", pin.style.cssText);
+rect(nextBtn, 800, 700, 120, 44); w.document.dispatchEvent(new w.Event("scroll")); await tick(40);
 
-// Escape, then draw a box by dragging, and Ctrl+Enter
+// Escape, then the whole screen, and Ctrl+Enter
 k(root, "comment").click(); await settle();
 press(w, w.document.body, "Escape");
 check("Escape leaves comment mode", root.querySelector(".shield").hidden && k(root, "comment").textContent === "Comment");
 k(root, "comment").click(); await settle();
-pointer(w, shield, "pointerdown", 100, 100); pointer(w, shield, "pointermove", 200, 160); pointer(w, shield, "pointermove", 300, 250); pointer(w, shield, "pointerup", 300, 250); await settle();
-check("drag: drawing a box marks any area", boxEl.style.left === "100px" && boxEl.style.width === "200px" && boxEl.style.height === "150px");
+k(root.querySelector(".tip"), "whole").click(); await settle();
+check("whole screen: the window's edge is outlined", !boxEl.hidden && boxEl.classList.contains("whole") && boxEl.style.width === "1024px" && boxEl.style.height === "768px");
 card = root.querySelector(".card");
 check("second comment: no name question", !card.querySelector('input[placeholder="Your name"]'));
 typeIn(w, card.querySelector("textarea"), "The heading is hard to read.\nEspecially in dark mode.");
 press(w, card.querySelector("textarea"), "Enter", { ctrlKey: true });
 await until(() => UI.mine().length === 2 && UI.mine()[1].status === "posted");
 list = (await team("GET", "/api/fb/list?tool=test-tool")).data.comments;
-check("Ctrl+Enter posts", list.length === 2 && list[1].where.area === true && list[1].text === "The heading is hard to read.\nEspecially in dark mode.");
+check("Ctrl+Enter posts, and the comment is about the whole screen", list.length === 2 && list[1].where.whole === true && list[1].where.el.tag === "page" && list[1].text === "The heading is hard to read.\nEspecially in dark mode.", JSON.stringify(list[1] && list[1].where));
+check("a whole-screen comment has no pin", root.querySelectorAll(".pin").length === 1);
+
+// Words are never lost: Escape keeps them, Cancel asks first, a reload brings them back
+k(root, "comment").click(); await settle();
+pointer(w, shield, "pointerdown", 850, 720); pointer(w, shield, "pointerup", 850, 720); await settle();
+typeIn(w, root.querySelector(".card textarea"), "Half a thought");
+press(w, w.document.body, "Escape");
+check("Escape closes the comment box but keeps the words", root.querySelector(".card").hidden && JSON.parse(w.localStorage.getItem("ep-feedback-draft")).text === "Half a thought");
+k(root, "comment").click(); await settle();
+pointer(w, shield, "pointerdown", 850, 720); pointer(w, shield, "pointerup", 850, 720); await settle();
+check("the next comment starts with the kept words", root.querySelector(".card textarea").value === "Half a thought");
+const cancelB = k(root.querySelector(".card"), "cancel");
+cancelB.click();
+check("Cancel asks before throwing typed words away", cancelB.textContent === "Discard?" && !root.querySelector(".card").hidden);
+cancelB.click();
+check("a second click throws them away", root.querySelector(".card").hidden && w.localStorage.getItem("ep-feedback-draft") === null);
+k(root, "comment").click(); await settle();
+pointer(w, shield, "pointerdown", 850, 720); pointer(w, shield, "pointerup", 850, 720); await settle();
+typeIn(w, root.querySelector(".card textarea"), "Typing when the tab closes");
+let bu = new w.Event("beforeunload", { cancelable: true }); w.dispatchEvent(bu);
+check("leaving the page while writing asks first", bu.defaultPrevented === true);
+press(w, w.document.body, "Escape");
+bu = new w.Event("beforeunload", { cancelable: true }); w.dispatchEvent(bu);
+check("leaving with everything posted doesn't ask", bu.defaultPrevented === false);
+{
+  const kept = w.localStorage.getItem("ep-feedback-draft");
+  const seed = (win) => { win.localStorage.setItem("ep-feedback-draft", kept); win.localStorage.setItem("ep-feedback-coach", "1"); win.localStorage.setItem("ep-feedback-name", "Ana"); };
+  const r1 = makePage(`https://ep.github.io/pt/field-tools/test-tool/?feedback=${CODE}`, { before: seed });
+  r1.EPKit = { tool: { id: "test-tool", screen: () => "ladder" } };
+  rect(r1.document.getElementById("nextBtn"), 800, 700, 120, 44);
+  runKit(r1, "feedback.js"); runKit(r1, "feedback-ui.js"); await settle();
+  const rr = fbRoot(r1);
+  check("after a reload, the comment being written comes back, on the same part", !rr.querySelector(".card").hidden && rr.querySelector(".card textarea").value === "Typing when the tab closes" && r1.EPKit.feedback.ui.state.target.el === r1.document.getElementById("nextBtn"));
+  press(r1, r1.document.body, "Escape");
+  const again = r1.localStorage.getItem("ep-feedback-draft");
+  const r2 = makePage(`https://ep.github.io/pt/field-tools/test-tool/?feedback=${CODE}`, { before: (win) => { seed(win); win.localStorage.setItem("ep-feedback-draft", again); } });
+  r2.EPKit = { tool: { id: "test-tool", screen: () => "ladder" } };
+  runKit(r2, "feedback.js"); runKit(r2, "feedback-ui.js"); await settle();
+  check("it comes back once; after that it waits for the next comment", fbRoot(r2).querySelector(".card").hidden && JSON.parse(r2.localStorage.getItem("ep-feedback-draft")).text === "Typing when the tab closes");
+}
+root.querySelector(".pin").click(); await settle();
+typeIn(w, root.querySelector(".card textarea"), "Changed but not saved");
+press(w, w.document.body, "Escape");
+const editKey = "ep-feedback-draft:" + UI.mine()[0].id;
+check("a change to a posted comment is kept in its own slot, never over a new comment's words", JSON.parse(w.localStorage.getItem(editKey)).text === "Changed but not saved" && JSON.parse(w.localStorage.getItem("ep-feedback-draft")).text === "Typing when the tab closes");
+root.querySelector(".pin").click(); await settle();
+check("reopening that comment brings the change back", root.querySelector(".card textarea").value === "Changed but not saved");
+k(root.querySelector(".card"), "cancel").click(); k(root.querySelector(".card"), "cancel").click();
+check("discarding the change leaves the posted words alone", w.localStorage.getItem(editKey) === null && UI.mine()[0].text === NOTE1);
+w.localStorage.removeItem("ep-feedback-draft");
 
 // Edit from a pin
 root.querySelector(".pin").click(); await settle();
 card = root.querySelector(".card");
-check("pin: opens the comment with Save and Delete", card.querySelector("textarea").value === NOTE1 && k(card, "post").textContent === "Save" && !!k(card, "delete"));
+check("pin: opens the comment on its part, with Save and Delete", card.querySelector("textarea").value === NOTE1 && k(card, "post").textContent === "Save" && !!k(card, "delete") && !boxEl.hidden && boxEl.style.left === "796px");
 typeIn(w, card.querySelector("textarea"), "Next jumps when the timer appears.");
 k(card, "post").click();
 await until(() => /Saved/.test(root.querySelector(".toast").textContent));
@@ -297,32 +420,88 @@ await until(() => UI.mine().length === 1);
 list = (await team("GET", "/api/fb/list?tool=test-tool")).data.comments;
 check("delete: gone from the worker and from this browser", list.length === 1 && UI.mine().length === 1 && /Deleted/.test(root.querySelector(".toast").textContent));
 
-// Offline: saved here, posted later
+// Offline: kept here, sent as the page closes, and posted later
 offline = true;
 k(root, "comment").click(); await settle();
 pointer(w, shield, "pointerdown", 850, 720); pointer(w, shield, "pointerup", 850, 720); await settle();
 card = root.querySelector(".card"); typeIn(w, card.querySelector("textarea"), "Offline note"); k(card, "post").click();
-await until(() => /online again/.test(root.querySelector(".toast").textContent));
-check("offline: the comment waits in this browser", UI.mine()[1].status === "waiting" && root.querySelector(".pin.wait"));
+await until(() => /back online/.test(root.querySelector(".toast").textContent));
+check("offline: the comment is kept in this browser, its pin hollow", UI.mine()[1].status === "waiting" && root.querySelector(".pin.wait") && JSON.parse(w.localStorage.getItem("ep-feedback-mine")).some((c) => c.text === "Offline note"));
 k(root, "count").click(); await settle();
 check("offline: the list says it hasn't posted yet", /not posted yet/.test(root.querySelector(".card").textContent));
 press(w, w.document.body, "Escape");
 k(root, "done").click(); await settle();
-check("Done: says what is still waiting", /1 comment hasn't posted yet\. Keep this page open until it does\./.test(root.querySelector(".card").textContent));
+check("Done: says what is still waiting, and that it is kept", /^1 comment hasn't posted yet\. It's kept here and posts the next time this page is open and online\.$/.test(root.querySelector(".card p").textContent), root.querySelector(".card p").textContent);
 press(w, w.document.body, "Escape");
+bu = new w.Event("beforeunload", { cancelable: true }); w.dispatchEvent(bu);
+check("leaving with a comment not yet posted asks first", bu.defaultPrevented === true);
+offline = false; w.kept = [];
+w.dispatchEvent(new w.Event("pagehide")); await tick(60);
+list = (await team("GET", "/api/fb/list?tool=test-tool")).data.comments;
+check("leaving the page sends anything not yet posted on a request that outlives the page", w.kept.length === 1 && /\/api\/fb\/post$/.test(w.kept[0]) && list.some((c) => c.text === "Offline note"));
+await UI.flush();
+check("back online: it posts, once", UI.mine()[1].status === "posted" && (await team("GET", "/api/fb/list?tool=test-tool")).data.comments.length === 2);
+
+// Done
+k(root, "done").click(); await settle();
+card = root.querySelector(".card");
+check("Done: Thanks, with the count", card.querySelector("h2").textContent === "Thanks. 2 comments sent." && !!byText(card, "button", /^Keep going$/));
+byText(card, "button", /^Keep going$/).click(); await settle();
+
+// Clear all, only after holding for three seconds
+k(root, "count").click(); await settle();
+const hold = k(root.querySelector(".card"), "clear");
+check("clear: the list ends with a button you hold, saying how many", hold && hold.textContent === "Hold to clear all 2" && /Press and hold for 3 seconds/.test(hold.getAttribute("aria-label")));
+hold.click(); await tick(50);
+check("clear: a click alone does nothing", UI.mine().length === 2);
+pointer(w, hold, "pointerdown", 10, 10); await tick(700);
+check("clear: holding says to keep holding, and fills as it goes", /Keep holding/.test(hold.textContent) && /scaleX\(0\.[1-9]/.test(hold.querySelector(".fill").style.transform), hold.querySelector(".fill").style.transform);
+pointer(w, hold, "pointerup", 10, 10);
+await tick(2600);
+check("clear: letting go early stops it, and nothing is cleared", hold.textContent === "Hold to clear all 2" && UI.mine().length === 2 && (await team("GET", "/api/fb/list?tool=test-tool")).data.comments.length === 2);
+offline = true;
+k(root, "comment").click(); await settle();
+pointer(w, shield, "pointerdown", 850, 720); pointer(w, shield, "pointerup", 850, 720); await settle();
+typeIn(w, root.querySelector(".card textarea"), "Written just before clearing"); k(root.querySelector(".card"), "post").click();
+await until(() => UI.mine().length === 3 && UI.mine()[2].status === "waiting");
+k(root, "count").click(); await settle();
+const hold2 = k(root.querySelector(".card"), "clear");
+hold2.dispatchEvent(new w.KeyboardEvent("keydown", { key: " ", bubbles: true, composed: true, cancelable: true }));
+await tick(3150);
+await until(() => /Cleared/.test(root.querySelector(".toast").textContent), 2000);
+list = (await team("GET", "/api/fb/list?tool=test-tool")).data.comments;
+check("clear: held for three seconds (Space works too), the tester's list and pins empty, and the board keeps every comment", UI.mine().length === 0 && list.length === 2 && root.querySelector(".toast").textContent === "Cleared. The team still has your comments." && !k(root, "count") && !root.querySelector(".pin"), root.querySelector(".toast").textContent + " / " + list.length);
 offline = false;
 await UI.flush();
-check("back online: it posts", UI.mine()[1].status === "posted" && (await team("GET", "/api/fb/list?tool=test-tool")).data.comments.length === 2);
+list = (await team("GET", "/api/fb/list?tool=test-tool")).data.comments;
+check("clear: a comment not yet posted when the list was cleared still reaches the board", list.length === 3 && list.some((c) => c.text === "Written just before clearing") && UI.mine().length === 0);
+check("clear: the kit never deletes from the board when clearing", !/fb\/delete[\s\S]{0,400}cleared|cleared[\s\S]{0,400}fb\/delete/.test(src("feedback-ui.js").slice(src("feedback-ui.js").indexOf("function clearAll"), src("feedback-ui.js").indexOf("function askName"))) && !/api\(/.test(src("feedback-ui.js").slice(src("feedback-ui.js").indexOf("function clearAll"), src("feedback-ui.js").indexOf("function askName"))));
+press(w, w.document.body, "Escape");
+k(root, "done").click(); await settle();
+check("Done still counts what was sent before the list was cleared", root.querySelector(".card h2").textContent === "Thanks. 3 comments sent.", root.querySelector(".card h2").textContent);
+press(w, w.document.body, "Escape");
 
 // Done and turning off
 k(root, "done").click(); await settle();
 card = root.querySelector(".card");
-check("Done: Thanks, with the count", card.querySelector("h2").textContent === "Thanks. 2 comments sent." && !!byText(card, "button", /^Keep going$/));
 k(card, "off").click(); await settle();
 check("turn off: the bar goes and the tab forgets", !w.document.querySelector('[data-epkit="feedback"]') && w.sessionStorage.getItem("ep-feedback") === null && w.sessionStorage.getItem("ep-feedback-code") === null && FB.on === false);
 check("turn off: ?feedback leaves the address, the rest stays", !/feedback/.test(w.location.search) && /host=ABCD/.test(w.location.search), w.location.href);
 const before = FB.actions.length; w.document.getElementById("start").click();
 check("turn off: nothing more is recorded", FB.actions.length === before);
+
+/* =================== a comment an older kit couldn't post =================== */
+{
+  const stuck = { id: "stuck000000001", edit: "S".repeat(24), tool: "test-tool", created: Date.now(), updated: Date.now(), name: "Ana", text: "Left over from an older kit", ver: "", screen: "cover",
+    where: { x: 1, y: 1, w: 10, h: 10, vw: 1024, vh: 768, xp: 0.1, yp: 0.1, wp: 1, hp: 1, area: true, el: { tag: "div", text: "", path: "main#stage" } },
+    ctx: { name: "Test Tool", errors: Array.from({ length: 60 }, (_, i) => ({ what: "x".repeat(240) + i })) }, status: "failed", err: "too big" };
+  const f2 = makePage(`https://ep.github.io/pt/field-tools/test-tool/?feedback=${CODE}`, { before: (win) => win.localStorage.setItem("ep-feedback-mine", JSON.stringify([stuck])) });
+  f2.EPKit = { tool: { id: "test-tool" } };
+  runKit(f2, "feedback.js"); runKit(f2, "feedback-ui.js");
+  await until(() => f2.EPKit.feedback.ui.mine()[0].status === "posted");
+  const got = (await team("GET", "/api/fb/list?tool=test-tool")).data.comments.find((c) => c.id === stuck.id);
+  check("a comment an older kit couldn't post is sent on the next visit, its context trimmed to fit", f2.EPKit.feedback.ui.mine()[0].status === "posted" && got && got.text === stuck.text && got.ctx.errors.length <= 2);
+}
 
 /* =================== a bad link, and no link =================== */
 {
@@ -330,15 +509,21 @@ check("turn off: nothing more is recorded", FB.actions.length === before);
   runKit(b, "feedback.js"); runKit(b, "feedback-ui.js");
   await until(() => b.EPKit.feedback.ui.link() === false);
   const r = fbRoot(b);
-  check("bad link: the bar says so and what to do", /This feedback link isn't working\. Ask for a new one\./.test(r.querySelector(".bar").textContent) && !k(r, "comment") && !!byText(r, "button", /^Turn off$/));
+  check("bad link: the bar says so and what to do", /^This feedback link isn't working\. Ask for a new one\.$/.test(r.querySelector(".bar .msg").textContent) && !k(r, "comment") && !!byText(r, "button", /^Turn off$/));
   const n = makePage("https://ep.github.io/pt/field-tools/test-tool/?feedback");
   runKit(n, "feedback.js"); runKit(n, "feedback-ui.js"); await settle();
   check("no code: the bar asks for a feedback link", /This page needs a feedback link\. Ask for one\./.test(fbRoot(n).querySelector(".bar").textContent));
   const old = CODE; CODE = (await team("POST", "/api/fb/code", {})).data.code;
-  const o = makePage(`https://ep.github.io/pt/field-tools/test-tool/?feedback=${old}`);
+  const waitingOne = { id: "waiting0000001", edit: "W".repeat(24), tool: "test-tool", created: Date.now(), updated: Date.now(), name: "Ana", text: "Written before the link changed", ver: "", screen: "cover", where: {}, ctx: {}, status: "waiting" };
+  const o = makePage(`https://ep.github.io/pt/field-tools/test-tool/?feedback=${old}`, { before: (win) => win.localStorage.setItem("ep-feedback-mine", JSON.stringify([waitingOne])) });
   runKit(o, "feedback.js"); runKit(o, "feedback-ui.js");
   await until(() => o.EPKit.feedback.ui.link() === false);
-  check("a retired tester code shows the same message", /isn't working/.test(fbRoot(o).querySelector(".bar").textContent));
+  check("a retired tester code says so, and that unsent comments are kept", /isn't working\. Ask for a new one\. Your unsent comment is kept here and posts from the new link\.$/.test(fbRoot(o).querySelector(".bar .msg").textContent), fbRoot(o).querySelector(".bar .msg").textContent);
+  const kept = o.localStorage.getItem("ep-feedback-mine");
+  const fresh = makePage(`https://ep.github.io/pt/field-tools/test-tool/?feedback=${CODE}`, { before: (win) => win.localStorage.setItem("ep-feedback-mine", kept) });
+  runKit(fresh, "feedback.js"); runKit(fresh, "feedback-ui.js");
+  await until(() => fresh.EPKit.feedback.ui.mine()[0] && fresh.EPKit.feedback.ui.mine()[0].status === "posted");
+  check("the new link posts what the old one couldn't", (await team("GET", "/api/fb/list?tool=test-tool")).data.comments.some((c) => c.text === "Written before the link changed"));
 }
 
 /* =================== on a phone =================== */
@@ -350,16 +535,16 @@ check("turn off: nothing more is recorded", FB.actions.length === before);
   await until(() => p.EPKit.feedback.ui.link() === true);
   const r = fbRoot(p);
   check("phone: bigger targets, placed where the tool asks", r.querySelector(".k").classList.contains("c") && r.querySelector(".bar").classList.contains("bc"));
-  check("phone: the first tip says tap", /^Tap Comment, then the area you mean\./.test(r.querySelector(".tip").textContent));
+  check("phone: the first tip says tap", /^Tap Comment, then what your comment is about\./.test(r.querySelector(".tip").textContent));
   k(r, "comment").click(); await settle();
-  check("phone: the instruction says tap", r.querySelector(".tip p").textContent === "Tap the area your feedback is about.");
+  check("phone: the instruction says tap", r.querySelector(".tip p").textContent === "Tap what your comment is about.");
   const nb = p.document.getElementById("nextBtn"); rect(nb, 250, 780, 120, 44);
   p.document.elementsFromPoint = () => [nb, p.document.body];
   pointer(p, r.querySelector(".shield"), "pointermove", 300, 800);
   check("phone: no hover outline", r.querySelector(".hover").hidden);
   pointer(p, r.querySelector(".shield"), "pointerdown", 300, 800); pointer(p, r.querySelector(".shield"), "pointerup", 300, 800); await settle();
   const cd = r.querySelector(".card");
-  check("phone: a tap picks the area and the comment box docks across the top, clear of it", !r.querySelector(".box").hidden && cd.classList.contains("dock") && cd.style.top === "12px");
+  check("phone: a tap picks the part and the comment box docks across the top, clear of it", !r.querySelector(".box").hidden && p.EPKit.feedback.ui.state.target.el === nb && cd.classList.contains("dock") && cd.style.top === "12px");
 }
 {
   const f = makePage("file:///Users/someone/Downloads/test-tool.html?feedback=" + CODE);

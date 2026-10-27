@@ -45,6 +45,8 @@
     Cloudflare. Comments live in the same kv table, in rooms named fb:<tool>, with
     c/<id> for the tester's words and r/<id> for the team's review. Caps: 2,000
     characters of text, 60 posts per visitor per hour, 3,000 comments per tool.
+    A comment is never refused for the size of its context: context that is too
+    big is trimmed, and the tester's words are always kept whole.
 
   KEYS (gated tools only; see GATED_TOOLS_DEFAULT below)
     Every session has one key, chosen by the tool at session start and sent as
@@ -370,6 +372,32 @@ function sameText(a, b) {
   return d === 0;
 }
 function clipText(v, n) { v = typeof v === 'string' ? v : (v == null ? '' : String(v)); return v.length > n ? v.slice(0, n) : v; }
+/* A comment's context and pointer, trimmed to fit rather than refused: the first
+   things to go are the least useful (page errors, recent clicks, settings). */
+function fitCtx(x) {
+  x = x && typeof x === 'object' && !Array.isArray(x) ? x : {};
+  var o = {}, k, size = function () { return JSON.stringify(o).length; };
+  for (k in x) o[k] = x[k];
+  if (size() <= 6000) return o;
+  o.errors = Array.isArray(o.errors) ? o.errors.slice(-2) : [];
+  o.actions = Array.isArray(o.actions) ? o.actions.slice(-4) : [];
+  if (size() <= 6000) return o;
+  delete o.errors; delete o.actions; o.settings = {};
+  if (size() <= 6000) return o;
+  return { name: clipText(x.name, 80), page: clipText(x.page, 300), heading: clipText(x.heading, 120), section: clipText(x.section, 80), kit: clipText(x.kit, 20), trimmed: true };
+}
+function fitWhere(w) {
+  w = w && typeof w === 'object' && !Array.isArray(w) ? w : {};
+  var o = {}, k;
+  for (k in w) if (k !== 'el') o[k] = w[k];
+  if (w.el && typeof w.el === 'object') o.el = { tag: clipText(w.el.tag, 20), role: clipText(w.el.role, 30), text: clipText(w.el.text, 120), path: clipText(w.el.path, 400), sel: clipText(w.el.sel, 600) };
+  if (JSON.stringify(o).length <= 2000) return o;
+  var n = {};
+  ['x', 'y', 'w', 'h', 'vw', 'vh', 'xp', 'yp', 'wp', 'hp', 'sy'].forEach(function (f) { if (typeof w[f] === 'number' && isFinite(w[f])) n[f] = w[f]; });
+  n.area = !!w.area; n.whole = !!w.whole;
+  if (o.el) n.el = { tag: o.el.tag, text: clipText(o.el.text, 80), path: clipText(o.el.path, 200) };
+  return n;
+}
 async function hashText(t) {
   var buf = await crypto.subtle.digest('SHA-256', new TextEncoder().encode(t));
   return Array.prototype.map.call(new Uint8Array(buf), function (b) { return ('0' + b.toString(16)).slice(-2); }).join('').slice(0, 16);
@@ -426,7 +454,7 @@ async function feedback(request, env, url, json) {
   }
   if (request.method !== 'POST') return json({ error: 'not found' }, 404);
   var clen = parseInt(request.headers.get('content-length') || '0', 10);
-  if (clen > 12000) return json({ error: 'too big' }, 413);
+  if (clen > 32000) return json({ error: 'too big' }, 413);
   var body;
   try { body = await request.json(); } catch (e) { return json({ error: 'bad body' }, 400); }
   if (!body || typeof body !== 'object') return json({ error: 'bad body' }, 400);
@@ -481,9 +509,7 @@ async function feedback(request, env, url, json) {
     if (!c || typeof c !== 'object') return json({ error: 'bad comment' }, 400);
     var text = clipText(c.text, 4000).trim();
     if (!text || text.length > 2000) return json({ error: 'bad text' }, 400);
-    var where = c.where && typeof c.where === 'object' ? c.where : {};
-    var ctx = c.ctx && typeof c.ctx === 'object' ? c.ctx : {};
-    if (JSON.stringify(where).length > 2000 || JSON.stringify(ctx).length > 6000) return json({ error: 'too big' }, 400);
+    var where = fitWhere(c.where), ctx = fitCtx(c.ctx);
     var existing = await row(room, 'c/' + id), now = Date.now();
     if (existing && !sameText(body.edit, existing.edit)) return json({ error: 'locked' }, 401);
     if (!existing) {
