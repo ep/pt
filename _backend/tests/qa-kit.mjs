@@ -67,8 +67,12 @@ function makePage(url, opts = {}) {
     }
     if (offline) throw new Error("offline");
     if (o.keepalive) (w.kept = w.kept || []).push(u);
+    const isPost = /\/api\/fb\/post$/.test(u);
+    if (isPost) { w.postsOut = (w.postsOut || 0) + 1; w.maxOut = Math.max(w.maxOut || 0, w.postsOut); }
+    if (w.slow) await new Promise((r) => setTimeout(r, w.slow));
     const req = new Request(u, { method: o.method || "GET", headers: Object.assign({ Origin: "https://ep.github.io", "CF-Connecting-IP": "10.0.0.1" }, o.headers || {}), body: o.body });
     const res = await worker.fetch(req, env);
+    if (isPost) w.postsOut--;
     const text = await res.text();
     return { ok: res.ok, status: res.status, json: async () => JSON.parse(text) };
   };
@@ -189,6 +193,7 @@ const k = (root, name) => root.querySelector(`[data-k="${name}"]`);
       <div class="cta"><button class="go">Begin</button><p class="quiet">Best with sound on.</p></div>
       <ul class="steps"><li>Made-up one</li><li>Made-up two</li><li>Made-up three</li></ul>
       <p class="other">Another line</p>
+      <p class="lede" style="opacity:0">Fades in late</p><p class="late">Drawn in later</p>
     </div></section></main></body></html>`;
   const T = (o) => Object.assign({ x: 0, y: 0, w: 10, h: 10 }, o);
   const targets = [
@@ -197,11 +202,13 @@ const k = (root, name) => root.querySelector(`[data-k="${name}"]`);
     T({ id: "madeup", tag: "li", text: "The tester's real step two", path: "main#stage > section.scene > div.frame > ul.steps > li", x: 100, y: 330, w: 200, h: 30 }),
     T({ id: "gone", tag: "p", text: "A line that isn't here", path: "aside.gone > p", sel: "#nope > p" }),
     T({ id: "words", tag: "p", text: "Another line", path: "section.moved > p" }),
-    T({ id: "screen", whole: true, tag: "page", text: "", path: "" })
+    T({ id: "screen", whole: true, tag: "page", text: "", path: "" }),
+    T({ id: "faded", tag: "p", text: "Fades in late", path: "main#stage > section.scene > div.frame > p.lede", sel: '#stage > section[data-id="cover"] > div > p:nth-of-type(2)' }),
+    T({ id: "late", tag: "p", text: "Drawn in later", path: "main#stage > section.scene > div.frame > p.late", sel: '#stage > section[data-id="cover"] > div > p:nth-of-type(3)' })
   ];
   const w = makePage("about:blank", { html, before: (win) => { win.EPKitReplay = { screen: "cover", settings: {}, scroll: 0, focus: "fresh", targets }; } });
   const d = w.document, scene = d.querySelector("section");
-  const lay = { h1: [0, 40, 1280, 300], "button.go": [560, 420, 140, 60], "p.quiet": [560, 490, 160, 22], li: null, "p.other": [400, 600, 300, 22], section: [0, 0, 1280, 640], ".frame": [64, 0, 1152, 900], ".cta": [500, 410, 280, 110], "ul.steps": [100, 280, 400, 120], main: [0, 0, 1280, 640] };
+  const lay = { h1: [0, 40, 1280, 300], "button.go": [560, 420, 140, 60], "p.quiet": [560, 490, 160, 22], li: null, "p.other": [400, 600, 300, 22], "p.lede": [400, 360, 300, 22], section: [0, 0, 1280, 640], ".frame": [64, 0, 1152, 900], ".cta": [500, 410, 280, 110], "ul.steps": [100, 280, 400, 120], main: [0, 0, 1280, 640] };
   for (const k of Object.keys(lay)) if (lay[k]) d.querySelectorAll(k).forEach((n) => rect(n, ...lay[k]));
   d.querySelectorAll("li").forEach((n, i) => rect(n, 100, 290 + i * 40, 200, 30));
   Object.defineProperty(scene, "scrollHeight", { configurable: true, value: 900 }); Object.defineProperty(scene, "clientHeight", { configurable: true, value: 640 });
@@ -220,6 +227,11 @@ const k = (root, name) => root.querySelector(`[data-k="${name}"]`);
   check("find: a part that moved is found by its exact words", r.rects.words && r.rects.words.y === 600, JSON.stringify(r.rects.words));
   check("find: a whole-screen comment has no box", r.rects.screen === null);
   check("find: the rebuilt screen says it is ready after saying where things are", msgs.findIndex((m) => m.type === "epkit-rects") < msgs.findIndex((m) => m.type === "epkit-replay"));
+  check("find: a part still fading in (opacity 0) is found", r.rects.faded && r.rects.faded.y === 360, JSON.stringify(r.rects.faded));
+  check("find: a part not drawn yet is not guessed at", r.rects.late === null);
+  rect(d.querySelector("p.late"), 400, 640, 300, 22);
+  await until(() => msgs.some((m) => m.type === "epkit-rects" && m.rects.late), 2500);
+  check("find: the rebuilt screen keeps looking, and reports a part once it is drawn", msgs.some((m) => m.type === "epkit-rects" && m.rects.late && m.rects.late.y === 640));
   /* the board picks another comment on the same screen */
   msgs.length = 0;
   w.dispatchEvent(new w.MessageEvent("message", { data: { type: "epkit-locate", focus: "older", targets }, source: w.parent }));
@@ -233,6 +245,13 @@ const k = (root, name) => root.querySelector(`[data-k="${name}"]`);
   w.dispatchEvent(new w.MessageEvent("message", { data: { type: "epkit-locate", focus: "words", targets }, source: w.parent }));
   await until(() => scrolled.includes("other"), 1500);
   check("locate: a part out of view is scrolled into view", scrolled.includes("other"));
+  scene.scrollTop = 0;
+  w.dispatchEvent(new w.MessageEvent("message", { data: { type: "epkit-locate", focus: "fresh", targets }, source: w.parent }));
+  await tick(30);
+  const was = scene.scrollTop;
+  w.dispatchEvent(new w.MessageEvent("message", { data: { type: "epkit-locate", focus: "gone", targets }, source: w.parent }));
+  await tick(30);
+  check("locate: scrolling done for one comment is undone for the next", was === 253 && scene.scrollTop === 0, was + " then " + scene.scrollTop);
 }
 
 /* =================== a tester's whole session =================== */
@@ -290,7 +309,7 @@ const nameIn = card.querySelector('input[placeholder="Your name"]'), ta = card.q
 check("click: a comment box opens, asking a name the first time", !!nameIn && !!ta && k(card, "post").textContent === "Post" && k(card, "post").disabled);
 check("click: nothing else to read", !card.querySelector("p"));
 typeIn(w, ta, "Draft words");
-check("half-written words are kept in this browser as they are typed", JSON.parse(w.localStorage.getItem("ep-feedback-draft")).text === "Draft words");
+check("half-written words are kept in this browser as they are typed", JSON.parse(w.localStorage.getItem("ep-feedback-draft:test-tool")).text === "Draft words");
 pointer(w, shield, "pointerdown", 60, 130); pointer(w, shield, "pointerup", 60, 130); await settle();
 check("while writing, a click on another part moves the comment there and keeps the words", boxEl.style.left === "36px" && UI.state.target.el === startBtn && root.querySelector(".card textarea").value === "Draft words", boxEl.style.cssText);
 pointer(w, shield, "pointerdown", 850, 720); pointer(w, shield, "pointerup", 850, 720); await settle();
@@ -315,7 +334,7 @@ check("post: the screen and the file version", c1.screen === "ladder" && c1.ver 
 check("post: the part of the tool the screen belongs to", c1.ctx.section === "2. Why it exists", c1.ctx.section);
 check("post: context with keys, codes and the tester code removed", c1.ctx.page === "https://ep.github.io/pt/field-tools/test-tool/?host=[removed]&k=[removed]&feedback#[removed]" && c1.ctx.settings.link.includes("k=[removed]"), c1.ctx.page);
 check("post: nothing secret anywhere in what was sent", !JSON.stringify(c1).includes("SECRETKEY99") && !JSON.stringify(c1).includes(CODE) && !JSON.stringify(c1).includes("secret answer") && !JSON.stringify(c1).includes("tok=abc"));
-check("post: the half-written copy is cleared once it is sent", w.localStorage.getItem("ep-feedback-draft") === null);
+check("post: the half-written copy is cleared once it is sent", w.localStorage.getItem("ep-feedback-draft:test-tool") === null);
 check("post: the outline and the comment box close", boxEl.hidden && root.querySelector(".card").hidden && shield.hidden && k(root, "comment").textContent === "Comment");
 check("the name is kept for next time", w.localStorage.getItem("ep-feedback-name") === "Ana");
 let pin = root.querySelector(".pin");
@@ -346,7 +365,7 @@ k(root, "comment").click(); await settle();
 pointer(w, shield, "pointerdown", 850, 720); pointer(w, shield, "pointerup", 850, 720); await settle();
 typeIn(w, root.querySelector(".card textarea"), "Half a thought");
 press(w, w.document.body, "Escape");
-check("Escape closes the comment box but keeps the words", root.querySelector(".card").hidden && JSON.parse(w.localStorage.getItem("ep-feedback-draft")).text === "Half a thought");
+check("Escape closes the comment box but keeps the words", root.querySelector(".card").hidden && JSON.parse(w.localStorage.getItem("ep-feedback-draft:test-tool")).text === "Half a thought");
 k(root, "comment").click(); await settle();
 pointer(w, shield, "pointerdown", 850, 720); pointer(w, shield, "pointerup", 850, 720); await settle();
 check("the next comment starts with the kept words", root.querySelector(".card textarea").value === "Half a thought");
@@ -354,7 +373,7 @@ const cancelB = k(root.querySelector(".card"), "cancel");
 cancelB.click();
 check("Cancel asks before throwing typed words away", cancelB.textContent === "Discard?" && !root.querySelector(".card").hidden);
 cancelB.click();
-check("a second click throws them away", root.querySelector(".card").hidden && w.localStorage.getItem("ep-feedback-draft") === null);
+check("a second click throws them away", root.querySelector(".card").hidden && w.localStorage.getItem("ep-feedback-draft:test-tool") === null);
 k(root, "comment").click(); await settle();
 pointer(w, shield, "pointerdown", 850, 720); pointer(w, shield, "pointerup", 850, 720); await settle();
 typeIn(w, root.querySelector(".card textarea"), "Typing when the tab closes");
@@ -364,8 +383,8 @@ press(w, w.document.body, "Escape");
 bu = new w.Event("beforeunload", { cancelable: true }); w.dispatchEvent(bu);
 check("leaving with everything posted doesn't ask", bu.defaultPrevented === false);
 {
-  const kept = w.localStorage.getItem("ep-feedback-draft");
-  const seed = (win) => { win.localStorage.setItem("ep-feedback-draft", kept); win.localStorage.setItem("ep-feedback-coach", "1"); win.localStorage.setItem("ep-feedback-name", "Ana"); };
+  const kept = w.localStorage.getItem("ep-feedback-draft:test-tool");
+  const seed = (win) => { win.localStorage.setItem("ep-feedback-draft:test-tool", kept); win.localStorage.setItem("ep-feedback-coach", "1"); win.localStorage.setItem("ep-feedback-name", "Ana"); };
   const r1 = makePage(`https://ep.github.io/pt/field-tools/test-tool/?feedback=${CODE}`, { before: seed });
   r1.EPKit = { tool: { id: "test-tool", screen: () => "ladder" } };
   rect(r1.document.getElementById("nextBtn"), 800, 700, 120, 44);
@@ -373,22 +392,22 @@ check("leaving with everything posted doesn't ask", bu.defaultPrevented === fals
   const rr = fbRoot(r1);
   check("after a reload, the comment being written comes back, on the same part", !rr.querySelector(".card").hidden && rr.querySelector(".card textarea").value === "Typing when the tab closes" && r1.EPKit.feedback.ui.state.target.el === r1.document.getElementById("nextBtn"));
   press(r1, r1.document.body, "Escape");
-  const again = r1.localStorage.getItem("ep-feedback-draft");
-  const r2 = makePage(`https://ep.github.io/pt/field-tools/test-tool/?feedback=${CODE}`, { before: (win) => { seed(win); win.localStorage.setItem("ep-feedback-draft", again); } });
+  const again = r1.localStorage.getItem("ep-feedback-draft:test-tool");
+  const r2 = makePage(`https://ep.github.io/pt/field-tools/test-tool/?feedback=${CODE}`, { before: (win) => { seed(win); win.localStorage.setItem("ep-feedback-draft:test-tool", again); } });
   r2.EPKit = { tool: { id: "test-tool", screen: () => "ladder" } };
   runKit(r2, "feedback.js"); runKit(r2, "feedback-ui.js"); await settle();
-  check("it comes back once; after that it waits for the next comment", fbRoot(r2).querySelector(".card").hidden && JSON.parse(r2.localStorage.getItem("ep-feedback-draft")).text === "Typing when the tab closes");
+  check("it comes back once; after that it waits for the next comment", fbRoot(r2).querySelector(".card").hidden && JSON.parse(r2.localStorage.getItem("ep-feedback-draft:test-tool")).text === "Typing when the tab closes");
 }
 root.querySelector(".pin").click(); await settle();
 typeIn(w, root.querySelector(".card textarea"), "Changed but not saved");
 press(w, w.document.body, "Escape");
-const editKey = "ep-feedback-draft:" + UI.mine()[0].id;
-check("a change to a posted comment is kept in its own slot, never over a new comment's words", JSON.parse(w.localStorage.getItem(editKey)).text === "Changed but not saved" && JSON.parse(w.localStorage.getItem("ep-feedback-draft")).text === "Typing when the tab closes");
+const editKey = "ep-feedback-draft:test-tool:" + UI.mine()[0].id;
+check("a change to a posted comment is kept in its own slot, never over a new comment's words", JSON.parse(w.localStorage.getItem(editKey)).text === "Changed but not saved" && JSON.parse(w.localStorage.getItem("ep-feedback-draft:test-tool")).text === "Typing when the tab closes");
 root.querySelector(".pin").click(); await settle();
 check("reopening that comment brings the change back", root.querySelector(".card textarea").value === "Changed but not saved");
 k(root.querySelector(".card"), "cancel").click(); k(root.querySelector(".card"), "cancel").click();
 check("discarding the change leaves the posted words alone", w.localStorage.getItem(editKey) === null && UI.mine()[0].text === NOTE1);
-w.localStorage.removeItem("ep-feedback-draft");
+w.localStorage.removeItem("ep-feedback-draft:test-tool");
 
 // Edit from a pin
 root.querySelector(".pin").click(); await settle();
@@ -503,12 +522,123 @@ check("turn off: nothing more is recorded", FB.actions.length === before);
   check("a comment an older kit couldn't post is sent on the next visit, its context trimmed to fit", f2.EPKit.feedback.ui.mine()[0].status === "posted" && got && got.text === stuck.text && got.ctx.errors.length <= 2);
 }
 
+/* =================== no stale words, no lost words =================== */
+{
+  const listOf = async () => (await team("GET", "/api/fb/list?tool=test-tool")).data.comments;
+  const seedName = (win) => { win.localStorage.setItem("ep-feedback-coach", "1"); win.localStorage.setItem("ep-feedback-name", "Rae"); };
+  async function tester(before) {
+    const p = makePage(`https://ep.github.io/pt/field-tools/test-tool/?feedback=${CODE}`, { before });
+    p.EPKit = { tool: { id: "test-tool", screen: () => "cover" } };
+    const nb = p.document.getElementById("nextBtn"); rect(nb, 800, 700, 120, 44);
+    p.document.elementsFromPoint = (x, y) => (x >= 800 && x <= 920 && y >= 700 && y <= 744) ? [nb, p.document.body] : [p.document.body];
+    runKit(p, "feedback.js"); runKit(p, "feedback-ui.js");
+    await until(() => p.EPKit.feedback.ui.link() === true);
+    const R = fbRoot(p), sh = R.querySelector(".shield");
+    return { p, R, U: p.EPKit.feedback.ui, pick: async () => { pointer(p, sh, "pointerdown", 850, 720); pointer(p, sh, "pointerup", 850, 720); await settle(); } };
+  }
+  const A = await tester(seedName);
+  /* a change saved while the first post is still on its way */
+  A.p.slow = 150; A.p.maxOut = 0;
+  k(A.R, "comment").click(); await settle(); await A.pick();
+  typeIn(A.p, A.R.querySelector(".card textarea"), "First words"); k(A.R.querySelector(".card"), "post").click();
+  await tick(20);
+  const cA = A.U.mine()[0];
+  A.R.querySelector(".pin").click(); await settle();
+  typeIn(A.p, A.R.querySelector(".card textarea"), "Corrected words"); k(A.R.querySelector(".card"), "post").click();
+  check("a change saved while the first post is out is not marked posted yet, here or in storage", cA.status !== "posted" && JSON.parse(A.p.localStorage.getItem("ep-feedback-mine")).find((c) => c.id === cA.id).status !== "posted");
+  await until(() => cA.status === "posted", 3000);
+  let got = (await listOf()).find((c) => c.id === cA.id);
+  check("the board ends with the newest words, sent one request at a time", got && got.text === "Corrected words" && A.p.maxOut === 1, (got && got.text) + " / " + A.p.maxOut);
+  A.p.slow = 0;
+  /* a change after a reload keeps the context and pointer the board already has */
+  const before = (await listOf()).find((c) => c.id === cA.id);
+  const B = await tester((win) => { seedName(win); win.localStorage.setItem("ep-feedback-mine", A.p.localStorage.getItem("ep-feedback-mine")); });
+  check("after a reload, a posted comment's context is not kept here", !B.U.mine()[0].ctx);
+  k(B.R, "count").click(); await settle();
+  B.R.querySelector(".card .item").click(); await settle();
+  typeIn(B.p, B.R.querySelector(".card textarea"), "Third words"); k(B.R.querySelector(".card"), "post").click();
+  await until(() => B.U.mine()[0].status === "posted");
+  got = (await listOf()).find((c) => c.id === cA.id);
+  check("a change after a reload keeps the context and pointer the board already has", got.text === "Third words" && got.ctx.settings && JSON.stringify(got.ctx) === JSON.stringify(before.ctx) && JSON.stringify(got.where) === JSON.stringify(before.where), JSON.stringify(got.ctx).slice(0, 120));
+  /* two tabs, and two tools, never overwrite each other */
+  const other = { id: "othertab000001", edit: "O".repeat(24), tool: "test-tool", created: Date.now(), updated: Date.now(), name: "Rae", text: "Written in another tab", ver: "", screen: "cover", where: {}, ctx: { name: "Test Tool" }, status: "waiting" };
+  const st0 = JSON.parse(B.p.localStorage.getItem("ep-feedback-mine")); st0.push(other); B.p.localStorage.setItem("ep-feedback-mine", JSON.stringify(st0));
+  B.p.localStorage.setItem("ep-feedback-draft:other-tool", JSON.stringify({ tool: "other-tool", id: "", text: "Words for another tool", screen: "x", sel: "", at: 1 }));
+  k(B.R, "comment").click(); await settle(); await B.pick();
+  typeIn(B.p, B.R.querySelector(".card textarea"), "Tab B's own comment"); k(B.R.querySelector(".card"), "post").click();
+  await until(() => B.U.mine().some((c) => c.text === "Tab B's own comment" && c.status === "posted"));
+  check("a save in one tab keeps a comment another tab saved", JSON.parse(B.p.localStorage.getItem("ep-feedback-mine")).some((c) => c.id === other.id));
+  await B.U.flush();
+  check("and this tab picks it up and posts it", B.U.mine().some((c) => c.id === other.id) && (await listOf()).some((c) => c.text === "Written in another tab"));
+  k(B.R, "comment").click(); await settle(); await B.pick();
+  k(B.R.querySelector(".card"), "cancel").click(); await settle();
+  check("another tool's half-written words are never touched", JSON.parse(B.p.localStorage.getItem("ep-feedback-draft:other-tool")).text === "Words for another tool");
+  const st1 = JSON.parse(B.p.localStorage.getItem("ep-feedback-mine")); st1.push(Object.assign({}, other, { id: "othertab000002", text: "Arrived from a third tab" })); B.p.localStorage.setItem("ep-feedback-mine", JSON.stringify(st1));
+  B.p.dispatchEvent(new B.p.StorageEvent("storage", { key: "ep-feedback-mine" }));
+  check("a save in another tab shows up here at once", B.U.mine().some((c) => c.id === "othertab000002") && k(B.R, "count").textContent === String(B.U.mine().length));
+  /* words kept by the first version of the kit, in the old shared slot */
+  const M = await tester((win) => { seedName(win); win.localStorage.setItem("ep-feedback-draft", JSON.stringify({ tool: "test-tool", id: "", text: "Kept in the old slot", screen: "cover", sel: "#nextBtn", at: 1, back: false })); });
+  check("words in the old shared slot move to their tool's slot and come back", M.p.localStorage.getItem("ep-feedback-draft") === null && !M.R.querySelector(".card").hidden && M.R.querySelector(".card textarea").value === "Kept in the old slot");
+  press(M.p, M.p.document.body, "Escape");
+  /* a delete while the first post is still on its way */
+  B.p.slow = 150;
+  k(B.R, "comment").click(); await settle(); await B.pick();
+  typeIn(B.p, B.R.querySelector(".card textarea"), "Delete me quickly"); k(B.R.querySelector(".card"), "post").click();
+  await tick(20);
+  const dc = B.U.mine().find((c) => c.text === "Delete me quickly");
+  k(B.R, "count").click(); await settle();
+  B.R.querySelector(".card .item").click(); await settle();
+  k(B.R.querySelector(".card"), "delete").click(); k(B.R.querySelector(".card"), "delete").click();
+  await until(() => !B.U.mine().some((c) => c.id === dc.id), 3000); await tick(200);
+  check("a delete while the first post is out still takes it off the board", !(await listOf()).some((c) => c.id === dc.id));
+  B.p.slow = 0;
+  /* Hold to clear only acts on a full, unbroken hold */
+  const n0 = B.U.mine().length;
+  k(B.R, "count").click(); await settle();
+  let hb = k(B.R.querySelector(".card"), "clear");
+  hb.dispatchEvent(new B.p.MouseEvent("pointerdown", { button: 2, bubbles: true, composed: true, cancelable: true }));
+  check("hold: a right-click does not start it", !hb.classList.contains("holding"));
+  hb.dispatchEvent(new B.p.KeyboardEvent("keydown", { key: " ", bubbles: true, composed: true, cancelable: true }));
+  await tick(300);
+  press(B.p, B.p.document.body, "Escape");
+  await tick(3100);
+  check("hold: closing the list mid-hold stops it", B.U.mine().length === n0);
+  k(B.R, "count").click(); await settle();
+  hb = k(B.R.querySelector(".card"), "clear");
+  hb.dispatchEvent(new B.p.KeyboardEvent("keydown", { key: " ", bubbles: true, composed: true, cancelable: true }));
+  await tick(300);
+  B.p.dispatchEvent(new B.p.Event("blur"));
+  await tick(3100);
+  check("hold: switching away mid-hold stops it", B.U.mine().length === n0 && !hb.classList.contains("holding"));
+  hb.dispatchEvent(new B.p.KeyboardEvent("keydown", { key: " ", bubbles: true, composed: true, cancelable: true }));
+  await tick(300);
+  hb.dispatchEvent(new B.p.KeyboardEvent("keydown", { key: "Tab", bubbles: true, composed: true, cancelable: true }));
+  await tick(3100);
+  check("hold: any other key stops it", B.U.mine().length === n0);
+  press(B.p, B.p.document.body, "Escape");
+  /* a full browser storage */
+  const realSet = B.p.Storage.prototype.setItem;
+  B.p.Storage.prototype.setItem = function (key, v) { if (key === "ep-feedback-mine") throw new B.p.DOMException("full", "QuotaExceededError"); return realSet.call(this, key, v); };
+  offline = true;
+  k(B.R, "comment").click(); await settle(); await B.pick();
+  typeIn(B.p, B.R.querySelector(".card textarea"), "Written with storage full"); k(B.R.querySelector(".card"), "post").click();
+  await until(() => /storage is full/.test(B.R.querySelector(".toast").textContent) || /back online/.test(B.R.querySelector(".toast").textContent), 2000);
+  const full = /This browser's storage is full\. Keep this page open until your comments post\./.test(B.R.querySelector(".toast").textContent) || B.U.mine().some((c) => c.text === "Written with storage full");
+  let bu2 = new B.p.Event("beforeunload", { cancelable: true }); B.p.dispatchEvent(bu2);
+  check("full storage: the tester is told to keep the page open, and leaving asks first", full && bu2.defaultPrevented === true);
+  await until(() => B.U.mine().some((c) => c.text === "Written with storage full" && c.status === "waiting"));
+  B.p.Storage.prototype.setItem = realSet; offline = false;
+  await B.U.flush();
+  check("full storage: the comment still posts once the network is back", (await listOf()).some((c) => c.text === "Written with storage full"));
+}
+
 /* =================== a bad link, and no link =================== */
 {
   const b = makePage("https://ep.github.io/pt/field-tools/test-tool/?feedback=WRONG1");
   runKit(b, "feedback.js"); runKit(b, "feedback-ui.js");
   await until(() => b.EPKit.feedback.ui.link() === false);
   const r = fbRoot(b);
+  check("bad link: no tip pointing at a Comment button that isn't there", r.querySelector(".tip").hidden);
   check("bad link: the bar says so and what to do", /^This feedback link isn't working\. Ask for a new one\.$/.test(r.querySelector(".bar .msg").textContent) && !k(r, "comment") && !!byText(r, "button", /^Turn off$/));
   const n = makePage("https://ep.github.io/pt/field-tools/test-tool/?feedback");
   runKit(n, "feedback.js"); runKit(n, "feedback-ui.js"); await settle();

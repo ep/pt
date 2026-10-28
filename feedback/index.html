@@ -338,15 +338,21 @@ function start() {
 
 /* ---------- a tool's comments ---------- */
 function niceName(id) { return S.names[id] || str(id).split("-").map(function (w) { return w.charAt(0).toUpperCase() + w.slice(1); }).join(" "); }
+/* The tool's file, from the address testers had open. Testers write that address, so
+   only a plain path is accepted: letters, digits and / _ . - with no step up a folder. */
 function toolPath() {
   for (var i = 0; i < S.comments.length; i++) {
     var p = str(S.comments[i].ctx && S.comments[i].ctx.page);
     var m = /^https:\/\/ep\.github\.io\/pt\/([^?#]*)/.exec(p);
-    if (m) { var q = m[1]; if (!q || /\/$/.test(q)) q += "index.html"; return q; }
+    if (!m) continue;
+    var q = m[1]; if (!q || /\/$/.test(q)) q += "index.html";
+    if (/^[A-Za-z0-9][A-Za-z0-9\/_.-]*$/.test(q) && !/(^|\/)\.\.?(\/|$)/.test(q) && q.indexOf("//") < 0) return q;
   }
   return "";
 }
+var lastSig = "";
 function take(data) {
+  lastSig = JSON.stringify([data.comments || [], data.reviews || {}]);
   S.comments = (data.comments || []).slice().sort(function (a, b) { return a.created - b.created; });
   S.reviews = data.reviews || {};
 }
@@ -496,7 +502,16 @@ function flat(view) { var out = []; groupsFor(view).forEach(function (g) { out =
 function testersIn(list) { var t = {}; list.forEach(function (c) { t[str(c.name).toLowerCase() || c.id] = 1; }); return Object.keys(t).length; }
 
 /* ---------- drawing ---------- */
+/* Redrawing rebuilds the list and the weight buttons, so a keyboard user's place is
+   put back on the same card or button afterwards. */
 function render(keep) {
+  var a = document.activeElement, card = a && a.closest && a.closest(".crow");
+  var keepRow = card ? card.getAttribute("data-id") : "", keepW = a && a.parentNode && a.parentNode.id === "dWeight" ? str(a.className).split(" ")[0] : "";
+  draw(keep);
+  var back = keepRow ? document.querySelector('.crow[data-id="' + keepRow + '"]') : keepW ? document.querySelector("#dWeight ." + keepW) : null;
+  if (back && back !== document.activeElement) back.focus({ preventScroll: true });
+}
+function draw(keep) {
   $("toolName").textContent = S.tool ? niceName(S.tool) : "Feedback";
   document.title = S.tool ? niceName(S.tool) + " feedback" : "Feedback board";
   var early = S.comments.filter(isEarlier);
@@ -642,7 +657,7 @@ $("nowBtn").addEventListener("click", function () { S.then = false; render(true)
 
 /* ---------- rebuilding the screen ---------- */
 function replayDoc(html, data) {
-  var dir = "https://ep.github.io/pt/" + toolPath().replace(/[^\/]*$/, "");
+  var dir = ("https://ep.github.io/pt/" + toolPath().replace(/[^\/]*$/, "")).replace(/[&"<>]/g, "");
   var json = JSON.stringify(data).split("<").join("\\" + "u003c");
   var inject = '<base href="' + dir + '"><script>window.EPKitReplay=' + json + ";<\/script>";
   return /<head[^>]*>/i.test(html) ? html.replace(/<head[^>]*>/i, function (m) { return m + inject; }) : inject + html;
@@ -719,7 +734,8 @@ function cleanRects(x) {
   if (!x || typeof x !== "object") return out;
   Object.keys(x).slice(0, 300).forEach(function (id) {
     var r = x[id];
-    if (r && [r.x, r.y, r.w, r.h].every(function (v) { return typeof v === "number" && isFinite(v); }) && r.w > 0 && r.h > 0) out[id] = { x: r.x, y: r.y, w: r.w, h: r.h };
+    var big = Math.max(frame.vw || 1280, frame.vh || 800) * 4, cl = function (v) { return Math.max(-big, Math.min(big, v)); };
+    if (r && [r.x, r.y, r.w, r.h].every(function (v) { return typeof v === "number" && isFinite(v); }) && r.w > 0 && r.h > 0) out[id] = { x: cl(r.x), y: cl(r.y), w: cl(r.w), h: cl(r.h) };
   });
   return out;
 }
@@ -1016,7 +1032,7 @@ document.addEventListener("keydown", function (e) {
     if (S.sel) { e.preventDefault(); step(1); }
     else { var l = flat(S.view); if (l.length) { e.preventDefault(); select(l[0].id); } }
   } else if ((e.key === "ArrowLeft" || e.key === "k") && S.sel) { e.preventDefault(); step(-1); }
-  else if (/^[1-4]$/.test(e.key) && S.sel) { var c = selected(); if (c) { e.preventDefault(); weigh(c, WEIGHTS[+e.key - 1][0]); } }
+  else if (/^[1-4]$/.test(e.key) && S.sel && !e.repeat) { var c = selected(); if (c) { e.preventDefault(); weigh(c, WEIGHTS[+e.key - 1][0]); } }
 });
 /* New comments show up on their own: every 15 seconds, and as soon as the board is
    looked at again. Each new one glows for a moment. */
@@ -1028,6 +1044,8 @@ function pull() {
   var tool = S.tool;
   api("/api/fb/list?tool=" + encodeURIComponent(tool)).then(function (r) {
     if (r.status !== 200 || tool !== S.tool) return;
+    /* Nothing changed: leave the page alone, so focus and scrolling stay put. */
+    if (JSON.stringify([r.data.comments || [], r.data.reviews || {}]) === lastSig) return;
     var had = {}; S.comments.forEach(function (c) { had[c.id] = 1; });
     take(r.data);
     var fresh = S.comments.filter(function (c) { return !had[c.id]; });

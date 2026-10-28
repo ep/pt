@@ -106,7 +106,8 @@ function untick(w, name){
   console.log('\n[one change for everyone]');
   let dom = load(), w = dom.window, d = w.document;
   await give(w, csv(ALL, SAME));
-  check('summary counts teams and leaves out the empty one', d.getElementById('fsum').textContent === '3 teams · 11 activities · 1 with no answers left out');
+  check('summary counts teams and leaves out the empty one, and a column LABELS hides', d.getElementById('fsum').textContent === '3 teams · 10 activities · 1 with no answers left out', d.getElementById('fsum').textContent);
+  check('a hidden column (Key Persona) is not offered as an activity', !Array.from(d.querySelectorAll('#acts .an')).some(s => /persona/i.test(s.textContent)));
   check('the same change everywhere starts as one change', pressedV(w, 'mode') === 'one' && d.getElementById('fChange').value === 'Move to the new CRM' && !d.getElementById('changeFld').hidden);
   check('no team name or layout option', !d.getElementById('names') && !d.getElementById('layout'));
   const listed = Array.from(d.querySelectorAll('#acts .an')).map(s => s.textContent);
@@ -142,6 +143,7 @@ function untick(w, name){
   check('AI copy carries the shared change and team names', w.ai.includes('same change: Move to the new CRM') && w.ai.includes('\nGreen\n'));
   check('AI copy leaves out the organization', !w.ai.includes('Acme'));
   check('AI copy puts the huddle first in each team', w.ai.indexOf('The Hallway Huddle') < w.ai.indexOf('What to preserve'));
+  check('a hidden column is left out of the report and both copies', !/ten-year account manager|key persona/i.test(report(w).textContent + w.copied.text + w.ai));
   click(w, d.getElementById('print'));
   check('Save as PDF prints', w.printed === 1);
 

@@ -11,7 +11,9 @@ fifteen minutes to find, or miss entirely.
   for everything else), seat claiming, path validation, the origin lock, the write
   times a read can carry for presence, the feedback routes (tester codes, comments
   testers can change only for themselves, the team key, reviews with Ignore and still
-  open, caps, and context that is trimmed rather than refused), and the
+  open, caps, context that is trimmed rather than refused, edits that keep the stored
+  context, newer words that a late request can't undo, delete markers, counts that
+  can't double, and bodies checked by size however they arrive), and the
   retention sweeps. No Cloudflare
   account or network needed.
 - `qa-pyc.js` tests `../../field-tools/chips/index.html` (Place Your Chips) in a
@@ -51,7 +53,8 @@ fifteen minutes to find, or miss entirely.
 - `qa-kc-report-builder.mjs` tests `../../kc/report-builder/index.html` (the KickstartChange
   report builder) the same way, with made-up teams built inside the file. It covers one
   chapter per team (team, change, Hallway Huddle, then the rest), one change for everyone
-  or one per team, the highlights and their numbers, skipped activities, the copies for
+  or one per team, the highlights and their numbers, skipped activities, columns its LABELS
+  block hides, the copies for
   Google Docs and for AI, and that the page's security lock still matches its script.
 - `qa-ai-impact-ladder.mjs` tests `../../field-tools/ai-impact-ladder/index.html` (AI Impact
   Ladder) in a simulated browser. It walks the whole conversation: the read on usage and
@@ -63,16 +66,22 @@ fifteen minutes to find, or miss entirely.
   a browser that blocks storage, no analytics or brand names, and one primary button per screen.
 - `qa-reimagination-lab.mjs` tests `../../field-tools/reimagination-lab/index.html` (the
   Reimagination Lab) in a simulated browser. It walks a whole team session, in a room and
-  then on a call (the checklist that moves on by itself, timers that take 30 seconds off or
-  on and end once you move past their screen, the wall of eye-rollers, votes revealed
-  through Next with ties waiting for a pick, the ladder that unlocks one rung at a time, the
-  steps and the one you're working on, the reactions, the four moves, the new flow, the
-  people and the first test) and a whole solo session (no team-only screens, and picks that
-  show plainly and move on), one screen at a time with at most one filled button. It checks that typed text never runs as code, print, the
-  outcome image, Email this with the real send kit, picking up after a reload (including a
-  session left on a screen that has since gone, and a photo of the flow), clear with undo,
-  and the hooks the feedback board uses: its parts (every screen in exactly one) and opening
-  any screen with made-up content.
+  then on a call: the plan of six steps, the rail that fills with the group's own words,
+  timers that take 30 seconds off or on and end once you move past their screen, the wall of
+  eye-rollers, the vote revealed through Next with ties waiting for a pick, the why chain
+  (each line unlocks the next, and one line is the real purpose), the three ways to draw it,
+  one face per step, necessary or inherited, the captioned story player (silent when the
+  sound is off, and carrying on in captions when the voice can't play), the four moves on
+  one board, the new workflow (it starts as a copy of today's steps), the before and after,
+  and the first test. It walks a whole solo session too (no team-only screens, and the steps
+  typed straight in), one screen at a time with at most one filled button. It checks that
+  typed text never runs as code, that everything the group types (and every line that quotes
+  it) is marked private for the feedback kit, two tabs open on one session, print, the
+  outcome image, Email this with the real send kit, picking up after a reload (including
+  sessions saved by earlier versions and screens that have since gone), clear with undo,
+  that the page stays well under 1 MB with the voice in its own file beside it
+  (`story.mp3`), and the hooks the feedback board uses: its parts (every screen in exactly
+  one) and opening any screen with made-up content.
 - `qa-kit.mjs` tests the shared kits in `../../assets/kit/` in a simulated browser, against
   the real worker code with the fake database: the feedback kit (`feedback.js`, and the
   comment bar it loads only in feedback mode) and the Email this kit (`send.js`). It covers
@@ -85,11 +94,14 @@ fifteen minutes to find, or miss entirely.
   part, editing and deleting your own comments, words that are never lost (kept as they
   are typed, back after a reload, Cancel that asks first, a warning before leaving), waiting
   offline, sending on the way out and posting later, a comment an older kit couldn't post,
-  clearing your own list with a three-second hold while the board keeps
-  every comment, Done, a bad or retired link, phones, a
+  one request per comment at a time, edits after a reload, two tabs and two tools, old
+  draft slots, a delete while posting, a full browser storage,
+  clearing your own list with a three-second hold (and every way a hold stops early)
+  while the board keeps every comment, Done, a bad or retired link, phones, a
   file opened from a computer, the replay the board uses (the tool's sections, and finding
   each comment's part in the rebuilt screen: exact places, older comments by path and
-  words, made-up content, parts that are gone, the tester's own scroll), keys that never
+  words, made-up content, parts that are gone or still drawing in, the tester's own scroll, undone
+  for the next comment), keys that never
   reach the tool behind the bar, the Email this links and share sheet, and that the kit
   files are plain ASCII, never write HTML from strings and talk only to the pt worker.
 - `qa-feedback-board.mjs` tests `../../feedback/index.html` (the feedback board) in a
@@ -100,7 +112,8 @@ fifteen minutes to find, or miss entirely.
   open and which parts to find, the right version of the code) and its boxes (around the part
   where the rebuilt screen found it, older hand-drawn boxes moved onto their part, the spot
   the tester pointed at when the part is gone, none for the whole screen), new comments
-  arriving on their own, Must, Should, Could and Ignore with the number keys, team notes and
+  arriving on their own, refreshes that never disturb the reviewer, a tester-made address
+  that can't reach the frame, Must, Should, Could and Ignore with the number keys, team notes and
   removing them, earlier versions with Then and Now and still open, reviews saved by the
   first board, Copy for AI (what goes in, in what order, what is left out, no names), the
   tester link and a new code, deleting, small screens, more than one tool, escaping, no

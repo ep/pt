@@ -46,7 +46,12 @@
     c/<id> for the tester's words and r/<id> for the team's review. Caps: 2,000
     characters of text, 60 posts per visitor per hour, 3,000 comments per tool.
     A comment is never refused for the size of its context: context that is too
-    big is trimmed, and the tester's words are always kept whole.
+    big is trimmed, and the tester's words are always kept whole. A change that
+    leaves out the context or the pointer keeps the ones already stored, and a post
+    older than the stored one (comment.updated, the tester's own clock) is ignored,
+    so a late or repeated request never undoes a newer edit. A deleted comment
+    leaves a marker (d/<id>) for two days, so a post still on its way can't bring
+    it back.
 
   KEYS (gated tools only; see GATED_TOOLS_DEFAULT below)
     Every session has one key, chosen by the tool at session start and sent as
@@ -361,6 +366,7 @@ export default {
     await env.DB.prepare(ranged).bind('fb:', 'fb;', 'c/', 'c0', now - FB_KEEP_DAYS * day).run();
     await env.DB.prepare(ranged).bind('fb:', 'fb;', 'r/', 'r0', now - FB_KEEP_DAYS * day).run();
     await env.DB.prepare(ranged).bind(FB_ADMIN, FB_ADMIN + '0', 'rl/', 'rl0', now - 2 * day).run();
+    await env.DB.prepare(ranged).bind('fb:', 'fb;', 'd/', 'd0', now - 2 * day).run();
   }
 };
 
@@ -424,6 +430,12 @@ async function feedback(request, env, url, json) {
   }
   async function drop(room, path) { await DB.prepare('DELETE FROM kv WHERE room = ? AND path = ?').bind(room, path).run(); }
   async function testerCode() { var c = await row(FB_ADMIN, 'code'); return c && c.code ? c.code : null; }
+  /* The tools list counts comments by counting them, so two posts at once can't count one twice. */
+  async function recount(tool, last) {
+    var n = await DB.prepare('SELECT COUNT(*) AS c FROM kv WHERE room = ? AND path >= ? AND path < ?').bind('fb:' + tool, 'c/', 'c0').first();
+    var ix = await row(FB_ADMIN, 'tools/' + tool);
+    await put(FB_ADMIN, 'tools/' + tool, { n: n ? n.c : 0, last: last || (ix && ix.last) || 0 });
+  }
 
   if (request.method === 'GET') {
     if (what === 'check') {
@@ -455,8 +467,11 @@ async function feedback(request, env, url, json) {
   if (request.method !== 'POST') return json({ error: 'not found' }, 404);
   var clen = parseInt(request.headers.get('content-length') || '0', 10);
   if (clen > 32000) return json({ error: 'too big' }, 413);
-  var body;
-  try { body = await request.json(); } catch (e) { return json({ error: 'bad body' }, 400); }
+  /* Read as text first, so the size is checked even without a content-length. */
+  var raw, body;
+  try { raw = await request.text(); } catch (e) { return json({ error: 'bad body' }, 400); }
+  if (raw.length > 32000 || new TextEncoder().encode(raw).length > 32000) return json({ error: 'too big' }, 413);
+  try { body = JSON.parse(raw); } catch (e) { return json({ error: 'bad body' }, 400); }
   if (!body || typeof body !== 'object') return json({ error: 'bad body' }, 400);
 
   if (what === 'code') {
@@ -497,8 +512,8 @@ async function feedback(request, env, url, json) {
     if (!had) return json({ ok: true });
     if (!team() && !(tester && sameText(body.edit, had.edit))) return json({ error: 'locked' }, 401);
     await drop(room, 'c/' + id); await drop(room, 'r/' + id);
-    var ix = await row(FB_ADMIN, 'tools/' + tool);
-    if (ix) await put(FB_ADMIN, 'tools/' + tool, { n: Math.max(0, (ix.n || 1) - 1), last: ix.last || 0 });
+    await put(room, 'd/' + id, { at: Date.now() });
+    await recount(tool);
     return json({ ok: true });
   }
 
@@ -509,9 +524,16 @@ async function feedback(request, env, url, json) {
     if (!c || typeof c !== 'object') return json({ error: 'bad comment' }, 400);
     var text = clipText(c.text, 4000).trim();
     if (!text || text.length > 2000) return json({ error: 'bad text' }, 400);
-    var where = fitWhere(c.where), ctx = fitCtx(c.ctx);
     var existing = await row(room, 'c/' + id), now = Date.now();
     if (existing && !sameText(body.edit, existing.edit)) return json({ error: 'locked' }, 401);
+    var cu = typeof c.updated === 'number' && isFinite(c.updated) && c.updated > 0 ? c.updated : 0;
+    if (existing && cu && existing.cu && cu < existing.cu) return json({ ok: true, created: existing.created, updated: existing.updated, stale: true });
+    if (!existing && (await row(room, 'd/' + id))) return json({ ok: true, gone: true });
+    var where, ctx;
+    try {
+      where = c.where === undefined && existing ? existing.where : fitWhere(c.where);
+      ctx = c.ctx === undefined && existing ? existing.ctx : fitCtx(c.ctx);
+    } catch (e) { where = {}; ctx = { trimmed: true }; }
     if (!existing) {
       var who = await hashText(request.headers.get('CF-Connecting-IP') || 'unknown');
       var rl = await row(FB_ADMIN, 'rl/' + who);
@@ -524,13 +546,10 @@ async function feedback(request, env, url, json) {
     var rec = {
       id: id, edit: body.edit, created: existing ? existing.created : now, updated: now,
       name: clipText(c.name, 60).trim(), text: text, ver: clipText(c.ver, 80), screen: clipText(c.screen, 80),
-      where: where, ctx: ctx
+      where: where, ctx: ctx, cu: cu || (existing && existing.cu) || 0
     };
     await put(room, 'c/' + id, rec);
-    if (!existing) {
-      var ix2 = await row(FB_ADMIN, 'tools/' + tool);
-      await put(FB_ADMIN, 'tools/' + tool, { n: (ix2 && ix2.n || 0) + 1, last: now });
-    }
+    if (!existing) await recount(tool, now);
     return json({ ok: true, created: rec.created, updated: now });
   }
   return json({ error: 'not found' }, 404);

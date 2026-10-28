@@ -345,6 +345,41 @@ check("whole screen: Copy for AI says so too", /"The whole screen feels slow\."\
 await tick(3100);
 check("arrivals: the glow fades", !row("c8hhhhhhhh").classList.contains("fresh") || !B.S.fresh.c8hhhhhhhh);
 
+/* ---- refreshing never disturbs the reviewer ---- */
+{
+  row("c1aaaaaaaa").click(); await tick(5);
+  const node = row("c1aaaaaaaa"), wb = $("#dWeight .could");
+  B.pull(); await tick(80);
+  check("refresh: with nothing new, the page is left exactly as it was", row("c1aaaaaaaa") === node && $("#dWeight .could") === wb);
+  row("c2bbbbbbbb").focus();
+  await post("c9iiiiiiii", { name: "Max", text: "One more arrives.", screen: "who", ctx: ctx({ heading: "Who's here?" }) });
+  B.pull();
+  await until(() => row("c9iiiiiiii")); await tick(60);
+  check("refresh: when something is new, keyboard focus stays on the same card", w.document.activeElement === row("c2bbbbbbbb"));
+  const was = weightOf0();
+  function weightOf0() { const r = B.S.reviews.c1aaaaaaaa; return r ? r.priority : ""; }
+  w.document.dispatchEvent(new w.KeyboardEvent("keydown", { key: "3", bubbles: true, repeat: true }));
+  await tick(80);
+  check("weights: a held number key doesn't flip the weight back and forth", weightOf0() === was && (await list()).reviews.c1aaaaaaaa.priority === was);
+}
+
+/* ---- a tester-made address can't put anything into the board's frame ---- */
+{
+  await post("e1jjjjjjjj", { text: "Odd address.", ctx: ctx({ name: "Evil", page: 'https://ep.github.io/pt/a"><script>window.bad=1</script>/../../field-tools/reimagination-lab/?feedback' }) }, "evil-tool");
+  $("#menuBtn").click(); $("#refreshBtn").click();
+  await until(() => !$("#toolsBtn").hidden);
+  $("#toolsBtn").click(); await tick(5);
+  Array.from($$("#dlg .toolrow")).find((b) => /Evil/i.test(b.textContent)).click();
+  await until(() => row("e1jjjjjjjj"));
+  row("e1jjjjjjjj").click(); await tick(30);
+  const frames = $$("iframe").map((f) => f.getAttribute("srcdoc") || "").join(" ");
+  check("frame: an address with anything but a plain path is not used, and nothing from it reaches the frame", !/window\.bad/.test(frames) && /Can't find this tool's file/.test($("#dNote").textContent), $("#dNote").textContent);
+  $("#toolsBtn").click(); await tick(5);
+  Array.from($$("#dlg .toolrow")).find((b) => /Reimagination/i.test(b.textContent)).click();
+  await until(() => row("c1aaaaaaaa"));
+  row("c1aaaaaaaa").click(); await tick(5);
+}
+
 /* ---- small screens ---- */
 w.innerWidth = 800; w.dispatchEvent(new w.Event("resize"));
 check("phones: the open comment covers the list, and the page behind it stays still", w.document.body.classList.contains("lock"));

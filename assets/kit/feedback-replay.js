@@ -30,11 +30,13 @@ function textOf(n) {
   if (n.isContentEditable) return "an editable area";
   return clip(n.getAttribute("aria-label") || n.getAttribute("alt") || n.getAttribute("title") || n.innerText || n.textContent || "", 80);
 }
+/* On the page and taking up space. A part that is still fading in counts: screens
+   often draw their lines in one by one. */
 function shown(n) {
   if (!n || !n.getBoundingClientRect || (n.closest && n.closest("[data-epkit]"))) return false;
   var r = n.getBoundingClientRect();
   if (!(r.width > 0 && r.height > 0)) return false;
-  try { var s = win.getComputedStyle(n); if (s.visibility === "hidden" || +s.opacity === 0) return false; } catch (e) {}
+  try { if (win.getComputedStyle(n).visibility === "hidden") return false; } catch (e) {}
   return true;
 }
 function all(sel) { if (!sel) return []; try { return Array.prototype.slice.call(doc.querySelectorAll(sel)).filter(shown); } catch (e) { return []; } }
@@ -67,6 +69,9 @@ function find(t) {
     if (same.length) return nearest(same, t);
   }
   if (exact.length === 1) return exact[0];
+  /* A comment that knows its exact place waits for it rather than guessing; only older
+     comments, which have just the path, fall back to the nearest part of the same kind. */
+  if (t.sel) return null;
   if (pool.length) return nearest(pool, t);
   return tail.length ? nearest(tail, t) : null;
 }
@@ -79,26 +84,45 @@ function scroller(n) {
 }
 function rectOf(n) { var r = n.getBoundingClientRect(); return { x: Math.round(r.left), y: Math.round(r.top), w: Math.round(r.width), h: Math.round(r.height) }; }
 
-var targets = [], focus = "", found = {};
-function locate(list, f, settle) {
-  targets = Array.isArray(list) ? list.slice(0, 200) : []; focus = str(f);
-  found = {};
+var targets = [], focus = "", found = {}, moved = [], placed = false;
+/* Scrolling done for one comment is undone before the next, so a part that can't be
+   found is shown where the tester's own scroll would put it. */
+function unscroll() {
+  moved.forEach(function (m) { try { m.el.scrollTop = m.top; } catch (e) {} });
+  moved = [];
+}
+function nudge(n, top) { if (!n) return; moved.push({ el: n, top: n.scrollTop }); n.scrollTop = top; }
+/* Scroll the way the tester had it, then make sure the part is in view. */
+function bring(ft, el) {
+  var sc = scroller(el);
+  if (sc && ft.sy != null) nudge(sc, num(ft.sy));
+  else if (!sc) win.scrollTo(0, ft.sy != null ? num(ft.sy) : num(R.scroll));
+  var r = el.getBoundingClientRect();
+  if (r.top < 0 || r.bottom > win.innerHeight || r.left < 0 || r.right > win.innerWidth) {
+    for (var p = el.parentElement; p && p !== doc.body && p !== doc.documentElement; p = p.parentElement) if (p.scrollHeight > p.clientHeight + 1) moved.push({ el: p, top: p.scrollTop });
+    el.scrollIntoView({ block: "center", inline: "nearest" });
+  }
+  placed = true;
+}
+function focusTarget() { var ft = null; targets.forEach(function (t) { if (t && t.id === focus) ft = t; }); return ft; }
+function locate(list, f) {
+  unscroll();
+  targets = Array.isArray(list) ? list.slice(0, 200) : []; focus = str(f); found = {}; placed = false;
   targets.forEach(function (t) { if (t && t.id) found[t.id] = find(t); });
-  var ft = null; targets.forEach(function (t) { if (t && t.id === focus) ft = t; });
-  var el = ft && found[focus];
-  try {
-    if (el) {
-      /* Scroll the way the tester had it, then make sure the part is in view. */
-      var sc = scroller(el);
-      if (sc && ft.sy != null) sc.scrollTop = num(ft.sy);
-      else if (!sc) win.scrollTo(0, ft.sy != null ? num(ft.sy) : num(R.scroll));
-      var r = el.getBoundingClientRect();
-      if (r.top < 0 || r.bottom > win.innerHeight || r.left < 0 || r.right > win.innerWidth) el.scrollIntoView({ block: "center", inline: "nearest" });
-    } else if (settle) win.scrollTo(0, num(R.scroll));
-  } catch (e) {}
+  var ft = focusTarget(), el = ft && found[focus];
+  try { if (el) bring(ft, el); else win.scrollTo(0, num(R.scroll)); } catch (e) {}
   report();
 }
+/* Says where each part is now, looking again for any not found yet, since some only
+   appear as the screen finishes drawing. */
 function report() {
+  targets.forEach(function (t) {
+    if (!t || !t.id) return;
+    var n = found[t.id];
+    if (!n || !n.isConnected || !shown(n)) found[t.id] = find(t);
+  });
+  var ft = focusTarget();
+  if (ft && found[focus] && !placed) { try { bring(ft, found[focus]); } catch (e) {} }
   var rects = {};
   Object.keys(found).forEach(function (id) { var n = found[id]; rects[id] = n && n.isConnected && shown(n) ? rectOf(n) : null; });
   send({ type: "epkit-rects", focus: focus, rects: rects, found: !!(focus && rects[focus]) });
@@ -120,17 +144,16 @@ function go() {
   /* Give the screen a moment to draw and settle, then find the parts, and look again
      as late fonts and entrances finish. */
   setTimeout(function () {
-    locate(R.targets, R.focus, true);
+    locate(R.targets, R.focus);
     tell(ok);
-    setTimeout(report, 700);
-    setTimeout(report, 1800);
+    [700, 1800, 3200].forEach(function (ms) { setTimeout(report, ms); });
   }, 600);
 }
 win.addEventListener("message", function (e) {
   var d = e.data;
   if (e.source !== win.parent || !d || typeof d !== "object" || d.type !== "epkit-locate") return;
-  locate(d.targets, d.focus, false);
-  setTimeout(report, 400);
+  locate(d.targets, d.focus);
+  [400, 1500].forEach(function (ms) { setTimeout(report, ms); });
 });
 if (doc.readyState === "complete") setTimeout(go, 50); else win.addEventListener("load", function () { setTimeout(go, 50); });
 setTimeout(function () { tell(false); }, 8000);

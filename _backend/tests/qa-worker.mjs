@@ -371,6 +371,43 @@ check('7-day sweep keeps live sessions', [...db2._rows.keys()].some(k=>k.startsW
   const big=new Request(base+'/api/fb/post',{method:'POST',headers:{'Content-Type':'application/json','content-length':'40000'},body:JSON.stringify(C1)});
   check('an outsized body is refused before reading', (await worker.fetch(big, fenv)).status===413);
 
+  /* edits: newer words always win, and an edit that leaves out context keeps what is stored */
+  {
+    const P = (o) => fb('POST','/api/fb/post',Object.assign({},C1,{id:'ord00001'},o),{'CF-Connecting-IP':'7.7.7.7'});
+    const B={name:'Ana',ver:'git:abc',screen:'b-share'};
+    const get = async () => (await fb('GET','/api/fb/list?tool=reimagination-lab',null,TK)).data.comments.find(c=>c.id==='ord00001');
+    await P({comment:Object.assign({},C1.comment,{text:'First words',updated:1000,ctx:{name:'Lab',heading:'H',settings:{mode:'team'},device:{browser:'Chrome 141'}},where:{x:5,y:6,w:7,h:8,el:{tag:'button',text:'Next',path:'footer > button',sel:'#nextBtn'}}})});
+    q=await P({comment:Object.assign({},B,{text:'Corrected words',updated:3000})});
+    let g=await get();
+    check('an edit that leaves out the context and pointer keeps the ones stored', q.data.ok===true && g.text==='Corrected words' && g.ctx.settings.mode==='team' && g.ctx.device.browser==='Chrome 141' && g.where.el.sel==='#nextBtn', JSON.stringify(g && g.ctx));
+    q=await P({comment:Object.assign({},B,{text:'First words',updated:1000})});
+    g=await get();
+    check('a late post of older words is ignored, and still answers ok so nothing retries', q.data.ok===true && q.data.stale===true && g.text==='Corrected words');
+    q=await P({comment:Object.assign({},B,{text:'Words from an older kit'})});
+    g=await get();
+    check('a post with no time at all (an older kit) still saves', q.data.ok===true && g.text==='Words from an older kit');
+    await fb('POST','/api/fb/delete',{tool:'reimagination-lab',code:CODE,id:'ord00001',edit:C1.edit});
+    q=await P({comment:Object.assign({},B,{text:'Still on its way',updated:5000})});
+    g=await get();
+    check('a post still on its way after a delete cannot bring the comment back', q.data.ok===true && q.data.gone===true && !g);
+    const tl=async()=>(await fb('GET','/api/fb/tools',null,TK)).data.tools.find(t=>t.tool==='count-tool');
+    const mk=(id)=>fb('POST','/api/fb/post',{tool:'count-tool',code:CODE,id,edit:'Edit0123456789abcdef',comment:{text:'x',updated:1}},{'CF-Connecting-IP':'6.6.6.6'});
+    await Promise.all([mk('twin0001'),mk('twin0001'),mk('twin0002')]);
+    check('the tools list counts comments, so two posts at once never count one twice', (await tl()).n===2, JSON.stringify(await tl()));
+    await fb('POST','/api/fb/delete',{tool:'count-tool',id:'twin0001'},TK);
+    check('and a delete counts down to what is really there', (await tl()).n===1);
+    const noLen=new Request(base+'/api/fb/post',{method:'POST',headers:{'Content-Type':'text/plain','Origin':'https://ep.github.io'},body:'{"x":"'+'y'.repeat(40000)+'"}'});
+    noLen.headers.delete('content-length');
+    check('an outsized body is refused even without a content-length', (await worker.fetch(noLen, fenv)).status===413);
+    const deepBody='{"tool":"deep-tool","code":"'+CODE+'","id":"deep0001","edit":"Edit0123456789abcdef","comment":{"text":"ok","ctx":'+'{"a":'.repeat(5000)+'{}'+'}'.repeat(5000)+'}}';
+    const r=await worker.fetch(new Request(base+'/api/fb/post',{method:'POST',headers:{'Content-Type':'text/plain','Origin':'https://ep.github.io','CF-Connecting-IP':'5.5.5.5'},body:deepBody}), fenv);
+    check('a context nested thousands deep is answered, never a server error', r.status!==500, r.status);
+    const old=Date.now()-3*86400000;
+    fenv.DB._rows.set('fb:reimagination-lab|d/oldmark01',{value:JSON.stringify({at:old}),updated:old});
+    await worker.scheduled({}, fenv, {});
+    check('delete markers are swept after two days', !fenv.DB._rows.has('fb:reimagination-lab|d/oldmark01') && fenv.DB._rows.has('fb:reimagination-lab|d/ord00001'));
+  }
+
   /* a new tester code retires the old links */
   const OLD=CODE; q=await fb('POST','/api/fb/code',{},TK);
   check('a new tester code replaces the old one', q.data.code!==OLD);

@@ -253,25 +253,66 @@ function scroller(n) {
 }
 
 /* ---------- the tester's own comments, kept in this browser ---------- */
-function loadMine() { var v = ls(function (l) { return JSON.parse(l.getItem(MINE) || "[]"); }); return Array.isArray(v) ? v.filter(function (c) { return c && c.id; }) : []; }
-var all = loadMine();
+var GONE = "ep-feedback-gone", storeOk = true, warnedFull = false;
+function readList(key) { var v = ls(function (l) { return JSON.parse(l.getItem(key) || "[]"); }); return Array.isArray(v) ? v.filter(function (c) { return c && c.id; }) : []; }
+var all = readList(MINE);
 /* mine(): this tool's comments the tester sees (list, pins, count). queue(): everything
    still to post, including comments cleared from the list before they posted. */
 function mine() { var id = toolId(); return all.filter(function (c) { return c.tool === id && !c.cleared; }); }
 function queue() { var id = toolId(); return all.filter(function (c) { return c.tool === id && c.status !== "posted"; }); }
-/* Nothing unsent is ever dropped to make room; only old posted comments are. */
+function goneIds() { var o = {}; readList(GONE).forEach(function (g) { o[g.id] = 1; }); return o; }
+function markGone(id) { var g = readList(GONE).filter(function (x) { return x.id !== id; }); g.push({ id: id, at: Date.now() }); ls(function (l) { l.setItem(GONE, JSON.stringify(g.slice(-300))); }); }
+/* Every tool on this site shares the browser's storage, and a tester may have two tabs
+   open, so the list is merged with what is stored before every save: comment by
+   comment, the newer copy wins, and nothing another tab saved is ever dropped. */
+function merge() {
+  var gone = goneIds(), here = {};
+  all = all.filter(function (c) { return !gone[c.id]; });
+  all.forEach(function (c) { here[c.id] = c; });
+  readList(MINE).forEach(function (s) {
+    if (gone[s.id]) return;
+    var c = here[s.id];
+    if (!c) { all.push(s); here[s.id] = s; return; }
+    var later = (s.updated || 0) > (c.updated || 0) || ((s.updated || 0) === (c.updated || 0) && s.status === "posted" && c.status !== "posted" && !inflight[c.id]);
+    if (later) for (var k in s) if (k !== "ctx" || s.ctx) c[k] = s[k];
+    if (s.cleared) c.cleared = true;
+  });
+  all.sort(function (x, y) { return (x.created || 0) - (y.created || 0); });
+}
+function serial(list) { return JSON.stringify(list.map(function (c) { if (c.status !== "posted") return c; var o = {}; for (var k in c) if (k !== "ctx") o[k] = c[k]; o.heading = c.heading || (c.ctx && c.ctx.heading) || ""; return o; })); }
+/* Nothing unsent is ever dropped to make room; only old posted comments are. If the
+   browser's storage is full, posted ones go first; if even that fails, the tester is
+   told to keep the page open, and the leave warning stays on until everything posts. */
 function saveMine() {
-  var unsent = all.filter(function (c) { return c.status !== "posted"; }).length;
-  var room = Math.max(0, 300 - unsent), seen = 0;
+  merge();
+  var unsentN = all.filter(function (c) { return c.status !== "posted"; }).length;
+  var room = Math.max(0, 300 - unsentN), seen = 0;
   for (var i = all.length - 1; i >= 0; i--) if (all[i].status === "posted" && ++seen > room) all.splice(i, 1);
-  ls(function (l) { l.setItem(MINE, JSON.stringify(all.map(function (c) { if (c.status !== "posted") return c; var o = {}; for (var k in c) if (k !== "ctx") o[k] = c[k]; o.heading = c.heading || (c.ctx && c.ctx.heading) || ""; return o; }))); });
+  var put = function (text) { return ls(function (l) { l.setItem(MINE, text); return true; }) === true; };
+  storeOk = put(serial(all)) || put(serial(all.filter(function (c) { return c.status !== "posted"; })));
+  if (!storeOk && !warnedFull) { warnedFull = true; showToast("This browser's storage is full. Keep this page open until your comments post."); }
+  if (storeOk) warnedFull = false;
 }
 function myName() { return str(ls(function (l) { return l.getItem(NAME); })).slice(0, 60); }
 /* A half-written comment, kept as it is typed so a reload, a crash or a closed tab
    never loses it. id is set when it is a change to a comment already posted. */
-/* One slot for a new comment, and one per comment being changed, so one never
-   overwrites another. */
-function draftKey(id) { return DRAFT + (id ? ":" + id : ""); }
+/* One slot per tool for a new comment, and one per comment being changed, so one never
+   overwrites another, across tools as well. */
+function draftKey(id, tool) { return DRAFT + ":" + (tool || toolId()) + (id ? ":" + id : ""); }
+/* Words kept by the first version of this kit, in a slot shared by every tool, move to
+   their own tool's slot. */
+(function () {
+  ls(function (l) {
+    var keys = [];
+    for (var i = 0; i < l.length; i++) { var k = l.key(i); if (k === DRAFT || (k && k.indexOf(DRAFT + ":") === 0)) keys.push(k); }
+    keys.forEach(function (k) {
+      var d = null; try { d = JSON.parse(l.getItem(k) || "null"); } catch (e) { d = null; }
+      if (!d || !d.tool) return;
+      var want = draftKey(d.id, d.tool);
+      if (k !== want) { if (!l.getItem(want)) l.setItem(want, JSON.stringify(d)); l.removeItem(k); }
+    });
+  });
+})();
 function draftGet(id) {
   var d = ls(function (l) { return JSON.parse(l.getItem(draftKey(id)) || "null"); });
   return d && d.tool === toolId() && str(d.text).trim() ? d : null;
@@ -314,24 +355,40 @@ function payload(c, bare) {
   var w = c.where || {}, wo = {};
   for (k in w) if (k !== "el") wo[k] = w[k];
   if (w.el) wo.el = { tag: clip(w.el.tag, 20), role: clip(w.el.role, 30), text: clip(w.el.text, 120), path: clip(w.el.path, bare ? 200 : 400), sel: bare ? "" : str(w.el.sel).slice(0, 600) };
-  return { tool: c.tool, code: FB.code, id: c.id, edit: c.edit, comment: { name: c.name, text: str(c.text).slice(0, 2000), ver: c.ver, screen: c.screen, where: wo, ctx: o } };
+  /* A change to a posted comment, after a reload, no longer has its context here: it is
+     left out, and the worker keeps the one it has. updated orders the changes. */
+  return { tool: c.tool, code: FB.code, id: c.id, edit: c.edit, comment: { name: c.name, text: str(c.text).slice(0, 2000), ver: c.ver, screen: c.screen, where: c.where ? wo : undefined, ctx: c.ctx ? o : undefined, updated: c.updated || 0 } };
 }
+/* One request per comment at a time. A change made while one is out goes as soon as it
+   comes back, so the board always ends with the newest words. */
+var inflight = {};
 function send(c) {
-  c.status = "sending";
-  return api("/api/fb/post", payload(c)).then(function (r) {
+  if (inflight[c.id]) { c.again = true; return inflight[c.id]; }
+  var stamp = c.updated;
+  c.status = "sending"; c.again = false;
+  var p = api("/api/fb/post", payload(c)).then(function (r) {
     if (r.status === 400 || r.status === 413) return api("/api/fb/post", payload(c, true));
     return r;
   }).then(function (r) {
-    if (r.ok) { c.status = "posted"; delete c.err; }
+    delete inflight[c.id];
+    var more = c.again || c.updated !== stamp; c.again = false;
+    if (r.ok && r.data && r.data.gone) {
+      all = all.filter(function (x) { return x !== c; }); markGone(c.id); draftClear(c.id);
+      saveMine(); renderBar(); renderPins(); return r;
+    }
+    if (r.ok) { c.status = more ? "waiting" : "posted"; delete c.err; }
     else if (r.status === 401) { c.status = "waiting"; c.err = "link"; linkOk = false; }
     else if (r.status === 400 || r.status === 413) { c.status = "failed"; c.err = r.error || "rejected"; }
     else { c.status = "waiting"; c.err = r.status ? "busy" : "offline"; }
-    saveMine(); renderBar(); renderPins(); return r;
+    saveMine(); renderBar(); renderPins();
+    return r.ok && more ? send(c) : r;
   });
+  inflight[c.id] = p;
+  return p;
 }
 function flush(again) {
   if (flushing || linkOk === false) return Promise.resolve();
-  var w = queue().filter(function (c) { return c.status === "waiting" || c.status === "sending" || (again && c.status === "failed"); });
+  var w = queue().filter(function (c) { return !inflight[c.id] && (c.status === "waiting" || c.status === "sending" || (again && c.status === "failed")); });
   if (!w.length) return Promise.resolve();
   flushing = true;
   return w.reduce(function (p, c) { return p.then(function () { return send(c); }); }, Promise.resolve()).then(function () { flushing = false; }, function () { flushing = false; });
@@ -486,6 +543,7 @@ var bumpUntil = 0;
 function renderBar() {
   bar.textContent = "";
   if (linkOk === false) {
+    tip.hidden = true;
     var u = unsent();
     bar.appendChild(el("span", "msg", (FB.code ? "This feedback link isn't working. Ask for a new one." : "This page needs a feedback link. Ask for one.") +
       (u === 1 ? " Your unsent comment is kept here and posts from the new link." : u ? " Your " + u + " unsent comments are kept here and post from the new link." : "")));
@@ -508,7 +566,7 @@ function renderBar() {
 
 /* ---------- choosing what a comment is about ---------- */
 function startComment() {
-  closeCard(); st.list = false; st.mode = "pick"; st.editing = null; st.target = null;
+  closeCard(); st.list = false; st.mode = "pick"; st.editing = null; st.target = null; st.picked = false;
   ls(function (l) { l.setItem(COACH, "1"); });
   shield.hidden = false; box.hidden = true; hoverBox.hidden = true;
   showTip(verb() + " what your comment is about.", [btnK("b", "Whole screen", function () { choose(whole()); }, "whole")]);
@@ -542,7 +600,7 @@ shield.addEventListener("pointerup", function (e) {
   choose(areaAt(e.clientX, e.clientY));
 });
 function choose(t) {
-  hoverBox.hidden = true; tip.hidden = true;
+  hoverBox.hidden = true; tip.hidden = true; st.picked = true;
   st.target = t; paint(box, t.rect, t.whole);
   if (st.mode === "edit") { placeCard(); keepDraft(); return; }
   st.mode = "edit"; shield.hidden = false;
@@ -550,7 +608,7 @@ function choose(t) {
 }
 
 /* ---------- writing a comment ---------- */
-function closeCard() { card.hidden = true; card.textContent = ""; card.className = "card"; composer = null; }
+function closeCard() { if (holdStop) holdStop(); card.hidden = true; card.textContent = ""; card.className = "card"; composer = null; }
 function placeCard() {
   if (card.hidden) return;
   var W = win.innerWidth, H = win.innerHeight, cw = card.offsetWidth || 340, ch = card.offsetHeight || 200;
@@ -630,10 +688,9 @@ function submit(existing, ta, nameIn) {
   if (nameIn && nameIn.value.trim()) ls(function (l) { l.setItem(NAME, nameIn.value.trim().slice(0, 60)); });
   var c, t = st.target;
   if (existing) {
-    c = existing; c.text = text.slice(0, 2000); c.updated = Date.now();
-    if (t && c.screen === screenId()) { c.where = whereNow(); if (t.el) st.live[c.id] = t.el; }
-    if (!c.ctx) c.ctx = { name: toolName(), kit: FB.kit, heading: c.heading || "" };
-    if (c.status === "failed") c.status = "waiting";
+    c = existing; c.text = text.slice(0, 2000); c.updated = Math.max(Date.now(), (c.updated || 0) + 1);
+    if (st.picked && t && c.screen === screenId()) { c.where = whereNow(); if (t.el) st.live[c.id] = t.el; }
+    c.status = "waiting"; delete c.err;
   } else {
     c = { id: randFrom("abcdefghijkmnpqrstuvwxyz23456789", 14), edit: randFrom("ABCDEFGHJKLMNPQRSTUVWXYZabcdefghijkmnpqrstuvwxyz23456789", 24), tool: toolId(), created: Date.now(), updated: Date.now(), name: myName(), text: text.slice(0, 2000), ver: ver, screen: screenId(), where: whereNow(), ctx: context(), status: "waiting" };
     if (t && t.el) st.live[c.id] = t.el;
@@ -653,9 +710,11 @@ function submit(existing, ta, nameIn) {
   });
 }
 function removeComment(c) {
-  return api("/api/fb/delete", { tool: c.tool, code: FB.code, id: c.id, edit: c.edit }).then(function (r) {
+  return (inflight[c.id] || Promise.resolve()).then(function () {
+    return api("/api/fb/delete", { tool: c.tool, code: FB.code, id: c.id, edit: c.edit });
+  }).then(function (r) {
     if (r.ok || c.status !== "posted") {
-      all = all.filter(function (x) { return x !== c; }); saveMine(); draftClear(c.id);
+      all = all.filter(function (x) { return x !== c; }); markGone(c.id); saveMine(); draftClear(c.id);
       var wasList = st.list; cancelComment(); showToast("Deleted"); if (wasList) openList();
     } else showToast(r.status ? "Couldn't delete it. Try again." : "Couldn't delete it while offline.");
   });
@@ -701,7 +760,7 @@ var pinFrame = 0;
 function pinsSoon() { if (pinFrame) return; pinFrame = raf(function () { pinFrame = 0; renderPins(); }); }
 function editComment(c) {
   st.list = false; closeCard();
-  st.mode = "edit"; st.editing = c; st.target = null;
+  st.mode = "edit"; st.editing = c; st.target = null; st.picked = false;
   if (c.where && !c.where.whole && c.screen === screenId()) {
     var n = st.live[c.id]; if (!n || !n.isConnected) { n = null; try { n = c.where.el && c.where.el.sel ? doc.querySelector(c.where.el.sel) : null; } catch (e) { n = null; } }
     st.target = n ? { el: n, whole: false, rect: around(n) } : { el: null, whole: false, rect: fit({ x: c.where.xp * win.innerWidth / 100, y: c.where.yp * win.innerHeight / 100, w: c.where.wp * win.innerWidth / 100, h: c.where.hp * win.innerHeight / 100 }) };
@@ -740,20 +799,27 @@ function openList() {
 }
 /* A button that acts only after it is held down for three seconds, by pointer or by
    Space or Enter. Letting go early does nothing. */
+var holdStop = null;
 function holdButton(label, holding, done) {
   var b = btn("b hold"), fill = el("i", "fill"), lab = el("span", null, label), t0 = 0, timer = 0;
   b.appendChild(fill); b.appendChild(lab);
   b.setAttribute("data-k", "clear"); b.setAttribute("aria-label", label + ". Press and hold for 3 seconds.");
   function draw() { if (!t0) return; var p = Math.min(1, (Date.now() - t0) / HOLD_MS); fill.style.transform = "scaleX(" + p + ")"; if (p < 1) raf(draw); }
-  function stop() { clearTimeout(timer); t0 = 0; b.classList.remove("holding"); fill.style.transform = "scaleX(0)"; lab.textContent = label; }
+  function stop() { clearTimeout(timer); t0 = 0; if (holdStop === stop) holdStop = null; b.classList.remove("holding"); fill.style.transform = "scaleX(0)"; lab.textContent = label; }
   function start(e) {
-    if (t0 || b.disabled) return; if (e && e.preventDefault) e.preventDefault();
-    t0 = Date.now(); b.classList.add("holding"); lab.textContent = holding; draw();
-    timer = setTimeout(function () { t0 = 0; b.disabled = true; fill.style.transform = "scaleX(1)"; lab.textContent = "Clearing\u2026"; done(); }, HOLD_MS);
+    if (t0 || b.disabled) return;
+    if (e && e.type === "pointerdown") { if (e.button !== 0) return; e.preventDefault(); try { b.setPointerCapture(e.pointerId); } catch (x) {} }
+    if (holdStop) holdStop();
+    t0 = Date.now(); holdStop = stop; b.classList.add("holding"); lab.textContent = holding; draw();
+    timer = setTimeout(function () {
+      /* Only a hold that is still going, on a list that is still open, clears it. */
+      if (!t0 || holdStop !== stop || !b.isConnected || card.hidden) { stop(); return; }
+      t0 = 0; holdStop = null; b.disabled = true; fill.style.transform = "scaleX(1)"; lab.textContent = "Clearing\u2026"; done();
+    }, HOLD_MS);
   }
   b.addEventListener("pointerdown", start);
-  ["pointerup", "pointerleave", "pointercancel"].forEach(function (t) { b.addEventListener(t, function () { if (t0) stop(); }); });
-  b.addEventListener("keydown", function (e) { if (e.key === " " || e.key === "Enter") { e.preventDefault(); if (!e.repeat) start(); } });
+  ["pointerup", "pointerleave", "pointercancel", "lostpointercapture", "blur", "contextmenu"].forEach(function (t) { b.addEventListener(t, function () { if (t0) stop(); }); });
+  b.addEventListener("keydown", function (e) { if (e.key === " " || e.key === "Enter") { e.preventDefault(); if (!e.repeat) start(); } else if (t0) stop(); });
   b.addEventListener("keyup", function (e) { if ((e.key === " " || e.key === "Enter") && t0) stop(); });
   b.hold = { start: start, stop: stop };
   return b;
@@ -827,8 +893,10 @@ function onLeaving(e) {
   e.preventDefault(); e.returnValue = ""; return "";
 }
 win.addEventListener("beforeunload", onLeaving);
+win.addEventListener("blur", function () { if (holdStop) holdStop(); });
+win.addEventListener("storage", function (e) { if (e.key === MINE || e.key === GONE || e.key === null) { merge(); renderBar(); renderPins(); } });
 win.addEventListener("pagehide", sendOnLeave);
-doc.addEventListener("visibilitychange", function () { if (doc.visibilityState === "hidden") sendOnLeave(); });
+doc.addEventListener("visibilitychange", function () { if (doc.visibilityState === "hidden") { if (holdStop) holdStop(); sendOnLeave(); } });
 
 /* ---------- start ---------- */
 (doc.documentElement || doc.body).appendChild(host);

@@ -21,7 +21,8 @@ export function FakeDB(){
           },
           async first(){
             if (sql.includes('COUNT')){
-              let n=0; rows.forEach((v,k)=>{ if (k.split('|')[0]===args[0]) n++; });
+              const rng = sql.includes('path >= ?'); /* a count over one range of paths, [args[1], args[2]) */
+              let n=0; rows.forEach((v,k)=>{ const [r,p]=k.split('|'); if (r===args[0] && (!rng || (p>=args[1] && p<args[2]))) n++; });
               reads.n += n;
               return { c: n };
             }

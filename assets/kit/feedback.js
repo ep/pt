@@ -11,7 +11,8 @@
    words), page errors, and which version of the file was open. No picture is taken:
    the feedback board in feedback/ rebuilds the screen from the tool's own code.
    Nothing typed is lost: an unsent comment is kept in the browser until it posts,
-   and so is a half-written one. Testers can edit or delete their own comments,
+   and so is a half-written one, safely across tabs and tools; changes to a comment
+   go one at a time, so the board always ends with the newest words. Testers can edit or delete their own comments,
    clear their own list with a three-second hold (the board keeps every comment;
    only the team changes the board), and Done shows how many were sent.
 
@@ -44,7 +45,8 @@
    board rebuilds a screen, even after the tool changes.
 
    Remove it: delete the script line. The tool hook can stay; it does nothing alone.
-   Turn it off in a tab: ?feedback=off, or Done, then Turn off feedback.
+   Turn it off in a tab: ?feedback=off, or Done, then Turn off feedback. Anything
+   not yet posted still goes to the board.
 
    Files: feedback.js (this, loaded by every page that carries the line),
    feedback-ui.js (the bar and comments, loaded only in feedback mode),
