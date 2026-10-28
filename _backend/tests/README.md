@@ -69,16 +69,20 @@ fifteen minutes to find, or miss entirely.
   then on a call: the plan of six steps, the rail that fills with the group's own words,
   timers that take 30 seconds off or on and end once you move past their screen, the wall of
   eye-rollers, the vote revealed through Next with ties waiting for a pick, the why chain
-  (each line unlocks the next, and one line is the real purpose), the three ways to draw it,
-  one face per step, necessary or inherited, the captioned story player (silent when the
-  sound is off, and carrying on in captions when the voice can't play), the four moves on
-  one board, the new workflow (it starts as a copy of today's steps), the before and after,
-  and the first test. It walks a whole solo session too (no team-only screens, and the steps
-  typed straight in), one screen at a time with at most one filled button. It checks that
+  (each line unlocks the next) and picking which line is the real purpose, the three ways to
+  draw it, the strip of frames the steps become (typed in, moved, removed with undo), one
+  face stamped on each frame, necessary or inherited for the steps lifted out to question,
+  the captioned story player (silent when the sound is off, and carrying on in captions when
+  the voice can't play), the four moves used as tools on the frames themselves (cut with undo,
+  shrink and amplify with a line on how, invent a new step after any frame), the change
+  replayed in Share it, and the first test. It walks a whole solo session too (no team-only
+  screens, and the steps typed straight in), one screen at a time with at most one filled
+  button. It checks that
   typed text never runs as code, that everything the group types (and every line that quotes
   it) is marked private for the feedback kit, two tabs open on one session, print, the
   outcome image, Email this with the real send kit, picking up after a reload (including
-  sessions saved by earlier versions and screens that have since gone), clear with undo,
+  sessions saved by earlier versions and screens that have since gone, and steps edited
+  after the moves keeping their changes), clear with undo,
   that the page stays well under 1 MB with the voice in its own file beside it
   (`story.mp3`), and the hooks the feedback board uses: its parts (every screen in exactly
   one) and opening any screen with made-up content.

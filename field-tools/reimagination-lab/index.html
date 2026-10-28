@@ -1230,6 +1230,487 @@ b.own{font-weight:650;color:var(--ink)}
 .jkey{grid-template-columns:minmax(0,1fr) repeat(3,64px);column-gap:8px;padding-right:10px}
 .jkey span{font-size:12px;white-space:nowrap}
 
+/* =========================================================
+   v8: one living strip
+   From Draw it to Share it, the group's workflow is a row of
+   frames that every step acts on. Quieter everywhere else,
+   with more room, larger examples, and gold kept for choices.
+   ========================================================= */
+:root{
+  --tD:#DDF1F0; --tF:#F9E3D6; --tC:#FFF2C2;
+  --mSub:#D86527; --mShr:#586A90; --mAmp:#3E8E8C; --mInv:#E8B400;
+  --tSub:#F9E3D6; --tShr:#E3E8F2; --tAmp:#DDF1F0; --tInv:#FFF2C2;
+  --frameShadow:0 1px 1px rgba(17,26,43,.04),0 3px 8px -3px rgba(17,26,43,.10),0 22px 34px -26px rgba(17,26,43,.34);
+}
+@media (prefers-color-scheme:dark){ :root:not([data-theme="light"]){
+  --tD:rgba(104,191,189,.17); --tF:rgba(216,101,39,.2); --tC:rgba(255,204,0,.15);
+  --mShr:#A8B2C7; --mAmp:#68BFBD; --mInv:#FFCC00;
+  --tSub:rgba(216,101,39,.16); --tShr:rgba(168,178,199,.14); --tAmp:rgba(104,191,189,.16); --tInv:rgba(255,204,0,.14);
+  --frameShadow:0 1px 1px rgba(0,0,0,.25),0 3px 8px -3px rgba(0,0,0,.35),0 22px 34px -26px rgba(0,0,0,.7);
+}}
+:root[data-theme="dark"]{
+  --tD:rgba(104,191,189,.17); --tF:rgba(216,101,39,.2); --tC:rgba(255,204,0,.15);
+  --mShr:#A8B2C7; --mAmp:#68BFBD; --mInv:#FFCC00;
+  --tSub:rgba(216,101,39,.16); --tShr:rgba(168,178,199,.14); --tAmp:rgba(104,191,189,.16); --tInv:rgba(255,204,0,.14);
+  --frameShadow:0 1px 1px rgba(0,0,0,.25),0 3px 8px -3px rgba(0,0,0,.35),0 22px 34px -26px rgba(0,0,0,.7);
+}
+
+/* ---------- focus is a quiet outline; gold only marks what was chosen ---------- */
+:focus-visible,:root:not([data-theme="dark"]) :focus-visible{outline:2.5px solid var(--ink2);outline-offset:3px;box-shadow:none;border-radius:10px}
+@media (prefers-color-scheme:dark){ :root:not([data-theme="light"]) :focus-visible{outline-color:var(--ink2);box-shadow:none} }
+.scene.night :focus-visible{outline-color:var(--nightInk2);box-shadow:none}
+textarea:focus-visible,input:focus-visible{outline:none}
+
+/* ---------- more room, and words that are easy to read on a shared screen ---------- */
+.scene{padding:92px clamp(20px,5vw,80px) 112px}
+.split{gap:clamp(32px,5vw,96px)}
+.split .ask{font-size:clamp(32px,3.4vw,52px);margin-bottom:14px}
+.split .sub,.stagel .sub{font-size:clamp(17px,1.3vw,19.5px);line-height:1.55;margin-bottom:18px;max-width:44ch}
+.who{gap:7px;margin:4px 0 18px}
+.who li{font-size:clamp(15.5px,1.15vw,17px)}
+
+/* examples and tips: larger pencil, darker, with a small mark people learn to spot */
+.pencil{font-size:clamp(20px,1.6vw,23.5px);line-height:1.22;color:color-mix(in srgb,var(--ink2) 72%,var(--ink));margin:18px 0 0}
+.pencil p{margin:0 0 10px}
+.pencil .eg{font-weight:700;white-space:nowrap}
+.pencil .pi{width:.92em;height:.92em;margin:0 .32em 0 0;vertical-align:-.1em;opacity:.85}
+.night .pencil{color:var(--nightInk2)}
+
+/* ---------- the workshop that goes further: in the bottom bar, apart from the activity ---------- */
+.golink{position:absolute;left:50%;top:50%;transform:translate(-50%,-50%);display:inline-flex;align-items:center;gap:10px;max-width:calc(100% - 440px);
+  padding:8px 4px;font-size:14px;line-height:1.3;color:var(--ink2);text-decoration:none;white-space:nowrap;overflow:hidden;transition:color .25s}
+.golink .gt{overflow:hidden;text-overflow:ellipsis}
+.golink b{font-weight:650;color:var(--ink);text-decoration:underline;text-decoration-color:var(--gold);text-decoration-thickness:2px;text-underline-offset:4px}
+.golink:hover{color:var(--ink)}
+.golink .gm{position:relative;flex:0 0 auto;width:18px;height:16px}
+.golink .gm i{position:absolute;border-radius:50%}
+.golink .gm i:nth-child(1){width:10px;height:10px;right:0;bottom:0;background:#F2C94C}
+.golink .gm i:nth-child(2){width:7px;height:7px;left:1px;bottom:1px;background:var(--tealM)}
+.golink .gm i:nth-child(3){width:6px;height:6px;left:5px;top:0;background:var(--clayM)}
+@media (max-width:1180px){ .golink .gx{display:none} }
+@media (max-width:820px){ .golink{display:none} }
+
+/* ---------- the rail: larger words ---------- */
+.rail button{height:58px;max-width:178px}
+.rail button span{font-size:13px;line-height:1.26;min-height:2.52em}
+
+/* ---------- the plan: one path, two questions then four actions ---------- */
+.planscreen .frame{max-width:1180px}
+.planscreen .sub{margin-top:6px}
+.path6{position:relative;width:100%;margin:clamp(40px,7vh,72px) auto 0}
+.path6 ol{position:relative;list-style:none;margin:0;padding:0;display:grid;grid-template-columns:repeat(6,minmax(0,1fr));gap:clamp(10px,1.4vw,22px)}
+.pline{position:absolute;left:0;top:21px;width:100%;height:4px;overflow:visible}
+.pline path{fill:none;stroke:var(--nightLine);stroke-width:2;vector-effect:non-scaling-stroke;stroke-dasharray:1000;stroke-dashoffset:1000;animation:drawLine 1.5s cubic-bezier(.6,0,.2,1) .25s forwards}
+@keyframes drawLine{to{stroke-dashoffset:0}}
+.path6 .pc{display:flex;flex-direction:column;align-items:center;gap:12px;text-align:center;opacity:0;animation:nodeIn .7s var(--spring) forwards;animation-delay:calc(var(--i)*170ms + 350ms)}
+@keyframes nodeIn{from{opacity:0;transform:translateY(12px)}to{opacity:1;transform:none}}
+.pdot{width:44px;height:44px;border-radius:50%;display:grid;place-items:center;background:var(--night);box-shadow:inset 0 0 0 2px var(--nightInk2);font-family:var(--display);font-weight:600;font-size:18px;color:var(--nightInk)}
+.pc.q .pdot{background:var(--gold);box-shadow:0 0 0 6px rgba(255,204,0,.14);color:#141C2C}
+.pq{font-family:var(--display);font-weight:540;font-size:clamp(19px,1.75vw,25px);line-height:1.16;letter-spacing:-.01em;color:var(--nightInk);text-wrap:balance}
+.pc.q .pq{font-style:italic;font-weight:460}
+.pl{font-size:14.5px;line-height:1.35;color:var(--nightInk2)}
+.planscreen .grab{margin:clamp(40px,7vh,68px) auto 0;font-size:15.5px;color:var(--nightInk2);max-width:60ch}
+@media (max-width:880px){
+  .path6 ol{grid-template-columns:1fr;gap:18px;max-width:420px;margin:0 auto}
+  .pline{display:none}
+  .path6 .pc{display:grid;grid-template-columns:44px minmax(0,1fr);grid-template-rows:auto auto;column-gap:16px;row-gap:2px;text-align:left;align-items:center}
+  .pdot{grid-row:span 2}
+}
+
+/* ---------- step 2: keep asking, then pick ---------- */
+.chain .crow{grid-template-columns:minmax(0,1fr) 34px}
+.chain .cj{margin-left:2px}
+.cghost{margin-left:calc(var(--lv) * 22px)}
+.purposescreen .frame{max-width:960px}
+.pchoices{display:flex;flex-direction:column;gap:12px;width:100%;max-width:780px;margin:34px auto 0;text-align:left}
+.pfrom{margin:0 0 6px;font-family:var(--display);font-size:clamp(17px,1.4vw,20px);color:var(--ink2);text-wrap:balance}
+.pc8{position:relative;display:grid;grid-template-columns:minmax(0,1fr) 40px;align-items:center;column-gap:16px;margin-left:calc(var(--lv) * 30px);padding:16px 20px 18px 22px;border-radius:18px;background:var(--card);box-shadow:inset 0 0 0 1.5px var(--line),var(--frameShadow);text-align:left;transition:transform .35s var(--spring),box-shadow .3s}
+.pc8:hover{transform:translateY(-2px);box-shadow:inset 0 0 0 1.5px var(--line2),var(--frameShadow)}
+.pc8 .pj{grid-column:1;font-family:var(--display);font-style:italic;font-size:15.5px;color:var(--ink2)}
+.pc8 .pt{grid-column:1;font-family:var(--display);font-weight:520;font-size:clamp(21px,1.9vw,27px);line-height:1.2;letter-spacing:-.01em;color:var(--ink);overflow-wrap:anywhere}
+.pc8 .pk{grid-column:2;grid-row:1 / span 2;width:38px;height:38px;border-radius:50%;display:grid;place-items:center;box-shadow:inset 0 0 0 1.5px var(--line2);color:transparent;transition:background .25s,transform .35s var(--spring)}
+.pc8 .pk svg{width:20px;height:20px}
+.pc8.on{box-shadow:inset 0 0 0 2.5px var(--gold),0 0 0 6px rgba(255,204,0,.15),var(--frameShadow)}
+.pc8.on .pk{background:var(--gold);color:#141C2C;box-shadow:none;transform:scale(1.08)}
+.pchoices.nudge .pc8{animation:nudgeX .5s ease}
+@keyframes nudgeX{20%{transform:translateX(-6px)}45%{transform:translateX(6px)}70%{transform:translateX(-3px)}100%{transform:none}}
+
+/* ---------- step 3: four ways to draw it, each with its own example ---------- */
+.modes{gap:12px;margin:4px 0 20px}
+.mode{padding:12px 14px 14px;border-radius:16px;gap:3px}
+.mode .art{width:64px;height:44px;margin-bottom:4px}
+.mode b{font-size:16px}
+.expanel{margin:0;padding:clamp(22px,2.4vw,34px);border-radius:24px;background:var(--card);box-shadow:inset 0 0 0 1.5px var(--line),var(--frameShadow);display:flex;flex-direction:column;gap:20px;min-height:min(440px,52vh);justify-content:center}
+.expanel .exart{display:grid;place-items:center;color:var(--ink2)}
+.expanel figcaption{margin:0;font-size:clamp(20px,1.6vw,23px)}
+.sheet6{width:100%;max-width:560px;height:auto;color:var(--ink2)}
+.sheet6 .lab,.actex .lab{font-family:var(--hand);font-weight:600;font-size:19px;fill:currentColor;stroke:none}
+.sheet6 .g{stroke:var(--gold)}
+.actex{width:100%;max-width:520px;height:auto;color:var(--ink2)}
+.actex .g2{stroke:var(--gold)}
+.actex .rep{fill:var(--s1);stroke:var(--sInk)}
+.m-sticky .exnotes{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:18px 16px;max-width:560px;width:100%;margin:0}
+.m-sticky .xn{min-width:0;max-width:none;min-height:96px;padding:14px 14px 18px;border:0;border-radius:3px 3px 14px 3px;background:var(--s1);color:var(--sInk);font-size:22px;line-height:1.1;box-shadow:0 2px 2px rgba(17,26,43,.06),0 12px 20px -14px rgba(17,26,43,.4)}
+.m-sticky .xn.c2{background:var(--s2)} .m-sticky .xn.c3{background:var(--s3)} .m-sticky .xn.c4{background:var(--s4)}
+.mstrip.ex{justify-content:center}
+.scene[data-id="map"] .split{grid-template-columns:minmax(0,5.2fr) minmax(0,6.8fr)}
+
+/* ---------- the strip screens: what to do across the top, the workflow below ---------- */
+.stagel .sh{display:grid;grid-template-columns:minmax(0,1fr) minmax(250px,400px);gap:clamp(24px,4.5vw,80px);align-items:start;margin:0 0 clamp(22px,3.4vh,40px)}
+.stagel .sh .ask{font-size:clamp(32px,3.4vw,52px);margin:0 0 14px}
+.stagel .sh .sub{margin-bottom:12px;max-width:52ch}
+.stagel .shr{padding-top:4px}
+.stagel .shr .timer{margin:0 0 6px}
+.stagel .shr .pencil{margin-top:8px;font-size:clamp(19px,1.45vw,21.5px)}
+.stagel .shr .pencil p{margin-bottom:8px}
+.stagel .who{margin-bottom:0}
+@media (max-width:980px){ .stagel .sh{grid-template-columns:1fr;gap:10px} }
+
+/* ---------- the strip ---------- */
+.strip8{--gap:clamp(16px,1.6vw,26px);list-style:none;margin:0;padding:0;display:grid;grid-template-columns:repeat(var(--per,5),minmax(0,1fr));gap:var(--gap);max-width:calc(var(--per,5) * 300px)}
+/* a small arrow between frames shows the work moving along */
+.strip8 .sf:not(.re)::after{content:"";position:absolute;top:50%;right:calc(var(--gap) / -2 - 4px);width:8px;height:8px;border-top:2px solid var(--line2);border-right:2px solid var(--line2);transform:translateY(-50%) rotate(45deg);pointer-events:none}
+.strip8 .sf.mv-sub::after{opacity:.5}
+.sf{position:relative;min-width:0;display:flex}
+.sf-card{position:relative;flex:1;display:flex;flex-direction:column;min-height:132px;padding:14px 16px 14px;border-radius:18px;background:var(--card);box-shadow:inset 0 0 0 1px var(--line),var(--frameShadow);transition:transform .45s var(--spring),box-shadow .3s,background-color .35s,opacity .35s}
+.sf-n{font-family:var(--display);font-weight:600;font-size:15px;line-height:1;color:var(--ink2);margin:2px 0 10px}
+.sf-t{margin:0;font-size:clamp(15px,1.12vw,16.5px);line-height:1.42;font-weight:520;color:var(--ink);overflow-wrap:anywhere;display:-webkit-box;-webkit-box-orient:vertical;-webkit-line-clamp:5;overflow:hidden}
+.sf.fresh .sf-card{animation:frameIn .55s var(--spring) both}
+@keyframes frameIn{from{opacity:0;transform:translateY(-14px) scale(.96)}to{opacity:1;transform:none}}
+/* typing the steps */
+.strip8.edit .sf-card{padding-bottom:10px}
+.sf-in,.sf-how{width:100%;flex:0 0 auto;resize:none;border:0;background:transparent;padding:0;margin:0;font:inherit;font-size:clamp(15px,1.12vw,16.5px);line-height:1.42;font-weight:520;color:var(--ink);min-height:3em;overflow:hidden}
+.sf-in::placeholder,.sf-how::placeholder{color:var(--ink2);opacity:.75;font-weight:450}
+.sf-card:focus-within{box-shadow:inset 0 0 0 2px var(--ink2),var(--frameShadow)}
+.sf-ctl{display:flex;gap:2px;justify-content:flex-end;margin:8px -6px -4px 0;opacity:0;transition:opacity .2s}
+.sf-card:hover .sf-ctl,.sf-card:focus-within .sf-ctl{opacity:1}
+@media (hover:none){ .sf-ctl{opacity:1} }
+.sf-ctl button{width:34px;height:34px;border-radius:50%;display:grid;place-items:center;color:var(--ink2)}
+.sf-ctl button:hover{background:var(--line);color:var(--ink)}
+.sf-ctl button[disabled]{opacity:.25;pointer-events:none}
+.sf-ctl svg{width:18px;height:18px}
+.sf.moved .sf-card{box-shadow:inset 0 0 0 1.5px var(--line2),var(--frameShadow);transform:translateY(-3px)}
+.sf.addf .sf-add{flex:1;min-height:132px;border-radius:18px;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:4px;color:var(--ink2);font-weight:600;font-size:15.5px;box-shadow:inset 0 0 0 1.5px var(--line2);border:0;background:transparent;transition:color .2s,box-shadow .2s,background-color .2s}
+.sf.addf .sf-add:hover{color:var(--ink);box-shadow:inset 0 0 0 1.5px var(--ink2);background:var(--card)}
+.sf-add .pl{font-size:28px;line-height:1;font-weight:400}
+.capture .shr .photo{margin-top:12px;padding:10px 12px;border-radius:14px}
+.capture .shr .photo svg{width:26px;height:26px}
+.capture .shr .photo small{font-size:12.5px}
+/* judging: one face per frame, stamped on */
+.strip8.judge .sf-card{padding-bottom:12px}
+.sf.r-d .sf-card{background:var(--tD)} .sf.r-f .sf-card{background:var(--tF)} .sf.r-c .sf-card{background:var(--tC)}
+.sf-faces{display:flex;gap:6px;margin-top:auto;padding-top:14px}
+.fb{width:42px;height:42px;border-radius:50%;display:grid;place-items:center;font-size:23px;line-height:1;transition:transform .3s var(--spring),opacity .2s,filter .2s,background-color .2s}
+.sf[class*=" r-"] .fb:not(.on){filter:grayscale(1);opacity:.42}
+.fb:hover,.sf[class*=" r-"] .fb:not(.on):hover{filter:none;opacity:1;transform:translateY(-2px)}
+.fb.on{filter:none;opacity:1;background:var(--card);box-shadow:0 0 0 2px var(--ink2);transform:scale(1.08)}
+.stamp{position:absolute;top:-12px;right:-10px;width:50px;height:50px;border-radius:50%;display:grid;place-items:center;font-size:27px;line-height:1;background:var(--card);box-shadow:0 0 0 3px var(--bg),0 6px 14px -6px rgba(17,26,43,.4);transform:rotate(10deg);z-index:2}
+.stamp.fresh{animation:stampIn .55s cubic-bezier(.3,1.6,.5,1) both}
+@keyframes stampIn{0%{opacity:0;transform:scale(1.9) rotate(-14deg)}60%{opacity:1;transform:scale(.9) rotate(13deg)}100%{transform:rotate(10deg)}}
+.seal{position:absolute;top:12px;right:12px;z-index:2;padding:5px 10px 4px;border-radius:7px;border:2px solid currentColor;font-size:12.5px;font-weight:750;letter-spacing:.06em;line-height:1;transform:rotate(-7deg);background:color-mix(in srgb,var(--card) 80%,transparent)}
+.seal.inh{color:var(--mSub)} .seal.need{color:var(--mAmp)}
+.seal.sm{position:static;align-self:flex-start;margin:-2px 0 8px;padding:3px 7px 2px;font-size:10.5px;border-width:1.5px;transform:rotate(-5deg)}
+.seal.fresh{animation:sealIn .5s cubic-bezier(.3,1.6,.5,1) both}
+@keyframes sealIn{0%{opacity:0;transform:scale(2.2) rotate(-18deg)}60%{opacity:1;transform:scale(.92) rotate(-5deg)}100%{transform:rotate(-7deg)}}
+/* necessary or inherited: the frames to question lift out of a small copy of the strip */
+.mstrip{list-style:none;margin:0;padding:0;display:flex;flex-wrap:wrap;gap:10px}
+.inherit .mstrip:not(.wrap){flex-wrap:nowrap}
+.inherit .mstrip:not(.wrap) .mt{flex:1 1 0;width:auto;min-width:0;max-width:150px}
+.mt{position:relative;width:clamp(104px,9.4vw,134px);min-height:66px;padding:9px 10px 10px;border-radius:11px;background:var(--card);box-shadow:inset 0 0 0 1px var(--line),0 6px 14px -12px rgba(17,26,43,.4);display:flex;flex-direction:column;gap:4px;transition:max-width .7s var(--spring),width .7s var(--spring),padding .7s var(--spring),margin .7s var(--spring),opacity .5s,transform .6s var(--spring),background-color .5s}
+.mt-n{font-family:var(--display);font-weight:600;font-size:12px;color:var(--ink2)}
+.mt-t{font-size:12.5px;line-height:1.28;font-weight:550;color:var(--ink);display:-webkit-box;-webkit-box-orient:vertical;-webkit-line-clamp:3;overflow:hidden;overflow-wrap:anywhere}
+.mt-f{position:absolute;top:-8px;right:-6px;font-size:17px;line-height:1}
+.mt-s{position:absolute;bottom:7px;right:8px;width:9px;height:9px;border-radius:2px;background:var(--mSub);transform:rotate(-8deg)}
+.mt.r-d{background:var(--tD)} .mt.r-f{background:var(--tF)} .mt.r-c{background:var(--tC)}
+.mt.slot{background:transparent;box-shadow:inset 0 0 0 1.5px var(--line2)}
+.mt.slot .mt-t,.mt.slot .mt-f{opacity:.3}
+.strip8 + .hint,.lifts + .hint{margin-top:16px}
+.scene .inherit .sb>.mstrip{margin-bottom:clamp(20px,3.2vh,34px)}
+.lifts{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:clamp(16px,1.8vw,26px);max-width:1200px}
+.lifts.n1{grid-template-columns:minmax(0,420px)} .lifts.n2{grid-template-columns:repeat(2,minmax(0,1fr));max-width:860px}
+.lift{display:flex;will-change:transform}
+.lift .sf-card{min-height:0;padding:18px 20px 18px}
+.lift .sf-t{font-size:clamp(17px,1.35vw,20px);line-height:1.35;font-weight:560;-webkit-line-clamp:4;margin:0 64px 12px 0}
+.lift .why{width:100%;font-size:16.5px;line-height:1.4;padding:10px 0;border:0;border-bottom:1.5px solid var(--line2);background:transparent;border-radius:0;resize:none}
+.lift .why:focus{border-bottom-color:var(--ink2)}
+.lift .nec{display:flex;gap:8px;margin-top:14px}
+.lift .nec button{flex:1;height:42px;border-radius:12px;font-weight:650;font-size:15px;box-shadow:inset 0 0 0 1.5px var(--line2);color:var(--ink);transition:background-color .25s,box-shadow .25s,color .25s}
+.lift .nec button:hover{box-shadow:inset 0 0 0 1.5px var(--ink2)}
+.lift .nec button.on.need{background:var(--mAmp);color:#fff;box-shadow:none}
+.lift .nec button.on.inh{background:var(--mSub);color:#fff;box-shadow:none}
+.lift .stamp{top:-14px}
+.sf-top{display:flex;align-items:center;gap:10px;min-height:22px;margin:0 0 10px}
+.sf-top .sf-n{margin:0}
+.sf-top .seal{position:static;transform:rotate(-5deg)}
+.sf-top .seal.fresh{animation:sealIn2 .5s cubic-bezier(.3,1.6,.5,1) both}
+@keyframes sealIn2{0%{opacity:0;transform:scale(2.2) rotate(-18deg)}60%{opacity:1;transform:scale(.92) rotate(-3deg)}100%{transform:rotate(-5deg)}}
+.sf-fe{font-size:17px;line-height:1}
+.strip8.moves .sf-top{margin-bottom:8px}
+.strip8.moves .seal.sm{margin:0}
+/* reimagine it: four tools, then the frames they act on */
+.tools8{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:12px;margin:0 0 12px}
+.tool{position:relative;display:flex;align-items:center;gap:12px;padding:12px 14px;border-radius:16px;background:var(--card);box-shadow:inset 0 0 0 1px var(--line),var(--frameShadow);text-align:left;transition:transform .3s var(--spring),box-shadow .25s,background-color .25s}
+.tool:hover{transform:translateY(-2px)}
+.tool .tg{flex:0 0 auto;width:44px;height:44px;color:var(--ink)}
+.tool .tg svg{width:100%;height:100%}
+.tool .tx{display:flex;flex-direction:column;min-width:0}
+.tool b{font-size:16.5px;font-weight:700;color:var(--ink);display:flex;align-items:center;gap:7px}
+.tool .tx>span{font-size:13.5px;line-height:1.3;color:var(--ink2)}
+.tool .tn{font-style:normal;min-width:21px;height:21px;padding:0 6px;border-radius:11px;display:inline-grid;place-items:center;font-size:12px;font-weight:700;background:var(--line);color:var(--ink)}
+.tool.from::after{content:"";position:absolute;top:10px;right:10px;width:9px;height:9px;border-radius:50%;background:var(--gold)}
+.tool.t-sub.on{--tc:var(--mSub);--tt:var(--tSub)} .tool.t-shr.on{--tc:var(--mShr);--tt:var(--tShr)} .tool.t-amp.on{--tc:var(--mAmp);--tt:var(--tAmp)} .tool.t-inv.on{--tc:var(--mInv);--tt:var(--tInv)}
+.tool.on{background:var(--tt);box-shadow:inset 0 0 0 2.5px var(--tc),0 12px 26px -16px var(--tc);transform:translateY(-2px)}
+.tools8.nudge .tool{animation:nudgeX .5s ease}
+.armed{min-height:62px;margin:0 0 clamp(16px,2.6vh,26px)}
+.armed .ah{margin:0;font-size:clamp(16px,1.2vw,18px);line-height:1.45;color:var(--ink);font-weight:520}
+.armed .pencil{margin-top:4px;font-size:clamp(18px,1.35vw,20px)}
+.strip8.moves .sf-card{min-height:124px}
+.mvb{position:absolute;top:-11px;right:-9px;z-index:2;width:38px;height:38px;border-radius:50%;display:grid;place-items:center;background:var(--card);box-shadow:0 0 0 3px var(--bg),0 6px 12px -6px rgba(17,26,43,.4)}
+.mvb svg{width:26px;height:26px}
+.mvb.b-sub{color:var(--mSub)} .mvb.b-shr{color:var(--mShr)} .mvb.b-amp{color:var(--mAmp)} .mvb.b-inv{color:var(--mInv)}
+.sf-hit{position:absolute;inset:0;z-index:1;border-radius:18px;cursor:default}
+.armable .sf-hit{cursor:pointer}
+.armable:hover .sf-card{transform:translateY(-4px)}
+.armed-sub .armable:hover .sf-card{box-shadow:inset 0 0 0 2px var(--mSub),var(--frameShadow)}
+.armed-shr .armable:hover .sf-card{box-shadow:inset 0 0 0 2px var(--mShr),var(--frameShadow)}
+.armed-amp .armable:hover .sf-card{box-shadow:inset 0 0 0 2px var(--mAmp),var(--frameShadow)}
+.armed-inv .armable:hover .sf-card{box-shadow:inset 0 0 0 2px var(--mInv),var(--frameShadow)}
+.armed-inv .armable .sf-card::after{content:"+";position:absolute;right:-17px;top:50%;width:24px;height:24px;margin-top:-12px;border-radius:50%;display:grid;place-items:center;background:var(--mInv);color:#141C2C;font-weight:700;font-size:17px;line-height:1;opacity:0;transform:scale(.6);transition:opacity .2s,transform .25s var(--spring);z-index:3}
+.armed-inv .armable:hover .sf-card::after{opacity:1;transform:none}
+.sf.mv-sub .sf-card{background:transparent;box-shadow:inset 0 0 0 1.5px var(--line2);opacity:.62}
+.sf.mv-sub .sf-card{background-image:repeating-linear-gradient(135deg,transparent 0 10px,var(--line) 10px 11px)}
+.sf.mv-sub .sf-t{text-decoration:line-through;text-decoration-color:var(--mSub);text-decoration-thickness:2px;color:var(--ink2)}
+.sf.mv-sub .stamp,.sf.mv-sub .seal{opacity:.5}
+.sf.mv-sub:hover .sf-card{opacity:.9}
+.sf.mv-shr .sf-card{background:var(--tShr);transform:scale(.94);box-shadow:inset 0 0 0 1.5px color-mix(in srgb,var(--mShr) 45%,transparent),var(--frameShadow)}
+.sf.mv-amp .sf-card{background:var(--tAmp);transform:scale(1.035);box-shadow:inset 0 0 0 2px var(--mAmp),0 0 0 6px color-mix(in srgb,var(--mAmp) 16%,transparent),var(--frameShadow)}
+.sf.mv-inv .sf-card{background:var(--tInv);box-shadow:inset 0 0 0 2px var(--mInv),0 0 0 6px rgba(255,204,0,.14),var(--frameShadow)}
+.sf.mv-shr .sf-t,.sf.mv-amp .sf-t{font-size:13.5px;font-weight:500;color:var(--ink2);-webkit-line-clamp:3}
+.sf-how{margin-top:8px;padding-top:8px;border-top:1.5px dashed var(--line2);min-height:2.9em}
+.sf.isnew .sf-n{font-size:20px;color:var(--mInv);font-weight:700}
+.sf-undo{position:absolute;right:8px;bottom:8px;z-index:3;width:30px;height:30px;border-radius:50%;display:grid;place-items:center;color:var(--ink2);opacity:0;transition:opacity .2s}
+.sf-undo svg{width:16px;height:16px}
+.sf:hover .sf-undo,.sf:focus-within .sf-undo{opacity:.9}
+.sf-undo:hover{background:var(--line);opacity:1}
+@media (hover:none){ .sf-undo{opacity:.7} }
+/* each move answers the moment it lands */
+.sf.play.mv-sub .sf-card{animation:cutIn .6s cubic-bezier(.3,1.3,.5,1)}
+@keyframes cutIn{0%{opacity:1;transform:none}35%{transform:translateY(6px) rotate(-2.5deg)}100%{opacity:.62;transform:none}}
+.sf.play.mv-shr .sf-card{animation:shrinkIn .6s var(--spring)}
+@keyframes shrinkIn{0%{transform:scale(1.06)}100%{transform:scale(.94)}}
+.sf.play.mv-amp .sf-card{animation:growIn .7s cubic-bezier(.3,1.5,.5,1)}
+@keyframes growIn{0%{transform:scale(.94)}100%{transform:scale(1.035)}}
+.sf.play.mv-inv .sf-card{animation:bornIn .7s cubic-bezier(.3,1.5,.5,1)}
+@keyframes bornIn{0%{opacity:0;transform:scale(.6)}100%{opacity:1;transform:none}}
+.sf.play .mvb{animation:stampIn .5s cubic-bezier(.3,1.6,.5,1) both}
+/* share it: today's workflow turns into the new one */
+.replay{margin:0 0 clamp(24px,3.8vh,40px)}
+.replay .rl{display:flex;align-items:baseline;gap:12px;margin:0 0 14px;flex-wrap:wrap;max-width:1080px}
+.replay .rl b{font-family:var(--display);font-weight:560;font-size:clamp(40px,3.8vw,58px);line-height:1;letter-spacing:-.02em;font-variant-numeric:tabular-nums}
+.replay .rl [data-rw]{font-family:var(--display);font-size:clamp(20px,1.7vw,25px);color:var(--ink)}
+.replay .rl .rwas{margin-left:8px;font-size:15px;color:var(--ink2)}
+.replay.before .rwas{opacity:0}
+.rps{flex-wrap:wrap;gap:12px}
+.rp{position:relative;width:clamp(118px,10.6vw,158px);min-height:84px;max-width:160px;overflow:visible;padding:10px 12px 12px}
+.rp .mt-t{font-size:13.5px;line-height:1.3;-webkit-line-clamp:4}
+.rp .at{display:none}
+.rp .mvb{width:26px;height:26px;top:-9px;right:-8px;box-shadow:0 0 0 2px var(--bg)}
+.rp .mvb svg{width:18px;height:18px}
+.replay.before .rp .mvb{opacity:0;transform:scale(.4)}
+.rp .mvb{transition:opacity .4s,transform .45s cubic-bezier(.3,1.6,.5,1)}
+/* the order things change: cuts fall away, changes shift, new steps arrive */
+.replay.before .rp.isnew{width:0;min-width:0;padding-left:0;padding-right:0;margin-right:-12px;opacity:0;transform:scale(.5);overflow:hidden;box-shadow:none}
+.replay.p1 .rp.mv-sub .mt-t,.replay.after .rp.mv-sub .mt-t{text-decoration:line-through;text-decoration-color:var(--mSub);text-decoration-thickness:2px}
+.replay.p1 .rp.mv-sub .mvb{opacity:1;transform:none}
+.replay.p2 .rp.mv-sub,.replay.after .rp.mv-sub{width:0;min-width:0;padding-left:0;padding-right:0;margin-right:-12px;opacity:0;transform:translateY(16px) rotate(-6deg);overflow:hidden;box-shadow:none}
+.replay.p2 .rp.mv-shr,.replay.after .rp.mv-shr{background:var(--tShr);transform:scale(.92)}
+.replay.p2 .rp.mv-amp,.replay.after .rp.mv-amp{background:var(--tAmp);transform:scale(1.06);box-shadow:inset 0 0 0 1.5px var(--mAmp),0 8px 18px -12px var(--mAmp)}
+.replay.p2 .rp.mv-shr .mvb,.replay.p2 .rp.mv-amp .mvb,.replay.after .rp .mvb{opacity:1;transform:none}
+.replay.p2 .rp .at,.replay.after .rp .at{display:block;animation:fadeIn .5s ease both}
+.replay.p2 .rp:has(.at) .bt,.replay.after .rp:has(.at) .bt{display:none}
+.replay.p3 .rp.isnew,.replay.after .rp.isnew{background:var(--tInv);box-shadow:inset 0 0 0 1.5px var(--mInv),0 0 0 4px rgba(255,204,0,.14)}
+.replay.p3 .rp.isnew .mvb{opacity:1;transform:none}
+.replay .rpl{margin-left:auto;align-self:center;height:36px;padding:0 10px;font-size:14px;gap:6px}
+.replay .rpl svg{width:16px;height:16px}
+.shfields{display:grid;grid-template-columns:minmax(0,1.5fr) minmax(0,1fr) minmax(0,1fr);gap:20px 24px;max-width:1080px}
+.shfields.solo{grid-template-columns:minmax(0,2fr) minmax(0,1fr)}
+.shfields .ask2{margin:0}
+.shfields .ask2.wide{grid-column:1 / -1;max-width:780px}
+.shfields .lbl{display:block;margin-bottom:6px}
+.shfields .big{font-size:clamp(20px,1.7vw,25px)}
+@media (max-width:760px){ .shfields,.shfields.solo{grid-template-columns:1fr} }
+
+/* ---------- finish: the card beside the words, never below a fold ---------- */
+.finale .frame{max-width:1260px}
+.fin{display:grid;grid-template-columns:minmax(0,1fr);gap:28px;justify-items:center;text-align:center}
+.fin-l{display:flex;flex-direction:column;align-items:center}
+.fin .hero{font-size:clamp(42px,5.4vw,82px)}
+.fin .lede{margin-top:16px}
+.fin .exports{margin-top:26px}
+.fin .ocard{margin:0}
+@media (min-width:1180px){
+  .fin{grid-template-columns:minmax(0,1fr) minmax(0,560px);gap:clamp(40px,5vw,84px);align-items:start;justify-items:stretch;text-align:left}
+  .fin-l{align-items:flex-start;position:sticky;top:0;padding-top:clamp(20px,8vh,90px)}
+  .fin .stamps{justify-content:flex-start}
+  .fin .lede{margin-left:0}
+  .fin .exports{justify-content:flex-start}
+  .fin .hero{font-size:clamp(46px,4.6vw,76px)}
+}
+.ocard .strip.small .fr.chg .pic{box-shadow:inset 0 0 0 2px var(--teal)}
+.ocard .kept-list{font-family:var(--body);font-size:16px;line-height:1.4;font-weight:550}
+.ocard .kept-list li{position:relative;padding-left:20px;margin:6px 0}
+.ocard .kept-list li::before{content:"";position:absolute;left:2px;top:.45em;width:9px;height:9px;border-radius:50%;background:var(--gold)}
+.ocard .kept-list li.k-sub::before{background:var(--clayM)} .ocard .kept-list li.k-shr::before{background:var(--aegean)} .ocard .kept-list li.k-amp::before{background:var(--teal)}
+
+/* ---------- phones: the strip becomes a list ---------- */
+@media (max-width:880px){
+  .strip8{grid-template-columns:repeat(var(--per2,2),minmax(0,1fr))}
+  .strip8 .sf::after{display:none}
+  .inherit .mstrip:not(.wrap){flex-wrap:wrap}
+  .tools8{grid-template-columns:repeat(2,minmax(0,1fr))}
+}
+@media (max-width:600px){
+  .strip8{grid-template-columns:1fr;gap:12px}
+  .sf-card{min-height:0;display:grid;grid-template-columns:30px minmax(0,1fr);column-gap:10px;align-items:start;padding:14px 16px}
+  .sf-card>*{grid-column:2}
+  .sf-n{grid-column:1;grid-row:1 / span 3;margin:3px 0 0}
+  .sf-ctl{grid-column:2;margin-top:4px}
+  .sf-ctl [data-act="sup"] svg,.sf-ctl [data-act="sdown"] svg{transform:rotate(90deg)}
+  .sf.addf .sf-add{min-height:64px;flex-direction:row}
+  .sf-faces{padding-top:10px}
+  .strip8.moves .sf-card{min-height:0}
+  .lifts,.lifts.n2{grid-template-columns:1fr}
+  .tools8{gap:8px}
+  .tool{padding:10px;gap:8px}
+  .tool .tg{width:34px;height:34px}
+  .tool .tx>span{display:none}
+  .mt{width:calc(50% - 5px)}
+}
+@media (prefers-reduced-motion:reduce){
+  .sf-card,.mt,.lift,.pc8,.tool,.rp .mvb{transition:none!important}
+  .path6 .pc,.pline path{animation:none!important;opacity:1;stroke-dashoffset:0}
+  .sf.play .sf-card,.sf.play .mvb,.stamp.fresh,.seal.fresh,.sf.fresh .sf-card{animation:none!important}
+}
+
+/* reimagine it fits a laptop screen: a tighter header, then the tools and the strip */
+.who1{margin:10px 0 0;font-size:clamp(15px,1.1vw,16.5px);line-height:1.45;color:var(--ink2);max-width:36ch}
+.stagel.moves .sh{margin-bottom:clamp(14px,2.2vh,24px)}
+.stagel.moves .sh .sub{margin-bottom:0}
+.stagel.moves .strip8{--gap:clamp(14px,1.3vw,20px)}
+.stagel.moves .armed{min-height:50px;margin-bottom:clamp(14px,2vh,20px)}
+.stagel.moves .armed .pencil{margin-top:2px}
+
+/* ---------- shorter laptop screens: everything a little tighter, so the strip stays above the bar ---------- */
+@media (max-height:860px) and (min-width:761px){
+  .scene{padding-top:80px;padding-bottom:96px}
+  .stagel .sh{margin-bottom:18px}
+  .stagel .sh .ask,.split .ask{font-size:clamp(30px,3vw,42px);margin-bottom:10px}
+  .stagel .sh .sub,.split .sub{font-size:clamp(16px,1.2vw,17.5px);margin-bottom:10px}
+  .stagel .shr .tring{width:76px;height:76px}
+  .stagel .shr .tring .tt{font-size:21px}
+  .stagel .shr .pencil,.split .pencil{font-size:clamp(18px,1.35vw,20px)}
+  .strip8{--gap:clamp(14px,1.2vw,18px)}
+  .sf-card{min-height:108px;padding:12px 14px}
+  .sf-t,.sf-in,.sf-how{font-size:14.5px}
+  .sf-t{-webkit-line-clamp:4}
+  .sf-n{margin-bottom:8px}
+  .fb{width:36px;height:36px;font-size:20px}
+  .sf-faces{padding-top:10px}
+  .stamp{width:42px;height:42px;font-size:23px}
+  .tool{padding:9px 12px}
+  .tool .tg{width:36px;height:36px}
+  .tool .tx>span{font-size:12.5px}
+  .armed .pencil{display:-webkit-box;-webkit-box-orient:vertical;-webkit-line-clamp:1;overflow:hidden}
+  .strip8.moves .sf-card{min-height:104px}
+  .lift .sf-card{padding:14px 16px}
+  .lift .sf-t{font-size:16.5px;margin-bottom:8px}
+  .lift .why{font-size:15.5px;padding:6px 0}
+  .lift .nec{margin-top:10px}
+  .lift .nec button{height:38px}
+  .mt{min-height:56px;padding:7px 9px 8px}
+  .mt-t{font-size:12px;-webkit-line-clamp:2}
+  .inherit .sb>.mstrip{margin-bottom:18px}
+  .rp{min-height:66px}
+  .replay{margin-bottom:18px}
+  .replay .rl b{font-size:40px}
+  .shfields{gap:14px 20px}
+  .shfields .big{font-size:clamp(18px,1.5vw,22px)}
+  .pchoices{margin-top:22px;gap:10px}
+  .pc8{padding:11px 18px 13px}
+  .pc8 .pt{font-size:clamp(19px,1.6vw,23px)}
+  .chain .big{font-size:clamp(17px,1.4vw,21px)}
+  .eyer .et{font-size:clamp(19px,1.6vw,23px)}
+  .path6{margin-top:36px}
+  .planscreen .grab{margin-top:36px}
+  .expanel{min-height:0;gap:14px;padding:20px 24px}
+  .sheet6{max-width:440px}
+  .actex{max-width:420px}
+}
+@media (max-height:720px) and (min-width:761px){
+  .scene{padding-top:74px;padding-bottom:90px}
+  .stagel .sh .ask,.split .ask{font-size:clamp(28px,2.7vw,36px)}
+  .stagel .sh .sub,.split .sub{font-size:15.5px;line-height:1.45}
+  .stagel .shr .pencil p:nth-child(n+2){display:none}
+  .stagel .shr .tring{width:64px;height:64px}
+  .stagel .shr .tring .tt{font-size:18px}
+  .who li{font-size:14.5px}
+  .sf-card{min-height:92px}
+  .sf-t{-webkit-line-clamp:3}
+  .tool .tx>span{display:none}
+  .armed{min-height:0}
+  .armed .pencil{display:none}
+  .strip8.moves .sf-card{min-height:92px}
+  .lift .why{min-height:0}
+  .expanel figcaption{font-size:18px}
+  .sheet6{max-width:360px}
+  .modes{margin-bottom:12px}
+  .mode .art{height:34px}
+  .pc8 .pj{font-size:14px}
+}
+
+@media (max-height:820px) and (min-width:761px){
+  .sf.mv-shr .sf-t,.sf.mv-amp .sf-t{-webkit-line-clamp:2}
+  .sf-how{margin-top:6px;padding-top:6px}
+  .stagel.moves .sh{margin-bottom:14px}
+}
+@media (max-height:720px) and (min-width:761px){
+  .scene{padding-bottom:86px}
+  .sf.mv-shr .sf-t,.sf.mv-amp .sf-t{-webkit-line-clamp:1}
+  .sf-how{min-height:2.6em}
+  .fb{width:32px;height:32px;font-size:18px}
+  .sf-faces{padding-top:6px;gap:4px}
+  .sf-top{margin-bottom:6px}
+  .who1{margin-top:6px}
+  .tools8{margin-bottom:8px}
+  .stagel .sh{margin-bottom:12px}
+  .rp{min-height:58px}
+  .shfields .big{font-size:18px}
+}
+
+/* a cut lands with a slash across the frame; a new frame arrives with a little light */
+.sf.play.mv-sub .sf-card::before{content:"";position:absolute;left:-8px;right:-8px;top:52%;height:2.5px;border-radius:2px;background:var(--mSub);transform:rotate(-14deg) scaleX(0);transform-origin:0 50%;animation:slash .32s ease-out forwards,slashOut .45s ease .5s forwards;z-index:3}
+@keyframes slash{to{transform:rotate(-14deg) scaleX(1)}}
+@keyframes slashOut{to{opacity:0}}
+@media (max-width:600px){
+  .inherit .sb>.mstrip{display:none}
+  .strip8.judge .sf-card,.strip8.moves .sf-card{padding-right:46px}
+  .stamp{top:-8px;right:-6px;width:40px;height:40px;font-size:21px}
+  .mvb{top:-8px;right:-6px}
+}
+/* on Reimagine it, colour belongs to the moves; the faces stay as small marks */
+.strip8.moves .sf.mv-none .sf-card{background:var(--card)}
+/* four ways to draw it sit two by two, so every name fits on one line */
+.modes.four{grid-template-columns:repeat(2,minmax(0,1fr))}
+.modes.four .mode{flex-direction:row;align-items:center;gap:12px;padding:10px 14px}
+.modes.four .mode .art{flex:0 0 auto;width:54px;height:40px;margin:0}
+.modes.four .mode b{display:block}
+.modes.four .mode .mtx{display:flex;flex-direction:column}
+/* the typed example looks like the strip it becomes */
+.m-type .mstrip.ex{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:14px;width:100%;max-width:520px}
+.m-type .mstrip.ex .mt{width:auto;min-height:84px;padding:12px 14px}
+.m-type .mstrip.ex .mt-t{font-size:14.5px;-webkit-line-clamp:3}
+.m-type .mstrip.ex .mt:not(:nth-child(3n))::after{content:"";position:absolute;top:50%;right:-11px;width:7px;height:7px;border-top:2px solid var(--line2);border-right:2px solid var(--line2);transform:translateY(-50%) rotate(45deg)}
+
 #printout{display:none}
 @media print{
 body{overflow:visible;background:#fff!important;color:#111;transition:none!important}
@@ -1272,6 +1753,7 @@ body{overflow:visible;background:#fff!important;color:#111;transition:none!impor
 
 <footer class="bar bottom" id="bottom">
   <button class="btn ghost" id="backBtn" type="button">Back</button>
+  <a class="golink" id="goLink" href="https://www.experiencepoint.com/ai-training/" target="_blank" rel="noopener" hidden><span class="gm" aria-hidden="true"><i></i><i></i><i></i></span><span class="gt"></span></a>
   <button class="btn" id="nextBtn" type="button">Next</button>
 </footer>
 <div class="burn" id="burn" aria-hidden="true"><i></i></div>
@@ -1349,7 +1831,7 @@ function fresh(){
     eyeroll:"", cands:[], why:["",""], whyPick:-1, purpose:"",
     start:"", end:"", drawMode:"", photoOld:null, photoNew:null,
     frames:[], ideas:{sub:[],shr:[],amp:[],inv:[]}, newFrames:[],
-    story:"", ask:"", test:"", owner:"", when:"", nfSeeded:false,
+    story:"", ask:"", test:"", owner:"", when:"", nfSeeded:false, flow:[], flowSeeded:false,
     votes:{}, picks:{}, ties:{}, revealed:{}
   };
 }
@@ -1367,11 +1849,20 @@ function cleanList(a, frames){
     return o;
   });
 }
+/* the reimagined workflow: today's steps, each with the move used on it, plus new steps */
+var MOVE_KEYS=["","sub","shr","amp","inv"];
+function cleanFlow(a){
+  if(!Array.isArray(a)) return [];
+  return a.filter(isObj).slice(0,80).map(function(x){
+    return {id:str(x.id).replace(/[^A-Za-z0-9_-]/g,"").slice(0,40)||uid(), src:str(x.src).replace(/[^A-Za-z0-9_-]/g,"").slice(0,40),
+      t:str(x.t).slice(0,400), mv:MOVE_KEYS.indexOf(x.mv)>-1?x.mv:"", how:str(x.how).slice(0,300)};
+  }).filter(function(x){ return x.src||x.mv==="inv"; });
+}
 /* screens from earlier versions, and where each one went */
 var MOVED={gather:"plan",roles:"plan",agenda:"plan",c1:"spin","b-think":"b-write","b-share":"b-write",dial1:"b-vote",dial2:"ends",r1:"why",
   c2:"why",quiz:"why",climb:"why",ladder:"why",pick:"why",r2:"why",c3:"ends",mode:"map",make:"map",r3:"judge",c4:"judge",lenses:"judge",
   tally:"judge",dot:"judge",hot:"inherit",r4:"inherit",brk:"stories",tesla:"stories",mlb:"stories",poll:"stories",c5:"moves",
-  "mv-sub":"moves","mv-shr":"moves","mv-amp":"moves","mv-inv":"moves",ideas:"moves",r5:"share",c6:"share",lww:"share",people:"share",rehearse:"share",test:"share"};
+  "mv-sub":"moves","mv-shr":"moves","mv-amp":"moves","mv-inv":"moves",ideas:"moves",r5:"share",c6:"share",lww:"share",people:"share",rehearse:"share",test:"share",newflow:"moves"};
 function load(){
   var s=fresh(), raw=lsGet(KEY), imported=false, o=null;
   if(!raw){ raw=lsGet(OLDKEY); imported=!!raw; }
@@ -1401,6 +1892,15 @@ function load(){
   s.cands=cleanList(s.cands); s.frames=cleanList(s.frames,true); s.newFrames=cleanList(s.newFrames);
   if(!isObj(s.ideas)) s.ideas={};
   ["sub","shr","amp","inv"].forEach(function(k){ s.ideas[k]=cleanList(s.ideas[k]); });
+  s.flow=cleanFlow(s.flow); s.flowSeeded = s.flowSeeded===true;
+  /* v7 built the new workflow as a separate list: steps it left out were subtracted, steps it added were new */
+  if(!s.flowSeeded&&!s.flow.length&&(s.nfSeeded||filled(s.newFrames).length)){
+    var nf=filled(s.newFrames), fr=filled(s.frames), nt={}, ft={};
+    nf.forEach(function(f){ nt[norm(f.t)]=1; }); fr.forEach(function(f){ ft[norm(f.t)]=1; });
+    s.flow=fr.map(function(f){ return {id:uid(),src:f.id,t:f.t,mv:(nf.length&&!nt[norm(f.t)])?"sub":"",how:""}; });
+    nf.forEach(function(f){ if(!ft[norm(f.t)]) s.flow.push({id:f.id,src:"",t:f.t,mv:"inv",how:""}); });
+    s.flowSeeded=fr.length>0;
+  }
   s.why = Array.isArray(s.why) ? s.why.slice(0,WHY_MAX).map(function(x){ return str(x).slice(0,300); }) : ["",""];
   if(!s.why.length) s.why=["",""];
   s.whyPick = (+s.whyPick===+s.whyPick && s.whyPick>=0 && s.whyPick<s.why.length) ? Math.floor(+s.whyPick) : -1;
@@ -1417,7 +1917,7 @@ var WHY_MAX=4;
 var S=load(); syncPurpose();
 /* Tells the shared feedback kit what it is looking at (assets/kit/feedback.js in pt). */
 (window.EPKit=window.EPKit||{}).tool={
-  id:"reimagination-lab", name:"Reimagination Lab", version:"v7", dot:"bottom-center",
+  id:"reimagination-lab", name:"Reimagination Lab", version:"v8", dot:"bottom-center",
   screen:function(){ return S.at; },
   /* The board groups comments by these, in this order: set up, the six steps, finish. */
   sections:function(){
@@ -1440,8 +1940,11 @@ function demoState(set){
   d.frames=[{id:"f1",t:"Ask every lead for an update",r:"",why:"",nec:""},{id:"f2",t:"Chase the late ones",r:"f",why:"It eats Friday afternoon",nec:"inh"},
     {id:"f3",t:"Copy updates into the template",r:"f",why:"",nec:""},{id:"f4",t:"Format the slides",r:"c",why:"",nec:""},
     {id:"f5",t:"Email the deck to leaders",r:"",why:"",nec:""},{id:"f6",t:"Leaders skim it on Monday",r:"d",why:"",nec:""}];
-  d.ideas={sub:[{id:"i1",t:"Drop the slides"}],shr:[{id:"i2",t:"One line per project"}],amp:[{id:"i3",t:"Flag the top three risks"}],inv:[{id:"i4",t:"A short risk check-in on Monday"}]};
-  d.newFrames=[{id:"n1",t:"Ask every lead for an update"},{id:"n2",t:"Flag the top three risks"},{id:"n3",t:"A short risk check-in on Monday"}];
+  d.flow=[{id:"w1",src:"f1",t:"Ask every lead for an update",mv:"shr",how:"Leads add one line each to a shared list",},
+    {id:"w2",src:"f2",t:"Chase the late ones",mv:"sub",how:""},{id:"w3",src:"f3",t:"Copy updates into the template",mv:"sub",how:""},
+    {id:"w4",src:"f4",t:"Format the slides",mv:"sub",how:""},{id:"w5",src:"f5",t:"Email the deck to leaders",mv:"shr",how:"AI drafts a five-line risk note"},
+    {id:"w6",src:"",t:"Flag the top three risks",mv:"inv",how:""},{id:"w7",src:"f6",t:"Leaders skim it on Monday",mv:"amp",how:"A short risk check-in on Monday"}];
+  d.flowSeeded=true;
   d.story="tesla";
   d.ask="A project lead, a director and the coordinator";
   d.test="Try a five-line risk note for two weeks"; d.owner="Sam"; d.when="next Friday";
@@ -1688,12 +2191,13 @@ var PLAY='<svg viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path 
    ========================================================= */
 var LINKS={ai:"https://www.experiencepoint.com/ai-training/", contact:"https://www.experiencepoint.com/contact-us/"};
 function more(label,inner){ return '<details class="more"><summary><span class="pl" aria-hidden="true">+</span>'+label+'</summary><div class="mbox">'+inner+'</div></details>'; }
-/* one quiet, always-visible line per step that points to the workshop going further */
-function goLine(n){ var g=GO[n]; if(!g) return ""; return '<p class="go"><a href="'+LINKS.ai+'" target="_blank" rel="noopener">'+g[0]+'</a> '+g[1]+'</p>'; }
 /* examples and tips are written in pencil; your own work is in ink */
 function pencil(lines){ return '<div class="pencil">'+lines.map(function(l){ return '<p>'+l+'</p>'; }).join("")+'</div>'; }
-function eg(t){ return '<span class="eg">For example:</span> '+t; }
-function tip(t){ return '<span class="eg">Tip:</span> '+t; }
+/* a pencil marks an example and a light bulb marks a tip, so people learn to spot them */
+var EG_IC='<svg class="pi" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M4 20l1.2-4.6L16.6 4a2 2 0 0 1 2.8 0l.6.6a2 2 0 0 1 0 2.8L8.6 18.8z"/><path d="M14.5 6.1l3.4 3.4"/></svg>';
+var TIP_IC='<svg class="pi" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M9 18h6M10 21h4"/><path d="M12 3a6 6 0 0 0-3.6 10.8c.7.6 1.1 1.3 1.1 2.2h5c0-.9.4-1.6 1.1-2.2A6 6 0 0 0 12 3z"/></svg>';
+function eg(t){ return '<span class="eg">'+EG_IC+'For example:</span> '+t; }
+function tip(t){ return '<span class="eg">'+TIP_IC+'Tip:</span> '+t; }
 /* who does what on a group step: one plain line each, no numbers */
 function whoList(list){ return '<ul class="who">'+list.map(function(x){ var t=typeof x==="string"?x:'<b>'+x[0]+':</b> '+x[1]; return '<li'+pv(t)+'>'+t+'</li>'; }).join("")+'</ul>'; }
 function words(t,delay){ return str(t).split(" ").map(function(w,i){ return '<span class="w"><span style="--i:'+i+';--d:'+(delay||0)+'ms">'+esc(w)+'</span></span>'; }).join(" "); }
@@ -1706,7 +2210,7 @@ function stripHTML(arr,o){
   var bal='';
   if(o.bal){ var per=function(max){ return Math.ceil(f.length/Math.ceil(f.length/max)); }; bal=' style="--per:'+per(6)+';--perm:'+per(3)+'"'; }
   return '<div class="strip'+(o.mini?' small':'')+(o.ex?' ex':'')+(o.bal?' bal':'')+(o.hold?' hold':'')+(o.pop?' popin':'')+'"'+(o.id?' id="'+o.id+'"':'')+bal+'>'+f.map(function(x,i){
-    var c='fr'; if(o.cut&&o.cut[x.id]) c+=' cut'+(o.struck?' struck':''); if(o.nw&&o.nw[x.id]) c+=' new';
+    var c='fr'; if(o.cut&&o.cut[x.id]) c+=' cut'+(o.struck?' struck':''); if(o.nw&&o.nw[x.id]) c+=' new'; if(o.ch&&o.ch[x.id]) c+=' chg';
     return '<div class="'+c+'"><div class="pic"><span class="fn">'+(i+1)+'</span><span class="ft">'+esc(x.t)+'</span></div></div>';
   }).join("")+'</div>';
 }
@@ -1715,7 +2219,7 @@ function noteCls(id){ var h=0; id=str(id); for(var i=0;i<id.length;i++) h=(h*17+
 var MOVE_CLS={sub:"c3",shr:"c4",amp:"c2",inv:""};
 var seen={};
 function markSeen(){
-  S.cands.forEach(function(x){ seen[x.id]=1; }); S.frames.forEach(function(x){ seen[x.id]=1; }); S.newFrames.forEach(function(x){ seen[x.id]=1; });
+  S.cands.forEach(function(x){ seen[x.id]=1; }); S.frames.forEach(function(x){ seen[x.id]=1; }); S.newFrames.forEach(function(x){ seen[x.id]=1; }); S.flow.forEach(function(x){ seen[x.id]=1; });
   ["sub","shr","amp","inv"].forEach(function(k){ S.ideas[k].forEach(function(x){ seen[x.id]=1; }); });
 }
 function wallHTML(path,ph,cls){
@@ -1740,6 +2244,9 @@ function own(v,max){ return '<b class="own" data-feedback-private>“'+esc(clipW
 /* a line that quotes the group's own words is private too, so a tester's comment on it never carries them */
 function pv(html){ return /class="own"/.test(html)?' data-feedback-private':''; }
 
+ICON.left=ic('<path d="M19 12H5M11 6l-6 6 6 6"/>');
+ICON.right=ic('<path d="M5 12h14M13 6l6 6-6 6"/>');
+ICON.undo=ic('<path d="M9 14L4 9l5-5"/><path d="M4 9h10.5a5.5 5.5 0 0 1 0 11H11"/>');
 /* =========================================================
    TIMER
    ========================================================= */
@@ -1968,10 +2475,10 @@ var EX={
   inherit:"Why 12 pages? “It’s always been 12.” Inherited.",
   test:"Send a one-page list of stuck deals for two Mondays."
 };
-/* the sketch example: a sheet folded into 8 boxes, six of them drawn */
+/* the sketch example: a sheet folded into six boxes, one step drawn in each */
 function sheetEx(){
-  var o='<svg class="sheet8" viewBox="0 0 400 214" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" role="img" aria-label="An example sketch: a sheet folded into 8 boxes, six steps drawn">';
-  o+='<rect x="3" y="3" width="394" height="208" rx="4" stroke-dasharray="1 0"/><path d="M101.5 3v208M200 3v208M298.5 3v208M3 107h394" opacity=".55"/>';
+  var o='<svg class="sheet6" viewBox="0 0 400 262" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" role="img" aria-label="An example sketch: a sheet folded into six boxes, one step drawn in each">';
+  o+='<rect x="3" y="3" width="394" height="256" rx="6"/><path d="M135 3v256M267 3v256M3 131h394" opacity=".5"/>';
   var D=[
     '<rect x="22" y="22" width="20" height="14" rx="2"/><rect x="22" y="40" width="20" height="14" rx="2"/><rect x="22" y="58" width="20" height="14" rx="2"/><path d="M48 47h20M62 41l6 6-6 6"/><rect x="72" y="36" width="16" height="22" rx="2"/>',
     '<rect x="122" y="22" width="56" height="44" rx="3"/><path d="M122 36h56M122 51h56M141 22v44M160 22v44"/><path class="g" d="M172 16l3 6 6 3-6 3-3 6-3-6-6-3 6-3z"/>',
@@ -1980,9 +2487,11 @@ function sheetEx(){
     '<path d="M22 154c10-14 40-14 50 0-10 14-40 14-50 0z"/><circle cx="47" cy="154" r="6"/><path d="M76 140l10-6M76 168l10 6" opacity=".6"/>',
     '<circle cx="132" cy="146" r="9"/><path d="M118 176c0-14 6-20 14-20s14 6 14 20"/><circle cx="168" cy="146" r="9"/><path d="M154 176c0-14 6-20 14-20s14 6 14 20"/>'
   ];
-  var L=["Export","Clean up","Build 12 pages","Email it","Skim it","Monday call"];
-  var X=[0,98.5,197,295.5];
-  for(var i=0;i<6;i++){ var c=i%4, r=Math.floor(i/4); o+='<g>'+D[i]+'<text class="lab" x="'+(X[c]+50)+'" y="'+(r?196:92)+'" text-anchor="middle">'+L[i]+'</text></g>'; }
+  var X=[0,98.5,197,295.5], L=["Export","Clean up","Build 12 pages","Email it","Skim it","Monday call"];
+  for(var i=0;i<6;i++){
+    var c=i%4, r=Math.floor(i/4), nc=i%3, nr=Math.floor(i/3), nx=3+nc*132, ny=3+nr*128;
+    o+='<g><g transform="translate('+(nx+17-X[c]).toFixed(1)+' '+(ny+14-r*107).toFixed(1)+')">'+D[i]+'</g><text class="lab" x="'+(nx+66)+'" y="'+(ny+112)+'" text-anchor="middle">'+L[i]+'</text></g>';
+  }
   return o+'</svg>';
 }
 function stickyEx(){ return '<div class="exnotes">'+EX.steps.map(function(t,i){ return '<span class="xn '+["","c2","c3","c4"][i%4]+'" style="--r:'+((i%3)-1)*1.2+'deg">'+esc(t)+'</span>'; }).join("")+'</div>'; }
@@ -1996,11 +2505,11 @@ function drawSteps(){
   var m=drawMode(), E=endsLine();
   if(!team()){
     if(m==="type") return ["Type the steps straight in on the next screen, one line each.","Go in order."+(E||" Start with the first thing that happens.")];
-    if(m==="sketch") return ["Fold a sheet of paper into 8 boxes.","Sketch one step per box."+E,"Label each box with a few words."];
+    if(m==="sketch") return ["Fold a sheet of paper into six boxes. Need more? Use the back.","Sketch one step per box."+E,"Label each box with a few words."];
     if(m==="act") return ["Cast objects on your desk as the people in it.","Narrate the workflow out loud, moving them as the work changes hands."+E,"Jot a step down each time you say “and then”."];
     return ["Write one step per sticky note, verb first.","Lay them out in order."+E,"Doodle a little picture on each. It helps more than you’d think."];
   }
-  if(m==="sketch") return [["Everyone",P("fold a sheet into 8 boxes.","fold a sheet into 8 boxes. Cameras on, mics off.")],
+  if(m==="sketch") return [["Everyone",P("fold a sheet into six boxes.","fold a sheet into six boxes. Cameras on, mics off.")],
     ["Alone, no talking","sketch one step per box."+E],
     ["Together",P("compare sketches. Where they differ, ask why.","hold sketches up to the camera. Where they differ, ask why.")]];
   if(m==="act") return [["Cast it","each person plays someone in the workflow."],
@@ -2014,56 +2523,261 @@ function drawSteps(){
 function hots(){ return filled(S.frames).filter(function(x){ return x.r==="f"||x.r==="c"; }); }
 function hotFirst(){ var h=hots(); for(var i=0;i<h.length;i++) if(h[i].nec==="inh") return h[i]; return h[0]||null; }
 function byReact(k){ return filled(S.frames).filter(function(x){ return x.r===k; }); }
+/* the four moves, as tools that act on the workflow's steps */
 var MOVES=[
-  {k:"sub",name:"Subtract",q:"What should disappear?",ex:"Drop the 12 pages nobody discusses. Tesla deleted the mats.",ph:"What goes away…"},
-  {k:"shr",name:"Shrink",q:"What still matters, but deserves far less effort? Work like this is often a job for AI.",ex:"Let AI pull the numbers from all three systems.",ph:"What gets smaller…"},
-  {k:"amp",name:"Amplify",q:"Where should you spend more energy?",ex:"Give the Monday call more time on the riskiest deals.",ph:"What gets more room…"},
-  {k:"inv",name:"Invent",q:"What is newly possible with AI?",ex:"An alert the day a deal stalls. MLB added the challenge.",ph:"What becomes possible…"}
+  {k:"sub",name:"Subtract",q:"What should disappear?",ex:"Drop the 12 pages nobody discusses. Tesla deleted the mats.",hint:"Select a step to cut it. Select it again to bring it back."},
+  {k:"shr",name:"Shrink",q:"What deserves far less effort?",ex:"Let AI pull the numbers from all three systems.",hint:"Select a step to shrink it, then say how. Work like this is often a job for AI.",how:"How does it get smaller?"},
+  {k:"amp",name:"Amplify",q:"Where should you spend more energy?",ex:"Give the Monday call more time on the riskiest deals.",hint:"Select a step to give it more room, then say how.",how:"How does it grow?"},
+  {k:"inv",name:"Invent",q:"What is newly possible with AI?",ex:"An alert the day a deal stalls. MLB added the challenge.",hint:"Select the step your new idea comes after.",how:"What happens here?"}
 ];
-/* each move remembers what Judge it found */
-function moveCtx(k){
-  var list=function(a){ return a.slice(0,3).map(function(x){ return '<b>'+esc(x.t)+'</b>'; }).join(", "); };
-  if(k==="sub"){ var inh=filled(S.frames).filter(function(x){ return x.nec==="inh"; }); if(inh.length) return "Inherited: "+list(inh); var h=hots(); return h.length?"To question: "+list(h):""; }
-  if(k==="shr"){ var f=byReact("f"); return f.length?"Frustrating: "+list(f):""; }
-  if(k==="amp"){ var d=byReact("d"); return d.length?"Delightful: "+list(d):""; }
-  if(k==="inv") return has(S.purpose)?"Real purpose: <b>"+esc(S.purpose)+"</b>":"";
-  return "";
-}
-function ideaItems(){ var out=[]; MOVES.forEach(function(m){ S.ideas[m.k].forEach(function(i){ out.push({id:i.id,t:i.t,cls:MOVE_CLS[m.k],move:m.k}); }); }); return out; }
-/* the ideas a workflow actually used (everything subtracted, plus ideas carried in), or else every idea, named as ideas you had */
-function cardIdeas(){
-  var nt={}; S.newFrames.forEach(function(f){ nt[norm(f.t)]=1; });
-  var all=ideaItems().filter(function(x){ return has(x.t); });
-  var used=all.filter(function(x){ return x.move==="sub" || nt[norm(x.t)]; });
-  return used.length ? {label:T("Ideas we used","Ideas I used"), list:used} : {label:T("Ideas we had","Ideas I had"), list:all};
-}
-function matchSets(){
-  var olds=filled(S.frames), news=filled(S.newFrames), nt={}, ot={}, cut={}, nw={};
-  news.forEach(function(f){ nt[norm(f.t)]=1; }); olds.forEach(function(f){ ot[norm(f.t)]=1; });
-  olds.forEach(function(f){ if(!nt[norm(f.t)]) cut[f.id]=1; }); news.forEach(function(f){ if(!ot[norm(f.t)]) nw[f.id]=1; });
-  return {olds:olds,news:news,cut:cut,nw:nw,nCut:Object.keys(cut).length,nNew:Object.keys(nw).length};
-}
+var MV={}; MOVES.forEach(function(m){ MV[m.k]=m; });
 function grabLine(){
-  var l = !team() ? "paper and a pen if you’d like to sketch, and your phone for photos"
-    : S.place==="room" ? "a flip chart or a wall, sticky notes and markers, and one phone for photos"
-    : "a shared whiteboard, paper and a pen each, cameras on, and Share sound ticked when you share your screen";
-  return "Grab these now, so nothing interrupts you later: "+l+".";
+  var l = !team() ? "paper and a pen, and your phone for photos"
+    : S.place==="room" ? "sticky notes, markers, a wall to stick them on, and one phone for photos"
+    : "paper and a pen each. When you share your screen, tick Share sound";
+  return "Before you start, grab "+l+".";
 }
-/* the workshop that builds on each step, one line each, always in view */
+/* the workshop that goes further, one quiet line in the bottom bar, apart from the activity */
 var GO={
-  1:["Finding AI Use Cases","starts the same way: a workflow that makes people ask why we still do it like this."],
-  2:["Finding AI Use Cases","takes this to first principles: where your team creates value that AI can’t easily copy."],
-  3:["Finding AI Use Cases","builds on a map like this one: teams mark the friction and the judgment calls, then build a working AI agent for one step."],
-  4:["Driving AI Innovation","goes deeper on seeing work through other people’s eyes, with human-centered innovation methods."],
-  5:["Driving AI Innovation","takes this kind of rethinking to real strategic challenges."],
-  6:["Communicating AI Strategy","helps you bring people along: why the change matters, what’s in it for them, and what has to change."]
+  plan:["New to AI? Start with ","Building AI Confidence",", an ExperiencePoint workshop"],
+  1:["Take this further in ","Finding AI Use Cases",", an ExperiencePoint workshop"],
+  2:["Take this further in ","Finding AI Use Cases",", an ExperiencePoint workshop"],
+  3:["Take this further in ","Finding AI Use Cases",", an ExperiencePoint workshop"],
+  4:["Take this further in ","Driving AI Innovation",", an ExperiencePoint workshop"],
+  5:["Take this further in ","Driving AI Innovation",", an ExperiencePoint workshop"],
+  6:["Take this further in ","Communicating AI Strategy",", an ExperiencePoint workshop"]
 };
+/* =========================================================
+   THE STRIP: the group's workflow as a row of frames that
+   stays on screen from Draw it to Share it. Judge stamps a face
+   on each frame, Inherited seals the ones nobody can explain,
+   the four moves cut, shrink, grow and add frames, and Share it
+   replays the change. Frames hold the group's full words.
+   ========================================================= */
+/* the sounds of the strip: a stamp, a snip, a shrink, a grow and a spark */
+SFX.stamp=function(a,t){ var o=a.createOscillator(), g=a.createGain(); o.type="sine"; o.frequency.setValueAtTime(210,t); o.frequency.exponentialRampToValueAtTime(70,t+.14); g.gain.setValueAtTime(.0001,t); g.gain.exponentialRampToValueAtTime(.2,t+.008); g.gain.exponentialRampToValueAtTime(.0001,t+.2); o.connect(g); g.connect(sfxBus); o.start(t); o.stop(t+.24); noise(t,.05,.045,1800,600); };
+SFX.snip=function(a,t){ noise(t,.045,.06,3200,7000); noise(t+.085,.05,.06,3600,7600); tone(2400,t+.09,.05,"triangle",.02); };
+SFX.shrink=function(a,t){ [880,660,494].forEach(function(f,i){ tone(f,t+i*.07,.16,"sine",.075); }); };
+SFX.grow=function(a,t){ [494,660,880].forEach(function(f,i){ tone(f,t+i*.07,.18,"sine",.075); }); tone(1320,t+.22,.4,"sine",.03); };
+SFX.spark=function(a,t){ [1568,2093,2637].forEach(function(f,i){ tone(f,t+i*.06,.3+i*.05,"sine",.055-i*.012); }); };
+var FACES=[["d","😍","Delighted"],["f","😤","Frustrated"],["c","🤔","Confused"]];
+var FACE={}; FACES.forEach(function(f){ FACE[f[0]]={e:f[1],n:f[2]}; });
+function hots(){ return filled(S.frames).filter(function(x){ return x.r==="f"||x.r==="c"; }); }
+function hotFirst(){ var h=hots(); for(var i=0;i<h.length;i++) if(h[i].nec==="inh") return h[i]; return h[0]||null; }
+function frameOf(id){ for(var i=0;i<S.frames.length;i++) if(S.frames[i].id===id) return S.frames[i]; return null; }
+function flowItem(id){ for(var i=0;i<S.flow.length;i++) if(S.flow[i].id===id) return S.flow[i]; return null; }
+/* balanced rows: nine frames sit as five and four, never eight and one */
+function balance(n,max){ if(n<1) return 1; return Math.ceil(n/Math.ceil(n/max)); }
+/* the strip's list, set for balanced rows; each frame that ends a row gets no arrow to the next */
+function stripOpen(cls,n,max){ return '<ol class="strip8 '+cls+'" data-feedback-private style="--per:'+balance(n,max)+';--per2:'+balance(n,2)+'">'; }
+function rowEnd(i,n,max){ var per=balance(n,max); return (i%per===per-1||i===n-1)?' re':''; }
+
+/* keeps the reimagined workflow in step with today's: new steps slot in, removed ones leave,
+   reordered ones follow, and anything new stays after the step it was added after */
+function flowSync(){
+  var fr=filled(S.frames);
+  if(!S.flowSeeded){
+    if(!fr.length) return false;
+    S.flow=fr.map(function(f){ return {id:uid(),src:f.id,t:f.t,mv:"",how:""}; }); S.flowSeeded=true; return true;
+  }
+  var live={}; fr.forEach(function(f){ live[f.id]=f; });
+  var bySrc={}, after={"":[]}, anchor="";
+  S.flow.forEach(function(x){
+    if(x.src){ if(live[x.src]&&!bySrc[x.src]){ bySrc[x.src]=x; anchor=x.src; } }
+    else (after[anchor]=after[anchor]||[]).push(x);
+  });
+  var out=after[""].slice();
+  fr.forEach(function(f){ var x=bySrc[f.id]||{id:uid(),src:f.id,t:f.t,mv:"",how:""}; x.t=f.t; out.push(x); (after[f.id]||[]).forEach(function(y){ out.push(y); }); });
+  var changed=out.length!==S.flow.length||out.some(function(x,i){ return x!==S.flow[i]; });
+  S.flow=out; return changed;
+}
+/* today's steps, the reimagined ones, and what happened to each */
+function matchSets(){
+  flowSync();
+  var olds=filled(S.frames), cut={}, nw={}, ch={}, news=[], srcMv={};
+  S.flow.forEach(function(x){ if(x.src) srcMv[x.src]=x.mv; });
+  olds.forEach(function(f){ if(srcMv[f.id]==="sub") cut[f.id]=1; });
+  S.flow.forEach(function(x){
+    if(x.mv==="sub") return; var t=has(x.how)?x.how:x.t; if(!has(t)) return;
+    news.push({id:x.id,t:t,mv:x.mv});
+    if(x.mv==="inv") nw[x.id]=1; else if(x.mv==="shr"||x.mv==="amp") ch[x.id]=x.mv;
+  });
+  return {olds:olds,news:news,cut:cut,nw:nw,ch:ch,nCut:Object.keys(cut).length,nNew:Object.keys(nw).length,nCh:Object.keys(ch).length};
+}
+/* what changed, in words, for the card, the printout and the email */
+function cardChanges(){
+  var out=[];
+  S.flow.forEach(function(x){
+    if(x.mv==="sub"&&has(x.t)) out.push({k:"sub",t:"Cut: "+x.t});
+    else if(x.mv==="inv"&&has(x.t)) out.push({k:"inv",t:"New: "+x.t});
+    else if(x.mv==="shr"&&has(x.t)) out.push({k:"shr",t:"Less effort: "+(has(x.how)?x.how:x.t)});
+    else if(x.mv==="amp"&&has(x.t)) out.push({k:"amp",t:"More room: "+(has(x.how)?x.how:x.t)});
+  });
+  var order={inv:0,shr:1,amp:2,sub:3};
+  out.sort(function(a,b){ return order[a.k]-order[b.k]; });
+  return {label:T("What we changed","What I changed"), list:out};
+}
+function moveCount(k){ return S.flow.filter(function(x){ return x.mv===k&&(k!=="inv"||has(x.t)); }).length; }
+
+/* ---------- the pieces of a frame ---------- */
+function fNum(n){ return '<span class="sf-n">'+n+'</span>'; }
+function fText(t){ return '<p class="sf-t" title="'+esc(t)+'">'+esc(t)+'</p>'; }
+function fFace(r,fresh){ return r&&FACE[r]?'<span class="stamp'+(fresh?' fresh':'')+'" role="img" aria-label="'+FACE[r].n+'">'+FACE[r].e+'</span>':''; }
+function fSeal(nec,fresh){ return nec?'<span class="seal '+nec+(fresh?' fresh':'')+'">'+(nec==="inh"?"Inherited":"Necessary")+'</span>':''; }
+var lastFx=null;   /* the frame that just changed, so its animation plays once */
+function fxOn(id,k){ return lastFx&&lastFx.id===id&&lastFx.k===k; }
+
+/* ---------- Draw it: the steps become frames as they're typed ---------- */
+function captureStrip(){
+  var arr=S.frames, n=arr.length+1, h=stripOpen("edit",n,5);
+  arr.forEach(function(f,i){
+    var lab='step '+(i+1);
+    h+='<li class="sf'+(seen[f.id]?'':' fresh')+(movedId===f.id?' moved':'')+(i===arr.length-1?' re':rowEnd(i,n,5))+'" data-fid="'+esc(f.id)+'"><div class="sf-card">'+fNum(i+1)+
+      '<textarea class="sf-in" rows="2" maxlength="120" data-bstep="frames" data-id="'+esc(f.id)+'" placeholder="What happens at this step?" aria-label="Step '+(i+1)+'">'+esc(f.t)+'</textarea>'+
+      '<span class="sf-ctl">'+
+        '<button type="button" data-act="sup" data-path="frames" data-id="'+esc(f.id)+'" aria-label="Move '+lab+' earlier"'+(i?'':' disabled')+'>'+ICON.left+'</button>'+
+        '<button type="button" data-act="sdown" data-path="frames" data-id="'+esc(f.id)+'" aria-label="Move '+lab+' later"'+(i<arr.length-1?'':' disabled')+'>'+ICON.right+'</button>'+
+        '<button type="button" data-act="sdel" data-path="frames" data-id="'+esc(f.id)+'" aria-label="Remove '+lab+'">'+ICON.x+'</button>'+
+      '</span></div></li>';
+  });
+  return h+'<li class="sf addf re"><button type="button" class="sf-add" data-act="sadd" data-path="frames"><span class="pl" aria-hidden="true">+</span>Add a step</button></li></ol>';
+}
+
+/* ---------- Judge it: one face per frame, stamped on ---------- */
+function judgeStrip(){
+  var f=filled(S.frames); if(!f.length) return emptyBox("Go back to Draw it and add your steps first.");
+  var h=stripOpen("judge",f.length,5);
+  f.forEach(function(x,i){
+    h+='<li class="sf'+(x.r?' r-'+x.r:'')+rowEnd(i,f.length,5)+'" data-fid="'+esc(x.id)+'"><div class="sf-card">'+fNum(i+1)+fFace(x.r,fxOn(x.id,"face"))+fText(x.t)+
+      '<span class="sf-faces" role="radiogroup" aria-label="How does step '+(i+1)+' feel?">'+
+      FACES.map(function(b,k){ var on=x.r===b[0], tab=x.r?on:k===0; return '<button class="fb '+b[0]+(on?' on':'')+'" type="button" role="radio" data-act="react" data-id="'+esc(x.id)+'" data-k="'+b[0]+'" aria-checked="'+on+'" aria-label="'+b[2]+'" title="'+b[2]+'"'+(tab?'':' tabindex="-1"')+'>'+b[1]+'</button>'; }).join("")+
+      '</span></div></li>';
+  });
+  return h+'</ol>';
+}
+
+/* ---------- Necessary, or inherited?: the frames to question lift out of the strip ---------- */
+function inheritView(){
+  var all=filled(S.frames), h=hots(); if(!h.length) return emptyBox("Nothing marked frustrating or confusing yet. Go back a screen, or move on.");
+  var top=h.slice(0,3), up={}; top.forEach(function(x){ up[x.id]=1; });
+  var mini='<ol class="mstrip'+(all.length>10?' wrap':'')+'" data-feedback-private aria-label="Today’s workflow">'+all.map(function(x,i){
+    return '<li class="mt'+(x.r?' r-'+x.r:'')+(up[x.id]?' slot':'')+'" data-mt="'+esc(x.id)+'"><span class="mt-n">'+(i+1)+'</span><span class="mt-t">'+esc(x.t)+'</span>'+(x.r&&FACE[x.r]?'<span class="mt-f" aria-hidden="true">'+FACE[x.r].e+'</span>':'')+(x.nec==="inh"?'<span class="mt-s" aria-hidden="true"></span>':'')+'</li>';
+  }).join("")+'</ol>';
+  var cards='<div class="lifts n'+top.length+'" data-feedback-private>'+top.map(function(x){
+    var n=all.indexOf(x)+1;
+    return '<div class="lift'+(x.nec?' nec-'+x.nec:'')+'" data-fid="'+esc(x.id)+'"><div class="sf-card"><div class="sf-top">'+fNum(n)+fSeal(x.nec,fxOn(x.id,"seal"))+'</div>'+fFace(x.r)+
+      '<h3 class="sf-t" id="hh-'+esc(x.id)+'">'+esc(x.t)+'</h3>'+
+      '<textarea class="big why" rows="1" maxlength="300" data-bwhy="'+esc(x.id)+'" placeholder="Why does it happen?" aria-label="Why does it happen?" aria-describedby="hh-'+esc(x.id)+'">'+esc(x.why)+'</textarea>'+
+      '<div class="nec" role="radiogroup" aria-label="Necessary or inherited?">'+[["need","Necessary"],["inh","Inherited"]].map(function(o,k){ var on=x.nec===o[0], tab=x.nec?on:k===0; return '<button type="button" role="radio" class="'+o[0]+(on?' on':'')+'" data-act="nec" data-id="'+esc(x.id)+'" data-v="'+o[0]+'" aria-checked="'+on+'"'+(tab?'':' tabindex="-1"')+'>'+o[1]+'</button>'; }).join("")+'</div>'+
+      '</div></div>';
+  }).join("")+'</div>';
+  return mini+cards+(h.length>3?'<p class="hint more3">'+plural(h.length-3,"more step is","more steps are")+' marked. Start with these three.</p>':'');
+}
+/* the lifted frames rise from their place in the strip the first time the screen opens */
+function liftPlay(el){
+  if(rm()) return;
+  $$(".lift",el).forEach(function(c,i){
+    var id=c.getAttribute("data-fid"), slot=$('.mt[data-mt="'+id+'"]',el); if(!slot) return;
+    var a=slot.getBoundingClientRect(), b=c.getBoundingClientRect(); if(!a.width||!b.width) return;
+    c.style.transformOrigin="0 0"; c.style.transition="none";
+    c.style.transform="translate("+(a.left-b.left)+"px,"+(a.top-b.top)+"px) scale("+(a.width/b.width).toFixed(3)+","+(a.height/b.height).toFixed(3)+")"; c.style.opacity="0";
+    void c.offsetWidth;
+    setTimeout(function(){ if(!c.isConnected) return; c.style.transition="transform .8s var(--spring), opacity .45s ease"; c.style.transform=""; c.style.opacity=""; sfx("pop"); },180+i*140);
+    setTimeout(function(){ if(c.isConnected){ c.style.transition=""; c.style.transformOrigin=""; } },1200+i*140);
+  });
+}
+
+/* ---------- Reimagine it: the four moves are tools that act on the frames ---------- */
+var armed;   /* the move in hand: starts on the story the group picked */
+function storyMove(){ return S.story==="tesla"?"sub":S.story==="mlb"?"inv":""; }
+function movesView(){
+  flowSync(); if(armed===undefined) armed=storyMove()||null;
+  var from=storyMove();
+  var tools='<div class="tools8" role="radiogroup" aria-label="The four moves">'+MOVES.map(function(m,k){
+    var on=armed===m.k, n=moveCount(m.k), tab=armed?on:k===0;
+    return '<button type="button" class="tool t-'+m.k+(on?' on':'')+(from===m.k?' from':'')+'" role="radio" aria-checked="'+on+'" data-act="tool" data-v="'+m.k+'"'+(tab?'':' tabindex="-1"')+'>'+
+      '<span class="tg">'+GLYPH[m.k]+'</span><span class="tx"><b>'+m.name+(n?' <i class="tn">'+n+'</i>':'')+'</b><span>'+m.q+'</span></span></button>';
+  }).join("")+'</div>';
+  var m=armed&&MV[armed];
+  var panel='<div class="armed" aria-live="polite">'+(m?'<p class="ah">'+(from===m.k?'You said more '+(S.story==="tesla"?"Tesla":"MLB")+', so start here. ':'')+m.hint+'</p>'+pencil([eg(m.ex)]):'<p class="ah">Pick a move, then select a step.</p>')+'</div>';
+  var n=0, N=S.flow.length, frames=S.flow.map(function(x,i){
+    var f=x.src?frameOf(x.src):null, num=x.src?(++n):'+', lab=x.src?"step "+n:"the new step";
+    var cls='sf mv-'+(x.mv||'none')+(x.src?'':' isnew')+(f&&f.r?' r-'+f.r:'')+rowEnd(i,N,5)+(x.mv&&fxOn(x.id,x.mv)?' play':'')+(x.mv||!x.src?'':(armed?' armable':''));
+    var badge=x.mv?'<span class="mvb b-'+x.mv+'" aria-hidden="true">'+GLYPH[x.mv]+'</span>':'';
+    var body;
+    if(x.mv==="inv"&&!x.src) body='<textarea class="sf-in" rows="2" maxlength="160" data-ftext="'+esc(x.id)+'" placeholder="'+MV.inv.how+'" aria-label="The new step">'+esc(x.t)+'</textarea>';
+    else body=fText(x.t)+((x.mv==="shr"||x.mv==="amp")?'<textarea class="sf-how" rows="2" maxlength="200" data-fhow="'+esc(x.id)+'" placeholder="'+MV[x.mv].how+'" aria-label="'+MV[x.mv].how+'">'+esc(x.how)+'</textarea>':'');
+    var hit = x.mv==="sub" ? '<button type="button" class="sf-hit" data-act="apply" data-id="'+esc(x.id)+'" aria-label="Bring back '+lab+'"></button>'
+      : (!x.mv ? '<button type="button" class="sf-hit" data-act="apply" data-id="'+esc(x.id)+'" aria-label="'+(armed?MV[armed].name+' '+lab:'Select '+lab)+'"></button>' : '');
+    var undo=(x.mv&&x.mv!=="sub")?'<button type="button" class="sf-undo" data-act="unmove" data-id="'+esc(x.id)+'" aria-label="'+(x.src?'Undo '+MV[x.mv].name.toLowerCase()+' on '+lab:'Remove the new step')+'">'+ICON.x+'</button>':'';
+    var top='<div class="sf-top">'+fNum(num)+(f&&f.r&&FACE[f.r]?'<span class="sf-fe" role="img" aria-label="'+FACE[f.r].n+'">'+FACE[f.r].e+'</span>':'')+(f&&f.nec==="inh"?'<span class="seal inh sm">Inherited</span>':'')+'</div>';
+    return '<li class="'+cls+'" data-fid="'+esc(x.id)+'"><div class="sf-card">'+top+badge+body+undo+hit+'</div></li>';
+  });
+  return tools+panel+stripOpen("moves"+(armed?' armed-'+armed:''),frames.length,5)+frames.join("")+'</ol>';
+}
+var MOVE_SFX={sub:"snip",shr:"shrink",amp:"grow",inv:"spark"};
+function applyMove(id){
+  var x=flowItem(id); if(!x) return;
+  if(x.mv==="sub"){ x.mv=""; lastFx={id:x.id,k:"back"}; save(); sfx("pop"); refresh(); return; }
+  if(x.mv) return;
+  if(!armed){ var t=$(".tools8",curEl); if(t){ t.classList.remove("nudge"); void t.offsetWidth; t.classList.add("nudge"); } toast("Pick a move first."); sfx("tick"); return; }
+  if(armed==="inv"){
+    var at=S.flow.indexOf(x), nx={id:uid(),src:"",t:"",mv:"inv",how:""}; S.flow.splice(at+1,0,nx);
+    lastFx={id:nx.id,k:"inv"}; save(); sfx("spark"); refresh('[data-ftext="'+nx.id+'"]');
+    setTimeout(function(){ var c=$('.sf[data-fid="'+nx.id+'"] .sf-card',curEl); if(c) burstAt(c,22,.45); },120); return;
+  }
+  x.mv=armed; lastFx={id:x.id,k:armed}; save(); sfx(MOVE_SFX[armed]);
+  if(armed==="sub"){ refresh(); var ref=x; toast("Step cut.","Undo",function(){ ref.mv=""; save(); refresh(); },5000); }
+  else refresh('[data-fhow="'+x.id+'"]');
+}
+function unMove(id){
+  var x=flowItem(id); if(!x) return;
+  if(!x.src){ var at=S.flow.indexOf(x), gone=S.flow.splice(at,1)[0]; save(); sfx("tick"); refresh(); toast("New step removed.","Undo",function(){ S.flow.splice(Math.min(at,S.flow.length),0,gone); save(); refresh(); },5000); return; }
+  var was={mv:x.mv,how:x.how}; x.mv=""; x.how=""; save(); sfx("tick"); refresh();
+  toast("Move undone.","Undo",function(){ x.mv=was.mv; x.how=was.how; save(); refresh(); },5000);
+}
+
+/* ---------- Share it: today's workflow turns into the new one ---------- */
+function replayHTML(){
+  var m=matchSets(); if(!m.olds.length) return '<p class="hint">Draw today’s workflow first, and you’ll see it change here.</p>';
+  var tiles=S.flow.map(function(x){
+    var after=has(x.how)?x.how:x.t; if(!has(after)&&!has(x.t)) return "";
+    return '<li class="mt rp mv-'+(x.mv||'none')+(x.src?'':' isnew')+'"><span class="mt-t"><span class="bt">'+esc(x.t)+'</span>'+((x.mv==="shr"||x.mv==="amp")&&has(x.how)?'<span class="at">'+esc(x.how)+'</span>':'')+'</span>'+(x.mv?'<span class="mvb b-'+x.mv+'" aria-hidden="true">'+GLYPH[x.mv]+'</span>':'')+'</li>';
+  }).join("");
+  return '<div class="replay after" id="replay" data-feedback-private aria-label="'+plural(m.olds.length,"step","steps")+' today, '+m.news.length+' reimagined">'+
+    '<div class="rl"><b data-rn>'+m.news.length+'</b><span data-rw>'+(m.news.length===1?"step, reimagined":"steps, reimagined")+'</span><span class="rwas">'+plural(m.olds.length,"step","steps")+' today</span><button type="button" class="btn ghost sm rpl" data-act="replay">'+ICON.loop+'Play it again</button></div>'+
+    '<ol class="mstrip rps">'+tiles+'</ol></div>';
+}
+function replayPlay(el,force){
+  var box=$("#replay",el); if(!box) return; var m=matchSets();
+  var tiles=$$(".rp",box), rn=$("[data-rn]",box), rw=$("[data-rw]",box);
+  var end=function(){ box.classList.remove("before","p1","p2","p3"); box.classList.add("after"); if(rn) rn.textContent=m.news.length; if(rw) rw.textContent=m.news.length===1?"step, reimagined":"steps, reimagined"; };
+  if((celebrated.ba&&!force)||rm()){ end(); return; }
+  celebrated.ba=1;
+  box.classList.remove("after","p1","p2","p3"); box.classList.add("before"); if(rn) rn.textContent=m.olds.length; if(rw) rw.textContent=m.olds.length===1?"step today":"steps today";
+  var steps=[[700,"p1","snip",function(){ return m.nCut; }],[1500,"p2","shrink",function(){ return m.nCh; }],[2300,"p3","spark",function(){ return m.nNew; }]];
+  steps.forEach(function(st){ setTimeout(function(){ if(curEl!==el) return; box.classList.add(st[1]); if(st[3]()) sfx(st[2]); },st[0]); });
+  setTimeout(function(){ if(curEl!==el) return; end(); countFrom(rn,m.olds.length,m.news.length,600); sfx("little"); },3100);
+}
+function countFrom(el,a,b,ms){
+  if(!el) return; if(rm()||a===b){ el.textContent=b; return; }
+  var t0=performance.now();
+  (function step(now){ var k=Math.min(1,(now-t0)/ms), e=1-Math.pow(1-k,3); el.textContent=Math.round(a+(b-a)*e); if(k<1) requestAnimationFrame(step); })(t0);
+}
 /* =========================================================
    SCREEN BUILDERS
    ========================================================= */
 function split(lead,work,cls){ return '<div class="split'+(cls?' '+cls:'')+'"><div class="lead">'+lead+'</div><div class="work">'+work+'</div></div>'; }
 function head(h,sub){ return '<h2 class="ask">'+h+'</h2>'+(sub?'<p class="sub"'+pv(sub)+'>'+sub+'</p>':''); }
+/* the strip screens: what to do across the top, the group's workflow as the hero below */
+function stageL(lead,side,body,cls){ return '<div class="stagel'+(cls?' '+cls:'')+'"><div class="sh"><div class="shl">'+lead+'</div>'+(side?'<div class="shr">'+side+'</div>':'')+'</div><div class="sb">'+body+'</div></div>'; }
 var celebrated={};
+/* acting it out: three people pass the report along as the work moves */
+var ACT_EX='<svg class="actex" viewBox="0 0 420 200" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" role="img" aria-label="Three people pass a report along as the work moves">'+
+  [70,210,350].map(function(x,i){ return '<circle cx="'+x+'" cy="46" r="15"/><path d="M'+x+' 61v52M'+x+' 113l-17 42M'+x+' 113l17 42M'+x+' 80l'+(i===2?'-':'')+'30 10"/>'; }).join("")+
+  '<path class="g2" d="M108 40c26-26 50-26 72-2" stroke-dasharray="3 7"/><path class="g2" d="M248 40c26-26 50-26 72-2" stroke-dasharray="3 7"/>'+
+  '<rect class="rep" x="96" y="80" width="22" height="28" rx="2"/><path d="M101 88h12M101 95h12M101 101h7" opacity=".6"/>'+
+  '<text class="lab" x="70" y="186" text-anchor="middle">analyst</text><text class="lab" x="210" y="186" text-anchor="middle">manager</text><text class="lab" x="350" y="186" text-anchor="middle">sales leader</text></svg>';
 
 /* =========================================================
    SCREENS
@@ -2092,13 +2806,13 @@ var SCREENS=[
   },
   notes:["Team mode assumes one shared screen that you drive. Nobody else needs to open anything.","Best with the people who do the work day to day."]
 },
-{id:"plan", ch:0, night:true, center:true, noRail:true, cls:"planscreen",
+/* the framework, drawn as one path: two questions, then four actions */
+{id:"plan", ch:0, night:true, center:true, noRail:true, cls:"planscreen", go:"plan",
   html:function(){
-    var card=function(n){ return '<div class="pc" data-ch="'+n+'" style="--i:'+n+'"><span class="pn">'+n+'</span><b>'+STEP[n].q+'</b><em>'+STEP[n].leave+'</em></div>'; };
+    var node=function(n){ return '<li class="pc'+(n<3?' q':' a')+'" data-ch="'+n+'" style="--i:'+(n-1)+'"><span class="pdot"><b>'+n+'</b></span><span class="pq">'+STEP[n].q+'</span><span class="pl">'+STEP[n].leave+'</span></li>'; };
     return '<h2 class="ask">Two questions, four actions.</h2><p class="sub">'+T("About 30 minutes.","About 20 minutes, at your own pace.")+' Each step adds to one card you’ll take away.</p>'+
-      '<div class="plan"><div class="pq">'+card(1)+card(2)+'</div><div class="pa">'+card(3)+card(4)+card(5)+card(6)+'</div></div>'+
-      '<p class="grab">'+grabLine()+'</p>'+
-      '<p class="go">New to AI? Start one step back: <a href="'+LINKS.ai+'" target="_blank" rel="noopener">Building AI Confidence</a> is a hands-on crash course on your own work.</p>';
+      '<div class="path6"><svg class="pline" viewBox="0 0 1000 8" preserveAspectRatio="none" aria-hidden="true"><path d="M0 4H1000"/></svg><ol>'+[1,2,3,4,5,6].map(node).join("")+'</ol></div>'+
+      '<p class="grab">'+grabLine()+'</p>';
   },
   notes:["Read the six steps out loud. It sets expectations.","Ask someone to keep time, and someone to speak for the people this work affects who aren’t here.","Need two sessions? Stop after Judge it. Answers stay saved in this browser."]
 },
@@ -2126,7 +2840,7 @@ var SCREENS=[
 {id:"b-vote", ch:1, show:team, vote:"eyeroll",
   html:function(){
     return split(head("Which one do we fix today?",P("Two votes each, by show of hands.","Two votes each, by raised hand or chat."))+
-      pencil([tip(EX.size)])+goLine(1),
+      pencil([tip(EX.size)]),
       voteNotes("eyeroll",S.cands,{empty:"Go back a screen and add the group’s eye-rollers first."}));
   },
   notes:["Select a note once per vote and count out loud. It keeps it fun and transparent.","Steer toward one that bugs the most people and is the right size.","Once votes are in, Next turns into Reveal."]
@@ -2134,7 +2848,7 @@ var SCREENS=[
 {id:"b-solo", ch:1, show:function(){ return !team(); }, focusField:true,
   html:function(){
     return split(head("What makes you roll your eyes?","One line, the way you’d say it out loud.")+
-      pencil([eg(EX.eye),tip(EX.size)])+goLine(1),
+      pencil([eg(EX.eye),tip(EX.size)]),
       bigArea("eyeroll","The thing that makes me roll my eyes is…",200,"My eye-roller")+
       '<p class="starters">Stuck? Start with '+[["A report that ","a report"],["A meeting that ","a meeting"],["An email that ","an email"],["A dashboard that ","a dashboard"],["A proposal that ","a proposal"]].map(function(c,i,a){ var btn='<button type="button" data-act="fill" data-path="eyeroll" data-v="'+esc(c[0])+'">'+c[1]+'</button>'; return i===a.length-1?'<span class="nb">'+btn+'.</span>':btn+(i<a.length-2?', ':' or '); }).join("")+'</p>');
   },
@@ -2147,11 +2861,18 @@ var SCREENS=[
     var eye=has(S.eyeroll)?own(S.eyeroll):"your eye-roller";
     return split(head("Why does this exist?",T("Now that you’ve picked ","Now that you’ve named ")+eye+", find its real purpose. Finish the sentence, then keep asking: in order to?")+
       (team()?whoList([["Together","call out answers."],["Lead","type the ones you agree on."]])+timerHTML("t-why",90,"talk","Keep asking: in order to?"):"")+
-      pencil([eg(EX.why.join(" ")),tip("If you reach something like <s>grow the business</s>, you’ve gone too far. Come back down a line.")])+goLine(2),
+      pencil([eg(EX.why.join(" ")),tip("If you reach something like “grow the business,” you’ve gone too far. Come back down a line.")]),
       whyHTML());
   },
-  out:function(el){ return [2,$(".chain li.picked",el)]; },
-  notes:["Ask “in order to?” out loud each time. Make it a rhythm.","Too high? Ask: could we design a workflow around that sentence? If not, come back down.","If the group splits between two lines, the higher one is usually the purpose and the lower one is how you deliver it today."]
+  notes:["Ask “in order to?” out loud each time. Make it a rhythm.","Too high? Ask: could we design a workflow around that sentence? If not, come back down.","Next, the group picks which line is the real purpose."]
+},
+{id:"purpose", ch:2, center:true, cls:"purposescreen",
+  html:function(){
+    return '<h2 class="ask">Which line is its real purpose?</h2><p class="sub">Pick the one specific enough to design a better workflow around.</p>'+purposeHTML();
+  },
+  mount:function(el,dir,isRefresh){ var l=purposeLines(); if(!isRefresh&&l.length===1&&!(S.whyPick>=0&&has(S.why[S.whyPick]))){ S.whyPick=l[0].i; syncPurpose(); save(); refresh(); } },
+  out:function(el){ return [2,$(".pc8.on .pt",el)]; },
+  notes:["If the group splits between two lines, the higher one is usually the purpose and the lower one is how you deliver it today.","Too high to act on? Pick the line below it."]
 },
 
 /* ---------- 3 DRAW IT ---------- */
@@ -2167,55 +2888,57 @@ var SCREENS=[
 {id:"map", ch:3,
   html:function(){
     var k=drawMode(), d=DRAW[k], sec=team()?150:120, ways=team()?["sketch","act","sticky"]:["type","sketch","act","sticky"];
-    var seg='<div class="modes'+(ways.length>3?' four':'')+'" role="radiogroup" aria-label="How to draw it">'+ways.map(function(m){ return '<button type="button" class="mode" role="radio" data-act="dmode" data-v="'+m+'" aria-checked="'+(k===m)+'"'+(k===m?'':' tabindex="-1"')+'><span class="art">'+ART[m]+'</span><b>'+DRAW[m].t+'</b><small>'+DRAW[m].p+'</small></button>'; }).join("")+'</div>';
-    var ex = k==="sketch" ? '<p>'+eg("the weekly sales report, sketched.")+'</p>'+sheetEx()
-      : k==="sticky" ? '<p>'+eg("the weekly sales report, on sticky notes.")+'</p>'+stickyEx()
-      : k==="type" ? '<p>'+eg("the weekly sales report, typed in.")+'</p><ol class="exlist">'+EX.steps.map(function(t){ return '<li>'+esc(t)+'</li>'; }).join("")+'</ol>'
-      : '<p>'+eg("three people play the analyst, the manager and a sales leader. They pass a real report along as the work moves, and someone writes each step down.")+'</p>';
+    var seg='<div class="modes'+(ways.length>3?' four':'')+'" role="radiogroup" aria-label="How to draw it">'+ways.map(function(m){ return '<button type="button" class="mode" role="radio" data-act="dmode" data-v="'+m+'" aria-checked="'+(k===m)+'"'+(k===m?'':' tabindex="-1"')+'><span class="art">'+ART[m]+'</span><span class="mtx"><b>'+DRAW[m].t+'</b><small>'+DRAW[m].p+'</small></span></button>'; }).join("")+'</div>';
+    var ex = k==="sketch" ? sheetEx()
+      : k==="sticky" ? stickyEx()
+      : k==="type" ? '<ol class="mstrip ex">'+EX.steps.map(function(t,i){ return '<li class="mt"><span class="mt-n">'+(i+1)+'</span><span class="mt-t">'+esc(t)+'</span></li>'; }).join("")+'</ol>'
+      : ACT_EX;
+    var cap = {sketch:"the weekly sales report, sketched.",sticky:"the weekly sales report, on sticky notes.",type:"the weekly sales report, typed in.",act:"three people play the analyst, the manager and a sales leader, passing a real report along as the work moves. Someone writes each step down."}[k];
     return split(head("Draw it your way.",T("Pick a way that suits your group today.","Pick a way that suits you today."))+seg+whoList(drawSteps())+
       (k==="type"?"":timerHTML("t-draw",sec,d.kind,"Aim for 5 to 8 steps.",{stay:true})),
-      '<div class="pencil xl">'+ex+'</div>');
+      '<figure class="expanel m-'+k+'"><div class="exart">'+ex+'</div><figcaption class="pencil">'+eg(cap)+'</figcaption></figure>');
   },
   notes:["Walk around, or watch the cameras. Nudge anyone stuck: what happens right after that?","Draw what actually happens, including the workarounds nobody admits to.","Acting it out works best in a room with three or more people. Sketching works everywhere."]
 },
 {id:"capture", ch:3,
   html:function(){
-    var k=drawMode(), lbl={sketch:"Snap your sketch",act:"Snap your notes, if you like",sticky:"Snap your sticky wall"}[k];
-    return split(head(k==="type"?"Type the steps.":"Type up the steps.",T("One person reads the steps out in order while the lead types.","Type each step in order, one line each."))+
-      pencil([tip("Type what happens today, workarounds and all. Your chance to change it comes soon.")])+(lbl?photoHTML("photoOld",lbl):"")+goLine(3),
-      stepsHTML("frames","What happens at this step?"));
+    var k=drawMode(), lbl={sketch:"Add a photo of your sketch",act:"Add a photo of your notes",sticky:"Add a photo of your sticky notes"}[k];
+    return stageL(head(k==="type"?"Type the steps.":"Type up the steps.",T("One person reads the steps out in order while the lead types. Each step becomes a frame.","Type one step per frame, in order.")),
+      pencil([tip("Type what happens today, workarounds and all. Your chance to change it comes soon.")])+(lbl?photoHTML("photoOld",lbl):""),
+      captureStrip(),"capture");
   },
-  mount:function(){ if(!S.frames.length){ S.frames.push({id:uid(),t:"",r:"",why:"",nec:""}); save(); refresh(); } },
-  out:function(el){ return [3,$(".steps",el)]; },
+  mount:function(el,dir,isRefresh){ if(!S.frames.length){ S.frames.push({id:uid(),t:"",r:"",why:"",nec:""}); save(); refresh(); } else if(!isRefresh&&!("ontouchstart" in window)){ var e=$$(".sf-in",el).filter(function(t){ return !has(t.value); })[0]; if(e) setTimeout(function(){ if(curEl===el) try{ e.focus({preventScroll:true}); }catch(x){} },700); } },
+  out:function(el){ return [3,$(".strip8",el)]; },
   notes:["Ask one person to read the steps out while you type. Everyone else listens for anything missing."]
 },
 
 /* ---------- 4 JUDGE IT ---------- */
 {id:"judge", ch:4, chap:4,
   html:function(){
-    return split(head("Judge it.",(has(S.purpose)?"Now that the workflow is drawn, judge each step against its real purpose, "+own(S.purpose)+".":"Now that the workflow is drawn, look at each step through the eyes of the people who live it.")+" Does it help, or get in the way?")+
-      (team()?whoList([["Lead","read each step out."],["Everyone",P("point to the face that fits.","react with the face that fits.")],["Lead","select the face most people chose."]])+timerHTML("t-judge",90,"talk","One step at a time."):"")+
-      pencil([eg(EX.judge),tip("😍 it works and is worth protecting. 😤 it costs effort, delay or repetition. 🤔 nobody’s sure why it’s there.")]),
-      judgeHTML());
+    return stageL(head("Judge it.",(has(S.purpose)?"Now that the workflow is drawn, judge each step against its real purpose, "+own(S.purpose)+".":"Now that the workflow is drawn, look at each step through the eyes of the people who live it.")+" Does it help, or get in the way?")+
+      (team()?whoList([["Lead","read each step out."],["Everyone",P("point to the face that fits.","react with the face that fits.")],["Lead","select the face most people chose."]]):""),
+      (team()?timerHTML("t-judge",90,"talk","One step at a time."):"")+
+      pencil([tip("😍 it works and is worth protecting. 😤 it costs effort, delay or repetition. 🤔 nobody’s sure why it’s there."),eg(EX.judge)]),
+      judgeStrip(),"judge");
   },
   notes:["Read each step out, then count faces.","Voice of the people: react the way the customer or the next team would.","Some steps deserve protecting, so don’t only hunt for problems."]
 },
 {id:"inherit", ch:4,
   html:function(){
     var hh=hots();
-    return split(head("Necessary, or inherited?",(hh.length?"Now that you’ve flagged "+own(hh[0].t,48)+(hh.length>1?" and "+plural(hh.length-1,"more step","more steps"):"")+", ask why each one happens, who decided, and what would break without it.":"Ask why it happens, who decided, and what would break without it."))+
-      (team()?timerHTML("t-inh",60,"talk","Start with the hottest step."):"")+
-      pencil([eg(EX.inherit)])+goLine(4),
-      hotHTML());
+    return stageL(head("Necessary, or inherited?",(hh.length?"Now that you’ve flagged "+own(hh[0].t,48)+(hh.length>1?" and "+plural(hh.length-1,"more step","more steps"):"")+", ask why each one happens, who decided, and what would break without it.":"Ask why it happens, who decided, and what would break without it.")),
+      (team()?timerHTML("t-inh",60,"talk","Start with the hottest step."):"")+pencil([eg(EX.inherit)]),
+      inheritView(),"inherit");
   },
-  out:function(el){ return [4,$(".hotc",el)]; },
+  mount:function(el,dir,isRefresh){ if(!isRefresh) liftPlay(el); },
+  out:function(el){ return [4,$(".lift .sf-t",el)]; },
   notes:["Push for the origin story: when did we start doing this? Often nobody knows. That’s the point.","Voice of the people: does this step matter to anyone downstream?","Splitting into two sessions? Stop here. Everything is saved in this browser."]
 },
 
 /* ---------- 5 REIMAGINE IT ---------- */
 {id:"stories", ch:5, chap:5, grand:true, night:true, center:true, cls:"storyscreen",
   html:function(){
-    return '<h2 class="ask">Two stories, opposite endings.</h2><p class="sub"'+(has(S.eyeroll)?' data-feedback-private':'')+'>Before you change '+(has(S.eyeroll)?own(S.eyeroll,44):"yours")+', see how two organizations changed theirs.</p>'+storyHTML()+goLine(5);
+    return '<h2 class="ask">Two stories, opposite endings.</h2><p class="sub"'+(has(S.eyeroll)?' data-feedback-private':'')+'>Before you change '+(has(S.eyeroll)?own(S.eyeroll,44):"yours")+', see how two organizations changed theirs.</p>'+storyHTML();
   },
   mount:function(el){ initStory(el); },
   notes:["Press play and let it run, under two minutes. Don’t narrate over it.","On a call, check people can hear it. Share sound needs to be on.","At the end, ask which story sounds more like us, then select the group’s answer."]
@@ -2223,49 +2946,32 @@ var SCREENS=[
 {id:"moves", ch:5,
   html:function(){
     var h=hotFirst();
-    return split(head("Reimagine it.",(h?"Now that you’ve questioned "+own(h.t,48)+", change the work.":"Now that you know what to question, change the work.")+" Use any of the four moves, in any order.")+
-      (team()?whoList([["Alone",P("one idea per sticky note, as many as you can.","jot ideas on paper, one per line.")],["Together","read them out in turn."],["Lead","add each one to its move."]])+timerHTML("t-moves",150,"think","Alone first. As many ideas as you can.",{stay:true}):""),
-      boardHTML(), "wide");
+    return stageL(head("Reimagine it.",(h?"Now that you’ve questioned "+own(h.t,48)+", change the work.":"Now that you know what to question, change the work.")+" Use any of the four moves, in any order."),
+      (team()?timerHTML("t-moves",150,"think","Alone first. As many ideas as you can.",{stay:true})+'<p class="who1">'+P("Jot ideas alone on sticky notes. Read them out. The lead uses the moves on the steps.","Jot ideas alone. Read them out. The lead uses the moves on the steps.")+'</p>':""),
+      movesView(),"moves");
   },
-  notes:["Quantity first. Don’t debate ideas yet.","It’s fine if a move gets no ideas. Not every workflow needs all four.","Check each idea against the purpose: does it create the value in a better way?"]
-},
-{id:"newflow", ch:5,
-  html:function(){
-    var used={}; S.newFrames.forEach(function(f){ used[norm(f.t)]=1; });
-    var all=ideaItems().filter(function(x){ return has(x.t); }), keep=all.filter(function(k){ return k.move!=="sub"; }), gone=all.filter(function(k){ return k.move==="sub"; });
-    var chips=function(list,act){ return '<div class="carry" data-feedback-private>'+list.map(function(f){ var on=!!used[norm(f.t)]; return '<button type="button" class="'+(on?'used':'')+'" aria-pressed="'+on+'" data-act="'+act+'" data-id="'+esc(f.id)+'">'+(on?'<span class="tk" aria-hidden="true">'+ICON.tick+'</span>':'')+esc(f.t)+'</button>'; }).join("")+'</div>'; };
-    return split(head("Build the new workflow.","Today’s steps are already here. Remove, reorder or rewrite them, then add your ideas.")+
-      (has(S.purpose)?'<p class="remind" data-feedback-private>Keep it true to its real purpose, '+own(S.purpose,64)+'.</p>':'')+
-      (gone.length?'<p class="hint" data-feedback-private>Leaving out: '+gone.map(function(g){ return '<b>'+esc(g.t)+'</b>'; }).join(", ")+'</p>':'')+
-      (team()?timerHTML("t-flow",120,"talk","Talk it through. The lead edits the steps live."):"")+
-      (keep.length?'<p class="lbl">Your ideas</p>'+chips(keep,"carryidea"):''),
-      '<p class="lbl">The new workflow</p>'+stepsHTML("newFrames","What happens now?")+
-      '<details class="more"><summary><span class="pl" aria-hidden="true">+</span>Add a photo of the new sketch</summary><div>'+photoHTML("photoNew","Snap the new workflow")+'</div></details>', "build");
-  },
-  /* the new workflow starts as a copy of today's, once, so the group edits rather than retypes */
-  mount:function(){ if(!S.nfSeeded&&!S.newFrames.length&&filled(S.frames).length){ S.newFrames=filled(S.frames).map(function(f){ return {id:uid(),t:f.t}; }); S.nfSeeded=true; save(); refresh(); } else if(!S.nfSeeded&&S.newFrames.length){ S.nfSeeded=true; save(); } },
-  out:function(el){ return [5,$(".steps",el)]; },
-  notes:["Talk it through together while you build the new workflow on screen.","Leave out whatever you’re subtracting.","Read the new workflow aloud when you’re done. Does it sound better than the old one?"]
+  out:function(el){ return [5,$(".strip8",el)]; },
+  notes:["Quantity first. Don’t debate ideas yet.","It’s fine if a move goes unused. Not every workflow needs all four.","Check each change against the purpose: does it create the value in a better way?","Read the new workflow aloud when you’re done. Does it sound better than the old one?"]
 },
 
 /* ---------- 6 SHARE IT ---------- */
 {id:"share", ch:6, chap:6,
   html:function(){
     var lead=(has(S.eyeroll)?"Now that you’ve reimagined "+own(S.eyeroll,56)+",":"Now that you have a new workflow,")+" get feedback from at least three people it affects. Then pick the smallest piece you could try next week.";
-    return split(head("Share it.",lead)+
-      pencil([tip("Ask each one three questions. What do you like? What do you wish? What do you wonder?"),eg(EX.test)])+goLine(6),
-      baHTML()+
+    return stageL(head("Share it.",lead),
+      pencil([tip("Ask each one three questions. What do you like? What do you wish? What do you wonder?"),eg(EX.test)]),
+      replayHTML()+
+      '<div class="shfields'+(team()?'':' solo')+'"><div class="ask2 wide"><label class="lbl" for="sh-test">What can you test next week?</label>'+bigArea("test",T("The smallest piece we could try is…","The smallest piece I could try is…"),240,"What can you test next week?").replace('<textarea','<textarea id="sh-test"')+'</div>'+
       '<div class="ask2"><label class="lbl" for="sh-ask">Who will you ask?</label>'+field("ask",T("Three people it affects who weren’t here","Three people it affects"),160,"Who will you ask?").replace('<input','<input id="sh-ask"')+'</div>'+
-      '<div class="ask2"><label class="lbl" for="sh-test">What can you test next week?</label>'+bigArea("test",T("The smallest piece we could try is…","The smallest piece I could try is…"),240,"What can you test next week?").replace('<textarea','<textarea id="sh-test"')+'</div>'+
-      '<div class="duo-fields">'+(team()?'<div><label class="lbl" for="sh-owner">Owner</label>'+field("owner","Who makes it happen",80,"Owner").replace('<input','<input id="sh-owner"')+'</div>':'')+'<div><label class="lbl" for="sh-when">By when</label>'+field("when","next Friday",60,"By when").replace('<input','<input id="sh-when"')+'</div></div>');
+      (team()?'<div class="ask2"><label class="lbl" for="sh-owner">Owner</label>'+field("owner","Who makes it happen",80,"Owner").replace('<input','<input id="sh-owner"')+'</div>':'')+'<div class="ask2"><label class="lbl" for="sh-when">By when</label>'+field("when","next Friday",60,"By when").replace('<input','<input id="sh-when"')+'</div></div>',"share");
   },
-  mount:function(el){ baPlay(el); },
+  mount:function(el){ replayPlay(el); },
   out:function(el){ return [6,$('[data-bind="test"]',el)]; },
   notes:["Pick people who will be honest, including at least one likely skeptic.","Push for a small test. One you can run next week beats a pilot that needs approval.","Want to rehearse? One person plays the skeptic while another pitches the new workflow in a minute, then asks what they like, wish and wonder."]
 },
 
 /* ---------- FINISH ---------- */
-{id:"workshops", ch:7, night:true, center:true, cls:"pathscreen", next:"See your card",
+{id:"workshops", ch:7, night:true, center:true, cls:"pathscreen", next:"Get your card",
   html:function(){
     var ws=function(n,d,p,c){ return '<a class="ws c'+c+'" href="'+LINKS.ai+'" target="_blank" rel="noopener"><b>'+n+'</b><span>'+d+'</span><em>'+p+'</em></a>'; };
     return '<section class="path"><h2 class="ask">This lab is one activity. Our workshops offer the whole path.</h2><p class="sub">Wherever your teams are, from early friction to reimagination.</p><div class="phases">'+
@@ -2278,15 +2984,14 @@ var SCREENS=[
   },
   notes:["Point to the workshop that fits what the group just did, then show the card."]
 },
-{id:"finish", ch:7, night:true, center:true, cls:"finale", noNext:true, noRail:true,
+{id:"finish", ch:7, night:true, cls:"finale", noNext:true, noRail:true,
   pre:function(){ return '<div class="dawn" aria-hidden="true"><i></i></div>'; },
   html:function(){
     var st='', got=0; for(var c=1;c<=6;c++){ var on=has(railVal(c)); if(on) got++; st+='<i class="'+(on?'got':'')+'" style="--i:'+(c-1)+'">'+c+'</i>'; }
-    return '<div class="stamps" role="img" aria-label="'+got+' of 6 steps complete">'+st+'</div>'+
+    return '<div class="fin"><div class="fin-l"><div class="stamps" role="img" aria-label="'+got+' of 6 steps complete">'+st+'</div>'+
       '<h1 class="hero">From eye-roll to a better way.</h1><p class="lede">'+T("Not bad for one session. Save your card and post it where the team will see it.","Not bad for one session. Save your card so you can come back to it.")+'</p>'+
-      '<div class="exports"><button class="btn ghost" type="button" data-act="bow">Take a bow</button><button class="btn sec" type="button" data-act="print">Print my answers</button><button class="btn sec" type="button" data-act="email"'+(hasMail()?'':' hidden')+'>Email this</button><button class="btn" type="button" data-act="png">Save as image</button></div>'+
-      ocardHTML()+
-      '<p class="legal">This is a proprietary ExperiencePoint tool. Please don’t copy or redistribute it.<br>ExperiencePoint&reg; Copyright &copy; ExperiencePoint Inc. 2026, all rights reserved.</p>';
+      '<div class="exports"><button class="btn" type="button" data-act="png">Save as image</button><button class="btn sec" type="button" data-act="print">Print my answers</button><button class="btn sec" type="button" data-act="email"'+(hasMail()?'':' hidden')+'>Email this</button><button class="btn ghost" type="button" data-act="bow">Take a bow</button></div></div>'+
+      '<div class="fin-r">'+ocardHTML()+'</div></div>';
   },
   mount:function(el){
     tKill();
@@ -2297,74 +3002,41 @@ var SCREENS=[
   notes:["Save or print the card now, before anyone leaves.","Close with the first test and its owner. Say the date out loud.","Ask each person for one word on how that felt."]
 }
 ];
-
 /* =========================================================
    COMPONENT HTML: why chain, judging, hot spots, the four moves,
    the story player, before and after, photo, steps, outcome card
    ========================================================= */
 function whyCan(){ return S.why.length<WHY_MAX && has(S.why[S.why.length-1]); }
 function whyGhost(){ var can=whyCan(); return '<button class="cghost" type="button" data-act="whyadd" style="--lv:'+S.why.length+'"'+(can?'':' disabled')+'><span class="pl" aria-hidden="true">+</span><span class="gt">'+(can?'Ask again: in order to?':'Fill the last line first')+'</span></button>'; }
+/* the why chain: keep asking "in order to?". Picking the real purpose comes on its own screen next */
 function whyHTML(){
-  var n=S.why.length, pi=pickIdx(), r='<div class="eyer" data-feedback-private><span class="el">'+T("Our eye-roller","My eye-roller")+'</span>';
+  var n=S.why.length, r='<div class="eyer" data-feedback-private><span class="el">'+T("Our eye-roller","My eye-roller")+'</span>';
   if(has(S.eyeroll)) r+='<div class="et" data-live="eyeroll">'+escBr(S.eyeroll)+'</div><details class="editw"><summary>Polish the wording</summary>'+bigArea("eyeroll","The eye-roller is…",200,"Polish the eye-roller")+'</details>';
   else r+=bigArea("eyeroll",T("Name the group’s eye-roller","Name your eye-roller"),200,T("Our eye-roller","My eye-roller"));
   r+='</div><ol class="chain" data-feedback-private>';
   S.why.forEach(function(v,i){
-    var on=i===pi;
-    r+='<li class="cl'+(on?' picked':'')+'" style="--lv:'+i+'" data-i="'+i+'"><span class="cj">'+(i===0?"We do this in order to…":"in order to…")+'</span><div class="crow">'+
-      '<button class="cpick" type="button" data-act="whypick" data-i="'+i+'" aria-pressed="'+on+'" aria-label="Make this the real purpose"'+(has(v)?'':' disabled')+'>'+ICON.tick+'</button>'+
+    r+='<li class="cl" style="--lv:'+i+'" data-i="'+i+'"><span class="cj">'+(i===0?"We do this in order to…":"in order to…")+'</span><div class="crow">'+
       bigInput("why."+i,i===0?"say what it produces or makes possible":"and what does that make possible?",200,i===0?"We do this in order to":"In order to")+
       (n>1?'<button class="rx" type="button" data-act="whydel" data-i="'+i+'" aria-label="Remove this line">&times;</button>':'')+'</div></li>';
   });
-  r+='</ol>'+(n<WHY_MAX?whyGhost():'');
-  return r+'<p class="chint" aria-live="polite">'+(pi>-1?'The gold line is the real purpose. Select another to choose it.':'')+'</p>';
+  return r+'</ol>'+(n<WHY_MAX?whyGhost():'');
 }
-/* keeps the chain's gold line, picks and the next line in step with typing, without a redraw */
+/* keeps the chain's next line in step with typing, without a redraw */
 function paintWhy(){
-  if(!curEl) return; var pi=pickIdx();
-  $$(".chain li.cl",curEl).forEach(function(li){ var i=+li.getAttribute("data-i"), on=i===pi; li.classList.toggle("picked",on); var b=$(".cpick",li); if(b){ b.setAttribute("aria-pressed",on?"true":"false"); b.disabled=!has(S.why[i]); } });
+  if(!curEl) return;
   var g=$(".cghost",curEl); if(g){ var can=whyCan(); g.disabled=!can; $(".gt",g).textContent=can?"Ask again: in order to?":"Fill the last line first"; }
-  var hn=$(".chint",curEl); if(hn) hn.textContent=pi>-1?"The gold line is the real purpose. Select another to choose it.":"";
 }
-var FACES=[["d","😍","Delighted"],["f","😤","Frustrated"],["c","🤔","Confused"]];
-function judgeHTML(){
-  var f=filled(S.frames); if(!f.length) return emptyBox("Go back to Draw it and add your steps first.");
-  var h='<div class="jkey" aria-hidden="true"><span></span>'+FACES.map(function(x){ return '<span>'+x[2]+'</span>'; }).join("")+'</div><div class="jlist" data-feedback-private>';
-  f.forEach(function(x,i){
-    h+='<div class="jrow'+(x.r?' r-'+x.r:'')+'" data-fid="'+esc(x.id)+'"><span class="sn">'+(i+1)+'</span><span class="st">'+esc(x.t)+'</span><span class="jbtns" role="radiogroup" aria-label="'+esc(x.t)+'">'+
-      FACES.map(function(b,k){ var on=x.r===b[0], tab=x.r?on:k===0; return '<button class="jb '+b[0]+(on?' on':'')+'" type="button" role="radio" data-act="react" data-id="'+esc(x.id)+'" data-k="'+b[0]+'" aria-checked="'+on+'" aria-label="'+b[2]+'"'+(tab?'':' tabindex="-1"')+'>'+b[1]+'</button>'; }).join("")+'</span></div>';
-  });
-  return h+'</div>';
+/* which line is the real purpose: the lines of the chain, as choices */
+function purposeLines(){ var out=[]; S.why.forEach(function(v,i){ if(has(v)) out.push({i:i,t:str(v).trim()}); }); return out; }
+function needPurpose(){ var l=purposeLines(); return l.length>1 && !(S.whyPick>=0&&has(S.why[S.whyPick])); }
+function purposeHTML(){
+  var l=purposeLines(); if(!l.length) return emptyBox("Go back a screen and finish the sentence first.");
+  var on=S.whyPick;
+  return '<div class="pchoices" role="radiogroup" aria-label="Its real purpose" data-feedback-private>'+
+    '<p class="pfrom">'+(has(S.eyeroll)?esc(S.eyeroll):T("Our eye-roller","My eye-roller"))+'</p>'+
+    l.map(function(x,k){ var sel=on===x.i, tab=on>=0?sel:k===0; return '<button type="button" class="pc8'+(sel?' on':'')+'" role="radio" aria-checked="'+sel+'" data-act="ppick" data-i="'+x.i+'" style="--lv:'+k+'"'+(tab?'':' tabindex="-1"')+'><span class="pj">'+(x.i===0?"We do this in order to":"in order to")+'</span><span class="pt">'+esc(x.t)+'</span><span class="pk" aria-hidden="true">'+ICON.tick+'</span></button>'; }).join("")+
+    '</div>';
 }
-function hotHTML(){
-  var h=hots();
-  if(!h.length) return emptyBox("Nothing marked frustrating or confusing yet. Go back a screen, or move on.");
-  return '<div class="hot" data-feedback-private>'+h.slice(0,3).map(function(x){
-    return '<div class="hotc" data-fid="'+esc(x.id)+'"><h3 id="hh-'+esc(x.id)+'"><span class="e" aria-hidden="true">'+(x.r==="f"?"😤":"🤔")+'</span>'+esc(x.t)+'</h3>'+
-      '<textarea class="big" rows="1" maxlength="300" data-bwhy="'+esc(x.id)+'" placeholder="Why does it happen?" aria-label="Why does it happen?" aria-describedby="hh-'+esc(x.id)+'">'+esc(x.why)+'</textarea>'+
-      '<div class="nec" role="radiogroup" aria-label="Necessary or inherited?">'+[["need","Necessary"],["inh","Inherited"]].map(function(o,k){ var on=x.nec===o[0], tab=x.nec?on:k===0; return '<button type="button" role="radio" class="'+o[0]+(on?' on':'')+'" data-act="nec" data-id="'+esc(x.id)+'" data-v="'+o[0]+'" aria-checked="'+on+'"'+(tab?'':' tabindex="-1"')+'>'+o[1]+'</button>'; }).join("")+'</div></div>';
-  }).join("")+'</div>'+(h.length>3?'<p class="hint">'+plural(h.length-3,"more step is","more steps are")+' marked. Start with these three.</p>':'');
-}
-/* the four moves on one board; the story the group picked points to where to start */
-function boardHTML(){
-  var from=S.story==="tesla"?"sub":S.story==="mlb"?"inv":"";
-  return '<div class="board">'+MOVES.map(function(m){
-    var ctx=moveCtx(m.k), items=S.ideas[m.k], on=from===m.k;
-    return '<section class="mq mv-'+m.k+(on?' from':'')+(items.length>1?' full':'')+'" aria-label="'+m.name+'"><div class="mh">'+GLYPH[m.k]+'<h3>'+m.name+'</h3></div>'+
-      (on?'<p class="fromline">You said more '+(S.story==="tesla"?"Tesla":"MLB")+', so start here.</p>':'')+
-      '<p class="mqq">'+m.q+'</p><p class="pencil sm">'+eg(m.ex)+'</p>'+(ctx?'<p class="ctx" data-feedback-private>'+ctx+'</p>':'')+
-      adder("ideas."+m.k,m.ph,true)+
-      (items.length?'<div class="chips" data-wall="ideas.'+m.k+'" data-feedback-private>'+items.map(function(it){ return '<span class="chip '+MOVE_CLS[m.k]+(seen[it.id]?'':' fresh')+'" style="--r:'+tilt(it.id)+'deg">'+escBr(it.t)+'<button class="nx" type="button" data-act="unstick" data-path="ideas.'+m.k+'" data-id="'+esc(it.id)+'" aria-label="Remove this idea">&times;</button></span>'; }).join("")+'</div>':'')+'</section>';
-  }).join("")+'</div>';
-}
-/* before and after, as what you're about to share */
-function baHTML(){
-  var m=matchSets();
-  if(!m.news.length) return '<p class="hint">Build the new workflow on the last screen, and you’ll see the before and after here.</p>';
-  return '<div class="ba sm" data-feedback-private><div class="row"><div class="lab"><b data-ba="old">'+m.olds.length+'</b> today</div>'+stripHTML(m.olds,{mini:true,cut:m.cut,hold:true,id:"baOld"})+'</div>'+
-    '<div class="row"><div class="lab"><b data-ba="new">'+m.news.length+'</b> reimagined</div>'+stripHTML(m.news,{mini:true,nw:m.nw,hold:true,pop:true,id:"baNew"})+'</div></div>';
-}
-
 /* ---------- the two stories: captioned stills, with the voice when it can play ---------- */
 var STORY_SRC="https://ep.github.io/pt/field-tools/reimagination-lab/story.mp3";
 var STORY_LEN=103.1;
@@ -2420,22 +3092,9 @@ function photoHTML(path,label){
   return '<label class="photo">'+ICON.cam+'<span><b>'+esc(label)+'</b><small>Optional. It stays in this browser and appears in your printout.</small></span><input type="file" accept="image/*" data-photo="'+path+'"></label>';
 }
 var movedId=null;
-function unmark(){ movedId=null; if(curEl) $$(".step.moved",curEl).forEach(function(x){ x.classList.remove("moved"); }); }
-document.addEventListener("focusin",function(e){
-  var li=e.target&&e.target.closest&&e.target.closest(".step[data-fid]"); if(!li||!curEl||!curEl.contains(li)) return;
-  var id=li.getAttribute("data-fid"); if(movedId===id&&li.classList.contains("moved")) return;
-  movedId=id; $$(".step.moved",curEl).forEach(function(x){ if(x!==li) x.classList.remove("moved"); }); li.classList.add("moved");
-});
-function stepsHTML(path,ph){
-  var arr=getP(path)||[], h='<ol class="steps" data-steps="'+path+'" data-feedback-private>';
-  arr.forEach(function(f,i){
-    h+='<li class="step'+(seen[f.id]?'':' fresh')+(movedId===f.id?' moved':'')+'" data-fid="'+esc(f.id)+'"><span class="sn">'+(i+1)+'</span><input type="text" maxlength="120" data-bstep="'+path+'" data-id="'+esc(f.id)+'" value="'+esc(f.t)+'" placeholder="'+esc(ph)+'" aria-label="Step '+(i+1)+'">'+
-      '<span class="sb"><button type="button" data-act="sup" data-path="'+path+'" data-id="'+esc(f.id)+'" aria-label="Move step '+(i+1)+' up">'+ICON.up+'</button><button type="button" data-act="sdown" data-path="'+path+'" data-id="'+esc(f.id)+'" aria-label="Move step '+(i+1)+' down">'+ICON.down+'</button><button type="button" data-act="sdel" data-path="'+path+'" data-id="'+esc(f.id)+'" aria-label="Remove step '+(i+1)+'">'+ICON.x+'</button></span></li>';
-  });
-  return h+'</ol><button class="btn sec sm addstep" type="button" data-act="sadd" data-path="'+path+'">Add a step</button>';
-}
+function unmark(){ movedId=null; if(curEl) $$(".sf.moved",curEl).forEach(function(x){ x.classList.remove("moved"); }); }
 function ocardHTML(){
-  var m=matchSets(), ci=cardIdeas(), keep=ci.list.slice(0,4), muted='<div class="v muted">Not filled in</div>';
+  var m=matchSets(), ci=cardChanges(), keep=ci.list.slice(0,4), muted='<div class="v muted">Not filled in</div>';
   var f=function(l,body){ return '<div class="of"><div class="l">'+l+'</div>'+body+'</div>'; };
   var tv=function(v){ return has(v)?'<div class="v">'+escBr(v)+'</div>':muted; };
   var tl=[S.owner,S.when].filter(has).map(esc).join(", ");
@@ -2443,12 +3102,11 @@ function ocardHTML(){
   return '<div class="ocard" id="ocard" data-feedback-private><div class="oh"><span class="dt">'+esc(dateStr())+'</span><span class="wm"><span class="nw">Re<span class="di">&#305;</span>magination</span> Lab</span><h3>'+(has(S.eyeroll)?escBr(S.eyeroll):T('Our workflow','My workflow'))+'</h3></div><div class="ob">'+
     f("Real purpose",tv(S.purpose))+
     f("Today",m.olds.length?stripHTML(m.olds,{mini:true,cut:m.cut,struck:true}):muted)+
-    f("Reimagined",m.news.length?stripHTML(m.news,{mini:true,nw:m.nw}):muted)+
-    f(ci.label,keep.length?'<ul class="kept-list">'+keep.map(function(k){ return '<li>'+esc(k.t)+'</li>'; }).join("")+'</ul>':muted)+
+    f("Reimagined",m.news.length?stripHTML(m.news,{mini:true,nw:m.nw,ch:m.ch}):muted)+
+    f(ci.label,keep.length?'<ul class="kept-list">'+keep.map(function(k){ return '<li class="k-'+k.k+'">'+esc(k.t)+'</li>'; }).join("")+'</ul>':muted)+
     f("First test",has(S.test)?'<div class="v">'+escBr(S.test)+(tl?' <span class="ow">('+tl+')</span>':'')+'</div>':muted)+
     '</div><div class="odots">'+dots+'<span>ExperiencePoint&reg;</span></div></div>';
 }
-
 /* =========================================================
    ENGINE
    ========================================================= */
@@ -2469,6 +3127,7 @@ function shock(x,y){
 }
 function render(dir){
   var s=cur(); if(!s) return;
+  if(flowSync()) save();
   movedId=null;
   markSeen();
   var el=document.createElement("section");
@@ -2505,11 +3164,12 @@ function render(dir){
   mountParts(el,s,dir,false);
   markSeen();
   $("#sr").textContent=askText();
+  lastFx=null;
   if(s.focusField && !("ontouchstart" in window)){ setTimeout(function(){ if(curEl!==el) return; var f=$(".frame textarea.big, .frame input.big",el); if(f&&!has(f.value)){ try{ f.focus({preventScroll:true}); }catch(e){} } },700); }
   tPaint();
 }
 function mountParts(el,s,dir,isRefresh){
-  $$("textarea.big",el).forEach(autoGrow);
+  $$("textarea.big, textarea.sf-in, textarea.sf-how",el).forEach(autoGrow);
   if(!isRefresh){
     if(s.id==="spin"&&!celebrated.spin){ celebrated.spin=1; setTimeout(function(){ if(curEl===el) spin(el); },850); }
     $$("[data-count]",el).forEach(function(c){ countUp(c,+c.getAttribute("data-count"),1200); });
@@ -2528,14 +3188,14 @@ function refresh(focusSel){
   fr.innerHTML=s.html();
   $$("details",fr).forEach(function(d,i){ if(openD[i]) d.open=true; });
   curEl.scrollTop=st;
-  mountParts(curEl,s,0,true); markSeen(); chrome(); tPaint();
+  mountParts(curEl,s,0,true); markSeen(); chrome(); tPaint(); lastFx=null;
   var sel=focusSel||keep; if(sel){ var x=$(sel,curEl); if(x){ try{ x.focus({preventScroll:true}); }catch(e){ x.focus(); } if(x.setSelectionRange&&(x.type==="text"||x.tagName==="TEXTAREA")){ var L=x.value.length; try{ x.setSelectionRange(L,L); }catch(e){} } } }
 }
 function lock(ms){ lockT=Date.now()+ms; }
 function go(d){
   if(Date.now()<lockT) return;
   var v=vis(), i=idx(), s=v[i];
-  if(d>0){ var pg=pendingReveal(s); if(pg){ reveal(pg); return; } var tg=pendingTie(s); if(tg){ nudgeTie(); return; } }
+  if(d>0){ var pg=pendingReveal(s); if(pg){ reveal(pg); return; } var tg=pendingTie(s); if(tg){ nudgeTie(); return; } if(s.id==="purpose"&&needPurpose()){ nudgePurpose(); return; } }
   var n=i+d; if(n<0||n>=v.length) return;
   clearTimeout(autoT);
   /* an undo belongs to the screen it was offered on */
@@ -2563,7 +3223,7 @@ function railVal(n){
   if(n===2) return str(S.purpose).trim();
   if(n===3){ var f=filled(S.frames).length; return f?"Drawn in "+plural(f,"step","steps"):""; }
   if(n===4){ var h=hotFirst(); return h?"Question “"+clipWords(h.t,60)+"”":""; }
-  if(n===5){ var m=matchSets(); return m.news.length?"Now "+plural(m.news.length,"step","steps")+(m.olds.length?", was "+m.olds.length:""):""; }
+  if(n===5){ var m=matchSets(); return m.news.length?"Now "+plural(m.news.length,"step","steps")+(m.olds.length?", was\u00a0"+m.olds.length:""):""; }
   if(n===6) return str(S.test).trim();
   return "";
 }
@@ -2620,13 +3280,22 @@ function chrome(){
   back.disabled = i===0;
   next.hidden = !!s.noNext;
   nextLabel(s);
+  goPaint(s);
   $("#notesBtn").hidden = !team();
   if(!team()) setDrawer(false);
   drawerFill(s);
   var sb=$("#soundBtn"); sb.setAttribute("aria-label",S.sfx?"Turn sound off":"Turn sound on"); $(".s-on",sb).style.display=S.sfx?"":"none"; $(".s-off",sb).style.display=S.sfx?"none":"";
   paintNext();
 }
-function nextLabel(s){ s=s||cur(); var next=$("#nextBtn"), pr=!!pendingReveal(s), tie=!pr&&!!pendingTie(s); next.textContent = pr ? "Reveal" : tie ? "Pick one" : (s.next || "Next"); next.classList.toggle("reveal",pr); }
+function nextLabel(s){ s=s||cur(); var next=$("#nextBtn"), pr=!!pendingReveal(s), tie=!pr&&(!!pendingTie(s)||(s.id==="purpose"&&needPurpose())); next.textContent = pr ? "Reveal" : tie ? "Pick one" : (s.next || "Next"); next.classList.toggle("reveal",pr); }
+/* the real purpose has to be picked before moving on */
+function nudgePurpose(){ var g=$(".pchoices",curEl); if(g){ g.classList.remove("nudge"); void g.offsetWidth; g.classList.add("nudge"); } toast("Pick the line that’s the real purpose."); sfx("tick"); }
+/* the workshop that goes further sits in the bottom bar, apart from the activity */
+function goPaint(s){
+  var a=$("#goLink"); if(!a) return; var key=s.go||(s.ch>=1&&s.ch<=6?s.ch:0), g=key?GO[key]:null;
+  a.hidden=!g; if(!g) return;
+  a.href=LINKS.ai; $(".gt",a).innerHTML=esc(g[0])+'<b>'+esc(g[1])+'</b><span class="gx">'+esc(g[2])+'</span>';
+}
 function paintNext(){
   var next=$("#nextBtn"); if(!curEl) return;
   var holds=!!$(".frame .btn:not(.sec):not(.ghost):not([disabled])",curEl);
@@ -2749,35 +3418,22 @@ function initStory(root){
   else paint(0);
 }
 
-function baPlay(el){
-  var m=matchSets(); if(!m.news.length) return;
-  var old=$("#baOld",el), nw=$("#baNew",el), oN=$('[data-ba="old"]',el), nN=$('[data-ba="new"]',el);
-  var finalState=function(){ [old,nw].forEach(function(s){ if(s) s.classList.remove("hold"); }); $$(".fr.cut",el).forEach(function(f){ f.classList.add("struck","fall"); }); };
-  if(celebrated.ba||rm()){ finalState(); return; }
-  celebrated.ba=1;
-  var t=300, fo=old?$$(".fr",old):[], fn=nw?$$(".fr",nw):[];
-  if(oN) oN.textContent="0"; if(nN) nN.textContent="0";
-  setTimeout(function(){ if(curEl!==el) return; fo.forEach(function(f,i){ f.style.transitionDelay=(i*60)+"ms"; }); if(old) old.classList.remove("hold"); countUp(oN,m.olds.length,600); },t);
-  t+=300+fo.length*60+400;
-  var cuts=$$(".fr.cut",el);
-  cuts.forEach(function(f,i){ setTimeout(function(){ if(curEl!==el) return; f.style.transitionDelay="0ms"; f.classList.add("struck"); sfx("tick"); setTimeout(function(){ if(curEl===el) f.classList.add("fall"); },360); },t+i*260); });
-  t+=cuts.length*260+(cuts.length?600:120);
-  setTimeout(function(){ if(curEl!==el) return; fn.forEach(function(f,i){ f.style.transitionDelay=(i*100)+"ms"; setTimeout(function(){ if(curEl!==el) return; sfx(f.classList.contains("new")?"select":"pop"); if(f.classList.contains("new")) f.classList.add("glow"); },i*100+120); }); if(nw) nw.classList.remove("hold"); countUp(nN,m.news.length,700); },t);
-}
 function finishPlay(el){
   var sts=$$(".stamps i",el), row=$(".stamps",el);
   if(celebrated.fin||rm()){ el.classList.add("refreshed"); return; }
   celebrated.fin=1; el.classList.add("play");
   if(row) row.classList.add("play");
   sts.forEach(function(d,i){ if(!d.classList.contains("got")) return; setTimeout(function(){ if(curEl!==el) return; sfx(i===5?"thud":"tick"); },300+i*230+260); });
-  setTimeout(function(){ if(curEl!==el) return; sfx("fanfare"); burst(170); setTimeout(function(){ burst(90,innerWidth*.2,innerHeight*.5); burst(90,innerWidth*.8,innerHeight*.5); },320); },2100);
+  /* the confetti rises from the edges and the stamps, never over the words */
+  setTimeout(function(){ if(curEl!==el) return; sfx("fanfare"); burst(120,innerWidth*.05,innerHeight*.98,1.3); burst(120,innerWidth*.95,innerHeight*.98,1.3); },2100);
 }
 function autoGrow(t){ if(!t||t.offsetParent===null) return; t.style.height="auto"; t.style.height=Math.min(t.scrollHeight+2,420)+"px"; }
 /* fonts arriving late or a resized window change how tall a line of words is */
-function growAll(){ if(curEl) $$("textarea.big",curEl).forEach(autoGrow); }
+var GROW="textarea.big, textarea.sf-in, textarea.sf-how";
+function growAll(){ if(curEl) $$(GROW,curEl).forEach(autoGrow); }
 if(document.fonts){ if(document.fonts.ready) document.fonts.ready.then(growAll); if(document.fonts.addEventListener) document.fonts.addEventListener("loadingdone",growAll); }
 var growT=null; window.addEventListener("resize",function(){ clearTimeout(growT); growT=setTimeout(growAll,150); });
-document.addEventListener("toggle",function(e){ var d=e.target; if(d&&d.tagName==="DETAILS"&&d.open) $$("textarea.big",d).forEach(autoGrow); },true);
+document.addEventListener("toggle",function(e){ var d=e.target; if(d&&d.tagName==="DETAILS"&&d.open) $$(GROW,d).forEach(autoGrow); },true);
 
 /* =========================================================
    EVENTS
@@ -2813,9 +3469,15 @@ document.addEventListener("click",function(e){
         if(S.whyPick===wi) S.whyPick=-1; else if(S.whyPick>wi) S.whyPick--;
         syncPurpose(); save(); refresh(); sfx("tick");
         toast("Line removed.","Undo",function(){ S.why.splice(Math.min(wi,S.why.length),0,wasT); S.whyPick=wasP; syncPurpose(); save(); refresh(); },5000); } break;
-    case "whypick":
+    case "ppick":
       var pi=+b.getAttribute("data-i"); if(!has(S.why[pi])) break;
-      S.whyPick=pi; syncPurpose(); save(); paintWhy(); sfx("select"); burstAt(b,26,.5); break;
+      var was=S.whyPick; S.whyPick=pi; syncPurpose(); save(); refresh('[data-act="ppick"][data-i="'+pi+'"]'); nextLabel();
+      if(was!==pi){ sfx("select"); burstAt($('[data-act="ppick"][data-i="'+pi+'"] .pk',curEl),28,.55); } break;
+    case "tool":
+      var tv=b.getAttribute("data-v"); armed = armed===tv ? null : tv; sfx(armed?"select":"tick"); refresh(armed?'[data-act="tool"][data-v="'+tv+'"]':null); break;
+    case "apply": flip(function(){ applyMove(id); }); break;
+    case "unmove": flip(function(){ unMove(id); }); break;
+    case "replay": replayPlay(curEl,true); break;
     case "vtap":
       if(e.target.closest(".vm")) break;
       if(S.picks[g]) break;
@@ -2829,11 +3491,11 @@ document.addEventListener("click",function(e){
       toast("Votes cleared.","Undo",function(){ var o=JSON.parse(snap); S.votes[g]=o.v; if(o.p) S.picks[g]=o.p; if(o.t) S.ties[g]=o.t; if(o.r) S.revealed[g]=o.r; save(); refresh(); },5000); break;
     case "react":
       var fr=S.frames.filter(function(x){ return x.id===id; })[0]; if(!fr) break; var k2=b.getAttribute("data-k");
-      fr.r = fr.r===k2 ? "" : k2; save(); sfx(fr.r?"pop":"tick");
+      fr.r = fr.r===k2 ? "" : k2; save(); sfx(fr.r?"stamp":"tick"); if(fr.r) lastFx={id:id,k:"face"};
       refresh('[data-act="react"][data-id="'+id+'"][data-k="'+k2+'"]'); break;
     case "nec":
       var fh=S.frames.filter(function(x){ return x.id===id; })[0]; if(!fh) break; var nv=b.getAttribute("data-v");
-      fh.nec = fh.nec===nv ? "" : nv; save(); sfx(fh.nec?"select":"tick");
+      fh.nec = fh.nec===nv ? "" : nv; save(); sfx(fh.nec?"stamp":"tick"); if(fh.nec) lastFx={id:id,k:"seal"};
       refresh('[data-act="nec"][data-id="'+id+'"][data-v="'+nv+'"]'); break;
     case "spick":
       var again=S.story===id; S.story=id; save();
@@ -2842,19 +3504,13 @@ document.addEventListener("click",function(e){
       if(!again){ sfx("fanfare"); burstAt(b,60,.75); } else sfx("select");
       autoNext(1900); break;
     case "sadd":
-      var arr=getP(path)||[], nid=uid(); arr.push(path==="frames"?{id:nid,t:"",r:"",why:"",nec:""}:{id:nid,t:""}); setP(path,arr); save(); sfx("pop"); refresh('[data-bstep][data-id="'+nid+'"]'); break;
+      var arr=getP(path)||[], nid=uid(), last=arr[arr.length-1];
+      if(last&&!has(last.t)){ var le=$('[data-bstep][data-id="'+last.id+'"]',curEl); if(le){ try{ le.focus({preventScroll:false}); }catch(x){ le.focus(); } break; } } arr.push(path==="frames"?{id:nid,t:"",r:"",why:"",nec:""}:{id:nid,t:""}); setP(path,arr); save(); sfx("pop"); refresh('[data-bstep][data-id="'+nid+'"]'); break;
     case "sdel": removeItem(path,id,"Step removed."); break;
     case "sup": case "sdown":
       var ar=getP(path)||[], ix=-1; ar.forEach(function(x,k){ if(x.id===id) ix=k; }); if(ix<0) break;
       var j=ix+(a==="sup"?-1:1); if(j<0||j>=ar.length) break; var tmp=ar[ix]; ar[ix]=ar[j]; ar[j]=tmp; setP(path,ar); save(); sfx("tick");
       movedId=id; flip(function(){ refresh('[data-act="'+a+'"][data-id="'+id+'"]'); }); break;
-    case "carry": case "carryidea":
-      var src=(a==="carry"?S.frames:ideaItems()).filter(function(x){ return x.id===id; })[0]; if(!src||!has(src.t)) break;
-      /* a chip already in the new workflow takes it back out, like a filter chip */
-      var inAt=-1; S.newFrames.forEach(function(f,k){ if(norm(f.t)===norm(src.t)) inAt=k; });
-      if(inAt>=0){ var gone=S.newFrames.splice(inAt,1)[0]; save(); sfx("tick"); refresh('[data-act="'+a+'"][data-id="'+id+'"]');
-        toast("Step removed.","Undo",function(){ S.newFrames.splice(inAt,0,gone); save(); refresh(); },5000); break; }
-      S.newFrames.push({id:uid(),t:src.t}); save(); sfx("pop"); refresh('[data-act="'+a+'"][data-id="'+id+'"]'); break;
     case "unphoto":
       var wasPh=getP(path); setP(path,null); save(); refresh(); toast("Photo removed.","Undo",function(){ setP(path,wasPh); save(); refresh(); },5000); break;
     case "tgo": tToggle(tFromEl(b.closest("[data-timer]"))); break;
@@ -2865,7 +3521,7 @@ document.addEventListener("click",function(e){
     case "print": doPrint(); break;
     case "png": doPng(); break;
     case "email": doEmail(); break;
-    case "bow": sfx("fanfare"); burst(180); setTimeout(function(){ burst(100,innerWidth*.2,innerHeight*.5); burst(100,innerWidth*.8,innerHeight*.5); },300); break;
+    case "bow": sfx("fanfare"); burst(120,innerWidth*.06,innerHeight*.98,1.25); burst(120,innerWidth*.94,innerHeight*.98,1.25); break;
   }
 });
 function resetVotes(g){ delete S.votes[g]; delete S.picks[g]; delete S.ties[g]; delete S.revealed[g]; }
@@ -2901,9 +3557,11 @@ document.addEventListener("input",function(e){
     return;
   }
   var ps=t.getAttribute&&t.getAttribute("data-bstep");
-  if(ps){ var sid=t.getAttribute("data-id"); if(movedId&&movedId!==sid) unmark(); (getP(ps)||[]).forEach(function(x){ if(x.id===sid) x.t=t.value; }); save(); return; }
+  if(ps){ var sid=t.getAttribute("data-id"); if(movedId&&movedId!==sid) unmark(); (getP(ps)||[]).forEach(function(x){ if(x.id===sid) x.t=t.value; }); save(); if(t.tagName==="TEXTAREA") autoGrow(t); return; }
   var pw=t.getAttribute&&t.getAttribute("data-bwhy");
-  if(pw){ S.frames.forEach(function(x){ if(x.id===pw) x.why=t.value; }); save(); autoGrow(t); }
+  if(pw){ S.frames.forEach(function(x){ if(x.id===pw) x.why=t.value; }); save(); autoGrow(t); return; }
+  var ph=t.getAttribute&&t.getAttribute("data-fhow"), pt=t.getAttribute&&t.getAttribute("data-ftext");
+  if(ph||pt){ var it=flowItem(ph||pt); if(it){ if(ph) it.how=t.value; else it.t=t.value; save(); } autoGrow(t); return; }
 });
 document.addEventListener("change",function(e){
   var t=e.target, p=t.getAttribute&&t.getAttribute("data-photo");
@@ -2941,7 +3599,8 @@ document.addEventListener("keydown",function(e){
     if(menuOpen){ closeMenu(); return; }
     if(focusOpen){ closeFocus(); return; }
     if(drawerOpen){ setDrawer(false); return; }
-    if(inField) t.blur();
+    if(inField){ t.blur(); return; }
+    if(armed&&S.at==="moves"){ armed=null; refresh(); return; }
     return;
   }
   if(menuOpen) return;
@@ -2952,6 +3611,7 @@ document.addEventListener("keydown",function(e){
     if(k==="Enter"&&!e.shiftKey){
       if(t.hasAttribute("data-add")){ e.preventDefault(); addNote(t.getAttribute("data-add"),t); return; }
       if(t.hasAttribute("data-bstep")){ e.preventDefault(); stepEnter(t); return; }
+      if(t.hasAttribute("data-fhow")||t.hasAttribute("data-ftext")){ e.preventDefault(); t.blur(); return; }
       if((tag==="input"||tag==="textarea")&&(t.classList.contains("big")||t.classList.contains("field"))){
         e.preventDefault();
         var bp=t.getAttribute("data-bind")||"";
@@ -3055,13 +3715,14 @@ function doPrint(){
   var face={d:"😍 delighted",f:"😤 frustrated",c:"🤔 confused"};
   H.push('<h1>Reimagination Lab</h1><p class="meta">'+(team()?(S.place==="room"?"Team session, in one room":"Team session, on a call"):"Solo session")+'. '+e(dateStr())+'.</p>');
   H.push('<section><h2>1. Isn’t there a better way?</h2>'+line(T("Our eye-roller","My eye-roller"),S.eyeroll)+(function(){ var others=S.cands.filter(function(c){ return has(c.t)&&norm(c.t)!==norm(S.eyeroll); }); return others.length?'<p class="meta">Also suggested: '+others.map(function(c){ return e(c.t); }).join("; ")+'</p>':''; })()+'</section>');
+  var cc=cardChanges();
   H.push('<section><h2>2. Why does this exist?</h2>'+S.why.filter(has).map(function(x,i){ return '<p>'+(i?"In order to ":"We do this in order to ")+e(x)+'</p>'; }).join("")+line("The real purpose",S.purpose)+'</section>');
   H.push('<section><h2>3. Draw it: the workflow today</h2>'+line("It starts when",S.start)+line("It ends when",S.end)+
     (okPhoto(S.photoOld)?'<img src="'+S.photoOld+'" alt="">':'')+'<ol>'+m.olds.map(function(f){ return '<li>'+e(f.t)+'</li>'; }).join("")+'</ol></section>');
   H.push('<section><h2>4. Judge it</h2><ol>'+m.olds.map(function(f){ return '<li>'+e(f.t)+(f.r?' &nbsp; '+face[f.r]:'')+
     (has(f.why)?'<br><em>Why: '+e(f.why)+'</em>':'')+(f.nec?'<br><em>'+(f.nec==="inh"?"Inherited":"Necessary")+'</em>':'')+'</li>'; }).join("")+'</ol></section>');
   H.push('<section><h2>5. Reimagine it</h2>'+(S.story?'<p class="meta">'+T("We said our","I said my")+' workflow is more '+(S.story==="tesla"?"Tesla: something should disappear.":"MLB: something new should be added.")+'</p>':'')+
-    MOVES.map(function(mv){ var l=S.ideas[mv.k].filter(function(i){ return has(i.t); }); return l.length?'<p><strong>'+mv.name+':</strong> '+l.map(function(i){ return e(i.t); }).join("; ")+'</p>':''; }).join("")+
+    (cc.list.length?'<ul>'+cc.list.map(function(c){ return '<li>'+e(c.t)+'</li>'; }).join("")+'</ul>':'')+
     '<p><strong>The reimagined workflow</strong> ('+plural(m.nCut,"step","steps")+' gone, '+m.nNew+' new):</p>'+(okPhoto(S.photoNew)?'<img src="'+S.photoNew+'" alt="">':'')+'<ol>'+m.news.map(function(f){ return '<li>'+e(f.t)+'</li>'; }).join("")+'</ol></section>');
   H.push('<section><h2>6. Share it</h2>'+askNames().map(function(nm,i){ return '<p><strong>'+(i+1)+'. '+(has(nm)?e(nm):"________________")+'</strong></p><p>What do you like?</p><div class="blank"></div><p>What do you wish?</p><div class="blank"></div><p>What do you wonder?</p><div class="blank"></div>'; }).join("")+
     line("First test",S.test)+(has(S.owner)?line("Owner",S.owner):'')+(has(S.when)?line("By when",S.when):'')+'</section>');
@@ -3088,12 +3749,12 @@ function doPng(){
   fontsReady().then(function(){ try{ drawCard(); }catch(err){ toast("Couldn’t make the image here. Try Print instead."); } });
 }
 function emailBody(){
-  var m=matchSets(), ci=cardIdeas(), keep=ci.list.slice(0,4), L=[];
+  var m=matchSets(), ci=cardChanges(), keep=ci.list.slice(0,6), L=[];
   L.push(T("Here’s what we worked out","Here’s what I worked out")+" in the Reimagination Lab on "+dateStr()+".");
   L.push("");
   L.push("The workflow: "+(has(S.eyeroll)?S.eyeroll:"not named yet"));
   if(has(S.purpose)) L.push("Real purpose: "+S.purpose);
-  if(m.olds.length||m.news.length) L.push("Today it takes "+plural(m.olds.length,"step","steps")+". Reimagined, it takes "+plural(m.news.length,"step","steps")+": "+m.nCut+" gone and "+m.nNew+" new.");
+  if(m.olds.length||m.news.length) L.push("Today it takes "+plural(m.olds.length,"step","steps")+". Reimagined, it takes "+plural(m.news.length,"step","steps")+": "+m.nCut+" cut, "+m.nCh+" changed and "+m.nNew+" new.");
   if(m.news.length){ L.push(""); L.push("The reimagined workflow:"); m.news.forEach(function(f,i){ L.push((i+1)+". "+f.t); }); }
   if(keep.length){ L.push(""); L.push(ci.label+":"); keep.forEach(function(k){ L.push("- "+k.t); }); }
   if(has(S.test)){ L.push(""); L.push("First test: "+S.test+([S.owner,S.when].filter(has).length?" ("+[S.owner?("owner "+S.owner):"",S.when?("by "+S.when):""].filter(has).join(", ")+")":"")); }
@@ -3119,7 +3780,7 @@ function drawCard(){
 }
 function cardCanvas(){
   var W=1200, c=document.createElement("canvas"), x=c.getContext("2d"); c.width=W; c.height=3200;
-  var m=matchSets(), ci=cardIdeas(), keep=ci.list.slice(0,4), PAD=72, y=0;
+  var m=matchSets(), ci=cardChanges(), keep=ci.list.slice(0,4), PAD=72, y=0;
   /* words wrapped to a width; text that runs past the last allowed line ends with an ellipsis */
   var wrap=function(t,X,Y,maxW,lh,font,color,maxLines){
     x.font=font; x.fillStyle=color; var paras=str(t).split(/\n/), lines=0;
@@ -3157,7 +3818,7 @@ function cardCanvas(){
   var BY=HH; x.fillStyle="#FFFFFF"; x.fillRect(0,BY,W,c.height-BY); y=BY+70;
   var label=function(t){ x.font='600 19px "Inter", sans-serif'; x.fillStyle="#586A90"; x.fillText(t,PAD,y); y+=40; };
   var val=function(t){ y=wrap(has(t)?t:"Not filled in",PAD,y,W-PAD*2,42,(has(t)?'500':'italic 400')+' 30px "Fraunces", Georgia, serif',has(t)?"#293851":"#8A94AA",5); y+=26; };
-  var frames=function(list,marks,cutMarks){
+  var frames=function(list,marks,cutMarks,chMarks){
     if(!list.length){ val(""); return; }
     var fw=170, fh=104, gap=12, perRow=Math.floor((W-PAD*2+gap)/(fw+gap)), X=PAD;
     list.forEach(function(f,i){
@@ -3168,13 +3829,14 @@ function cardCanvas(){
       wrap(f.t,X+18,y+24,fw-40,20,'600 16px "Inter", sans-serif',(cutMarks&&cutMarks[f.id])?"#4A5570":"#1A2234",3);
       if(cutMarks&&cutMarks[f.id]){ x.strokeStyle="#D86527"; x.lineWidth=4; x.lineCap="round"; x.beginPath(); x.moveTo(X+16,y+44); x.lineTo(X+fw-16,y+8); x.stroke(); }
       if(marks&&marks[f.id]){ x.fillStyle="#FFCC00"; x.beginPath(); x.arc(X+fw-22,y-8,8,0,Math.PI*2); x.fill(); }
+      else if(chMarks&&chMarks[f.id]){ x.strokeStyle="#3E8E8C"; x.lineWidth=3; x.beginPath(); x.arc(X+fw-22,y-8,7,0,Math.PI*2); x.stroke(); }
       X+=fw+gap;
     });
     y+=fh+30;
   };
   label("Real purpose"); val(S.purpose);
   label("Today"+(m.olds.length?", "+plural(m.olds.length,"step","steps"):"")); frames(m.olds,null,m.cut);
-  label("Reimagined"+(m.news.length?", "+plural(m.news.length,"step","steps"):"")); frames(m.news,m.nw,null);
+  label("Reimagined"+(m.news.length?", "+plural(m.news.length,"step","steps"):"")); frames(m.news,m.nw,null,m.ch);
   label(ci.label);
   if(keep.length){ keep.forEach(function(k){ var y0=y; x.fillStyle="#FFCC00"; x.beginPath(); x.arc(PAD+8,y0-11,6,0,Math.PI*2); x.fill(); y=wrap(k.t,PAD+28,y0,W-PAD*2-28,40,'600 34px "Caveat", cursive',"#293851",2)+4; }); y+=20; }
   else val("");
