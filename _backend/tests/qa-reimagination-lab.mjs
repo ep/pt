@@ -2,12 +2,13 @@
 // simulated browser with jsdom. It walks a whole team session (in a room, then on a call)
 // and a whole solo session through the six steps and the rail that fills with the group's
 // own words, and checks the timers, the eye-roller vote revealed through Next, the why
-// chain and the pick of its real purpose, the strip of frames the steps become (typed in,
-// judged with one face each, questioned as necessary or inherited, then changed in place by
-// the four moves), the story player, the change replayed in Share it, escaping, print, the
-// outcome image, Email this (with the real send kit from assets/kit/), picking up after a
-// reload (including sessions saved by earlier versions), clear with undo, and the hooks
-// the feedback board uses.
+// chain and the pick of its real purpose, the strip of frames the steps become (typed in
+// between where the workflow starts and ends, judged with one face each, up to three picked
+// to question as necessary or inherited, then changed in place: select a step, pick a move),
+// the story player with its captions and sound, the new workflow in Share it, the finish that
+// plays the change before the card, escaping, print, the outcome image, Email this (with the
+// real send kit from assets/kit/), picking up after a reload (including sessions saved by
+// earlier versions), clear with undo, and the hooks the feedback board uses.
 //   node _backend/tests/qa-reimagination-lab.mjs
 import { JSDOM, VirtualConsole } from "jsdom";
 import fs from "node:fs";
@@ -62,12 +63,13 @@ function prepare(w, store) {
     w.__audio.push(a); return a; };
   if (store) for (const k of Object.keys(store)) w.localStorage.setItem(k, store[k]);
 }
-function openLab(store, url) {
+function openLab(store, url, motion) {
   const errors = [];
   const vc = new VirtualConsole();
   vc.on("jsdomError", (e) => { if (!/getContext|Not implemented: (navigation|window\.scrollTo|HTMLMediaElement)/.test(e.message)) errors.push(e.message); });
   vc.on("error", (e) => errors.push(String(e && e.message || e)));
-  const dom = new JSDOM(HTML, { url: url || URL0, runScripts: "dangerously", pretendToBeVisual: true, virtualConsole: vc, beforeParse: (w) => prepare(w, store) });
+  // motion: the page runs its animations, as it would for someone who hasn't asked their device for less motion
+  const dom = new JSDOM(HTML, { url: url || URL0, runScripts: "dangerously", pretendToBeVisual: true, virtualConsole: vc, beforeParse: (w) => { prepare(w, store); if (motion) w.matchMedia = (q) => ({ matches: false, media: q, addEventListener() {}, removeEventListener() {}, addListener() {}, removeListener() {} }); } });
   dom.window.__errors = errors;
   return dom.window;
 }
@@ -136,7 +138,7 @@ const w = openLab();
   check("start: the cover, with no errors", cur(w) === "cover" && w.__errors.length === 0, w.__errors.join(" | "));
   check("cover: plain words", /Bring one workflow that bugs you\.\s*Leave with a better one\./.test($(w, ".cover .sub").textContent));
   const T = w.EPKit && w.EPKit.tool;
-  check("kit hook: names the tool, its version and the screen", T && T.id === "reimagination-lab" && T.version === "v8" && T.screen() === "cover");
+  check("kit hook: names the tool, its version and the screen", T && T.id === "reimagination-lab" && T.version === "v9" && T.screen() === "cover");
   check("kit hook: reports a few settings and the step", T && T.state().mode === "team" && T.state().step === "1 of 18", JSON.stringify(T && T.state()));
   const secs = T && T.sections();
   check("kit hook: names its parts for the board: set up, the six steps, finish", secs && secs.map((s) => s.name).join("|") === "Set up|1. Better way|2. Why it exists|3. Draw it|4. Judge it|5. Reimagine it|6. Share it|Finish", secs && secs.map((s) => s.name).join("|"));
@@ -149,6 +151,10 @@ const w = openLab();
 
   $(w, "#menuBtn").click(); await sleep(60);
   check("settings: the gear opens Settings, with who's here first", $(w, "#mpanel h4").textContent === "Settings" && $(w, "#mpanel .mlab").textContent === "Who’s here" && $$(w, "#mpanel .mch").length === 8);
+  check("settings: the theme is Light or Dark, showing the one the device uses until someone picks", $$(w, '#mpanel [data-m="theme"]').map((b) => b.textContent + ":" + b.getAttribute("aria-pressed")).join() === "Light:true,Dark:false");
+  $(w, '#mpanel [data-m="theme"][data-v="dark"]').click(); await sleep(40);
+  check("settings: picking Dark sets it, and the setting shows it", stored(w).theme === "dark" && w.document.documentElement.getAttribute("data-theme") === "dark" && $(w, '#mpanel [data-m="theme"][data-v="dark"]').getAttribute("aria-pressed") === "true");
+  $(w, '#mpanel [data-m="theme"][data-v="light"]').click(); await sleep(40);
   key(w, w.document.body, "Escape"); await sleep(60);
 
   $(w, "[data-act=begin]").click();
@@ -160,11 +166,13 @@ const w = openLab();
   check("plan: one path of six steps, two questions then four actions, each with what it leaves you with", $$(w, ".path6 .pc").length === 6 && $$(w, ".path6 .pc.q").length === 2 && $$(w, ".path6 .pdot").map((n) => n.textContent).join("") === "123456" && /One eye-roller/.test($(w, ".path6").textContent) && /A first test/.test($(w, ".path6").textContent));
   check("plan: about 30 minutes, adding to one card", /About 30 minutes\. Each step adds to one card/.test(scene(w).textContent));
   check("plan: one short line on what to grab, for a room", /^Before you start, grab sticky notes, markers/.test($(w, ".grab").textContent));
-  check("plan: the workshop for people new to AI sits in the bottom bar, not on the plan", !$(w, "#goLink").hidden && /New to AI\? Start with Building AI Confidence, an ExperiencePoint workshop/.test($(w, "#goLink").textContent) && !scene(w).querySelector(".go"));
+  check("plan: the workshop for people new to AI sits in the bottom bar, not on the plan", !$(w, "#goLink").hidden && $(w, "#goLink").textContent === "New to AI? Ask us about Building AI Confidence." && !scene(w).querySelector(".go"));
+  check("plan: the workshop line opens ExperiencePoint's contact page in a new tab", $(w, "#goLink").getAttribute("href") === "https://www.experiencepoint.com/contact-us/" && $(w, "#goLink").getAttribute("target") === "_blank");
   check("rail: still hidden on the plan, which shows the six steps itself", $(w, "#rail").hidden);
   await next(w); await at(w, "spin", L);
   check("rail: appears with the six steps by name, the first one lit", !$(w, "#rail").hidden && $$(w, "#rail button").length === 6 && railText(w, 1) === "Better way" && railText(w, 6) === "Share it" && $(w, '#rail button[data-ch="1"]').classList.contains("on"));
   check("spin: the step's question heads the screen", /Isn’t there a better way\?/.test($(w, ".scene:last-child .ask").textContent));
+  check("spin: the spins are marked as examples, and the line under them says to press Next", /^For example:/.test($(w, ".scene:last-child .reel-eg").textContent.trim()) && !!$(w, ".scene:last-child .reel-eg svg.pi") && /When the group is ready to write its own, press Next\./.test($(w, ".scene:last-child .spin-sub").textContent));
   await next(w); await at(w, "b-write", L);
   check("b-write: who does what in plain lines, no numbers", $$(w, ".scene:last-child .who li").length === 3 && /^Alone:/.test($(w, ".who li").textContent) && /one by one, read yours out in one breath/i.test(scene(w).textContent) && !$(w, ".ministeps"));
   check("b-write: the example is in pencil, marked with a small pencil", /For example:/.test($(w, ".scene:last-child .pencil").textContent) && !!$(w, ".scene:last-child .pencil .eg svg.pi"));
@@ -188,7 +196,7 @@ const w = openLab();
   check("timer: moving on past its screen ends it", $(w, "#mini").hidden && !$(w, "[data-timer].running"));
   check("b-vote: the sizing tip stays with the sales report, marked with a light bulb", /Keep it manageable\. The weekly sales report is about right\. The whole sales process is too big\./.test($(w, ".scene:last-child .pencil").textContent) && !!$(w, ".scene:last-child .pencil .eg svg.pi"));
   check("privacy: the vote notes are marked private for the feedback kit", !!$(w, ".vote-grid[data-feedback-private]"));
-  check("b-vote: the workshop line sits in the bottom bar, apart from the step", /Take this further in Finding AI Use Cases, an ExperiencePoint workshop/.test($(w, "#goLink").textContent) && !$(w, ".scene:last-child .go") && $(w, "#goLink").getAttribute("target") === "_blank");
+  check("b-vote: the workshop line sits in the bottom bar, apart from the step", $(w, "#goLink").textContent === "Take this further: ask us about Finding AI Use Cases." && !$(w, ".scene:last-child .go") && $(w, "#goLink").getAttribute("target") === "_blank");
   check("b-vote: Next reads Next before any votes", $(w, "#nextBtn").textContent === "Next");
   const nv = (i) => $$(w, ".vnote")[i].click();
   nv(0); nv(0); nv(0); nv(1); nv(2); await sleep(40);
@@ -245,7 +253,8 @@ const w = openLab();
   check("map: one verb for the step: draw it, three ways on one screen, sketching first", $(w, ".scene:last-child .ask").textContent === "Draw it your way." && $$(w, ".mode").length === 3 && $(w, '.mode[data-v="sketch"]').getAttribute("aria-checked") === "true");
   check("map: the sketch example folds six boxes and draws one step in each, none left blank", $$(w, ".sheet6 text.lab").length === 6 && /fold a sheet into six boxes/.test(scene(w).textContent) && !$(w, ".sheet8"));
   check("map: each way has its own example panel, captioned in pencil", !!$(w, ".expanel.m-sketch") && /For example: the weekly sales report, sketched\./.test($(w, ".expanel figcaption").textContent));
-  check("map: the group's start and end, quoted, with no double full stops", /Start with “a sales leader asks for the pipeline view” and end with “the leader decides which deals to step into”\./.test(scene(w).textContent) && !/\.\./.test($(w, ".scene:last-child .who").textContent), $(w, ".scene:last-child .who").textContent);
+  check("map: the group's start and end, quoted, with no double full stops", /Start with “a sales leader asks for the pipeline view” and end with “the leader decides which deals to step into”\./.test(scene(w).textContent) && !/\.\./.test($(w, ".scene:last-child .howto").textContent), $(w, ".scene:last-child .howto").textContent);
+  check("map: the ways to draw sit across the top, and the steps are numbered beside the example", !!$(w, ".drawl .modes.w3") && $$(w, ".howto li").length === 3 && $$(w, ".howto .hn").map((n) => n.textContent).join("") === "123" && !!$(w, ".drawl .db .expanel") && $(w, ".howto li:nth-child(2)").hasAttribute("data-feedback-private"));
   check("map: 2:30 for a team, the same for every way", $(w, "[data-timer]").getAttribute("data-sec") === "150");
   $(w, "[data-timer] [data-act=tgo]").click(); await sleep(60);
   check("map: the timer runs small, so the example and the steps stay in view", !$(w, "#focus").classList.contains("open") && !!$(w, "[data-timer].running"));
@@ -255,10 +264,12 @@ const w = openLab();
   key(w, $(w, '.mode[data-v="sticky"]'), "ArrowLeft"); await sleep(40);
   check("map: arrow keys move between the ways to draw, and stay on the screen", cur(w) === "map" && stored(w).drawMode === "act" && w.document.activeElement === $(w, '.mode[data-v="act"]'));
   $(w, '.mode[data-v="act"]').click(); await sleep(40);
-  check("map: acting it out has its own steps and a drawn example", /Cast it:/.test($(w, ".scene:last-child .who").textContent) && !!$(w, ".expanel.m-act svg.actex") && /passing a real report along/.test($(w, ".expanel figcaption").textContent));
+  check("map: acting it out has its own steps and a drawn example", /Cast it:/.test($(w, ".scene:last-child .howto").textContent) && !!$(w, ".expanel.m-act svg.actex") && /passing a real report along/.test($(w, ".expanel figcaption").textContent));
   $(w, '.mode[data-v="sketch"]').click(); await sleep(40);
   await next(w); await at(w, "capture", L);
   check("capture: each step is a frame in the strip, typed in place", !!$(w, ".strip8.edit[data-feedback-private]") && $$(w, ".strip8.edit .sf-in").length === 1 && !!$(w, ".strip8.edit .addf"));
+  check("capture: the strip runs from where the workflow starts to where it ends, in the group's words", /It starts when\s*a sales leader asks for the pipeline view/.test($(w, ".strip8.edit .sf.cap.start").textContent) && /It ends when\s*the leader decides which deals to step into/.test($(w, ".strip8.edit .sf.cap.end").textContent) && $(w, ".strip8.edit").firstElementChild.classList.contains("start") && $(w, ".strip8.edit").lastElementChild.classList.contains("end"));
+  check("capture: a step can hold up to 200 characters", $(w, ".sf-in").getAttribute("maxlength") === "200");
   const steps = ["Export opportunities", "Clean the data in Excel", XSS, "Build 14 slides", "Email the deck", "Walk through every slide", "Leaders ask for the riskiest deals"];
   for (const s of steps) {
     const f = w.document.activeElement && w.document.activeElement.hasAttribute && w.document.activeElement.hasAttribute("data-bstep") ? w.document.activeElement : $$(w, "[data-bstep]").pop();
@@ -284,7 +295,7 @@ const w = openLab();
   /* 4. judge it: a face stamped on each frame */
   check("judge: the bridge asks the workbook's question of each step, against the real purpose", /judge each step against its real purpose, “Help leaders see where deals are stuck”\. Does it help, or get in the way\?/.test(scene(w).textContent));
   check("judge: the strip again, who does what, 1:30", /^Lead:/.test($(w, ".who li").textContent) && $(w, "[data-timer]").getAttribute("data-sec") === "90" && $$(w, ".strip8.judge .sf").length === 7 && $(w, ".strip8.judge").hasAttribute("data-feedback-private"));
-  check("judge: the three faces are defined in a tip, from the workbook", /Tip: 😍 it works and is worth protecting\. 😤 it costs effort, delay or repetition\. 🤔 nobody’s sure why it’s there\./.test($(w, ".scene:last-child .pencil").textContent));
+  check("judge: the three faces are explained one per line, from the workbook", $$(w, ".scene:last-child .fkey li").map((l) => l.textContent).join("|") === "😍Delighted: it works and is worth protecting.|😤Frustrated: it costs effort, delay or repetition.|🤔Confused: nobody’s sure why it’s there.", $$(w, ".scene:last-child .fkey li").map((l) => l.textContent).join("|"));
   check("judge: one face per frame, chosen like a radio button", $$(w, ".strip8.judge .sf")[0].querySelectorAll("[role=radio]").length === 3);
   const face = (row, k) => $$(w, ".strip8.judge .sf")[row].querySelector(".fb." + k).click();
   face(1, "f"); await sleep(30);
@@ -301,7 +312,7 @@ const w = openLab();
   face(6, "f"); await sleep(30);
   await next(w); await at(w, "inherit", L);
   check("rail: step 4 says what to question, in the group's words", railText(w, 4) === "Question “Clean the data in Excel”", railText(w, 4));
-  check("inherit: the bridge names the flagged steps", /Now that you’ve flagged “Clean the data in Excel” and 2 more steps, ask why each one happens/.test(scene(w).textContent));
+  check("inherit: the line under the heading names the steps picked to question", /Now that you’ve judged each step, ask why “Clean the data in Excel”, “Build 14 slides” and “Walk through every slide” happen, who decided, and what would break without them\./.test(scene(w).textContent));
   check("inherit: a small copy of the strip, with the frames to question lifted out of it", $$(w, ".mstrip .mt").length === 7 && $$(w, ".mstrip .mt.slot").length === 3 && $$(w, ".lifts .lift").length === 3 && /Clean the data in Excel/.test($$(w, ".lift")[0].textContent));
   check("privacy: each why field is named without the step's words, which a screen reader still hears from the card", $$(w, ".lift textarea").length === 3 && $$(w, ".lift textarea").every((t) => { const h = w.document.getElementById(t.getAttribute("aria-describedby")); return t.getAttribute("aria-label") === "Why does it happen?" && !!h && h.closest(".lift") === t.closest(".lift") && h.textContent.trim().length > 0; }));
   check("inherit: 1 minute", $(w, "[data-timer]").getAttribute("data-sec") === "60");
@@ -312,6 +323,25 @@ const w = openLab();
   $$(w, ".lift")[1].querySelector('[data-v="need"]').click(); await sleep(40);
   check("inherit: necessary replaces inherited, seal and all", stored(w).frames[3].nec === "need" && !!$$(w, ".lift")[1].querySelector(".seal.need"));
   $$(w, ".lift")[1].querySelector('[data-v="inh"]').click(); await sleep(40);
+  check("inherit: the two answers are explained in a key", $$(w, ".scene:last-child .nkey li").map((l) => l.textContent).join("|") === "Necessary: the real purpose needs it.|Inherited: it’s done because it always has been.");
+  check("inherit: the small strip says the group picks what to question, and each step in it is a button", /Select up to three steps to question\./.test($(w, ".qhint").textContent) && $$(w, ".mstrip.pick button.mt").length === 7 && $$(w, '.mstrip.pick .mt[aria-pressed="true"]').length === 3 && $(w, ".mstrip.pick").hasAttribute("data-feedback-private"));
+  const qp = (i) => $(w, `.mstrip.pick .mt[data-id="${stored(w).frames[i].id}"]`);
+  qp(6).click(); await sleep(60);
+  check("inherit: three at most: picking a fourth asks to put one back first", $$(w, ".lifts .lift").length === 3 && /Three at most/.test($(w, "#toastT").textContent) && $(w, ".mstrip.pick").classList.contains("nudge") && stored(w).qpick === null);
+  qp(5).click(); await sleep(60);
+  check("inherit: selecting a picked step puts it back in the strip", $$(w, ".lifts .lift").length === 2 && JSON.stringify(stored(w).qpick) === JSON.stringify([stored(w).frames[1].id, stored(w).frames[3].id]) && qp(5).getAttribute("aria-pressed") === "false");
+  qp(6).click(); await sleep(60);
+  check("inherit: any step can be picked, flagged or not, and it lifts out in the strip's order", $$(w, ".lifts .lift").length === 3 && /Leaders ask for the riskiest deals/.test($$(w, ".lift")[2].textContent) && qp(6).getAttribute("aria-pressed") === "true");
+  qp(3).click(); await sleep(60);
+  check("inherit: putting back a step with answers clears them, with undo", $$(w, ".lifts .lift").length === 2 && stored(w).frames[3].nec === "" && /Step put back/.test($(w, "#toastT").textContent));
+  $(w, "#toastA").click(); await sleep(60);
+  check("inherit: undo lifts it out again, answers and all", $$(w, ".lifts .lift").length === 3 && stored(w).frames[3].nec === "inh" && qp(3).getAttribute("aria-pressed") === "true" && /Build 14 slides/.test($$(w, ".lift")[1].textContent));
+  check("rail: the inherited step is still the one to question first", railText(w, 4) === "Question “Build 14 slides”", railText(w, 4));
+  check("inherit: the line under the heading follows the picks", /ask why “Clean the data in Excel”, “Build 14 slides” and “Leaders ask for the riskiest deals” happen/.test(scene(w).textContent) && quotesPrivate(w));
+  const why1 = $$(w, ".lift")[0].querySelector("[data-bwhy]"); why1.focus(); key(w, why1, "Enter"); await sleep(40);
+  check("inherit: Enter in a reason goes on to necessary or inherited for that step, and never to the next screen", cur(w) === "inherit" && w.document.activeElement === $$(w, ".lift")[0].querySelector(".nec button"));
+  const pk = $(w, ".mstrip.pick .mt"); pk.focus(); key(w, pk, "ArrowRight"); await sleep(40);
+  check("inherit: arrow keys move along the small strip and stay on the screen", cur(w) === "inherit" && w.document.activeElement === $$(w, ".mstrip.pick .mt")[1]);
   w.document.activeElement.blur();
   await next(w); await at(w, "stories", L);
 
@@ -322,12 +352,18 @@ const w = openLab();
   $(w, "#soundBtn").click(); await sleep(20);
   $(w, ".st-poster").click(); await sleep(80);
   check("stories: with the sound off, it plays silently with captions and never fetches the voice", $(w, ".story").classList.contains("started") && $(w, ".still.on").getAttribute("data-i") === "0" && /Two stories\./.test($(w, ".st-cap").textContent) && w.__audio.length === 0);
+  check("stories: the player's own sound button shows the sound is off", $(w, ".story").classList.contains("muted") && $(w, '.st-ctl [data-s="sound"]').getAttribute("aria-label") === "Turn sound on");
+  $(w, '.st-ctl [data-s="cc"]').click(); await sleep(30);
+  check("stories: captions can be turned off in the player, and the choice is kept", $(w, ".story").classList.contains("nocap") && $(w, '.st-ctl [data-s="cc"]').getAttribute("aria-pressed") === "false" && stored(w).cc === false);
+  $(w, '.st-ctl [data-s="cc"]').click(); await sleep(30);
+  check("stories: and back on", !$(w, ".story").classList.contains("nocap") && stored(w).cc === true);
   $(w, '.st-ctl [data-s="next"]').click(); await sleep(60);
   check("stories: Next line moves the still and the caption on", $(w, ".still.on").getAttribute("data-i") === "1" && /Model 3 ramp/.test($(w, ".st-cap").textContent));
   for (let i = 0; i < 12; i++) { $(w, '.st-ctl [data-s="next"]').click(); await sleep(15); }
   check("stories: the last still asks which story sounds like yours", $(w, ".still.on").classList.contains("last") && $$(w, ".spk").length === 2);
   $(w, '.st-ctl [data-s="replay"]').click(); await sleep(60);
-  $(w, "#soundBtn").click(); await sleep(40);
+  $(w, '.st-ctl [data-s="sound"]').click(); await sleep(40);
+  check("stories: the player's sound button is the same setting as the one at the top", stored(w).sfx === true && $(w, "#soundBtn").getAttribute("aria-label") === "Turn sound off" && $(w, '.st-ctl [data-s="sound"]').getAttribute("aria-label") === "Turn sound off" && !$(w, ".story").classList.contains("muted"));
   check("stories: turning the sound on mid-story brings the voice in at once", w.__audio.length === 1 && /reimagination-lab\/story\.mp3$/.test(w.__audio[0].src) && w.__audio[0].played === 1);
   $(w, '.st-ctl [data-s="replay"]').click(); await sleep(60);
   check("stories: with the sound on, play asks the voice to start again", w.__audio.length === 1 && w.__audio[0].played === 2);
@@ -338,62 +374,87 @@ const w = openLab();
   $(w, '.spk[data-id="tesla"]').click(); await sleep(40);
   check("stories: the pick is marked and the other steps back", $(w, '.spk[data-id="tesla"]').classList.contains("sel") && $(w, ".spick").classList.contains("picked") && stored(w).story === "tesla");
   check("stories: then the Lab moves on to the four moves", await until(() => cur(w) === "moves", 5000), cur(w));
-  check("moves: four tools, each with the workbook's question", $$(w, ".tools8 .tool").length === 4 && $(w, ".tools8").getAttribute("role") === "radiogroup" && /What should disappear\?/.test($(w, ".tool.t-sub").textContent) && /What is newly possible with AI\?/.test($(w, ".tool.t-inv").textContent));
-  check("moves: the story the group picked is the move in hand, and says so", $(w, ".tool.t-sub").getAttribute("aria-checked") === "true" && $(w, ".tool.t-sub").classList.contains("from") && /You said more Tesla, so start here\. Select a step to cut it\./.test($(w, ".armed").textContent) && /Tesla deleted the mats/.test($(w, ".armed .pencil").textContent));
-  check("moves: the bridge names what the group questioned", /Now that you’ve questioned “Build 14 slides”, change the work\. Use any of the four moves, in any order\./.test(scene(w).textContent));
+  check("moves: a key of the four moves, each with the workbook's question, and nothing to arm", $$(w, ".mkey .mk").length === 4 && /What should disappear\?/.test($(w, ".mk.t-sub").textContent) && /What is newly possible with AI\?/.test($(w, ".mk.t-inv").textContent) && !$(w, ".tools8") && !$(w, ".mkey button"));
+  check("moves: the line under the heading says how, and where the group's story says to start, with its example", /Now that you’ve questioned “Build 14 slides”, change the work\. Select any step, then pick one of the four moves\. You said more Tesla, so start with Subtract\./.test(scene(w).textContent) && /Tesla deleted the mats/.test($(w, ".mhint .pencil").textContent));
   check("moves: today's steps are the frames to change, with what judging found on each", $$(w, ".strip8.moves .sf").length === 7 && $(w, ".strip8.moves").hasAttribute("data-feedback-private") && $$(w, ".strip8.moves .sf")[3].querySelector(".seal.inh") && $$(w, ".strip8.moves .sf")[1].querySelector(".sf-fe").textContent === "😤");
-  check("moves: who does what in a line, and a 2:30 think timer that stays small", /Read them out\. The lead uses the moves on the steps\./.test($(w, ".scene:last-child .who1").textContent) && $(w, "[data-timer]").getAttribute("data-sec") === "150" && $(w, "[data-timer]").getAttribute("data-kind") === "think" && $(w, "[data-timer]").getAttribute("data-stay") === "1");
+  check("moves: who does what in a line, and a 2:30 think timer that stays small", /Read them out\. The lead selects a step and picks a move\./.test($(w, ".scene:last-child .who1").textContent) && $(w, "[data-timer]").getAttribute("data-sec") === "150" && $(w, "[data-timer]").getAttribute("data-kind") === "think" && $(w, "[data-timer]").getAttribute("data-stay") === "1");
   const frameAt = (i) => $$(w, ".strip8.moves .sf")[i];
-  const hit = async (i) => { frameAt(i).querySelector(".sf-hit").click(); await sleep(50); };
-  await hit(3);
-  check("moves: Subtract cuts a step: it stays as a ghost, with undo", stored(w).flow[3].mv === "sub" && frameAt(3).classList.contains("mv-sub") && /Step cut/.test($(w, "#toastT").textContent) && /^Bring back step 4/.test(frameAt(3).querySelector(".sf-hit").getAttribute("aria-label")));
-  await hit(3);
-  check("moves: selecting a cut step brings it back", stored(w).flow[3].mv === "");
-  await hit(3);
-  $(w, ".tool.t-shr").click(); await sleep(40);
-  check("moves: picking another tool puts it in hand, with its hint and example", $(w, ".tool.t-shr").getAttribute("aria-checked") === "true" && $(w, ".tool.t-sub").getAttribute("aria-checked") === "false" && /Select a step to shrink it, then say how\. Work like this is often a job for AI\./.test($(w, ".armed").textContent));
-  await hit(1);
+  const open = async (i) => { frameAt(i).querySelector(".sf-hit").click(); await sleep(50); };
+  const pick = async (v) => { $(w, `.mvmenu .mi[data-v="${v}"]`).click(); await sleep(60); };
+  const menuOf = (i) => frameAt(i) && frameAt(i).querySelector(".mvmenu");
+  await open(3);
+  check("moves: selecting a step opens its menu of moves on the step, the first one ready for the keyboard", !!menuOf(3) && menuOf(3).getAttribute("role") === "menu" && $$(w, ".mvmenu").length === 1 && frameAt(3).querySelector(".sf-hit").getAttribute("aria-expanded") === "true" && w.document.activeElement === menuOf(3).querySelector(".mi"));
+  check("moves: the menu offers the four moves, with what each one does, and nothing to undo yet", $$(w, ".mvmenu .mi").map((b) => b.getAttribute("data-v")).join() === "sub,shr,amp,inv" && /Cut this step/.test(menuOf(3).textContent) && /Far less effort, often with AI/.test(menuOf(3).textContent) && !$(w, '.mvmenu .mi[data-v="none"]'));
+  await pick("sub");
+  check("moves: Subtract cuts the step: it stays as a ghost, with undo, and the menu closes", stored(w).flow[3].mv === "sub" && frameAt(3).classList.contains("mv-sub") && /Step cut/.test($(w, "#toastT").textContent) && !$(w, ".mvmenu") && frameAt(3).querySelector(".sf-hit").getAttribute("aria-label") === "Change step 4, cut");
+  await open(3);
+  check("moves: a changed step's menu shows its move checked, and a way back", $(w, '.mvmenu .mi[data-v="sub"]').getAttribute("aria-checked") === "true" && $(w, '.mvmenu .mi[data-v="shr"]').getAttribute("aria-checked") === "false" && /Leave it as it was/.test(menuOf(3).textContent) && w.document.activeElement === $(w, '.mvmenu .mi[data-v="sub"]'));
+  await pick("none");
+  check("moves: Leave it as it was brings the step back, with undo", stored(w).flow[3].mv === "" && !frameAt(3).classList.contains("mv-sub") && /Back to how it was/.test($(w, "#toastT").textContent));
+  await open(3); await pick("sub");
+  await open(1); await pick("shr");
   check("moves: Shrink marks the step and opens a line to say how, ready to type", stored(w).flow[1].mv === "shr" && w.document.activeElement === $(w, `[data-fhow="${stored(w).flow[1].id}"]`));
   type(w, w.document.activeElement, "Auto-clean the export"); key(w, w.document.activeElement, "Enter"); await sleep(30);
-  check("moves: the how is saved, and Enter puts the field away", stored(w).flow[1].how === "Auto-clean the export" && w.document.activeElement.tagName !== "TEXTAREA");
-  $(w, ".tool.t-amp").click(); await sleep(40);
-  await hit(6);
+  check("moves: the how is saved, and Enter puts the field away and goes back to the step", stored(w).flow[1].how === "Auto-clean the export" && w.document.activeElement === frameAt(1).querySelector(".sf-hit"));
+  await open(1); await pick("amp");
+  check("moves: another move replaces the first, with its own empty answer", stored(w).flow[1].mv === "amp" && stored(w).flow[1].how === "" && frameAt(1).classList.contains("mv-amp"));
+  await open(1); await pick("shr");
+  check("moves: going back to Shrink brings back what was typed for it", stored(w).flow[1].mv === "shr" && stored(w).flow[1].how === "Auto-clean the export");
+  await open(6); await pick("amp");
   type(w, w.document.activeElement, "Leaders spend the call on the riskiest deals"); w.document.activeElement.blur();
-  $(w, ".tool.t-inv").click(); await sleep(40);
-  check("moves: Invent asks which step the new idea comes after", /Select the step your new idea comes after\./.test($(w, ".armed").textContent));
-  await hit(0);
-  check("moves: Invent adds a new frame right after the one selected, ready to type", stored(w).flow.length === 8 && stored(w).flow[1].mv === "inv" && !stored(w).flow[1].src && w.document.activeElement === $(w, `[data-ftext="${stored(w).flow[1].id}"]`));
+  await open(0); await pick("inv");
+  check("moves: Invent adds a new frame right after the step, ready to type", stored(w).flow.length === 8 && stored(w).flow[1].mv === "inv" && !stored(w).flow[1].src && w.document.activeElement === $(w, `[data-ftext="${stored(w).flow[1].id}"]`));
   type(w, w.document.activeElement, "An agent flags stuck deals daily"); w.document.activeElement.blur();
-  await hit(5);
+  await open(5); await pick("inv");
   type(w, w.document.activeElement, XSS); w.document.activeElement.blur(); await sleep(30);
   check("moves: typed code in a new step stays text", !w.__xss && !$(w, ".strip8.moves img"));
-  $$(w, ".strip8.moves .sf.isnew")[1].querySelector("[data-act=unmove]").click(); await sleep(50);
+  const newAt = $$(w, ".strip8.moves .sf").findIndex((li) => li.classList.contains("isnew") && /img src/.test(li.querySelector("textarea").value));
+  await open(newAt);
+  check("moves: a new step's menu offers another new step, or removing this one", $$(w, ".mvmenu .mi").map((b) => b.getAttribute("data-v")).join() === "inv,del" && /Remove this new step/.test(menuOf(newAt).textContent));
+  await pick("del");
   check("moves: a new step can be removed, with undo", stored(w).flow.length === 8 && /New step removed/.test($(w, "#toastT").textContent));
-  check("moves: each tool counts how often it's been used", $(w, ".tool.t-sub .tn").textContent === "1" && $(w, ".tool.t-inv .tn").textContent === "1" && !$(w, ".tool.t-sub").querySelector(".tn + .tn"));
-  key(w, w.document.body, "Escape"); await sleep(40);
-  check("moves: Escape puts the tool down", !$(w, ".tool.on") && /Pick a move, then select a step\./.test($(w, ".armed").textContent));
-  await hit(0);
-  check("moves: with no tool in hand, selecting a step asks for a move first", stored(w).flow[0].mv === "" && /Pick a move first/.test($(w, "#toastT").textContent) && $(w, ".tools8").classList.contains("nudge"));
-  const toolKey = $(w, ".tool.t-sub"); toolKey.focus(); key(w, toolKey, "ArrowRight"); await sleep(40);
-  check("moves: arrow keys move between the tools, and stay on the screen", cur(w) === "moves" && $(w, ".tool.t-shr").getAttribute("aria-checked") === "true");
-  $(w, ".tool.t-shr").click(); await sleep(30);
+  await open(6); await pick("inv");
+  check("moves: a new step comes with Undo, in case it was a slip", /New step added/.test($(w, "#toastT").textContent) && $(w, "#toastA").textContent === "Undo" && stored(w).flow.length === 9);
+  w.document.activeElement.blur(); await sleep(260);
+  check("moves: a new step left empty goes away when the group moves on from it", stored(w).flow.length === 8 && !$$(w, ".strip8.moves .sf.isnew").some((li) => !li.querySelector("textarea").value));
+  await open(6); await pick("inv");
+  const blank = $$(w, ".strip8.moves .sf.isnew").find((li) => !li.querySelector("textarea").value);
+  blank.querySelector(".sf-x").click(); await sleep(60);
+  check("moves: a new step has its own remove button, with undo", stored(w).flow.length === 8 && /New step removed/.test($(w, "#toastT").textContent));
+  const h0 = frameAt(0).querySelector(".sf-hit"); h0.focus(); key(w, h0, "ArrowRight"); await sleep(40);
+  check("moves: arrow keys move along the strip and stay on the screen", cur(w) === "moves" && w.document.activeElement === frameAt(1).querySelector(".sf-hit"));
+  const plain = $$(w, ".strip8.moves .sf").findIndex((li) => li.classList.contains("mv-none") && !li.classList.contains("isnew"));
+  await open(plain);
+  key(w, w.document.activeElement, "ArrowDown"); await sleep(20);
+  check("moves: arrow keys move through the menu, and stay on the screen", cur(w) === "moves" && w.document.activeElement === $(w, '.mvmenu .mi[data-v="shr"]'));
+  key(w, w.document.activeElement, "Escape"); await sleep(60);
+  check("moves: Escape closes the menu and goes back to the step", !$(w, ".mvmenu") && w.document.activeElement === frameAt(plain).querySelector(".sf-hit"));
+  await open(plain);
+  key(w, w.document.activeElement, "Tab"); await sleep(60);
+  check("moves: Tab puts the menu away too", !$(w, ".mvmenu") && w.document.activeElement === frameAt(plain).querySelector(".sf-hit"));
+  const before = JSON.stringify(stored(w).flow);
+  await open(plain); $(w, ".scene:last-child .ask").click(); await sleep(60);
+  check("moves: selecting anywhere else closes the menu, and changes nothing", !$(w, ".mvmenu") && JSON.stringify(stored(w).flow) === before);
+  await open(plain); await open(4);
+  check("moves: selecting another step moves the menu to it", !!menuOf(4) && $$(w, ".mvmenu").length === 1);
+  await open(4);
+  check("moves: selecting the same step again closes its menu", !$(w, ".mvmenu"));
   check("moves: no vote on ideas, and no separate board of ideas any more", !$(w, ".vote-grid") && !$(w, ".board") && $(w, "#nextBtn").textContent === "Next");
   await back(w); await at(w, "stories", L); await next(w); await at(w, "moves", L);
   check("moves: coming back keeps every change and never copies today's steps in again", stored(w).flow.length === 8 && stored(w).flow.filter((x) => x.mv).length === 4);
   await next(w); await at(w, "share", L);
-  check("rail: step 5 says how many steps now, and before", railText(w, 5) === "Now 7 steps, was\u00a07", railText(w, 5));
+  check("rail: step 5 says how many steps the new workflow has", railText(w, 5) === "Reimagined in 7 steps", railText(w, 5));
 
   /* 6. share it: the change replayed, then who to ask and the first test */
   check("share: the bridge quotes the workflow and says what's next", /Now that you’ve reimagined “A report no one reads but everyone updates”, get feedback from at least three people it affects\. Then pick the smallest piece you could try next week\./.test(scene(w).textContent));
-  check("share: today's workflow turns into the new one, as one strip", $$(w, "#replay .rp").length === 8 && $$(w, "#replay .rp.mv-sub").length === 1 && $$(w, "#replay .rp.isnew").length === 1 && $(w, "#replay [data-rn]").textContent.length > 0 && $(w, "#replay").hasAttribute("data-feedback-private"));
-  check("share: a changed step shows its new wording", /Auto-clean the export/.test($(w, "#replay").textContent));
-  $(w, "[data-act=replay]").click(); await sleep(40);
-  check("share: Play it again is there, and with reduced motion it shows the new workflow at once", !!$(w, "#replay [data-act=replay]") && $(w, "#replay").classList.contains("after") && $(w, "#replay [data-rn]").textContent === "7");
-  check("share: like, wish and wonder are the tip", /What do you like\? What do you wish\? What do you wonder\?/.test($(w, ".scene:last-child .pencil").textContent));
+  check("share: the new workflow as it stands, numbered, with nothing cut in it", $$(w, "#nflow .rp").length === 7 && $$(w, "#nflow .rp.mv-sub").length === 0 && $$(w, "#nflow .rp.isnew").length === 1 && $$(w, "#nflow .rp .mt-n").map((n) => n.textContent).join("") === "1234567" && $(w, "#nflow .rl b").textContent === "7" && /7 steps today/.test($(w, "#nflow .rwas").textContent) && $(w, "#nflow").hasAttribute("data-feedback-private"));
+  check("share: a changed step shows its new wording", /Auto-clean the export/.test($(w, "#nflow").textContent) && !/Clean the data in Excel/.test($(w, "#nflow").textContent));
+  check("share: the change plays once, at the finish, so nothing replays here", !$(w, "[data-act=replay]") && !$(w, "#replay"));
+  check("share: like, wish and wonder are the tip, with what to show first", /Show each person the new workflow, then ask three questions: what do you like, what do you wish, and what do you wonder\?/.test($(w, ".scene:last-child .pencil").textContent));
   check("share: no false ending", !/You reimagined it/.test(HTML));
   check("share: the first test, who to ask, its owner and date", ["ask", "test", "owner", "when"].every((k) => !!$(w, `.scene:last-child [data-bind="${k}"]`)) && !$(w, "[data-bind^=people]"));
   check("share: the last step says Next, since the workshops come before the card", $(w, "#nextBtn").textContent === "Next");
-  check("share: Communicating AI Strategy is the workshop line, in the bottom bar", /Take this further in Communicating AI Strategy/.test($(w, "#goLink").textContent));
+  check("share: Communicating AI Strategy is the workshop line, in the bottom bar", $(w, "#goLink").textContent === "Take this further: ask us about Communicating AI Strategy.");
   type(w, $(w, "[data-bind=ask]"), "Head of sales ops, Priya and Sam");
   type(w, $(w, "[data-bind=test]"), "Send leaders a one-line list of the riskiest deals next Monday");
   type(w, $(w, "[data-bind=owner]"), "Sam"); type(w, $(w, "[data-bind=when]"), "next Monday");
@@ -404,10 +465,14 @@ const w = openLab();
   check("workshops: the usage figure matches ExperiencePoint's site, 13% to 59%", /13% to 59%/.test(scene(w).textContent) && !/13% to 60%/.test(HTML));
   check("workshops: Finding AI Use Cases builds on what the group did today", /Builds on what you did today/.test(scene(w).textContent));
   check("workshops: no workshop line in the bar, since the page is the workshops", $(w, "#goLink").hidden);
-  check("workshops: Next reads Get your card", $(w, "#nextBtn").textContent === "Get your card");
+  check("workshops: Next reads Finish", $(w, "#nextBtn").textContent === "Finish" && !/Get your card/.test(HTML));
+  check("workshops: the four boxes are there to read, not links into the website", $$(w, ".phases .ws").every((x) => x.tagName === "DIV") && !$(w, ".pathscreen a.ws") && !/ai-training/.test(scene(w).innerHTML));
+  check("workshops: one next step, Contact ExperiencePoint, which opens the contact page", $$(w, ".pathscreen .contact a").length === 1 && $(w, ".pathscreen .contact a").textContent === "Contact ExperiencePoint" && $(w, ".pathscreen .contact a").getAttribute("href") === "https://www.experiencepoint.com/contact-us/" && !$(w, ".pathscreen a[href^=mailto]"));
   await next(w); await at(w, "finish", L);
   check("finish: no timer left running", $(w, "#mini").hidden && !$(w, "#burn i").style.width.replace(/^0(px|%)?$/, ""), $(w, "#burn i").style.width);
-  check("finish: all six steps stamped", $$(w, ".stamps i.got").length === 6);
+  check("finish: with reduced motion, the card shows at once, with no animation to play again", $(w, ".finale").classList.contains("revealed") && $(w, ".finale .reveal").hidden && !$(w, "[data-act=again]"));
+  check("finish: the change it plays is the group's own: today's steps, the cut, the changed and the new", $$(w, ".reveal .rv").length === 8 && $$(w, ".reveal .rv.mv-sub").length === 1 && $$(w, ".reveal .rv.isnew").length === 1 && $$(w, ".reveal .rv-t.new").length === 2 && $(w, ".reveal [data-rvn]").textContent === "7" && $(w, ".reveal").hasAttribute("data-feedback-private") && $(w, ".reveal").getAttribute("aria-hidden") === "true");
+  check("finish: no stamps or extra marks, just the card and its buttons", !$(w, ".stamps"));
   check("finish: “Save your card”", /Save your card and post it where the team will see it\./.test(scene(w).textContent));
   check("finish: From eye-roll to a better way", $(w, ".finale .hero").textContent === "From eye-roll to a better way.");
   check("finish: ends on the card, with no legal notice on screen", !$(w, ".scene:last-child .legal") && !/proprietary/.test(scene(w).textContent));
@@ -415,9 +480,9 @@ const w = openLab();
   check("finish: the buttons come before the card, so nobody scrolls to save", (() => { const ex = $(w, ".exports"), oc = $(w, "#ocard"); return ex && oc && (ex.compareDocumentPosition(oc) & w.Node.DOCUMENT_POSITION_FOLLOWING); })());
   c = prim(w);
   check("finish: one filled button, Save as image", c.length === 1 && c[0] === "Save as image", JSON.stringify(c));
-  check("finish: the card lists what changed", /What we changed/.test($(w, "#ocard").textContent) && /New: An agent flags stuck deals daily/.test($(w, "#ocard").textContent) && /Less effort: Auto-clean the export/.test($(w, "#ocard").textContent));
-  check("finish: the reimagined strip on the card marks new and changed steps", $$(w, "#ocard .fr.new").length === 1 && $$(w, "#ocard .fr.chg").length === 2 && $$(w, "#ocard .fr.cut").length === 1);
-  check("whole session: typed code never ran anywhere", !w.__xss && !w.document.querySelector(".note img, .chip img, .fr img, .vnote img, .ocard img, .lift img, .sf img, .mt img, .st-cap img"));
+  check("finish: the card marks each change with its move, and lists what was cut on one line", $$(w, "#ocard .ot .og").length === 3 && /An agent flags stuck deals daily/.test($(w, "#ocard .otiles").textContent) && /Auto-clean the export/.test($(w, "#ocard .otiles").textContent) && /What we cut\s*Build 14 slides/.test($(w, "#ocard").textContent) && !/What we changed/.test($(w, "#ocard").textContent));
+  check("finish: the card shows the new workflow as tiles, marking new and changed steps", $$(w, "#ocard .ot").length === 7 && $$(w, "#ocard .ot.new").length === 1 && $$(w, "#ocard .ot.chg").length === 2 && $$(w, "#ocard .ot.chg-amp").length === 1 && !$(w, "#ocard .fr") && /The new workflow\s*7 steps/.test($(w, "#ocard").textContent));
+  check("whole session: typed code never ran anywhere", !w.__xss && !w.document.querySelector(".note img, .chip img, .fr img, .vnote img, .ocard img, .lift img, .sf img, .mt img, .st-cap img, .rv img, .ot img"));
   check("whole session: no page errors", w.__errors.length === 0, w.__errors.join(" | "));
   const said = SHOWN.join(" ");
   check("whole session: no Goldilocks, no ladder or rungs, no quiz, anywhere on screen", SHOWN.length >= 18 && !/goldilocks|\brungs?\b|ladder|climb the|quiz/i.test(said), SHOWN.length);
@@ -431,9 +496,10 @@ const w = openLab();
   $(w, "[data-act=print]").click(); await sleep(200);
   const pr = $(w, "#printout").innerHTML;
   check("print: every step, the why chain, faces and inherited", w.__printed === 1 && /Isn’t there a better way\?/.test(pr) && /We do this in order to Show leaders the pipeline/.test(pr) && /😤 frustrated/.test(pr) && /Inherited/.test(pr) && /Share it/.test(pr));
+  check("print: says how to ask for feedback, with like, wish and wonder", /Show each person the new workflow, then ask them three questions and write down what they say/.test(pr));
   check("print: leaves room for like, wish, wonder for each person to ask", /What do you like\?/.test(pr) && /What do you wonder\?/.test(pr) && /1\. Head of sales ops/.test(pr) && /2\. Priya/.test(pr) && /3\. Sam/.test(pr));
   check("print: what changed, and the reimagined workflow with its counts", /Cut: Build 14 slides/.test(pr) && /Less effort: Auto-clean the export/.test(pr) && /The reimagined workflow<\/strong> \(1 step gone, 1 new\)/.test(pr));
-  check("print: ends with where to take it further, and keeps the copyright on paper", /Take it further:<\/strong> ExperiencePoint’s AI workshops build on what you made today/.test(pr) && /Copyright © ExperiencePoint Inc\. 2026/.test(pr));
+  check("print: ends with where to take it further, and keeps the copyright on paper", /Take it further:<\/strong> ask ExperiencePoint about the AI workshops that build on what you made today\. experiencepoint\.com\/contact-us/.test(pr) && /Copyright © ExperiencePoint Inc\. 2026/.test(pr));
   check("print: says workflow, and records the story pick", /The reimagined workflow/.test(pr) && /more Tesla/.test(pr));
   check("print: typed text is escaped", !/<img src=x/.test(pr) && /&lt;img src=x/.test(pr));
   check("print: the other eye-rollers are listed, not the one chosen", /Also suggested: The weekly status meeting/.test(pr) && !/Also suggested:[^<]*A report no one reads/.test(pr));
@@ -452,7 +518,7 @@ const w = openLab();
   const u = decodeURIComponent(w.opened[0] || "");
   check("Email this: the subject names the workflow", u.includes("subject=Our reimagined workflow: A report no one reads but everyone updates"), u.slice(0, 200));
   check("Email this: the body sums up the session", u.includes("Real purpose: Help leaders see where deals are stuck") && u.includes("Today it takes 7 steps. Reimagined, it takes 7 steps: 1 cut, 2 changed and 1 new.") && u.includes("The reimagined workflow:") && u.includes("What we changed:") && u.includes("First test: Send leaders a one-line list of the riskiest deals next Monday (owner Sam, by next Monday)") && u.includes("Who we’ll ask: Head of sales ops, Priya and Sam"), u.slice(0, 900));
-  check("Email this: it ends with where to take it further", u.includes("Take it further: ExperiencePoint’s AI workshops build on what we made today. https://www.experiencepoint.com/ai-training/"));
+  check("Email this: it ends with where to take it further", u.includes("Take it further: ask ExperiencePoint about the AI workshops that build on what we made today. https://www.experiencepoint.com/contact-us/"));
   const done = Array.from(sheet.querySelectorAll("button")).find((b) => b.textContent === "Done");
   if (done) done.click();
 }
@@ -506,6 +572,16 @@ const w = openLab();
   const f8 = stored(w8).flow;
   check("after the moves: renaming a step keeps its change, a removed step leaves, a new step joins at its place", f8.map((x) => x.t).join("|") === "Pull the numbers from the CRM|Flag risks|Build the slides|Send a summary" && f8[0].mv === "shr" && f8[0].how === "Auto-pull" && f8[1].mv === "inv" && f8[2].mv === "sub" && f8[3].mv === "", f8.map((x) => x.t + ":" + x.mv).join("|"));
   check("after the moves: no page errors", w8.__errors.length === 0, w8.__errors.join(" | "));
+  const w9 = openLab({ "rlab-v3": JSON.stringify({ at: "capture", mode: "team", place: "room", eyeroll: "The Friday report", frames: [{ id: "a", t: "Pull the numbers", r: "f" }, { id: "b", t: "Build the slides" }], test: "Send one page", flowSeeded: true, flow: [{ id: "x1", src: "a", t: "Pull the numbers", mv: "sub", how: "" }, { id: "x2", src: "b", t: "Build the slides", mv: "", how: "" }] }) });
+  await at(w9, "capture", "rail ahead");
+  type(w9, w9.document.querySelectorAll(".sf-in")[0], "a".repeat(180));
+  check("capture: near the 200-character limit, a quiet count says what's left", w9.document.querySelectorAll(".sf-cc")[0].textContent === "20 left");
+  type(w9, w9.document.querySelectorAll(".sf-in")[0], "Pull the numbers");
+  check("rail: a step ahead of this one shows its name, never words from a later visit", railText(w9, 3) === "Drawn in 2 steps" && railText(w9, 5) === "Reimagine it" && railText(w9, 6) === "Share it" && w9.document.querySelector('#rail button[data-ch="5"]').classList.contains("ahead"));
+  check("rail: steps ahead carry only their names, in the tooltip and for screen readers too", w9.document.querySelector('#rail button[data-ch="6"]').title === "Share it" && w9.document.querySelector('#rail button[data-ch="6"]').getAttribute("aria-label") === "Step 6, Share it");
+  w9.document.querySelector('#rail button[data-ch="6"]').click(); await sleep(80);
+  check("rail: on the last step, every step shows the group's words", await until(() => cur(w9) === "share", 2000) && railText(w9, 5) === "Reimagined in 1 step" && railText(w9, 6) === "Send one page", railText(w9, 5) + " / " + railText(w9, 6));
+  check("rail: no page errors", w9.__errors.length === 0, w9.__errors.join(" | "));
   // a tied eye-roller vote waits for the lead to pick, then moves on
   const t = { at: "b-vote", mode: "team", place: "room", cands: [{ id: "k1", t: "The Friday report" }, { id: "k2", t: "Three sign-offs" }, { id: "k3", t: "Copying notes" }], votes: { eyeroll: { k1: 2, k2: 2, k3: 1 } } };
   const w5 = openLab({ "rlab-v3": JSON.stringify(t) });
@@ -522,6 +598,25 @@ const w = openLab();
   check("b-vote tie: the pick becomes the eye-roller", stored(w5).eyeroll === "Three sign-offs");
   check("b-vote tie: then the Lab moves on", await until(() => cur(w5) === "why", 5000), cur(w5));
   check("b-vote tie: no page errors", w5.__errors.length === 0, w5.__errors.join(" | "));
+}
+
+/* =================== the finish plays the change, with motion on =================== */
+{
+  const saved = JSON.parse(w.localStorage.getItem("rlab-v3")); saved.at = "workshops";
+  const m = openLab({ "rlab-v3": JSON.stringify(saved) }, null, true);
+  await at(m, "workshops", "finale");
+  await next(m); await at(m, "finish", "finale");
+  const fin = () => m.document.querySelector(".finale");
+  check("finale: the change starts playing over the whole stage, the card waiting behind it", fin().classList.contains("revealing") && !m.document.querySelector(".finale .reveal").hidden && !fin().classList.contains("revealed"));
+  check("finale: it opens with the group's eye-roller and today's steps", /A report no one reads but everyone updates/.test(m.document.querySelector(".rv-q").textContent) && m.document.querySelectorAll(".reveal .rv:not(.unborn)").length === 7 && m.document.querySelector("[data-rvn]").textContent === "7");
+  const playedOut = await until(() => fin().classList.contains("revealed"), 12000);
+  check("finale: cuts fall away, changes take their new words, new steps arrive, then the card", playedOut && m.document.querySelectorAll(".reveal .rv.gone").length === 1 && m.document.querySelectorAll(".reveal .rv.morph").length === 2 && m.document.querySelectorAll(".reveal .rv.arrive").length === 1 && m.document.querySelector(".reveal").classList.contains("counted") && /steps, reimagined/.test(m.document.querySelector("[data-rvw]").textContent));
+  check("finale: when it ends, the stage steps aside for the card", await until(() => m.document.querySelector(".finale .reveal").hidden, 2000) && !m.document.querySelector(".rv-ghost"));
+  m.document.querySelector("[data-act=again]").click(); await sleep(80);
+  check("finale: Play it again plays the change from the start", fin().classList.contains("revealing") && m.document.querySelectorAll(".reveal .rv.gone").length === 0 && m.document.querySelectorAll(".reveal .rv.unborn").length === 1);
+  m.document.querySelector(".finale .reveal").click(); await sleep(40);
+  check("finale: selecting anything skips to the card", await until(() => fin().classList.contains("revealed") && !fin().classList.contains("revealing"), 1500));
+  check("finale: no page errors", m.__errors.length === 0, m.__errors.join(" | "));
 }
 
 /* =================== a solo session, start to finish =================== */
@@ -551,12 +646,12 @@ const w = openLab();
     if (id === "capture") { for (const t of ["Book the room", "Read updates aloud", "Notes go out by email"]) { const f = $$(s, "[data-bstep]").pop(); type(s, f, t); key(s, f, "Enter"); await sleep(30); } s.document.activeElement.blur(); }
     if (id === "judge") { $$(s, ".strip8.judge .sf")[1].querySelector(".fb.f").click(); await sleep(30); }
     if (id === "moves") {
-      soloSeeded = stored(s).flow; soloWho = ($(s, ".scene:last-child .who1") ? "who1 " : "") + ($(s, ".scene:last-child [data-timer]") ? "timer " : "") + ($(s, ".tool.on") ? "armed " : "") + $(s, ".armed").textContent;
-      $(s, ".tool.t-sub").click(); await sleep(30);
+      soloSeeded = stored(s).flow; soloWho = ($(s, ".scene:last-child .who1") ? "who1 " : "") + ($(s, ".scene:last-child [data-timer]") ? "timer " : "") + ($(s, ".mvmenu") ? "menu " : "") + ($(s, ".mhint") ? "hint " : "") + $(s, ".scene:last-child .sub").textContent;
       $$(s, ".strip8.moves .sf")[1].querySelector(".sf-hit").click(); await sleep(50);
+      $(s, '.mvmenu .mi[data-v="sub"]').click(); await sleep(50);
       soloCut = stored(s).flow[1].mv === "sub";
-      $(s, ".tool.t-inv").click(); await sleep(30);
       $$(s, ".strip8.moves .sf")[0].querySelector(".sf-hit").click(); await sleep(50);
+      $(s, '.mvmenu .mi[data-v="inv"]').click(); await sleep(50);
       type(s, s.document.activeElement, "A shared doc instead"); s.document.activeElement.blur();
     }
     if (id === "share") { type(s, $(s, "[data-bind=test]"), "Try written updates for two weeks"); s.document.activeElement.blur(); }
@@ -573,11 +668,11 @@ const w = openLab();
   check("solo: drawing starts as typing the steps straight in, with no timer", soloType && soloMap === "" && timers.length === 0, timers.join() + " " + soloMap);
   check("solo: sketching instead brings a 2 minute timer", soloSketch === "120", soloSketch);
   check("solo: the moves start from the steps typed in", Array.isArray(soloSeeded) && soloSeeded.length === 3 && soloSeeded[0].t === "Book the room" && soloSeeded.every((x) => !x.mv));
-  check("solo: no story picked, so no move is in hand until one is chosen, and no timer or team line", soloCut && /^Pick a move, then select a step\./.test(soloWho), soloWho);
+  check("solo: with no story picked, the moves just say to select a step, with no timer, team line or example", soloCut && /^Now that you’ve questioned “Read updates aloud”, change the work\. Select any step, then pick one of the four moves\. Use them in any order\.$/.test(soloWho), soloWho);
   check("solo: one screen at a time, at most one filled button", multi.length === 0, multi.join(", "));
   check("solo: the bridge says named, not picked", soloBridge);
   check("solo: the eye-roller fills the rail when you move on", stored(s).eyeroll === "A meeting that could have been an email." && /A meeting that could have been an email/.test(railText(s, 1)));
-  check("solo: the card says what I changed", /What I changed/.test($(s, "#ocard").textContent) && /New: A shared doc instead/.test($(s, "#ocard").textContent) && /Cut: Read updates aloud/.test($(s, "#ocard").textContent));
+  check("solo: the card says what I cut, and shows the new step", /What I cut\s*Read updates aloud/.test($(s, "#ocard").textContent) && /A shared doc instead/.test($(s, "#ocard .otiles").textContent));
   check("solo: the kit hook reports solo", s.EPKit.tool.state().mode === "solo");
   check("solo: no page errors", s.__errors.length === 0, s.__errors.join(" | "));
 }
@@ -619,9 +714,9 @@ const w = openLab();
   x = await replay("moves", { mode: "team", place: "room" });
   check("replay: the moves screen shows the made-up changes on the strip", cur(x.r) === "moves" && x.r.document.querySelectorAll(".strip8.moves .sf.mv-sub").length === 3 && x.r.document.querySelectorAll(".strip8.moves .sf.isnew").length === 1);
   x = await replay("share", { mode: "team" });
-  check("replay: the share screen replays the made-up change", cur(x.r) === "share" && x.r.document.querySelectorAll("#replay .rp").length === 7);
+  check("replay: the share screen shows the made-up new workflow", cur(x.r) === "share" && x.r.document.querySelectorAll("#nflow .rp").length === 4);
   x = await replay("finish", { mode: "solo" });
-  check("replay: a solo finish screen, with the made-up card", cur(x.r) === "finish" && /The weekly status report nobody reads/.test(x.r.document.querySelector("#stage").textContent) && x.r.EPKit.tool.state().mode === "solo");
+  check("replay: a solo finish screen, with the made-up card, without playing the change", cur(x.r) === "finish" && /The weekly status report nobody reads/.test(x.r.document.querySelector("#stage").textContent) && x.r.EPKit.tool.state().mode === "solo" && x.r.document.querySelector(".finale").classList.contains("revealed") && !x.r.document.querySelector(".finale").classList.contains("revealing"));
   x = await replay("stories", { mode: "team" });
   check("replay: the stories screen opens without fetching the voice", cur(x.r) === "stories" && x.r.__audio.length === 0);
   x = await replay("no-such-screen", { mode: "team" });

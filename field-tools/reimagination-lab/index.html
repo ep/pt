@@ -1711,6 +1711,413 @@ textarea:focus-visible,input:focus-visible{outline:none}
 .m-type .mstrip.ex .mt-t{font-size:14.5px;-webkit-line-clamp:3}
 .m-type .mstrip.ex .mt:not(:nth-child(3n))::after{content:"";position:absolute;top:50%;right:-11px;width:7px;height:7px;border-top:2px solid var(--line2);border-right:2px solid var(--line2);transform:translateY(-50%) rotate(45deg)}
 
+/* =========================================================
+   v9: the moves start from a step, the group picks what to
+   question, examples are easier to read, and the finish plays
+   today's workflow turning into the new one before the card.
+   ========================================================= */
+
+/* ---------- examples and tips: more air between lines, darker pencil ---------- */
+.pencil{line-height:1.3;color:color-mix(in srgb,var(--ink2) 52%,var(--ink))}
+.pencil p{margin:0 0 14px}
+.pencil p:last-child{margin-bottom:0}
+.night .pencil{color:var(--nightInk2)}
+
+/* ---------- the plan: six steps in one style, nothing looks done or picked ---------- */
+.pc.q .pdot{background:var(--night);box-shadow:inset 0 0 0 2px var(--nightInk2);color:var(--nightInk)}
+
+/* ---------- spin: the spins are examples, in the pencil hand ---------- */
+.spinscreen .reel-eg{margin:30px 0 0;font-size:clamp(19px,1.5vw,22px);color:var(--nightInk2)}
+.spinscreen .reel{margin-top:2px;font-family:var(--hand);font-style:normal;font-weight:600;font-size:clamp(38px,4.6vw,68px);line-height:1.08;font-variation-settings:normal}
+.spinscreen .lede.spin-sub{max-width:34ch}
+
+/* ---------- draw it: the ways to draw across the top, then the steps and the example ---------- */
+.drawl{display:flex;flex-direction:column;gap:clamp(18px,2.6vh,28px);text-align:left}
+.drawl .dh .ask{font-size:clamp(32px,3.4vw,52px);margin:0 0 8px}
+.drawl .dh .sub{margin:0;max-width:52ch}
+.drawl .modes{display:grid;gap:14px;margin:0}
+.drawl .modes.w3{grid-template-columns:repeat(3,minmax(0,1fr))}
+.drawl .modes.w4{grid-template-columns:repeat(4,minmax(0,1fr))}
+.drawl .mode{flex-direction:row;align-items:center;gap:14px;padding:14px 18px;border-radius:18px;min-height:82px}
+.drawl .mode .art{flex:0 0 auto;width:62px;height:44px;margin:0}
+.drawl .mode .mtx{display:flex;flex-direction:column;gap:4px;min-width:0}
+.drawl .mode b{display:block;font-size:17.5px;font-weight:700;line-height:1.2;color:var(--ink)}
+.drawl .mode small{display:block;font-size:14.5px;line-height:1.3;color:var(--ink2)}
+.drawl .db{display:grid;grid-template-columns:minmax(0,5fr) minmax(0,6fr);gap:clamp(28px,4.4vw,72px);align-items:start}
+.howto{list-style:none;margin:6px 0 0;padding:0;display:grid;gap:18px}
+.howto li{display:grid;grid-template-columns:30px minmax(0,1fr);gap:12px;align-items:baseline}
+.howto .hn{font-family:var(--display);font-weight:600;font-size:22px;line-height:1;color:var(--ink2)}
+.howto .ht{font-size:clamp(17px,1.3vw,19px);line-height:1.5;color:var(--ink)}
+.howto .ht b{font-weight:700}
+.drawl .dl .timer{margin:26px 0 0}
+.drawl .expanel{min-height:0}
+@media (max-width:980px){
+  .drawl .db{grid-template-columns:1fr}
+  .drawl .modes.w4,.drawl .modes.w3{grid-template-columns:repeat(2,minmax(0,1fr))}
+}
+@media (max-width:600px){
+  .drawl .modes.w3,.drawl .modes.w4{grid-template-columns:1fr;gap:8px}
+  .drawl .mode{min-height:0;padding:10px 14px}
+  .drawl .mode .art{width:48px;height:34px}
+}
+
+/* ---------- typing the steps: the strip runs from where the workflow starts to where it ends ---------- */
+.sf.cap .capc{flex:1;display:flex;flex-direction:column;justify-content:center;gap:8px;min-height:132px;padding:16px 18px;border-radius:18px;background:color-mix(in srgb,var(--line) 62%,transparent)}
+.sf.cap .cl{display:flex;align-items:center;gap:8px;font-size:13.5px;font-weight:650;color:var(--ink2)}
+.sf.cap .cl::before{content:"";flex:0 0 auto;width:10px;height:10px;border-radius:50%;background:var(--ink2)}
+.sf.cap.end .cl::before{background:transparent;box-shadow:inset 0 0 0 2.5px var(--ink2)}
+.sf.cap .ct{font-family:var(--display);font-style:italic;font-weight:460;font-size:clamp(16px,1.2vw,18px);line-height:1.32;color:var(--ink);overflow-wrap:anywhere}
+.strip8.edit .sf.addf.re + .sf.cap{margin-left:0}
+@media (max-width:600px){ .sf.cap .capc{min-height:0;padding:12px 16px} }
+
+/* ---------- judging and questioning: a short key, one line per mark ---------- */
+.fkey{list-style:none;margin:2px 0 0;padding:0;display:grid;gap:10px}
+.fkey li{display:grid;grid-template-columns:28px minmax(0,1fr);gap:10px;align-items:start;font-size:clamp(15.5px,1.12vw,17px);line-height:1.45;color:var(--ink2)}
+.fkey b{color:var(--ink);font-weight:650}
+.fkey .fe{font-size:21px;line-height:1.1}
+.nkey .nk{width:22px;height:15px;margin-top:4px;border-radius:4px;box-shadow:inset 0 0 0 2px currentColor;transform:rotate(-7deg)}
+.nkey .nk.need{color:var(--mAmp)} .nkey .nk.inh{color:var(--mSub)}
+.stagel .shr .fkey + .pencil{margin-top:18px}
+.stagel .shr .timer + .fkey{margin-top:14px}
+
+/* ---------- necessary or inherited: pick up to three steps from the small strip ---------- */
+.qhint{margin:0 0 10px;font-size:15px;font-weight:600;color:var(--ink2)}
+.mstrip.pick{flex-wrap:nowrap}
+.mstrip.pick.wrap{flex-wrap:wrap}
+.mstrip.pick>li{flex:1 1 0;min-width:0;max-width:150px;display:flex}
+.mstrip.pick.wrap>li{flex:0 0 auto;width:clamp(104px,9.4vw,134px)}
+.mstrip.pick .mt{flex:1;width:auto;margin:0;border:0;font:inherit;text-align:left;cursor:pointer}
+.mstrip.pick .mt:hover{transform:translateY(-3px);box-shadow:inset 0 0 0 1.5px var(--ink2),0 10px 18px -12px rgba(17,26,43,.45)}
+.mstrip.pick .mt.slot{background:transparent;box-shadow:inset 0 0 0 1.5px var(--ink2)}
+.mstrip.pick .mt.slot .mt-t,.mstrip.pick .mt.slot .mt-f{opacity:.35}
+.mstrip.pick .mt.slot::after{content:"";position:absolute;right:11px;bottom:10px;width:6px;height:11px;border:solid var(--ink);border-width:0 2.5px 2.5px 0;transform:rotate(45deg)}
+.mstrip.pick.nudge{animation:nudgeX .5s ease}
+.inherit .hint.nolift{margin-top:6px}
+@media (max-width:880px){ .mstrip.pick{flex-wrap:wrap} .mstrip.pick>li{flex:0 0 calc(25% - 8px);max-width:none} }
+@media (max-width:600px){
+  .inherit .sb>.mstrip.pick{display:flex}
+  .mstrip.pick>li{flex:0 0 calc(50% - 5px)}
+}
+
+/* ---------- reimagine it: the four moves as a key, then select a step to change it ---------- */
+.mkey{list-style:none;margin:0 0 16px;padding:0;display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:12px 24px}
+.mk{display:flex;align-items:center;gap:12px;min-width:0}
+.mk .tg{flex:0 0 auto;width:40px;height:40px;color:var(--ink)}
+.mk .tg svg{width:100%;height:100%}
+.mk .tx{display:flex;flex-direction:column;min-width:0}
+.mk b{font-size:16.5px;font-weight:700;color:var(--ink)}
+.mk .tx>span{font-size:14px;line-height:1.3;color:var(--ink2)}
+.mhint{margin:0 0 clamp(16px,2.4vh,24px)}
+.mhint .ah{margin:0;font-size:clamp(16px,1.2vw,18px);line-height:1.45;color:var(--ink);font-weight:560}
+.mhint .pencil{margin-top:4px;font-size:clamp(18px,1.35vw,20px)}
+.strip8.moves .sf-hit{cursor:pointer}
+.strip8.moves .sf:hover .sf-card{translate:0 -4px;box-shadow:inset 0 0 0 1.5px var(--ink2),var(--frameShadow)}
+.strip8.moves .sf.open{z-index:30}
+.strip8.moves .sf.open .sf-card{translate:0 -4px;box-shadow:inset 0 0 0 2px var(--ink),var(--frameShadow)}
+.strip8.moves .sf-how,.strip8.moves .sf-in{position:relative;z-index:2}
+.strip8.moves .mvb{pointer-events:none}
+.sf.back .sf-card{animation:backIn .5s var(--spring)}
+@keyframes backIn{0%{transform:scale(.96)}100%{transform:none}}
+/* the menu of moves, opening from the step */
+.mvmenu{position:absolute;top:calc(100% + 10px);left:-4px;z-index:40;width:310px;max-width:calc(100vw - 32px);padding:8px;border-radius:18px;background:var(--card);box-shadow:inset 0 0 0 1px var(--line),0 26px 50px -20px rgba(17,26,43,.5),0 4px 12px -4px rgba(17,26,43,.16);transform-origin:40px 0;animation:menuIn .22s cubic-bezier(.2,.9,.3,1.15) both}
+.mvmenu.end{left:auto;right:-4px;transform-origin:calc(100% - 40px) 0}
+.mvmenu.up{top:auto;bottom:calc(100% + 10px);transform-origin:40px 100%;animation-name:menuInUp}
+.mvmenu.up.end{transform-origin:calc(100% - 40px) 100%}
+.mvmenu.side{animation-name:menuInSide}
+.mvmenu.side.to-r{transform-origin:0 40px}
+.mvmenu.side.to-l{transform-origin:100% 40px;animation-name:menuInSideL}
+@keyframes menuInSide{from{opacity:0;transform:translateX(-8px) scale(.97)}to{opacity:1;transform:none}}
+@keyframes menuInSideL{from{opacity:0;transform:translateX(8px) scale(.97)}to{opacity:1;transform:none}}
+@keyframes menuIn{from{opacity:0;transform:translateY(-6px) scale(.97)}to{opacity:1;transform:none}}
+@keyframes menuInUp{from{opacity:0;transform:translateY(6px) scale(.97)}to{opacity:1;transform:none}}
+.mi{width:100%;display:grid;grid-template-columns:36px minmax(0,1fr) 22px;align-items:center;gap:12px;padding:9px 10px;border-radius:12px;text-align:left;color:var(--ink);transition:background-color .15s}
+.mi:hover{background:var(--line)}
+.mi:focus-visible{background:var(--line);outline-offset:-2px;border-radius:12px}
+.mi .mg{width:36px;height:36px;display:grid;place-items:center;color:var(--ink)}
+.mi .mg svg{width:32px;height:32px}
+.mi-none .mg svg,.mi-del .mg svg{width:20px;height:20px}
+.mi .mx{display:flex;flex-direction:column;min-width:0}
+.mi .mx b{font-size:15.5px;font-weight:700;line-height:1.25}
+.mi .mx span{font-size:13.5px;line-height:1.3;color:var(--ink2)}
+.mi .mc{width:22px;height:22px;border-radius:50%;display:grid;place-items:center;color:transparent}
+.mi .mc svg{width:14px;height:14px}
+.mi.on .mc{color:#fff}
+.mi-sub.on .mc{background:var(--mSub)} .mi-shr.on .mc{background:var(--mShr)} .mi-amp.on .mc{background:var(--mAmp)}
+.mi.on{background:color-mix(in srgb,var(--line) 65%,transparent)}
+.mi-del,.mi-del .mx b{color:var(--mSub)}
+.msep{display:block;height:1px;margin:6px 10px;background:var(--line)}
+@media (max-width:880px){ .mkey{grid-template-columns:repeat(2,minmax(0,1fr))} }
+@media (max-width:600px){
+  .mkey{gap:10px 14px}
+  .mk .tg{width:32px;height:32px}
+  .mk .tx>span{display:none}
+  .mvmenu,.mvmenu.end{left:0;right:0;width:auto}
+}
+
+/* ---------- share it: the new workflow, as it stands ---------- */
+.nflow{margin:0 0 clamp(24px,3.8vh,40px)}
+.nflow .rl{display:flex;align-items:baseline;gap:12px;margin:0 0 14px;flex-wrap:wrap}
+.nflow .rl b{font-family:var(--display);font-weight:560;font-size:clamp(40px,3.8vw,58px);line-height:1;letter-spacing:-.02em;font-variant-numeric:tabular-nums}
+.nflow .rl .rw{font-family:var(--display);font-size:clamp(20px,1.7vw,25px);color:var(--ink)}
+.nflow .rl .rwas{margin-left:8px;font-size:15px;color:var(--ink2)}
+.nflow .rp{gap:6px}
+.nflow .rp.mv-shr{background:var(--tShr)}
+.nflow .rp.mv-amp{background:var(--tAmp);box-shadow:inset 0 0 0 1.5px var(--mAmp)}
+.nflow .rp.isnew{background:var(--tInv);box-shadow:inset 0 0 0 1.5px var(--mInv),0 0 0 4px rgba(255,204,0,.14)}
+
+/* ---------- the story player: captions and sound, right in the player ---------- */
+.st-sep{width:1px;height:20px;margin:0 6px;align-self:center;background:rgba(242,244,248,.18)}
+.st-ctl .st-cc[aria-pressed="false"]{opacity:.5}
+.story.nocap .st-cap{visibility:hidden}
+.st-snd .s-off{display:none}
+.story.muted .st-snd .s-on{display:none}
+.story.muted .st-snd .s-off{display:block}
+
+/* ---------- workshops: four boxes to read, and one way to talk to us ---------- */
+div.ws:hover{transform:none;box-shadow:inset 0 0 0 1.5px var(--nightLine)}
+.pathscreen .contact{display:flex;gap:16px;align-items:center}
+
+/* ---------- the rail: steps ahead of this one show their names ---------- */
+.rail button.ahead{color:var(--ink2)}
+.rail button.ahead i{background:color-mix(in srgb,var(--ink2) 50%,transparent)}
+.rail button.ahead em{font-weight:600}
+
+/* ---------- the finish: today's workflow turns into the new one, then the card ---------- */
+.scene.finale.revealing{overflow:hidden}
+.reveal{position:absolute;left:0;right:0;top:0;height:100%;z-index:4;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:clamp(22px,4vh,40px);padding:86px clamp(16px,4vw,48px) 108px;text-align:center;transition:opacity .7s ease,transform .8s cubic-bezier(.22,1,.36,1)}
+.reveal[hidden]{display:none}
+.finale.rv-out .reveal,.finale.revealed .reveal{opacity:0;transform:translateY(-16px) scale(.98);pointer-events:none;transition:opacity .4s ease,transform .45s ease}
+.rv-q{margin:0;max-width:34ch;font-family:var(--display);font-style:italic;font-weight:420;font-size:clamp(20px,1.9vw,28px);line-height:1.3;color:var(--nightInk2);text-wrap:balance;opacity:0;transform:translateY(10px);transition:opacity .8s ease,transform .8s cubic-bezier(.22,1,.36,1)}
+.reveal.deal .rv-q{opacity:1;transform:none}
+.rv-strip{--tw:clamp(170px,11.5vw,226px);list-style:none;margin:0;padding:0;display:flex;flex-wrap:wrap;justify-content:center;gap:16px;max-width:calc(var(--per,5) * (var(--tw) + 16px))}
+.rv{position:relative;flex:0 0 auto;width:var(--tw);min-height:clamp(100px,7vw,128px);display:flex;padding:14px 16px;border-radius:16px;background:#F2F4F8;color:#1A2234;box-shadow:0 2px 2px rgba(0,0,0,.18),0 18px 34px -18px rgba(0,0,0,.7);text-align:left;opacity:0;transform:translateY(18px) scale(.96)}
+.reveal.deal .rv{opacity:1;transform:none;transition:opacity .55s ease,transform .75s cubic-bezier(.22,1,.36,1),background-color .6s ease,box-shadow .6s ease,scale .6s cubic-bezier(.3,1.4,.5,1);transition-delay:calc(var(--i,0) * 80ms + 300ms)}
+.reveal.dealt .rv{transition-delay:0s}
+.rvc{display:grid;width:100%}
+.rv-t{grid-area:1 / 1;font-size:clamp(14.5px,1vw,17px);line-height:1.36;font-weight:560;overflow-wrap:anywhere;display:-webkit-box;-webkit-box-orient:vertical;-webkit-line-clamp:4;overflow:hidden;transition:opacity .5s ease,transform .6s cubic-bezier(.22,1,.36,1)}
+.rv-t.new{opacity:0;transform:translateY(8px)}
+.rv .mvb{opacity:0;transform:scale(.4);transition:opacity .35s ease,transform .45s cubic-bezier(.3,1.6,.5,1)}
+/* cuts: a slash, then the step falls away */
+.rv.mv-sub::before{content:"";position:absolute;left:12px;right:12px;top:50%;height:3px;border-radius:2px;background:var(--mSub);transform:rotate(-10deg) scaleX(0);transform-origin:0 50%;transition:transform .4s cubic-bezier(.6,0,.3,1);z-index:2}
+.rv.slash::before{transform:rotate(-10deg) scaleX(1)}
+.rv.slash{background:#C8CFDB}
+.rv.slash .mvb,.rv.morph .mvb,.rv.arrive .mvb{opacity:1;transform:none}
+.rv.gone{display:none}
+.reveal .rv.rv-ghost{position:absolute;margin:0;z-index:0;transition:transform .8s cubic-bezier(.5,0,.75,0),opacity .45s ease!important;transition-delay:0s!important}
+.reveal .rv.rv-ghost.fall{transform:translateY(46px) rotate(-9deg) scale(.92);opacity:0}
+.rv-strip{position:relative;z-index:1}
+.reveal>.rv-ghost{z-index:0}
+/* changes: the old words give way to the new */
+.rv.morph .rv-t.old{opacity:0;transform:translateY(-8px)}
+.rv.morph .rv-t.new{opacity:1;transform:none}
+.rv.mv-shr.morph{background:#E3E8F2;scale:.95}
+.rv.mv-amp.morph{background:#DDF1F0;scale:1.05;box-shadow:inset 0 0 0 2px var(--mAmp),0 0 0 6px rgba(104,191,189,.2),0 18px 34px -18px rgba(0,0,0,.7)}
+/* new steps arrive with a little light */
+.rv.unborn{display:none}
+.rv.isnew{background:#FFF2C2;box-shadow:inset 0 0 0 2px var(--gold),0 0 0 6px rgba(255,204,0,.2),0 18px 34px -18px rgba(0,0,0,.7)}
+.reveal .rv.born{opacity:0;transform:scale(.55);transition:none}
+.reveal .rv.arrive{transition:opacity .45s ease,transform .8s cubic-bezier(.3,1.5,.5,1)}
+/* the count settles last */
+.rv-n{margin:0;display:flex;align-items:baseline;justify-content:center;gap:12px;color:var(--nightInk);opacity:0;transition:opacity .6s ease .5s}
+.reveal.deal .rv-n{opacity:1}
+.rv-n b{font-family:var(--display);font-weight:560;font-size:clamp(44px,4.4vw,68px);line-height:1;letter-spacing:-.02em;font-variant-numeric:tabular-nums;transition:color .6s ease}
+.rv-n span{font-family:var(--display);font-size:clamp(20px,1.8vw,26px);color:var(--nightInk2)}
+.reveal.counted .rv-n b{color:var(--gold)}
+/* then the card and the buttons */
+.finale.revealing .fin{visibility:hidden;opacity:0}
+.finale.revealed:not(.refreshed) .fin .hero{animation:finRise .9s cubic-bezier(.22,1,.36,1) both}
+.finale.revealed:not(.refreshed) .fin .lede{animation:finRise .9s cubic-bezier(.22,1,.36,1) .12s both}
+.finale.revealed:not(.refreshed) .fin .exports{animation:finRise .9s cubic-bezier(.22,1,.36,1) .24s both}
+.finale.revealed:not(.refreshed) .fin .ocard{animation:cardRise 1.1s var(--spring) .18s both}
+@keyframes finRise{from{opacity:0;transform:translateY(16px)}to{opacity:1;transform:none}}
+.fin .exports .btn svg{width:18px;height:18px;margin-right:6px}
+@media (max-width:600px){
+  .rv-strip{gap:10px}
+  .rv{width:calc(50% - 5px);min-height:86px;padding:12px}
+  .rv-t{font-size:14px}
+}
+@media (max-height:760px) and (min-width:601px){
+  .rv{min-height:88px;padding:12px 14px}
+  .rv-t{-webkit-line-clamp:3;font-size:14.5px}
+  .reveal{gap:18px}
+}
+
+/* ---------- the card: the new workflow as tiles that wrap at any width ---------- */
+.fin .ocard{width:100%;max-width:560px;border-radius:24px}
+.ocard .oh{padding:24px 28px 26px}
+.ocard .otop{display:flex;align-items:center;justify-content:space-between;gap:12px}
+.ocard .oh .wm{font-size:17px}
+.ocard .oh .dt{float:none;margin:0;font-size:13.5px}
+.ocard .oh h3{font-family:var(--display);font-weight:500;font-style:normal;font-size:clamp(23px,2.1vw,31px);line-height:1.2;letter-spacing:-.01em;margin:14px 0 0}
+.ocard .ob{padding:22px 28px 26px;gap:20px}
+.ocard .of .l{display:flex;justify-content:space-between;align-items:baseline;gap:12px;font-size:13.5px;font-weight:650;color:#586A90;margin-bottom:6px}
+.ocard .of .lx{font-weight:500}
+.ocard .of .v{font-size:18px}
+.otiles{list-style:none;margin:2px 0 0;padding:0;display:grid;grid-template-columns:repeat(auto-fill,minmax(146px,1fr));gap:8px}
+.ot{display:flex;flex-direction:column;gap:4px;min-width:0;padding:10px 12px 12px;border-radius:12px;background:#F3F5F9;color:#1A2234}
+.ot .on{font-family:var(--display);font-weight:600;font-size:13px;line-height:1;color:#586A90}
+.ot .ox{font-size:14px;line-height:1.32;font-weight:560;overflow-wrap:anywhere;display:-webkit-box;-webkit-box-orient:vertical;-webkit-line-clamp:3;overflow:hidden}
+.ot.new{background:#FFF6D6;box-shadow:inset 0 0 0 2px #E8B400}
+.ot.new .on{color:#9A7600}
+.ot.new .on::before{content:"+ "}
+.ot.chg{background:#E9EDF5;box-shadow:inset 0 0 0 1.5px #586A90}
+.ot.chg-amp{background:#E2F3F2;box-shadow:inset 0 0 0 1.5px #3E8E8C}
+.ocard .kept-list{font-size:15px}
+@media (min-width:1180px){
+  .fin-l{padding-top:clamp(20px,10vh,120px)}
+}
+
+/* ---------- shorter laptop screens: the keys stay, the examples step back ---------- */
+@media (max-height:760px) and (min-width:761px){
+  .fkey{gap:6px}
+  .fkey li{font-size:14.5px;line-height:1.38}
+  .stagel .shr .fkey + .pencil{display:none}
+  .mkey{margin-bottom:10px}
+  .mk .tg{width:34px;height:34px}
+  .mhint{margin-bottom:12px}
+  .mhint .pencil{display:-webkit-box;-webkit-box-orient:vertical;-webkit-line-clamp:1;overflow:hidden}
+  .nflow{margin-bottom:16px}
+  .nflow .rl{margin-bottom:10px}
+  .nflow .rl b{font-size:40px}
+  .sf.cap .capc{min-height:0}
+  .drawl{gap:16px}
+  .drawl .mode{min-height:0;padding:10px 14px}
+  .howto{gap:12px}
+  .howto .ht{font-size:16px}
+  .drawl .dl .timer{margin-top:16px}
+}
+@media (max-height:700px) and (min-width:761px){
+  .mk .tx>span{display:none}
+  .mhint .pencil{display:none}
+  .qhint{margin-bottom:6px}
+  .nflow .rp{min-height:0;padding:8px 10px}
+  .nflow .rp .mt-t{-webkit-line-clamp:2}
+  .nflow .rl b{font-size:34px}
+  .shfields{gap:10px 18px}
+  .shfields .big{font-size:17px}
+}
+
+@media (prefers-reduced-motion:reduce){
+  .mvmenu{animation:none}
+  .reveal,.rv,.rv-t,.rv-q,.rv-n{transition:none!important}
+}
+
+/* =========================================================
+   v9, after an independent review
+   ========================================================= */
+/* the scene scrolls a focused field into view clear of the top and bottom bars */
+.scene{scroll-padding:84px 0 108px}
+
+/* the plan's line runs from the first number to the last, and draws itself once */
+.path6 .pline{position:absolute;top:21px;left:calc((100% - 5 * clamp(10px,1.4vw,22px)) / 12);right:calc((100% - 5 * clamp(10px,1.4vw,22px)) / 12);width:auto;height:2px;overflow:visible;background:var(--nightLine);transform-origin:0 50%;transform:scaleX(0);animation:lineIn 1.5s cubic-bezier(.6,0,.2,1) .25s forwards}
+@keyframes lineIn{to{transform:scaleX(1)}}
+
+/* spin: the examples in the pencil hand, in pencil ink, so they never read as the answer */
+.spinscreen .reel,.spinscreen .reel-item{color:color-mix(in srgb,var(--nightInk) 86%,var(--nightInk2))}
+@media (max-height:760px) and (min-width:601px){
+  .spinscreen .ask{font-size:clamp(32px,3.6vw,48px)}
+  .spinscreen .sub{margin-top:8px}
+  .spinscreen .reel-eg{margin-top:14px}
+  .spinscreen .reel{font-size:clamp(30px,3.4vw,46px);height:2.3em;margin-bottom:14px}
+  .spinscreen .reel-item{height:2.3em}
+  .spinscreen .lede.spin-sub{margin-top:14px;font-size:clamp(17px,1.4vw,20px)}
+}
+
+/* new steps: a quiet warm tint and their sun, so gold stays for what's chosen */
+:root{--tInv2:#FFF8E3;--mInv2:#E0B23A}
+@media (prefers-color-scheme:dark){ :root:not([data-theme="light"]){ --tInv2:rgba(255,204,0,.08); --mInv2:rgba(255,204,0,.55) } }
+:root[data-theme="dark"]{ --tInv2:rgba(255,204,0,.08); --mInv2:rgba(255,204,0,.55) }
+.sf.mv-inv .sf-card{background:var(--tInv2);box-shadow:inset 0 0 0 1.5px var(--mInv2),var(--frameShadow)}
+.sf.isnew .sf-n{color:var(--ink2);font-size:18px}
+.nflow .rp.isnew{background:var(--tInv2);box-shadow:inset 0 0 0 1.5px var(--mInv2)}
+.sf-x{margin-left:auto;position:relative;z-index:3;width:30px;height:30px;margin-top:-6px;margin-right:24px;border-radius:50%;display:grid;place-items:center;color:var(--ink2)}
+.sf-x:hover{background:var(--line);color:var(--ink)}
+.sf-x svg{width:16px;height:16px}
+
+/* typing the steps: a quiet count near the limit */
+.sf-cc{margin-right:auto;align-self:center;padding-left:6px;font-size:12.5px;font-weight:600;color:var(--ink2)}
+
+/* frames show up to six lines; the cards to question show every word */
+.sf-t{-webkit-line-clamp:6}
+.lift .sf-t{display:block;-webkit-line-clamp:unset;overflow:visible}
+
+/* picking steps to question: a picked step is outlined and ticked, at full strength */
+.mstrip.pick .mt.slot{background:var(--card);box-shadow:inset 0 0 0 2px var(--ink),0 8px 18px -12px rgba(17,26,43,.45)}
+.mstrip.pick .mt.slot.r-d{background:var(--tD)} .mstrip.pick .mt.slot.r-f{background:var(--tF)} .mstrip.pick .mt.slot.r-c{background:var(--tC)}
+.mstrip.pick .mt.slot .mt-t,.mstrip.pick .mt.slot .mt-f{opacity:1}
+.mstrip.pick .mt.slot .mt-s{display:none}
+.mstrip.pick .mt.slot::after{content:"";position:absolute;right:7px;bottom:7px;width:18px;height:18px;border:0;border-radius:50%;background:var(--ink);transform:none}
+.mstrip.pick .mt.slot::before{content:"";position:absolute;right:13.5px;bottom:11.5px;width:4px;height:8px;border:solid var(--card);border-width:0 2px 2px 0;transform:rotate(45deg);z-index:1}
+.mstrip.pick .mt.slot .mt-t{padding-right:14px}
+
+/* share it: the new workflow fills its row, so every step can be read */
+.nflow .rps{display:grid;grid-template-columns:repeat(auto-fill,minmax(150px,1fr));gap:12px;max-width:1240px}
+.nflow .rp{width:auto;max-width:none}
+@media (max-height:820px) and (min-width:761px){
+  .nflow{margin-bottom:16px}
+  .nflow .rl{margin-bottom:8px}
+  .nflow .rl b{font-size:44px}
+  .shfields{gap:12px 20px}
+  .shfields .big{font-size:clamp(18px,1.5vw,21px)}
+}
+@media (max-height:700px) and (min-width:761px){
+  .nflow .rp .mt-t{-webkit-line-clamp:3}
+}
+
+/* the story waits behind its play button: no caption or controls until it starts */
+.story:not(.started) .st-cap,.story:not(.started) .st-ctl{visibility:hidden}
+
+/* the finish: the strip holds its height while the change plays, and new steps arrive with a moment of light */
+.rv-strip{align-content:center}
+.rv.isnew{background:#FFF6DA;box-shadow:inset 0 0 0 2px #E0B23A,0 18px 34px -18px rgba(0,0,0,.7)}
+.reveal .rv.arrive{animation:arriveGlow 1.6s ease-out .2s both}
+@keyframes arriveGlow{0%{box-shadow:inset 0 0 0 2px #E0B23A,0 0 0 0 rgba(255,204,0,.55),0 18px 34px -18px rgba(0,0,0,.7)}35%{box-shadow:inset 0 0 0 2px #E0B23A,0 0 0 14px rgba(255,204,0,.2),0 18px 34px -18px rgba(0,0,0,.7)}100%{box-shadow:inset 0 0 0 2px #E0B23A,0 0 0 22px rgba(255,204,0,0),0 18px 34px -18px rgba(0,0,0,.7)}}
+
+/* the card: each change marked with its move; what was cut on one line */
+.ot .otop2{display:flex;align-items:center;justify-content:space-between;gap:6px;min-height:20px}
+.ot .og{width:22px;height:22px;flex:0 0 auto;color:#1A2234}
+.ot .og svg{width:100%;height:100%}
+.ot.new{background:#FFF8E6;box-shadow:inset 0 0 0 1.5px #E0B23A}
+.ot.new .on{color:#586A90}
+.ot.new .on::before{content:none}
+.ocard .cutl{font-size:16.5px;line-height:1.45;color:#22304A}
+@media (max-height:820px) and (min-width:1180px){
+  .ocard .oh{padding:18px 24px 20px}
+  .ocard .oh h3{font-size:clamp(20px,1.8vw,26px);margin-top:10px}
+  .ocard .ob{padding:16px 24px 20px;gap:14px}
+  .ocard .of .v{font-size:16.5px}
+  .ocard .cutl{font-size:15.5px}
+  .ot{padding:8px 10px 10px}
+  .ot .ox{font-size:13.5px}
+  .fin-l{padding-top:clamp(12px,6vh,60px)}
+}
+
+/* phones: the bottom bar is solid, so words never print under Back and Next */
+@media (max-width:600px){
+  .bar.bottom::before{background:var(--bg)}
+  body.is-night .bar.bottom::before{background:rgba(10,16,30,.97)}
+  body.on-finish .bar.bottom::before{opacity:1}
+  .rv{padding-right:30px}
+}
+
+@media (prefers-reduced-motion:reduce){
+  .path6 .pline{animation:none;transform:none}
+  .reveal .rv.arrive{animation:none}
+}
+@media (max-height:700px) and (min-width:1180px){
+  .ocard .oh{padding:14px 22px 16px}
+  .ocard .oh h3{font-size:clamp(19px,1.6vw,23px);display:-webkit-box;-webkit-box-orient:vertical;-webkit-line-clamp:2;overflow:hidden}
+  .ocard .ob{padding:12px 22px 16px;gap:10px}
+  .ocard .of .l{margin-bottom:4px}
+  .ocard .of .v{font-size:15.5px}
+  .ot .ox{-webkit-line-clamp:2}
+  .ocard .cutl{display:-webkit-box;-webkit-box-orient:vertical;-webkit-line-clamp:2;overflow:hidden}
+  .stagel .sh{margin-bottom:10px}
+}
+
+/* a field inside a frame shows focus through its frame's outline, never a second box */
+.strip8 .sf-card textarea:focus-visible,.lift textarea:focus-visible{outline:none!important}
+
 #printout{display:none}
 @media print{
 body{overflow:visible;background:#fff!important;color:#111;transition:none!important}
@@ -1753,7 +2160,7 @@ body{overflow:visible;background:#fff!important;color:#111;transition:none!impor
 
 <footer class="bar bottom" id="bottom">
   <button class="btn ghost" id="backBtn" type="button">Back</button>
-  <a class="golink" id="goLink" href="https://www.experiencepoint.com/ai-training/" target="_blank" rel="noopener" hidden><span class="gm" aria-hidden="true"><i></i><i></i><i></i></span><span class="gt"></span></a>
+  <a class="golink" id="goLink" href="https://www.experiencepoint.com/contact-us/" target="_blank" rel="noopener" hidden><span class="gm" aria-hidden="true"><i></i><i></i><i></i></span><span class="gt"></span></a>
   <button class="btn" id="nextBtn" type="button">Next</button>
 </footer>
 <div class="burn" id="burn" aria-hidden="true"><i></i></div>
@@ -1831,7 +2238,7 @@ function fresh(){
     eyeroll:"", cands:[], why:["",""], whyPick:-1, purpose:"",
     start:"", end:"", drawMode:"", photoOld:null, photoNew:null,
     frames:[], ideas:{sub:[],shr:[],amp:[],inv:[]}, newFrames:[],
-    story:"", ask:"", test:"", owner:"", when:"", nfSeeded:false, flow:[], flowSeeded:false,
+    story:"", ask:"", test:"", owner:"", when:"", nfSeeded:false, flow:[], flowSeeded:false, qpick:null, cc:true,
     votes:{}, picks:{}, ties:{}, revealed:{}
   };
 }
@@ -1854,8 +2261,11 @@ var MOVE_KEYS=["","sub","shr","amp","inv"];
 function cleanFlow(a){
   if(!Array.isArray(a)) return [];
   return a.filter(isObj).slice(0,80).map(function(x){
-    return {id:str(x.id).replace(/[^A-Za-z0-9_-]/g,"").slice(0,40)||uid(), src:str(x.src).replace(/[^A-Za-z0-9_-]/g,"").slice(0,40),
+    var o={id:str(x.id).replace(/[^A-Za-z0-9_-]/g,"").slice(0,40)||uid(), src:str(x.src).replace(/[^A-Za-z0-9_-]/g,"").slice(0,40),
       t:str(x.t).slice(0,400), mv:MOVE_KEYS.indexOf(x.mv)>-1?x.mv:"", how:str(x.how).slice(0,300)};
+    /* what was typed for Shrink and for Amplify, kept apart so switching moves never mixes them */
+    if(isObj(x.keep)) o.keep={shr:str(x.keep.shr).slice(0,300),amp:str(x.keep.amp).slice(0,300)};
+    return o;
   }).filter(function(x){ return x.src||x.mv==="inv"; });
 }
 /* screens from earlier versions, and where each one went */
@@ -1888,7 +2298,9 @@ function load(){
   if(["auto","light","dark"].indexOf(s.theme)<0) s.theme="auto";
   if(["type","sketch","act","sticky"].indexOf(s.drawMode)<0) s.drawMode="";
   if(["tesla","mlb"].indexOf(s.story)<0) s.story="";
-  s.sfx = s.sfx!==false; s.music = s.music!==false; s.nfSeeded = s.nfSeeded===true;
+  s.sfx = s.sfx!==false; s.music = s.music!==false; s.nfSeeded = s.nfSeeded===true; s.cc = s.cc!==false;
+  /* the steps the group chose to question: up to three, or null until they change the first three it flagged */
+  s.qpick = Array.isArray(s.qpick) ? s.qpick.map(function(x){ return str(x).replace(/[^A-Za-z0-9_-]/g,"").slice(0,40); }).filter(has).slice(0,3) : null;
   s.cands=cleanList(s.cands); s.frames=cleanList(s.frames,true); s.newFrames=cleanList(s.newFrames);
   if(!isObj(s.ideas)) s.ideas={};
   ["sub","shr","amp","inv"].forEach(function(k){ s.ideas[k]=cleanList(s.ideas[k]); });
@@ -1917,7 +2329,7 @@ var WHY_MAX=4;
 var S=load(); syncPurpose();
 /* Tells the shared feedback kit what it is looking at (assets/kit/feedback.js in pt). */
 (window.EPKit=window.EPKit||{}).tool={
-  id:"reimagination-lab", name:"Reimagination Lab", version:"v8", dot:"bottom-center",
+  id:"reimagination-lab", name:"Reimagination Lab", version:"v9", dot:"bottom-center",
   screen:function(){ return S.at; },
   /* The board groups comments by these, in this order: set up, the six steps, finish. */
   sections:function(){
@@ -2189,7 +2601,8 @@ var PLAY='<svg viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path 
 /* =========================================================
    SMALL COMPONENTS
    ========================================================= */
-var LINKS={ai:"https://www.experiencepoint.com/ai-training/", contact:"https://www.experiencepoint.com/contact-us/"};
+/* every next step with ExperiencePoint goes to one place: its contact page */
+var LINKS={contact:"https://www.experiencepoint.com/contact-us/"};
 function more(label,inner){ return '<details class="more"><summary><span class="pl" aria-hidden="true">+</span>'+label+'</summary><div class="mbox">'+inner+'</div></details>'; }
 /* examples and tips are written in pencil; your own work is in ink */
 function pencil(lines){ return '<div class="pencil">'+lines.map(function(l){ return '<p>'+l+'</p>'; }).join("")+'</div>'; }
@@ -2519,16 +2932,13 @@ function drawSteps(){
     ["Together",P("put them on the wall and stack the duplicates.","stack the duplicates.")],
     ["Then","arrange them in order."+E]];
 }
-/* what Judge it found */
-function hots(){ return filled(S.frames).filter(function(x){ return x.r==="f"||x.r==="c"; }); }
-function hotFirst(){ var h=hots(); for(var i=0;i<h.length;i++) if(h[i].nec==="inh") return h[i]; return h[0]||null; }
 function byReact(k){ return filled(S.frames).filter(function(x){ return x.r===k; }); }
-/* the four moves, as tools that act on the workflow's steps */
+/* the four moves: pick a step, then the move to make on it */
 var MOVES=[
-  {k:"sub",name:"Subtract",q:"What should disappear?",ex:"Drop the 12 pages nobody discusses. Tesla deleted the mats.",hint:"Select a step to cut it. Select it again to bring it back."},
-  {k:"shr",name:"Shrink",q:"What deserves far less effort?",ex:"Let AI pull the numbers from all three systems.",hint:"Select a step to shrink it, then say how. Work like this is often a job for AI.",how:"How does it get smaller?"},
-  {k:"amp",name:"Amplify",q:"Where should you spend more energy?",ex:"Give the Monday call more time on the riskiest deals.",hint:"Select a step to give it more room, then say how.",how:"How does it grow?"},
-  {k:"inv",name:"Invent",q:"What is newly possible with AI?",ex:"An alert the day a deal stalls. MLB added the challenge.",hint:"Select the step your new idea comes after.",how:"What happens here?"}
+  {k:"sub",name:"Subtract",q:"What should disappear?",ex:"Drop the 12 pages nobody discusses. Tesla deleted the mats.",menu:"Cut this step",done:"cut"},
+  {k:"shr",name:"Shrink",q:"What deserves far less effort?",ex:"Let AI pull the numbers from all three systems.",menu:"Far less effort, often with AI",how:"How does it get smaller?",done:"shrunk"},
+  {k:"amp",name:"Amplify",q:"Where should you spend more energy?",ex:"Give the Monday call more time on the riskiest deals.",menu:"More time and energy here",how:"How does it grow?",done:"amplified"},
+  {k:"inv",name:"Invent",q:"What is newly possible with AI?",ex:"An alert the day a deal stalls. MLB added the challenge.",menu:"Add a new step after it",how:"What happens here?",done:"new"}
 ];
 var MV={}; MOVES.forEach(function(m){ MV[m.k]=m; });
 function grabLine(){
@@ -2537,22 +2947,26 @@ function grabLine(){
     : "paper and a pen each. When you share your screen, tick Share sound";
   return "Before you start, grab "+l+".";
 }
-/* the workshop that goes further, one quiet line in the bottom bar, apart from the activity */
+/* the workshop that goes further, one quiet line in the bottom bar, apart from the activity.
+   It opens ExperiencePoint's contact page, so the words say "ask us" */
 var GO={
-  plan:["New to AI? Start with ","Building AI Confidence",", an ExperiencePoint workshop"],
-  1:["Take this further in ","Finding AI Use Cases",", an ExperiencePoint workshop"],
-  2:["Take this further in ","Finding AI Use Cases",", an ExperiencePoint workshop"],
-  3:["Take this further in ","Finding AI Use Cases",", an ExperiencePoint workshop"],
-  4:["Take this further in ","Driving AI Innovation",", an ExperiencePoint workshop"],
-  5:["Take this further in ","Driving AI Innovation",", an ExperiencePoint workshop"],
-  6:["Take this further in ","Communicating AI Strategy",", an ExperiencePoint workshop"]
+  plan:["New to AI? Ask us about ","Building AI Confidence","."],
+  1:["Take this further: ask us about ","Finding AI Use Cases","."],
+  2:["Take this further: ask us about ","Finding AI Use Cases","."],
+  3:["Take this further: ask us about ","Finding AI Use Cases","."],
+  4:["Take this further: ask us about ","Driving AI Innovation","."],
+  5:["Take this further: ask us about ","Driving AI Innovation","."],
+  6:["Take this further: ask us about ","Communicating AI Strategy","."]
 };
+/* what each face means, and what each answer to "necessary or inherited?" means */
+var FACE_DEF={d:"it works and is worth protecting.",f:"it costs effort, delay or repetition.",c:"nobody’s sure why it’s there."};
 /* =========================================================
    THE STRIP: the group's workflow as a row of frames that
    stays on screen from Draw it to Share it. Judge stamps a face
    on each frame, Inherited seals the ones nobody can explain,
-   the four moves cut, shrink, grow and add frames, and Share it
-   replays the change. Frames hold the group's full words.
+   the four moves change the frames in place, and the finish
+   plays today's workflow turning into the new one.
+   Frames hold the group's full words.
    ========================================================= */
 /* the sounds of the strip: a stamp, a snip, a shrink, a grow and a spark */
 SFX.stamp=function(a,t){ var o=a.createOscillator(), g=a.createGain(); o.type="sine"; o.frequency.setValueAtTime(210,t); o.frequency.exponentialRampToValueAtTime(70,t+.14); g.gain.setValueAtTime(.0001,t); g.gain.exponentialRampToValueAtTime(.2,t+.008); g.gain.exponentialRampToValueAtTime(.0001,t+.2); o.connect(g); g.connect(sfxBus); o.start(t); o.stop(t+.24); noise(t,.05,.045,1800,600); };
@@ -2562,8 +2976,15 @@ SFX.grow=function(a,t){ [494,660,880].forEach(function(f,i){ tone(f,t+i*.07,.18,
 SFX.spark=function(a,t){ [1568,2093,2637].forEach(function(f,i){ tone(f,t+i*.06,.3+i*.05,"sine",.055-i*.012); }); };
 var FACES=[["d","😍","Delighted"],["f","😤","Frustrated"],["c","🤔","Confused"]];
 var FACE={}; FACES.forEach(function(f){ FACE[f[0]]={e:f[1],n:f[2]}; });
+/* the steps judging flagged, and the ones the group chose to question */
 function hots(){ return filled(S.frames).filter(function(x){ return x.r==="f"||x.r==="c"; }); }
-function hotFirst(){ var h=hots(); for(var i=0;i<h.length;i++) if(h[i].nec==="inh") return h[i]; return h[0]||null; }
+function qList(){
+  var all=filled(S.frames);
+  if(Array.isArray(S.qpick)){ var on={}; S.qpick.forEach(function(id){ on[id]=1; }); return all.filter(function(x){ return on[x.id]; }).slice(0,3); }
+  return hots().slice(0,3);
+}
+function hotFirst(){ var h=qList(); for(var i=0;i<h.length;i++) if(h[i].nec==="inh") return h[i]; return h[0]||null; }
+function inStripOrder(ids){ var at={}; filled(S.frames).forEach(function(f,i){ at[f.id]=i; }); return ids.filter(function(id){ return id in at; }).sort(function(a,b){ return at[a]-at[b]; }); }
 function frameOf(id){ for(var i=0;i<S.frames.length;i++) if(S.frames[i].id===id) return S.frames[i]; return null; }
 function flowItem(id){ for(var i=0;i<S.flow.length;i++) if(S.flow[i].id===id) return S.flow[i]; return null; }
 /* balanced rows: nine frames sit as five and four, never eight and one */
@@ -2571,6 +2992,8 @@ function balance(n,max){ if(n<1) return 1; return Math.ceil(n/Math.ceil(n/max));
 /* the strip's list, set for balanced rows; each frame that ends a row gets no arrow to the next */
 function stripOpen(cls,n,max){ return '<ol class="strip8 '+cls+'" data-feedback-private style="--per:'+balance(n,max)+';--per2:'+balance(n,2)+'">'; }
 function rowEnd(i,n,max){ var per=balance(n,max); return (i%per===per-1||i===n-1)?' re':''; }
+/* a laptop fits six frames to a row, a smaller window five, so a strip stays in two rows where it can */
+function stripMax(){ return (window.innerWidth||1400)>=1240?6:5; }
 
 /* keeps the reimagined workflow in step with today's: new steps slot in, removed ones leave,
    reordered ones follow, and anything new stays after the step it was added after */
@@ -2604,6 +3027,11 @@ function matchSets(){
   });
   return {olds:olds,news:news,cut:cut,nw:nw,ch:ch,nCut:Object.keys(cut).length,nNew:Object.keys(nw).length,nCh:Object.keys(ch).length};
 }
+/* how the step count moved, in plain words: "6 steps, down from 9" */
+function stepCount(m){
+  var a=m.olds.length, b=m.news.length; if(!b) return "";
+  return plural(b,"step","steps")+(a&&a!==b?", "+(b<a?"down":"up")+" from "+a:"");
+}
 /* what changed, in words, for the card, the printout and the email */
 function cardChanges(){
   var out=[];
@@ -2618,6 +3046,7 @@ function cardChanges(){
   return {label:T("What we changed","What I changed"), list:out};
 }
 function moveCount(k){ return S.flow.filter(function(x){ return x.mv===k&&(k!=="inv"||has(x.t)); }).length; }
+function anyMoves(){ return S.flow.some(function(x){ return x.mv&&(x.mv!=="inv"||has(x.t)); }); }
 
 /* ---------- the pieces of a frame ---------- */
 function fNum(n){ return '<span class="sf-n">'+n+'</span>'; }
@@ -2626,29 +3055,42 @@ function fFace(r,fresh){ return r&&FACE[r]?'<span class="stamp'+(fresh?' fresh':
 function fSeal(nec,fresh){ return nec?'<span class="seal '+nec+(fresh?' fresh':'')+'">'+(nec==="inh"?"Inherited":"Necessary")+'</span>':''; }
 var lastFx=null;   /* the frame that just changed, so its animation plays once */
 function fxOn(id,k){ return lastFx&&lastFx.id===id&&lastFx.k===k; }
+/* a short key, in plain words, for the marks a screen uses */
+function faceKey(){ return '<ul class="fkey">'+FACES.map(function(f){ return '<li><span class="fe" aria-hidden="true">'+f[1]+'</span><span><b>'+f[2]+':</b> '+FACE_DEF[f[0]]+'</span></li>'; }).join("")+'</ul>'; }
+function necKey(){ return '<ul class="fkey nkey"><li><span class="nk need" aria-hidden="true"></span><span><b>Necessary:</b> the real purpose needs it.</span></li><li><span class="nk inh" aria-hidden="true"></span><span><b>Inherited:</b> it’s done because it always has been.</span></li></ul>'; }
 
-/* ---------- Draw it: the steps become frames as they're typed ---------- */
+/* ---------- Draw it: the steps become frames as they're typed, between where the workflow starts and ends ---------- */
+function capCell(k,text){ return '<div class="capc"><span class="cl">'+(k==="start"?"It starts when":"It ends when")+'</span><span class="ct">'+esc(clipWords(text,110))+'</span></div>'; }
 function captureStrip(){
-  var arr=S.frames, n=arr.length+1, h=stripOpen("edit",n,5);
-  arr.forEach(function(f,i){
-    var lab='step '+(i+1);
-    h+='<li class="sf'+(seen[f.id]?'':' fresh')+(movedId===f.id?' moved':'')+(i===arr.length-1?' re':rowEnd(i,n,5))+'" data-fid="'+esc(f.id)+'"><div class="sf-card">'+fNum(i+1)+
-      '<textarea class="sf-in" rows="2" maxlength="120" data-bstep="frames" data-id="'+esc(f.id)+'" placeholder="What happens at this step?" aria-label="Step '+(i+1)+'">'+esc(f.t)+'</textarea>'+
-      '<span class="sf-ctl">'+
+  var arr=S.frames, cells=[];
+  if(has(S.start)) cells.push({k:"start"});
+  arr.forEach(function(f,i){ cells.push({k:"step",f:f,i:i}); });
+  cells.push({k:"add"});
+  if(has(S.end)) cells.push({k:"end"});
+  /* with its start and end on the strip, a row can hold six, so the steps stay in two rows on a laptop */
+  var n=cells.length, mx=cells.length>arr.length+1?6:stripMax(), h=stripOpen("edit",n,mx);
+  cells.forEach(function(c,j){
+    var re=rowEnd(j,n,mx);
+    if(c.k==="start"||c.k==="end"){ h+='<li class="sf cap '+c.k+re+'">'+capCell(c.k,c.k==="start"?S.start:S.end)+'</li>'; return; }
+    if(c.k==="add"){ h+='<li class="sf addf re"><button type="button" class="sf-add" data-act="sadd" data-path="frames"><span class="pl" aria-hidden="true">+</span>Add a step</button></li>'; return; }
+    var f=c.f, i=c.i, lab='step '+(i+1);
+    h+='<li class="sf'+(seen[f.id]?'':' fresh')+(movedId===f.id?' moved':'')+re+'" data-fid="'+esc(f.id)+'"><div class="sf-card">'+fNum(i+1)+
+      '<textarea class="sf-in" rows="2" maxlength="200" data-bstep="frames" data-id="'+esc(f.id)+'" placeholder="What happens at this step?" aria-label="Step '+(i+1)+'">'+esc(f.t)+'</textarea>'+
+      '<span class="sf-ctl"><span class="sf-cc" aria-hidden="true">'+(f.t.length>=170?(200-f.t.length)+" left":"")+'</span>'+
         '<button type="button" data-act="sup" data-path="frames" data-id="'+esc(f.id)+'" aria-label="Move '+lab+' earlier"'+(i?'':' disabled')+'>'+ICON.left+'</button>'+
         '<button type="button" data-act="sdown" data-path="frames" data-id="'+esc(f.id)+'" aria-label="Move '+lab+' later"'+(i<arr.length-1?'':' disabled')+'>'+ICON.right+'</button>'+
         '<button type="button" data-act="sdel" data-path="frames" data-id="'+esc(f.id)+'" aria-label="Remove '+lab+'">'+ICON.x+'</button>'+
       '</span></div></li>';
   });
-  return h+'<li class="sf addf re"><button type="button" class="sf-add" data-act="sadd" data-path="frames"><span class="pl" aria-hidden="true">+</span>Add a step</button></li></ol>';
+  return h+'</ol>';
 }
 
 /* ---------- Judge it: one face per frame, stamped on ---------- */
 function judgeStrip(){
   var f=filled(S.frames); if(!f.length) return emptyBox("Go back to Draw it and add your steps first.");
-  var h=stripOpen("judge",f.length,5);
+  var mx=stripMax(), h=stripOpen("judge",f.length,mx);
   f.forEach(function(x,i){
-    h+='<li class="sf'+(x.r?' r-'+x.r:'')+rowEnd(i,f.length,5)+'" data-fid="'+esc(x.id)+'"><div class="sf-card">'+fNum(i+1)+fFace(x.r,fxOn(x.id,"face"))+fText(x.t)+
+    h+='<li class="sf'+(x.r?' r-'+x.r:'')+rowEnd(i,f.length,mx)+'" data-fid="'+esc(x.id)+'"><div class="sf-card">'+fNum(i+1)+fFace(x.r,fxOn(x.id,"face"))+fText(x.t)+
       '<span class="sf-faces" role="radiogroup" aria-label="How does step '+(i+1)+' feel?">'+
       FACES.map(function(b,k){ var on=x.r===b[0], tab=x.r?on:k===0; return '<button class="fb '+b[0]+(on?' on':'')+'" type="button" role="radio" data-act="react" data-id="'+esc(x.id)+'" data-k="'+b[0]+'" aria-checked="'+on+'" aria-label="'+b[2]+'" title="'+b[2]+'"'+(tab?'':' tabindex="-1"')+'>'+b[1]+'</button>'; }).join("")+
       '</span></div></li>';
@@ -2656,13 +3098,15 @@ function judgeStrip(){
   return h+'</ol>';
 }
 
-/* ---------- Necessary, or inherited?: the frames to question lift out of the strip ---------- */
+/* ---------- Necessary, or inherited?: the group picks up to three frames, and they lift out of the strip ---------- */
 function inheritView(){
-  var all=filled(S.frames), h=hots(); if(!h.length) return emptyBox("Nothing marked frustrating or confusing yet. Go back a screen, or move on.");
-  var top=h.slice(0,3), up={}; top.forEach(function(x){ up[x.id]=1; });
-  var mini='<ol class="mstrip'+(all.length>10?' wrap':'')+'" data-feedback-private aria-label="Today’s workflow">'+all.map(function(x,i){
-    return '<li class="mt'+(x.r?' r-'+x.r:'')+(up[x.id]?' slot':'')+'" data-mt="'+esc(x.id)+'"><span class="mt-n">'+(i+1)+'</span><span class="mt-t">'+esc(x.t)+'</span>'+(x.r&&FACE[x.r]?'<span class="mt-f" aria-hidden="true">'+FACE[x.r].e+'</span>':'')+(x.nec==="inh"?'<span class="mt-s" aria-hidden="true"></span>':'')+'</li>';
+  var all=filled(S.frames); if(!all.length) return emptyBox("Go back to Draw it and add your steps first.");
+  var top=qList(), up={}; top.forEach(function(x){ up[x.id]=1; });
+  var mini='<p class="qhint" id="qhint">Select up to three steps to question.</p><ol class="mstrip pick'+(all.length>10?' wrap':'')+'" data-feedback-private aria-describedby="qhint">'+all.map(function(x,i){
+    var on=!!up[x.id];
+    return '<li class="mtw"><button type="button" class="mt'+(x.r?' r-'+x.r:'')+(on?' slot':'')+'" data-act="qpick" data-id="'+esc(x.id)+'" data-mt="'+esc(x.id)+'" aria-pressed="'+on+'"><span class="mt-n">'+(i+1)+'</span><span class="mt-t">'+esc(x.t)+'</span>'+(x.r&&FACE[x.r]?'<span class="mt-f" role="img" aria-label="'+FACE[x.r].n+'">'+FACE[x.r].e+'</span>':'')+(x.nec==="inh"?'<span class="mt-s" aria-hidden="true"></span>':'')+'</button></li>';
   }).join("")+'</ol>';
+  if(!top.length) return mini+'<p class="hint nolift">Pick a step above to question it.</p>';
   var cards='<div class="lifts n'+top.length+'" data-feedback-private>'+top.map(function(x){
     var n=all.indexOf(x)+1;
     return '<div class="lift'+(x.nec?' nec-'+x.nec:'')+'" data-fid="'+esc(x.id)+'"><div class="sf-card"><div class="sf-top">'+fNum(n)+fSeal(x.nec,fxOn(x.id,"seal"))+'</div>'+fFace(x.r)+
@@ -2671,98 +3115,253 @@ function inheritView(){
       '<div class="nec" role="radiogroup" aria-label="Necessary or inherited?">'+[["need","Necessary"],["inh","Inherited"]].map(function(o,k){ var on=x.nec===o[0], tab=x.nec?on:k===0; return '<button type="button" role="radio" class="'+o[0]+(on?' on':'')+'" data-act="nec" data-id="'+esc(x.id)+'" data-v="'+o[0]+'" aria-checked="'+on+'"'+(tab?'':' tabindex="-1"')+'>'+o[1]+'</button>'; }).join("")+'</div>'+
       '</div></div>';
   }).join("")+'</div>';
-  return mini+cards+(h.length>3?'<p class="hint more3">'+plural(h.length-3,"more step is","more steps are")+' marked. Start with these three.</p>':'');
+  return mini+cards;
 }
-/* the lifted frames rise from their place in the strip the first time the screen opens */
-function liftPlay(el){
+/* the lifted frames rise from their place in the strip: all of them the first time, or just the one picked */
+function liftPlay(el,only){
   if(rm()) return;
   $$(".lift",el).forEach(function(c,i){
-    var id=c.getAttribute("data-fid"), slot=$('.mt[data-mt="'+id+'"]',el); if(!slot) return;
+    var id=c.getAttribute("data-fid"); if(only&&id!==only) return;
+    var slot=$('.mt[data-mt="'+id+'"]',el); if(!slot) return;
     var a=slot.getBoundingClientRect(), b=c.getBoundingClientRect(); if(!a.width||!b.width) return;
+    var k=only?0:i;
     c.style.transformOrigin="0 0"; c.style.transition="none";
     c.style.transform="translate("+(a.left-b.left)+"px,"+(a.top-b.top)+"px) scale("+(a.width/b.width).toFixed(3)+","+(a.height/b.height).toFixed(3)+")"; c.style.opacity="0";
     void c.offsetWidth;
-    setTimeout(function(){ if(!c.isConnected) return; c.style.transition="transform .8s var(--spring), opacity .45s ease"; c.style.transform=""; c.style.opacity=""; sfx("pop"); },180+i*140);
-    setTimeout(function(){ if(c.isConnected){ c.style.transition=""; c.style.transformOrigin=""; } },1200+i*140);
+    setTimeout(function(){ if(!c.isConnected) return; c.style.transition="transform .8s var(--spring), opacity .45s ease"; c.style.transform=""; c.style.opacity=""; sfx("pop"); },(only?40:180)+k*140);
+    setTimeout(function(){ if(c.isConnected){ c.style.transition=""; c.style.transformOrigin=""; } },(only?1000:1200)+k*140);
   });
 }
+/* picking a step to question, or putting one back */
+function qToggle(id){
+  var ids=qList().map(function(x){ return x.id; }), at=ids.indexOf(id);
+  if(at>-1){
+    var f=frameOf(id), was=f?{why:f.why,nec:f.nec}:null, had=f&&(has(f.why)||f.nec);
+    ids.splice(at,1); S.qpick=ids; if(f){ f.why=""; f.nec=""; } save(); sfx("tick"); flip(refresh);
+    if(had) toast("Step put back.","Undo",function(){ var now=qList().map(function(x){ return x.id; }); if(now.length<3&&now.indexOf(id)<0){ now.push(id); S.qpick=inStripOrder(now); } if(f&&was){ f.why=was.why; f.nec=was.nec; } save(); refresh(); },5000);
+    return;
+  }
+  if(ids.length>=3){ var m=$(".mstrip.pick",curEl); if(m){ m.classList.remove("nudge"); void m.offsetWidth; m.classList.add("nudge"); } toast("Three at most. Select a picked step to put it back."); sfx("tick"); return; }
+  ids.push(id); S.qpick=inStripOrder(ids); save(); sfx("select");
+  flip(function(){ refresh('[data-act="qpick"][data-id="'+id+'"]'); });
+  liftPlay(curEl,id);
+}
 
-/* ---------- Reimagine it: the four moves are tools that act on the frames ---------- */
-var armed;   /* the move in hand: starts on the story the group picked */
+/* ---------- Reimagine it: select a step, then pick the move to make on it ---------- */
+var mvOpen=null;   /* the step whose menu of moves is open */
 function storyMove(){ return S.story==="tesla"?"sub":S.story==="mlb"?"inv":""; }
+function hitSel(id){ return '[data-act="mvopen"][data-id="'+id+'"]'; }
+function mvItem(x,k,role,label,desc,icon){
+  var on=role==="menuitemradio"&&x.mv===k;
+  return '<button type="button" role="'+role+'"'+(role==="menuitemradio"?' aria-checked="'+on+'"':'')+' class="mi mi-'+k+(on?' on':'')+'" data-act="mv" data-v="'+k+'" data-id="'+esc(x.id)+'" tabindex="-1">'+
+    '<span class="mg">'+icon+'</span><span class="mx"><b>'+label+'</b>'+(desc?'<span>'+desc+'</span>':'')+'</span>'+(role==="menuitemradio"?'<span class="mc" aria-hidden="true">'+ICON.tick+'</span>':'')+'</button>';
+}
+function mvMenu(x,lab,end){
+  var h=[];
+  if(x.src){
+    ["sub","shr","amp"].forEach(function(k){ h.push(mvItem(x,k,"menuitemradio",MV[k].name,MV[k].menu,GLYPH[k])); });
+    h.push(mvItem(x,"inv","menuitem",MV.inv.name,MV.inv.menu,GLYPH.inv));
+    if(x.mv) h.push('<span class="msep" role="separator"></span>'+mvItem(x,"none","menuitem","Leave it as it was","",ICON.undo));
+  } else {
+    h.push(mvItem(x,"inv","menuitem","Add another new step","After this one",GLYPH.inv));
+    h.push('<span class="msep" role="separator"></span>'+mvItem(x,"del","menuitem","Remove this new step","",ICON.x));
+  }
+  return '<div class="mvmenu'+(end?' end':'')+'" role="menu" aria-label="Change '+lab+'">'+h.join("")+'</div>';
+}
 function movesView(){
-  flowSync(); if(armed===undefined) armed=storyMove()||null;
+  flowSync();
   var from=storyMove();
-  var tools='<div class="tools8" role="radiogroup" aria-label="The four moves">'+MOVES.map(function(m,k){
-    var on=armed===m.k, n=moveCount(m.k), tab=armed?on:k===0;
-    return '<button type="button" class="tool t-'+m.k+(on?' on':'')+(from===m.k?' from':'')+'" role="radio" aria-checked="'+on+'" data-act="tool" data-v="'+m.k+'"'+(tab?'':' tabindex="-1"')+'>'+
-      '<span class="tg">'+GLYPH[m.k]+'</span><span class="tx"><b>'+m.name+(n?' <i class="tn">'+n+'</i>':'')+'</b><span>'+m.q+'</span></span></button>';
-  }).join("")+'</div>';
-  var m=armed&&MV[armed];
-  var panel='<div class="armed" aria-live="polite">'+(m?'<p class="ah">'+(from===m.k?'You said more '+(S.story==="tesla"?"Tesla":"MLB")+', so start here. ':'')+m.hint+'</p>'+pencil([eg(m.ex)]):'<p class="ah">Pick a move, then select a step.</p>')+'</div>';
-  var n=0, N=S.flow.length, frames=S.flow.map(function(x,i){
-    var f=x.src?frameOf(x.src):null, num=x.src?(++n):'+', lab=x.src?"step "+n:"the new step";
-    var cls='sf mv-'+(x.mv||'none')+(x.src?'':' isnew')+(f&&f.r?' r-'+f.r:'')+rowEnd(i,N,5)+(x.mv&&fxOn(x.id,x.mv)?' play':'')+(x.mv||!x.src?'':(armed?' armable':''));
+  var key='<ul class="mkey" aria-label="The four moves">'+MOVES.map(function(m){ return '<li class="mk t-'+m.k+'"><span class="tg">'+GLYPH[m.k]+'</span><span class="tx"><b>'+m.name+'</b><span>'+m.q+'</span></span></li>'; }).join("")+'</ul>';
+  var hint=from?'<div class="mhint">'+pencil([eg(MV[from].ex)])+'</div>':'';
+  var n=0, N=S.flow.length, mx=stripMax(), per=balance(N,mx), frames=S.flow.map(function(x,i){
+    var f=x.src?frameOf(x.src):null, num=x.src?(++n):'+', lab=x.src?"step "+n:"the new step", open=mvOpen===x.id;
+    var cls='sf mv-'+(x.mv||'none')+(x.src?'':' isnew')+(f&&f.r?' r-'+f.r:'')+rowEnd(i,N,mx)+(x.mv&&fxOn(x.id,x.mv)?' play':'')+(fxOn(x.id,"back")?' back':'')+(open?' open':'');
     var badge=x.mv?'<span class="mvb b-'+x.mv+'" aria-hidden="true">'+GLYPH[x.mv]+'</span>':'';
     var body;
-    if(x.mv==="inv"&&!x.src) body='<textarea class="sf-in" rows="2" maxlength="160" data-ftext="'+esc(x.id)+'" placeholder="'+MV.inv.how+'" aria-label="The new step">'+esc(x.t)+'</textarea>';
+    if(!x.src) body='<textarea class="sf-in" rows="2" maxlength="200" data-ftext="'+esc(x.id)+'" placeholder="'+MV.inv.how+'" aria-label="The new step">'+esc(x.t)+'</textarea>';
     else body=fText(x.t)+((x.mv==="shr"||x.mv==="amp")?'<textarea class="sf-how" rows="2" maxlength="200" data-fhow="'+esc(x.id)+'" placeholder="'+MV[x.mv].how+'" aria-label="'+MV[x.mv].how+'">'+esc(x.how)+'</textarea>':'');
-    var hit = x.mv==="sub" ? '<button type="button" class="sf-hit" data-act="apply" data-id="'+esc(x.id)+'" aria-label="Bring back '+lab+'"></button>'
-      : (!x.mv ? '<button type="button" class="sf-hit" data-act="apply" data-id="'+esc(x.id)+'" aria-label="'+(armed?MV[armed].name+' '+lab:'Select '+lab)+'"></button>' : '');
-    var undo=(x.mv&&x.mv!=="sub")?'<button type="button" class="sf-undo" data-act="unmove" data-id="'+esc(x.id)+'" aria-label="'+(x.src?'Undo '+MV[x.mv].name.toLowerCase()+' on '+lab:'Remove the new step')+'">'+ICON.x+'</button>':'';
-    var top='<div class="sf-top">'+fNum(num)+(f&&f.r&&FACE[f.r]?'<span class="sf-fe" role="img" aria-label="'+FACE[f.r].n+'">'+FACE[f.r].e+'</span>':'')+(f&&f.nec==="inh"?'<span class="seal inh sm">Inherited</span>':'')+'</div>';
-    return '<li class="'+cls+'" data-fid="'+esc(x.id)+'"><div class="sf-card">'+top+badge+body+undo+hit+'</div></li>';
+    var state=x.src?(x.mv?", "+MV[x.mv].done:""):"";
+    var hit='<button type="button" class="sf-hit" data-act="mvopen" data-id="'+esc(x.id)+'" aria-haspopup="menu" aria-expanded="'+open+'" aria-label="Change '+lab+state+'"></button>';
+    var top='<div class="sf-top">'+fNum(num)+(f&&f.r&&FACE[f.r]?'<span class="sf-fe" role="img" aria-label="'+FACE[f.r].n+'">'+FACE[f.r].e+'</span>':'')+(f&&f.nec==="inh"?'<span class="seal inh sm">Inherited</span>':'')+
+      (x.src?'':'<button type="button" class="sf-x" data-act="mv" data-v="del" data-id="'+esc(x.id)+'" aria-label="Remove the new step">'+ICON.x+'</button>')+'</div>';
+    return '<li class="'+cls+'" data-fid="'+esc(x.id)+'"><div class="sf-card">'+top+badge+body+hit+'</div>'+(open?mvMenu(x,lab,(i%per)>=per/2):'')+'</li>';
   });
-  return tools+panel+stripOpen("moves"+(armed?' armed-'+armed:''),frames.length,5)+frames.join("")+'</ol>';
+  return key+hint+stripOpen("moves",frames.length,mx)+frames.join("")+'</ol>';
 }
 var MOVE_SFX={sub:"snip",shr:"shrink",amp:"grow",inv:"spark"};
-function applyMove(id){
-  var x=flowItem(id); if(!x) return;
-  if(x.mv==="sub"){ x.mv=""; lastFx={id:x.id,k:"back"}; save(); sfx("pop"); refresh(); return; }
-  if(x.mv) return;
-  if(!armed){ var t=$(".tools8",curEl); if(t){ t.classList.remove("nudge"); void t.offsetWidth; t.classList.add("nudge"); } toast("Pick a move first."); sfx("tick"); return; }
-  if(armed==="inv"){
-    var at=S.flow.indexOf(x), nx={id:uid(),src:"",t:"",mv:"inv",how:""}; S.flow.splice(at+1,0,nx);
-    lastFx={id:nx.id,k:"inv"}; save(); sfx("spark"); refresh('[data-ftext="'+nx.id+'"]');
-    setTimeout(function(){ var c=$('.sf[data-fid="'+nx.id+'"] .sf-card',curEl); if(c) burstAt(c,22,.45); },120); return;
-  }
-  x.mv=armed; lastFx={id:x.id,k:armed}; save(); sfx(MOVE_SFX[armed]);
-  if(armed==="sub"){ refresh(); var ref=x; toast("Step cut.","Undo",function(){ ref.mv=""; save(); refresh(); },5000); }
-  else refresh('[data-fhow="'+x.id+'"]');
+function bring(sel){ var x=sel&&$(sel,curEl); if(x&&x.scrollIntoView){ try{ x.scrollIntoView({block:"nearest"}); }catch(e){} } }
+/* new steps nobody wrote anything in leave when the group moves on */
+function pruneEmptyNew(){ var n=S.flow.length; S.flow=S.flow.filter(function(x){ return x.src||has(x.t); }); if(S.flow.length!==n) save(); }
+function openMv(id){
+  var was=mvOpen; mvOpen = was===id ? null : id;
+  if(!mvOpen){ sfx("tick"); refresh(hitSel(id)); return; }
+  var x=flowItem(id); sfx("select");
+  refresh(x&&x.src&&x.mv&&x.mv!=="inv" ? '.mvmenu .mi[data-v="'+x.mv+'"]' : '.mvmenu .mi');
 }
-function unMove(id){
+function closeMv(refocus){ var id=mvOpen; if(!id) return; mvOpen=null; refresh(refocus?hitSel(id):null); }
+/* on a laptop the menu opens beside its step, so the step and the key of moves stay in view;
+   on a narrow screen it opens below the step, or above it when there's no room below */
+function placeMv(el){
+  var m=$(".mvmenu",el); if(!m||!m.getBoundingClientRect) return;
+  var li=m.parentNode, f=li.getBoundingClientRect(), r=m.getBoundingClientRect(); if(!r.height||!f.width) return;
+  var bar=$("#bottom"), limit=(bar&&!bar.hidden?bar.getBoundingClientRect().top:innerHeight)-10, top0=76, gap=12;
+  if(innerWidth>880){
+    var toR=f.right+gap+r.width<=innerWidth-16, toL=f.left-gap-r.width>=16;
+    if(toR||toL){
+      m.classList.add("side",toR?"to-r":"to-l");
+      m.style.top="0px"; m.style.bottom="auto";
+      if(toR){ m.style.left="calc(100% + "+gap+"px)"; m.style.right="auto"; } else { m.style.right="calc(100% + "+gap+"px)"; m.style.left="auto"; }
+      var q=m.getBoundingClientRect(), shift=0;
+      if(q.bottom>limit) shift=limit-q.bottom;
+      if(q.top+shift<top0) shift=top0-q.top;
+      if(shift) m.style.top=Math.round(shift)+"px";
+      return;
+    }
+  }
+  if(r.bottom>limit){
+    m.classList.add("up"); var u=m.getBoundingClientRect();
+    if(u.top<64){ m.classList.remove("up"); try{ m.scrollIntoView({block:"nearest"}); }catch(e){} }
+  }
+}
+function applyMv(id,v){
   var x=flowItem(id); if(!x) return;
-  if(!x.src){ var at=S.flow.indexOf(x), gone=S.flow.splice(at,1)[0]; save(); sfx("tick"); refresh(); toast("New step removed.","Undo",function(){ S.flow.splice(Math.min(at,S.flow.length),0,gone); save(); refresh(); },5000); return; }
-  var was={mv:x.mv,how:x.how}; x.mv=""; x.how=""; save(); sfx("tick"); refresh();
-  toast("Move undone.","Undo",function(){ x.mv=was.mv; x.how=was.how; save(); refresh(); },5000);
+  mvOpen=null;
+  if(v==="inv"){
+    var at=S.flow.indexOf(x), nx={id:uid(),src:"",t:"",mv:"inv",how:""}; S.flow.splice(at+1,0,nx);
+    lastFx={id:nx.id,k:"inv"}; save(); sfx("spark"); refresh('[data-ftext="'+nx.id+'"]'); bring('[data-ftext="'+nx.id+'"]');
+    setTimeout(function(){ var c=$('.sf[data-fid="'+nx.id+'"] .sf-card',curEl); if(c) burstAt(c,22,.45); },120);
+    toast("New step added.","Undo",function(){ var k=S.flow.indexOf(nx); if(k>-1) S.flow.splice(k,1); save(); refresh(); },5000); return;
+  }
+  if(v==="del"){
+    if(x.src) return; var at2=S.flow.indexOf(x), gone=S.flow.splice(at2,1)[0]; save(); sfx("tick"); refresh();
+    toast("New step removed.","Undo",function(){ S.flow.splice(Math.min(at2,S.flow.length),0,gone); save(); refresh(); },5000); return;
+  }
+  if(!x.src) return;
+  var was={mv:x.mv,how:x.how,keep:x.keep?{shr:x.keep.shr,amp:x.keep.amp}:null};
+  var restore=function(){ x.mv=was.mv; x.how=was.how; x.keep=was.keep; save(); refresh(); };
+  /* Shrink and Amplify each keep their own answer, so changing your mind never carries words to the wrong move */
+  var stash=function(){ if((x.mv==="shr"||x.mv==="amp")&&has(x.how)){ x.keep=x.keep||{shr:"",amp:""}; x.keep[x.mv]=x.how; } };
+  if(v==="none"){
+    if(!x.mv){ refresh(hitSel(x.id)); return; }
+    stash(); x.mv=""; x.how=""; lastFx={id:x.id,k:"back"}; save(); sfx("pop"); refresh(hitSel(x.id));
+    toast("Back to how it was.","Undo",restore,5000); return;
+  }
+  if(x.mv===v){ refresh(v==="sub"?hitSel(x.id):'[data-fhow="'+x.id+'"]'); return; }
+  stash(); x.mv=v; x.how=(v==="shr"||v==="amp")&&x.keep?(x.keep[v]||""):""; lastFx={id:x.id,k:v}; save(); sfx(MOVE_SFX[v]);
+  if(v==="sub"){ refresh(hitSel(x.id)); toast("Step cut.","Undo",restore,5000); }
+  else { refresh('[data-fhow="'+x.id+'"]'); bring('[data-fhow="'+x.id+'"]'); }
 }
 
-/* ---------- Share it: today's workflow turns into the new one ---------- */
-function replayHTML(){
-  var m=matchSets(); if(!m.olds.length) return '<p class="hint">Draw today’s workflow first, and you’ll see it change here.</p>';
-  var tiles=S.flow.map(function(x){
-    var after=has(x.how)?x.how:x.t; if(!has(after)&&!has(x.t)) return "";
-    return '<li class="mt rp mv-'+(x.mv||'none')+(x.src?'':' isnew')+'"><span class="mt-t"><span class="bt">'+esc(x.t)+'</span>'+((x.mv==="shr"||x.mv==="amp")&&has(x.how)?'<span class="at">'+esc(x.how)+'</span>':'')+'</span>'+(x.mv?'<span class="mvb b-'+x.mv+'" aria-hidden="true">'+GLYPH[x.mv]+'</span>':'')+'</li>';
+/* ---------- Share it: the new workflow, as it stands ---------- */
+function newFlowHTML(){
+  var m=matchSets(); if(!m.olds.length) return '<p class="hint">Draw today’s workflow first, and the new one shows here.</p>';
+  if(!m.news.length) return '<p class="hint">Every step is cut. Go back to Reimagine it to add what happens instead.</p>';
+  var k=0, tiles=S.flow.map(function(x){
+    if(x.mv==="sub") return ""; var t=has(x.how)?x.how:x.t; if(!has(t)) return "";
+    return '<li class="mt rp mv-'+(x.mv||'none')+(x.src?'':' isnew')+'"><span class="mt-n">'+(++k)+'</span><span class="mt-t">'+esc(t)+'</span>'+(x.mv?'<span class="mvb b-'+x.mv+'" aria-hidden="true">'+GLYPH[x.mv]+'</span>':'')+'</li>';
   }).join("");
-  return '<div class="replay after" id="replay" data-feedback-private aria-label="'+plural(m.olds.length,"step","steps")+' today, '+m.news.length+' reimagined">'+
-    '<div class="rl"><b data-rn>'+m.news.length+'</b><span data-rw>'+(m.news.length===1?"step, reimagined":"steps, reimagined")+'</span><span class="rwas">'+plural(m.olds.length,"step","steps")+' today</span><button type="button" class="btn ghost sm rpl" data-act="replay">'+ICON.loop+'Play it again</button></div>'+
+  return '<div class="nflow" id="nflow" data-feedback-private><p class="rl"><b>'+m.news.length+'</b><span class="rw">'+(m.news.length===1?"step, reimagined":"steps, reimagined")+'</span><span class="rwas">'+plural(m.olds.length,"step","steps")+' today</span></p>'+
     '<ol class="mstrip rps">'+tiles+'</ol></div>';
-}
-function replayPlay(el,force){
-  var box=$("#replay",el); if(!box) return; var m=matchSets();
-  var tiles=$$(".rp",box), rn=$("[data-rn]",box), rw=$("[data-rw]",box);
-  var end=function(){ box.classList.remove("before","p1","p2","p3"); box.classList.add("after"); if(rn) rn.textContent=m.news.length; if(rw) rw.textContent=m.news.length===1?"step, reimagined":"steps, reimagined"; };
-  if((celebrated.ba&&!force)||rm()){ end(); return; }
-  celebrated.ba=1;
-  box.classList.remove("after","p1","p2","p3"); box.classList.add("before"); if(rn) rn.textContent=m.olds.length; if(rw) rw.textContent=m.olds.length===1?"step today":"steps today";
-  var steps=[[700,"p1","snip",function(){ return m.nCut; }],[1500,"p2","shrink",function(){ return m.nCh; }],[2300,"p3","spark",function(){ return m.nNew; }]];
-  steps.forEach(function(st){ setTimeout(function(){ if(curEl!==el) return; box.classList.add(st[1]); if(st[3]()) sfx(st[2]); },st[0]); });
-  setTimeout(function(){ if(curEl!==el) return; end(); countFrom(rn,m.olds.length,m.news.length,600); sfx("little"); },3100);
 }
 function countFrom(el,a,b,ms){
   if(!el) return; if(rm()||a===b){ el.textContent=b; return; }
   var t0=performance.now();
   (function step(now){ var k=Math.min(1,(now-t0)/ms), e=1-Math.pow(1-k,3); el.textContent=Math.round(a+(b-a)*e); if(k<1) requestAnimationFrame(step); })(t0);
+}
+
+/* ---------- the finish: today's workflow turns into the new one, then the card ---------- */
+function revealHTML(){
+  var m=matchSets(); if(!m.olds.length) return "";
+  var n=0, tiles=S.flow.map(function(x){
+    var ch=(x.mv==="shr"||x.mv==="amp")&&has(x.how); if(!has(x.t)&&!ch) return ""; n++;
+    return '<li class="rv mv-'+(x.mv||'none')+(x.src?'':' isnew unborn')+'" data-rv="'+esc(x.id)+'" style="--i:'+(x.src?n:0)+'"><span class="rvc"><span class="rv-t'+(ch?' old':'')+'">'+esc(x.t)+'</span>'+(ch?'<span class="rv-t new">'+esc(x.how)+'</span>':'')+'</span>'+(x.mv?'<span class="mvb b-'+x.mv+'" aria-hidden="true">'+GLYPH[x.mv]+'</span>':'')+'</li>';
+  }).join("");
+  var per=balance(Math.max(m.olds.length,m.news.length),5);
+  return '<div class="reveal" aria-hidden="true" data-feedback-private>'+(has(S.eyeroll)?'<p class="rv-q">“'+esc(clipWords(S.eyeroll,90))+'”</p>':'')+
+    '<ol class="rv-strip" style="--per:'+per+'">'+tiles+'</ol>'+
+    '<p class="rv-n"><b data-rvn>'+m.olds.length+'</b><span data-rvw>'+(m.olds.length===1?"step today":"steps today")+'</span></p></div>';
+}
+/* tiles glide to their new places while others leave or arrive */
+function rvFlip(box,mutate){
+  var tiles=$$(".rv",box), first=tiles.map(function(t){ return t.getBoundingClientRect(); });
+  mutate();
+  tiles.forEach(function(t,i){
+    if(t.classList.contains("gone")||t.classList.contains("unborn")||t.classList.contains("born")) return;
+    var f=first[i], l=t.getBoundingClientRect(), dx=f.left-l.left, dy=f.top-l.top; if(Math.abs(dx)<1&&Math.abs(dy)<1) return;
+    t.style.transition="none"; t.style.transform="translate("+dx+"px,"+dy+"px)";
+    requestAnimationFrame(function(){ requestAnimationFrame(function(){ t.style.transition="transform .85s cubic-bezier(.22,1,.36,1)"; t.style.transform=""; }); });
+  });
+}
+function revealPlay(el,force){
+  var rv=$(".reveal",el);
+  /* the change steps aside first, then the card and the buttons arrive */
+  var done=function(){
+    if(el._rvT){ el._rvT.forEach(clearTimeout); el._rvT=null; }
+    el._rvSkip=null; el.classList.add("rv-out");
+    setTimeout(function(){
+      $$(".rv-ghost",el).forEach(function(g){ if(g.parentNode) g.parentNode.removeChild(g); });
+      el.classList.remove("revealing","rv-out"); el.classList.add("revealed"); if(rv) rv.hidden=true;
+      if(curEl!==el) return;
+      sfx("fanfare"); burst(120,innerWidth*.05,innerHeight*.98,1.3); burst(120,innerWidth*.95,innerHeight*.98,1.3);
+    },rm()?0:420);
+  };
+  if(!rv||rm()||(celebrated.fin&&!force)){ el.classList.add("revealed","refreshed"); if(rv) rv.hidden=true; return; }
+  celebrated.fin=1;
+  if(force){ el.scrollTop=0; var fresh=document.createElement("div"); fresh.innerHTML=revealHTML(); var nr=fresh.firstChild; if(nr){ rv.parentNode.replaceChild(nr,rv); rv=nr; } el.classList.remove("refreshed"); }
+  var tiles=$$(".rv",rv), cuts=tiles.filter(function(t){ return t.classList.contains("mv-sub"); }),
+    chs=tiles.filter(function(t){ return !!$(".rv-t.new",t); }), news=tiles.filter(function(t){ return t.classList.contains("isnew"); });
+  var m=matchSets(), T=[], at=0;
+  var later=function(ms,fn){ T.push(setTimeout(function(){ if(curEl!==el||!el.classList.contains("revealing")) return; fn(); },ms)); };
+  el._rvT=T;
+  rv.hidden=false; el.classList.remove("revealed"); el.classList.add("revealing");
+  void rv.offsetWidth; rv.classList.add("deal");
+  at=500+Math.min(tiles.length,12)*80+500;
+  /* once dealt, the strip holds its height, so the words above and below it never jump */
+  later(at-150,function(){ rv.classList.add("dealt"); var st=$(".rv-strip",rv); if(st&&st.offsetHeight) st.style.minHeight=st.offsetHeight+"px"; });
+  var b=$("[data-rvn]",rv), w=$("[data-rvw]",rv), shown=m.olds.length;
+  var countTo=function(n){ if(w) w.textContent=n===1?"step":"steps"; countFrom(b,shown,n,600); shown=n; };
+  if(cuts.length){
+    later(at,function(){ cuts.forEach(function(t){ t.classList.add("slash"); }); sfx("snip"); });
+    at+=520;
+    later(at,function(){
+      var box=rv.getBoundingClientRect();
+      rvFlip(rv,function(){
+        cuts.forEach(function(t){
+          var r=t.getBoundingClientRect(), g=t.cloneNode(true);
+          g.classList.add("rv-ghost"); g.style.left=(r.left-box.left)+"px"; g.style.top=(r.top-box.top)+"px"; g.style.width=r.width+"px"; g.style.height=r.height+"px";
+          rv.appendChild(g); t.classList.add("gone");
+          requestAnimationFrame(function(){ requestAnimationFrame(function(){ g.classList.add("fall"); }); });
+          setTimeout(function(){ if(g.parentNode) g.parentNode.removeChild(g); },1000);
+        });
+      });
+      countTo(shown-cuts.length);
+    });
+    at+=900;
+  }
+  if(chs.length){
+    later(at,function(){ chs.forEach(function(t){ t.classList.add("morph"); }); sfx(chs.some(function(t){ return t.classList.contains("mv-amp"); })?"grow":"shrink"); });
+    at+=1000;
+  }
+  /* the rows rebalance for the new count as new steps arrive: six sit as three and three */
+  var strip=$(".rv-strip",rv), perEnd=balance(Math.max(1,m.news.length),5);
+  if(news.length){
+    later(at,function(){
+      rvFlip(rv,function(){ news.forEach(function(t){ t.classList.remove("unborn"); t.classList.add("born"); }); if(strip) strip.style.setProperty("--per",perEnd); });
+      requestAnimationFrame(function(){ requestAnimationFrame(function(){ news.forEach(function(t,i){ setTimeout(function(){ t.classList.remove("born"); t.classList.add("arrive"); },i*120); }); }); });
+      sfx("spark"); countTo(shown+news.length);
+      setTimeout(function(){ news.forEach(function(t){ burstAt(t,18,.45); }); },380);
+    });
+    at+=1000+news.length*120;
+  }
+  later(at,function(){
+    if(strip&&strip.style.getPropertyValue("--per")!==String(perEnd)) rvFlip(rv,function(){ strip.style.setProperty("--per",perEnd); });
+    rv.classList.add("counted");
+    if(w) w.textContent=m.news.length===1?"step, reimagined":"steps, reimagined";
+    if(shown!==m.news.length) countFrom(b,shown,m.news.length,500); sfx("little");
+  });
+  at+=1500;
+  later(at,function(){ done(); });
+  el._rvSkip=function(){ done(); };
 }
 /* =========================================================
    SCREEN BUILDERS
@@ -2811,7 +3410,7 @@ var SCREENS=[
   html:function(){
     var node=function(n){ return '<li class="pc'+(n<3?' q':' a')+'" data-ch="'+n+'" style="--i:'+(n-1)+'"><span class="pdot"><b>'+n+'</b></span><span class="pq">'+STEP[n].q+'</span><span class="pl">'+STEP[n].leave+'</span></li>'; };
     return '<h2 class="ask">Two questions, four actions.</h2><p class="sub">'+T("About 30 minutes.","About 20 minutes, at your own pace.")+' Each step adds to one card you’ll take away.</p>'+
-      '<div class="path6"><svg class="pline" viewBox="0 0 1000 8" preserveAspectRatio="none" aria-hidden="true"><path d="M0 4H1000"/></svg><ol>'+[1,2,3,4,5,6].map(node).join("")+'</ol></div>'+
+      '<div class="path6"><span class="pline" aria-hidden="true"></span><ol>'+[1,2,3,4,5,6].map(node).join("")+'</ol></div>'+
       '<p class="grab">'+grabLine()+'</p>';
   },
   notes:["Read the six steps out loud. It sets expectations.","Ask someone to keep time, and someone to speak for the people this work affects who aren’t here.","Need two sessions? Stop after Judge it. Answers stay saved in this browser."]
@@ -2820,10 +3419,10 @@ var SCREENS=[
 /* ---------- 1 BETTER WAY ---------- */
 {id:"spin", ch:1, chap:1, night:true, center:true, cls:"spinscreen",
   html:function(){
-    return '<h2 class="ask">Isn’t there a better way?</h2><p class="sub">Think of one thing at work that makes you roll your eyes.</p>'+
-      '<div class="reel" aria-live="polite"><div class="reel-strip"><div class="reel-item">'+esc(SPINS[spinI])+'</div></div></div>'+
+    return '<h2 class="ask">Isn’t there a better way?</h2><p class="sub">Think of one thing at work that makes you roll your eyes. Forget AI for now.</p>'+
+      '<p class="pencil reel-eg">'+eg("")+'</p><div class="reel" aria-live="polite"><div class="reel-strip"><div class="reel-item">'+esc(SPINS[spinI])+'</div></div></div>'+
       '<button class="btn sec" type="button" data-act="spin">Spin again</button>'+
-      '<p class="lede spin-sub">Forget AI for now.<br>Notice what’s slow, clunky or silly.</p>';
+      '<p class="lede spin-sub">'+T("Spin for ideas as often as you like. When the group is ready to write its own, press Next.","Spin for ideas as often as you like. When one of your own comes to mind, press Next.")+'</p>';
   },
   notes:["Spin two or three times. Laughter means people recognize the eye-rollers.","Remind people to name the symptom. Solving comes later."]
 },
@@ -2888,15 +3487,16 @@ var SCREENS=[
 {id:"map", ch:3,
   html:function(){
     var k=drawMode(), d=DRAW[k], sec=team()?150:120, ways=team()?["sketch","act","sticky"]:["type","sketch","act","sticky"];
-    var seg='<div class="modes'+(ways.length>3?' four':'')+'" role="radiogroup" aria-label="How to draw it">'+ways.map(function(m){ return '<button type="button" class="mode" role="radio" data-act="dmode" data-v="'+m+'" aria-checked="'+(k===m)+'"'+(k===m?'':' tabindex="-1"')+'><span class="art">'+ART[m]+'</span><span class="mtx"><b>'+DRAW[m].t+'</b><small>'+DRAW[m].p+'</small></span></button>'; }).join("")+'</div>';
+    var seg='<div class="modes w'+ways.length+'" role="radiogroup" aria-label="How to draw it">'+ways.map(function(m){ return '<button type="button" class="mode" role="radio" data-act="dmode" data-v="'+m+'" aria-checked="'+(k===m)+'"'+(k===m?'':' tabindex="-1"')+'><span class="art">'+ART[m]+'</span><span class="mtx"><b>'+DRAW[m].t+'</b><small>'+DRAW[m].p+'</small></span></button>'; }).join("")+'</div>';
     var ex = k==="sketch" ? sheetEx()
       : k==="sticky" ? stickyEx()
       : k==="type" ? '<ol class="mstrip ex">'+EX.steps.map(function(t,i){ return '<li class="mt"><span class="mt-n">'+(i+1)+'</span><span class="mt-t">'+esc(t)+'</span></li>'; }).join("")+'</ol>'
       : ACT_EX;
     var cap = {sketch:"the weekly sales report, sketched.",sticky:"the weekly sales report, on sticky notes.",type:"the weekly sales report, typed in.",act:"three people play the analyst, the manager and a sales leader, passing a real report along as the work moves. Someone writes each step down."}[k];
-    return split(head("Draw it your way.",T("Pick a way that suits your group today.","Pick a way that suits you today."))+seg+whoList(drawSteps())+
-      (k==="type"?"":timerHTML("t-draw",sec,d.kind,"Aim for 5 to 8 steps.",{stay:true})),
-      '<figure class="expanel m-'+k+'"><div class="exart">'+ex+'</div><figcaption class="pencil">'+eg(cap)+'</figcaption></figure>');
+    var how='<ol class="howto">'+drawSteps().map(function(x,i){ var t=typeof x==="string"?x:'<b>'+x[0]+':</b> '+x[1]; return '<li'+pv(t)+'><span class="hn" aria-hidden="true">'+(i+1)+'</span><span class="ht">'+t+'</span></li>'; }).join("")+'</ol>';
+    return '<div class="drawl"><div class="dh">'+head("Draw it your way.",T("Pick a way that suits your group today.","Pick a way that suits you today."))+'</div>'+seg+
+      '<div class="db"><div class="dl">'+how+(k==="type"?"":timerHTML("t-draw",sec,d.kind,"Aim for 5 to 8 steps.",{stay:true}))+'</div>'+
+      '<figure class="expanel m-'+k+'"><div class="exart">'+ex+'</div><figcaption class="pencil">'+eg(cap)+'</figcaption></figure></div></div>';
   },
   notes:["Walk around, or watch the cameras. Nudge anyone stuck: what happens right after that?","Draw what actually happens, including the workarounds nobody admits to.","Acting it out works best in a room with three or more people. Sketching works everywhere."]
 },
@@ -2918,21 +3518,23 @@ var SCREENS=[
     return stageL(head("Judge it.",(has(S.purpose)?"Now that the workflow is drawn, judge each step against its real purpose, "+own(S.purpose)+".":"Now that the workflow is drawn, look at each step through the eyes of the people who live it.")+" Does it help, or get in the way?")+
       (team()?whoList([["Lead","read each step out."],["Everyone",P("point to the face that fits.","react with the face that fits.")],["Lead","select the face most people chose."]]):""),
       (team()?timerHTML("t-judge",90,"talk","One step at a time."):"")+
-      pencil([tip("😍 it works and is worth protecting. 😤 it costs effort, delay or repetition. 🤔 nobody’s sure why it’s there."),eg(EX.judge)]),
+      faceKey()+pencil([eg(EX.judge)]),
       judgeStrip(),"judge");
   },
   notes:["Read each step out, then count faces.","Voice of the people: react the way the customer or the next team would.","Some steps deserve protecting, so don’t only hunt for problems."]
 },
 {id:"inherit", ch:4,
   html:function(){
-    var hh=hots();
-    return stageL(head("Necessary, or inherited?",(hh.length?"Now that you’ve flagged "+own(hh[0].t,48)+(hh.length>1?" and "+plural(hh.length-1,"more step","more steps"):"")+", ask why each one happens, who decided, and what would break without it.":"Ask why it happens, who decided, and what would break without it.")),
-      (team()?timerHTML("t-inh",60,"talk","Start with the hottest step."):"")+pencil([eg(EX.inherit)]),
+    /* the line under the heading names the steps the group picked, and changes when the picks do */
+    var q=qList(), names=q.map(function(x){ return own(x.t,34); });
+    var list=names.length<3?names.join(" and "):names.slice(0,-1).join(", ")+" and "+names[names.length-1];
+    return stageL(head("Necessary, or inherited?",q.length?"Now that you’ve judged each step, ask why "+list+" "+(q.length>1?"happen":"happens")+", who decided, and what would break without "+(q.length>1?"them":"it")+".":"Pick up to three steps to question. Then ask why each one happens, who decided, and what would break without it."),
+      (team()?timerHTML("t-inh",60,"talk","Start with the hottest step."):"")+necKey()+pencil([eg(EX.inherit)]),
       inheritView(),"inherit");
   },
   mount:function(el,dir,isRefresh){ if(!isRefresh) liftPlay(el); },
   out:function(el){ return [4,$(".lift .sf-t",el)]; },
-  notes:["Push for the origin story: when did we start doing this? Often nobody knows. That’s the point.","Voice of the people: does this step matter to anyone downstream?","Splitting into two sessions? Stop here. Everything is saved in this browser."]
+  notes:["The steps people flagged start out picked. Select any step in the small strip to swap it in or out, up to three.","Push for the origin story: when did we start doing this? Often nobody knows. That’s the point.","Voice of the people: does this step matter to anyone downstream?","Splitting into two sessions? Stop here. Everything is saved in this browser."]
 },
 
 /* ---------- 5 REIMAGINE IT ---------- */
@@ -2946,12 +3548,14 @@ var SCREENS=[
 {id:"moves", ch:5,
   html:function(){
     var h=hotFirst();
-    return stageL(head("Reimagine it.",(h?"Now that you’ve questioned "+own(h.t,48)+", change the work.":"Now that you know what to question, change the work.")+" Use any of the four moves, in any order."),
-      (team()?timerHTML("t-moves",150,"think","Alone first. As many ideas as you can.",{stay:true})+'<p class="who1">'+P("Jot ideas alone on sticky notes. Read them out. The lead uses the moves on the steps.","Jot ideas alone. Read them out. The lead uses the moves on the steps.")+'</p>':""),
+    var from=storyMove();
+    return stageL(head("Reimagine it.",(h?"Now that you’ve questioned "+own(h.t,48)+", change the work.":"Now that you know what to question, change the work.")+" Select any step, then pick one of the four moves."+(from?" You said more "+(S.story==="tesla"?"Tesla":"MLB")+", so start with "+MV[from].name+".":" Use them in any order.")),
+      (team()?timerHTML("t-moves",150,"think","Alone first. As many ideas as you can.",{stay:true})+'<p class="who1">'+P("Jot ideas alone on sticky notes. Read them out. The lead selects a step and picks a move.","Jot ideas alone. Read them out. The lead selects a step and picks a move.")+'</p>':""),
       movesView(),"moves");
   },
+  mount:function(el){ placeMv(el); },
   out:function(el){ return [5,$(".strip8",el)]; },
-  notes:["Quantity first. Don’t debate ideas yet.","It’s fine if a move goes unused. Not every workflow needs all four.","Check each change against the purpose: does it create the value in a better way?","Read the new workflow aloud when you’re done. Does it sound better than the old one?"]
+  notes:["Select any step to see the four moves. Pick another move to change your mind, or pick “Leave it as it was.”","Quantity first. Don’t debate ideas yet.","It’s fine if a move goes unused. Not every workflow needs all four.","Check each change against the purpose: does it create the value in a better way?","Read the new workflow aloud when you’re done. Does it sound better than the old one?"]
 },
 
 /* ---------- 6 SHARE IT ---------- */
@@ -2959,47 +3563,46 @@ var SCREENS=[
   html:function(){
     var lead=(has(S.eyeroll)?"Now that you’ve reimagined "+own(S.eyeroll,56)+",":"Now that you have a new workflow,")+" get feedback from at least three people it affects. Then pick the smallest piece you could try next week.";
     return stageL(head("Share it.",lead),
-      pencil([tip("Ask each one three questions. What do you like? What do you wish? What do you wonder?"),eg(EX.test)]),
-      replayHTML()+
+      pencil([tip("Show each person the new workflow, then ask three questions: what do you like, what do you wish, and what do you wonder?"),eg(EX.test)]),
+      newFlowHTML()+
       '<div class="shfields'+(team()?'':' solo')+'"><div class="ask2 wide"><label class="lbl" for="sh-test">What can you test next week?</label>'+bigArea("test",T("The smallest piece we could try is…","The smallest piece I could try is…"),240,"What can you test next week?").replace('<textarea','<textarea id="sh-test"')+'</div>'+
       '<div class="ask2"><label class="lbl" for="sh-ask">Who will you ask?</label>'+field("ask",T("Three people it affects who weren’t here","Three people it affects"),160,"Who will you ask?").replace('<input','<input id="sh-ask"')+'</div>'+
       (team()?'<div class="ask2"><label class="lbl" for="sh-owner">Owner</label>'+field("owner","Who makes it happen",80,"Owner").replace('<input','<input id="sh-owner"')+'</div>':'')+'<div class="ask2"><label class="lbl" for="sh-when">By when</label>'+field("when","next Friday",60,"By when").replace('<input','<input id="sh-when"')+'</div></div>',"share");
   },
-  mount:function(el){ replayPlay(el); },
   out:function(el){ return [6,$('[data-bind="test"]',el)]; },
   notes:["Pick people who will be honest, including at least one likely skeptic.","Push for a small test. One you can run next week beats a pilot that needs approval.","Want to rehearse? One person plays the skeptic while another pitches the new workflow in a minute, then asks what they like, wish and wonder."]
 },
 
 /* ---------- FINISH ---------- */
-{id:"workshops", ch:7, night:true, center:true, cls:"pathscreen", next:"Get your card",
+{id:"workshops", ch:7, night:true, center:true, cls:"pathscreen", next:"Finish",
   html:function(){
-    var ws=function(n,d,p,c){ return '<a class="ws c'+c+'" href="'+LINKS.ai+'" target="_blank" rel="noopener"><b>'+n+'</b><span>'+d+'</span><em>'+p+'</em></a>'; };
+    var ws=function(n,d,p,c){ return '<div class="ws c'+c+'"><b>'+n+'</b><span>'+d+'</span><em>'+p+'</em></div>'; };
     return '<section class="path"><h2 class="ask">This lab is one activity. Our workshops offer the whole path.</h2><p class="sub">Wherever your teams are, from early friction to reimagination.</p><div class="phases">'+
       '<div class="phase p1"><h4>Early friction</h4></div><div class="phase p2"><h4>Optimization</h4></div><div class="phase p3"><h4>Reimagination</h4></div>'+
       ws("Building AI Confidence","A low-stakes, hands-on crash course in the fundamental tools and frameworks.","After one session with senior leaders, daily AI usage went from 13% to 59%.",1)+
       ws("Communicating AI Strategy","Make sense of what AI means for roles and workflows, and leave with a communication plan.","Over 90% report improved change capability in 2 hours.",2)+
       ws("Finding AI Use Cases","Builds on what you did today: find where value is shifting and build working AI agents.","70% arrive new to AI agents. 100% leave having built one.",3)+
       ws("Driving AI Innovation","Human-centered innovation methods applied to real strategic challenges.","94% of workshop buyers recommend ExperiencePoint.",4)+
-      '</div><div class="contact"><a class="btn sec" href="'+LINKS.contact+'" target="_blank" rel="noopener">Contact ExperiencePoint</a><a class="mail" href="mailto:hello@experiencepoint.com">hello@experiencepoint.com</a></div></section>';
+      '</div><div class="contact"><a class="btn sec" href="'+LINKS.contact+'" target="_blank" rel="noopener">Contact ExperiencePoint</a></div></section>';
   },
-  notes:["Point to the workshop that fits what the group just did, then show the card."]
+  notes:["Point to the workshop that fits what the group just did. Then press Finish and let the change play out."]
 },
 {id:"finish", ch:7, night:true, cls:"finale", noNext:true, noRail:true,
-  pre:function(){ return '<div class="dawn" aria-hidden="true"><i></i></div>'; },
+  /* the change plays out over the whole stage, outside the frame, so a redraw never interrupts it */
+  pre:function(){ return '<div class="dawn" aria-hidden="true"><i></i></div>'+revealHTML(); },
   html:function(){
-    var st='', got=0; for(var c=1;c<=6;c++){ var on=has(railVal(c)); if(on) got++; st+='<i class="'+(on?'got':'')+'" style="--i:'+(c-1)+'">'+c+'</i>'; }
-    return '<div class="fin"><div class="fin-l"><div class="stamps" role="img" aria-label="'+got+' of 6 steps complete">'+st+'</div>'+
+    return '<div class="fin"><div class="fin-l">'+
       '<h1 class="hero">From eye-roll to a better way.</h1><p class="lede">'+T("Not bad for one session. Save your card and post it where the team will see it.","Not bad for one session. Save your card so you can come back to it.")+'</p>'+
-      '<div class="exports"><button class="btn" type="button" data-act="png">Save as image</button><button class="btn sec" type="button" data-act="print">Print my answers</button><button class="btn sec" type="button" data-act="email"'+(hasMail()?'':' hidden')+'>Email this</button><button class="btn ghost" type="button" data-act="bow">Take a bow</button></div></div>'+
+      '<div class="exports"><button class="btn" type="button" data-act="png">Save as image</button><button class="btn sec" type="button" data-act="print">Print my answers</button><button class="btn sec" type="button" data-act="email"'+(hasMail()?'':' hidden')+'>Email this</button>'+(rm()?'':'<button class="btn ghost" type="button" data-act="again">'+ICON.loop+'Play it again</button>')+'</div></div>'+
       '<div class="fin-r">'+ocardHTML()+'</div></div>';
   },
-  mount:function(el){
+  mount:function(el,dir,isRefresh){
     tKill();
-    finishPlay(el);
+    if(!isRefresh) revealPlay(el); else el.classList.add("revealed");
     var eb=$('[data-act="email"]',el), show=function(){ if(eb) eb.hidden=false; };
     if(hasMail()) show(); else document.addEventListener("epkit:email-ready",show,{once:true});
   },
-  notes:["Save or print the card now, before anyone leaves.","Close with the first test and its owner. Say the date out loud.","Ask each person for one word on how that felt."]
+  notes:["Let the change play out. Selecting anything skips to the card.","Save or print the card now, before anyone leaves.","Close with the first test and its owner. Say the date out loud.","Ask each person for one word on how that felt."]
 }
 ];
 /* =========================================================
@@ -3070,11 +3673,13 @@ function storyPick(){
   var b=function(k,name,desc,g){ var on=S.story===k; return '<button type="button" class="spk'+(on?' sel':'')+'" data-act="spick" data-id="'+k+'" aria-pressed="'+on+'">'+GLYPH[g]+'<b>'+name+'</b><span>'+desc+'</span></button>'; };
   return '<p class="sq q">More Tesla, or more MLB?</p><div class="spick'+(S.story?' picked':'')+'" role="group" aria-label="Is your workflow more Tesla or more MLB?">'+b("tesla","More Tesla","Something should disappear.","sub")+b("mlb","More MLB","Something new should be added.","inv")+'</div>';
 }
+/* the sound button in the player: the same setting as the one at the top of the page */
+var STORY_SND='<svg class="s-on" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M4 9.5h3.5L12 5v14l-4.5-4.5H4z"/><path d="M15.5 9a4 4 0 0 1 0 6"/><path d="M18.5 6.5a7.5 7.5 0 0 1 0 11"/></svg><svg class="s-off" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M4 9.5h3.5L12 5v14l-4.5-4.5H4z"/><path d="M16 9.5l5 5M21 9.5l-5 5"/></svg>';
 function storyHTML(){
   var ic=function(d){ return '<svg viewBox="0 0 24 24" fill="currentColor" aria-hidden="true">'+d+'</svg>'; };
   var stills=STORY.map(function(x,i){ return '<div class="still'+(x.last?' last':'')+'" data-i="'+i+'"'+(x.last?'':' aria-hidden="true"')+'>'+(x.last?storyPick():x.v)+'</div>'; }).join("");
   var len=Math.round(STORY_LEN);
-  return '<div class="story" data-story><div class="st-stage">'+stills+'</div>'+
+  return '<div class="story'+(S.cc?'':' nocap')+(S.sfx?'':' muted')+'" data-story><div class="st-stage">'+stills+'</div>'+
     '<div class="st-bars" aria-hidden="true">'+STORY.map(function(){ return '<i><b></b></i>'; }).join("")+'</div>'+
     '<p class="st-cap" aria-live="polite"></p>'+
     '<div class="st-ctl">'+
@@ -3082,6 +3687,9 @@ function storyHTML(){
       '<button type="button" data-s="toggle" aria-label="Pause">'+ic('<path class="i-pause" d="M6 4h4v16H6zM14 4h4v16h-4z"/><path class="i-play" d="M7 4v16l13-8z"/>')+'</button>'+
       '<button type="button" data-s="next" aria-label="Next line">'+ic('<path d="M16 5h2v14h-2zM4 5v14l11-7z"/>')+'</button>'+
       '<button type="button" data-s="replay" aria-label="Play from the start"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" aria-hidden="true"><path d="M4 12a8 8 0 1 0 2.5-5.8"/><path d="M4 4v4h4"/></svg></button>'+
+      '<span class="st-sep" aria-hidden="true"></span>'+
+      '<button type="button" class="st-cc" data-s="cc" aria-pressed="'+(S.cc?"true":"false")+'" aria-label="Captions" title="Captions"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linejoin="round" aria-hidden="true"><rect x="3" y="5.5" width="18" height="13" rx="2.6"/><path d="M10.4 10.2a2.2 2.2 0 1 0 0 3.6M16.4 10.2a2.2 2.2 0 1 0 0 3.6" stroke-linecap="round"/></svg></button>'+
+      '<button type="button" class="st-snd" data-s="sound" aria-label="'+(S.sfx?"Turn sound off":"Turn sound on")+'" title="Sound">'+STORY_SND+'</button>'+
     '</div>'+
     '<button class="st-poster" type="button" data-s="play" aria-label="Play the two stories, '+Math.floor(len/60)+' minute '+(len%60)+' seconds"><span class="pp">'+PLAY+'</span><span class="pt"><b>Tesla and Major League Baseball</b><span>'+Math.floor(len/60)+':'+(len%60<10?'0':'')+(len%60)+'</span></span></button></div>';
 }
@@ -3093,20 +3701,22 @@ function photoHTML(path,label){
 }
 var movedId=null;
 function unmark(){ movedId=null; if(curEl) $$(".sf.moved",curEl).forEach(function(x){ x.classList.remove("moved"); }); }
+/* the card: the new workflow as tiles (each change marked with its move), what was cut, and the first test */
+function cardCuts(){ return S.flow.filter(function(x){ return x.mv==="sub"&&has(x.t); }).map(function(x){ return str(x.t).trim(); }); }
 function ocardHTML(){
-  var m=matchSets(), ci=cardChanges(), keep=ci.list.slice(0,4), muted='<div class="v muted">Not filled in</div>';
-  var f=function(l,body){ return '<div class="of"><div class="l">'+l+'</div>'+body+'</div>'; };
+  var m=matchSets(), cuts=cardCuts(), muted='<div class="v muted">Not filled in</div>';
+  var f=function(l,body,side){ return '<div class="of"><div class="l"><span>'+l+'</span>'+(side?'<span class="lx">'+side+'</span>':'')+'</div>'+body+'</div>'; };
   var tv=function(v){ return has(v)?'<div class="v">'+escBr(v)+'</div>':muted; };
   var tl=[S.owner,S.when].filter(has).map(esc).join(", ");
-  var dots=''; for(var c=1;c<=6;c++) dots+='<i class="'+(has(railVal(c))?'done':'')+'" data-od="'+c+'"></i>';
-  return '<div class="ocard" id="ocard" data-feedback-private><div class="oh"><span class="dt">'+esc(dateStr())+'</span><span class="wm"><span class="nw">Re<span class="di">&#305;</span>magination</span> Lab</span><h3>'+(has(S.eyeroll)?escBr(S.eyeroll):T('Our workflow','My workflow'))+'</h3></div><div class="ob">'+
+  var tiles=m.news.length?'<ol class="otiles">'+m.news.map(function(x,i){ var k=m.nw[x.id]?"inv":(m.ch[x.id]||""); return '<li class="ot'+(m.nw[x.id]?' new':'')+(m.ch[x.id]?' chg chg-'+m.ch[x.id]:'')+'"><span class="otop2"><span class="on">'+(i+1)+'</span>'+(k?'<span class="og" role="img" aria-label="'+(k==="inv"?"New":k==="shr"?"Less effort":"More room")+'">'+GLYPH[k]+'</span>':'')+'</span><span class="ox">'+esc(x.t)+'</span></li>'; }).join("")+'</ol>':muted;
+  return '<div class="ocard" id="ocard" data-feedback-private><div class="oh"><div class="otop"><span class="wm"><span class="nw">Re<span class="di">&#305;</span>magination</span> Lab</span><span class="dt">'+esc(dateStr())+'</span></div><h3>'+(has(S.eyeroll)?escBr(S.eyeroll):T('Our workflow','My workflow'))+'</h3></div><div class="ob">'+
     f("Real purpose",tv(S.purpose))+
-    f("Today",m.olds.length?stripHTML(m.olds,{mini:true,cut:m.cut,struck:true}):muted)+
-    f("Reimagined",m.news.length?stripHTML(m.news,{mini:true,nw:m.nw,ch:m.ch}):muted)+
-    f(ci.label,keep.length?'<ul class="kept-list">'+keep.map(function(k){ return '<li class="k-'+k.k+'">'+esc(k.t)+'</li>'; }).join("")+'</ul>':muted)+
+    f("The new workflow",tiles,anyMoves()?stepCount(m):"")+
+    (cuts.length?f(T("What we cut","What I cut"),'<div class="v cutl">'+cuts.map(esc).join("; ")+'</div>'):'')+
     f("First test",has(S.test)?'<div class="v">'+escBr(S.test)+(tl?' <span class="ow">('+tl+')</span>':'')+'</div>':muted)+
-    '</div><div class="odots">'+dots+'<span>ExperiencePoint&reg;</span></div></div>';
+    '</div></div>';
 }
+
 /* =========================================================
    ENGINE
    ========================================================= */
@@ -3128,7 +3738,7 @@ function shock(x,y){
 function render(dir){
   var s=cur(); if(!s) return;
   if(flowSync()) save();
-  movedId=null;
+  movedId=null; mvOpen=null;
   markSeen();
   var el=document.createElement("section");
   el.className="scene"+(s.night?" night":"")+(s.center?" center":"")+(s.grand?" grand":"")+(s.cls?" "+s.cls:"");
@@ -3179,10 +3789,7 @@ function mountParts(el,s,dir,isRefresh){
 function refresh(focusSel){
   if(!curEl) return; var s=cur(), fr=$(".frame",curEl); if(!fr||curEl.getAttribute("data-id")!==s.id){ render(0); return; }
   var st=curEl.scrollTop, ae=document.activeElement, keep=null;
-  if(!focusSel && ae && curEl.contains(ae)){
-    if(ae.hasAttribute("data-add")) keep='[data-add="'+ae.getAttribute("data-add")+'"]';
-    else if(ae.hasAttribute("data-bind")) keep='[data-bind="'+ae.getAttribute("data-bind")+'"]';
-  }
+  if(!focusSel && ae && curEl.contains(ae)) keep=focusKey(ae);
   var openD=$$("details",fr).map(function(d){ return d.open; });
   var story=$("[data-story]",fr); if(story&&story._stop) story._stop();
   fr.innerHTML=s.html();
@@ -3190,6 +3797,14 @@ function refresh(focusSel){
   curEl.scrollTop=st;
   mountParts(curEl,s,0,true); markSeen(); chrome(); tPaint(); lastFx=null;
   var sel=focusSel||keep; if(sel){ var x=$(sel,curEl); if(x){ try{ x.focus({preventScroll:true}); }catch(e){ x.focus(); } if(x.setSelectionRange&&(x.type==="text"||x.tagName==="TEXTAREA")){ var L=x.value.length; try{ x.setSelectionRange(L,L); }catch(e){} } } }
+}
+/* a selector that finds the same field or button again after the screen redraws */
+function focusKey(ae){
+  var a=function(n){ return ae.getAttribute(n); };
+  var one=["data-add","data-bind","data-bstep","data-fhow","data-ftext","data-bwhy"];
+  for(var i=0;i<one.length;i++){ if(ae.hasAttribute(one[i])){ var v=a(one[i]); return '['+one[i]+'="'+v+'"]'+(one[i]==="data-bstep"&&ae.hasAttribute("data-id")?'[data-id="'+a("data-id")+'"]':''); } }
+  if(ae.hasAttribute("data-act")){ var s='[data-act="'+a("data-act")+'"]'; if(ae.hasAttribute("data-id")) s+='[data-id="'+a("data-id")+'"]'; if(ae.hasAttribute("data-v")) s+='[data-v="'+a("data-v")+'"]'; if(ae.hasAttribute("data-k")) s+='[data-k="'+a("data-k")+'"]'; if(ae.hasAttribute("data-i")) s+='[data-i="'+a("data-i")+'"]'; return s; }
+  return null;
 }
 function lock(ms){ lockT=Date.now()+ms; }
 function go(d){
@@ -3201,6 +3816,7 @@ function go(d){
   /* an undo belongs to the screen it was offered on */
   if(toastFn) hideToast();
   if(s.id==="why") syncPurpose();
+  if(s.id==="moves") pruneEmptyNew();
   var out = d>0 && s.out ? s.out(curEl) : null, oldEl=curEl;
   var fromPlan = d>0 && s.id==="plan";
   leaveTimer(i,n);
@@ -3211,7 +3827,7 @@ function go(d){
 }
 function jumpTo(id){
   var v=vis(), from=idx(), to=-1; v.forEach(function(x,k){ if(x.id===id) to=k; }); if(to<0) return;
-  closeMenu(); if(to===from) return; clearTimeout(autoT); if(toastFn) hideToast(); leaveTimer(from,to); S.at=id; saveNow(true); lock(430); render(to>from?1:-1);
+  closeMenu(); if(to===from) return; clearTimeout(autoT); if(toastFn) hideToast(); if(S.at==="moves") pruneEmptyNew(); leaveTimer(from,to); S.at=id; saveNow(true); lock(430); render(to>from?1:-1);
 }
 /* moves on by itself after a reveal or a pick, unless someone moved first */
 function autoNext(ms){ var sid=S.at; clearTimeout(autoT); autoT=setTimeout(function(){ if(S.at===sid&&!menuOpen&&!focusOpen) go(1); },ms); }
@@ -3223,7 +3839,7 @@ function railVal(n){
   if(n===2) return str(S.purpose).trim();
   if(n===3){ var f=filled(S.frames).length; return f?"Drawn in "+plural(f,"step","steps"):""; }
   if(n===4){ var h=hotFirst(); return h?"Question “"+clipWords(h.t,60)+"”":""; }
-  if(n===5){ var m=matchSets(); return m.news.length?"Now "+plural(m.news.length,"step","steps")+(m.olds.length?", was\u00a0"+m.olds.length:""):""; }
+  if(n===5){ var m=matchSets(); return m.news.length&&anyMoves()?"Reimagined in "+plural(m.news.length,"step","steps"):""; }
   if(n===6) return str(S.test).trim();
   return "";
 }
@@ -3231,12 +3847,13 @@ function buildRail(){ var h=""; for(var c=1;c<=6;c++) h+='<button type="button" 
 function railPaint(landN){
   var rail=$("#rail"); if(!rail||!rail.firstChild) return; var s=cur(), ch=s?s.ch:0;
   $$("button[data-ch]",rail).forEach(function(b){
-    var c=+b.getAttribute("data-ch"), val=railVal(c), done=has(val), on=ch===c, txt=done?val:CHN[c], em=$("em",b);
-    b.classList.toggle("done",done); b.classList.toggle("on",on);
+    /* steps ahead of this one show their names, so words from a later step never appear early */
+    var c=+b.getAttribute("data-ch"), val=railVal(c), done=has(val), on=ch===c, ahead=ch>=1&&ch<=6&&c>ch, txt=done&&!ahead?val:CHN[c], em=$("em",b);
+    b.classList.toggle("done",done); b.classList.toggle("on",on); b.classList.toggle("ahead",ahead&&done);
     if(on) b.setAttribute("aria-current","step"); else b.removeAttribute("aria-current");
     if(em.textContent!==txt) em.textContent=txt;
-    b.setAttribute("aria-label","Step "+c+", "+CHN[c]+(done?": "+val:""));
-    b.title=done?val:CHN[c];
+    b.setAttribute("aria-label","Step "+c+", "+CHN[c]+(done&&!ahead?": "+val:""));
+    b.title=done&&!ahead?val:CHN[c];
     /* the landing animation plays once, then its styles come off so the words sit like the rest */
     if(landN===c&&!rm()){ b.classList.remove("land"); void b.offsetWidth; b.classList.add("land"); clearTimeout(b._landT); b._landT=setTimeout(function(){ b.classList.remove("land"); },1000); }
   });
@@ -3285,6 +3902,7 @@ function chrome(){
   if(!team()) setDrawer(false);
   drawerFill(s);
   var sb=$("#soundBtn"); sb.setAttribute("aria-label",S.sfx?"Turn sound off":"Turn sound on"); $(".s-on",sb).style.display=S.sfx?"":"none"; $(".s-off",sb).style.display=S.sfx?"none":"";
+  paintStorySound();
   paintNext();
 }
 function nextLabel(s){ s=s||cur(); var next=$("#nextBtn"), pr=!!pendingReveal(s), tie=!pr&&(!!pendingTie(s)||(s.id==="purpose"&&needPurpose())); next.textContent = pr ? "Reveal" : tie ? "Pick one" : (s.next || "Next"); next.classList.toggle("reveal",pr); }
@@ -3294,7 +3912,7 @@ function nudgePurpose(){ var g=$(".pchoices",curEl); if(g){ g.classList.remove("
 function goPaint(s){
   var a=$("#goLink"); if(!a) return; var key=s.go||(s.ch>=1&&s.ch<=6?s.ch:0), g=key?GO[key]:null;
   a.hidden=!g; if(!g) return;
-  a.href=LINKS.ai; $(".gt",a).innerHTML=esc(g[0])+'<b>'+esc(g[1])+'</b><span class="gx">'+esc(g[2])+'</span>';
+  a.href=LINKS.contact; $(".gt",a).innerHTML=esc(g[0])+'<b>'+esc(g[1])+'</b>'+esc(g[2]);
 }
 function paintNext(){
   var next=$("#nextBtn"); if(!curEl) return;
@@ -3408,6 +4026,8 @@ function initStory(root){
   p._sound=function(){ if(!playing) return; var t=now(); if(S.sfx) start(t); else silent(t); };
   p.addEventListener("click",function(e){
     var b=e.target.closest("[data-s]"); if(!b) return; var a=b.getAttribute("data-s"); ac();
+    if(a==="cc"){ S.cc=!S.cc; save(); p.classList.toggle("nocap",!S.cc); b.setAttribute("aria-pressed",S.cc?"true":"false"); sfx("tick"); return; }
+    if(a==="sound"){ toggleSound(); return; }
     if(a==="play"||a==="replay"){ sfx("select"); start(0); }
     else if(a==="toggle"){ if(playing) pause(); else start(p.classList.contains("ended")?0:at); }
     else if(a==="next") seekLine(line+1);
@@ -3418,15 +4038,8 @@ function initStory(root){
   else paint(0);
 }
 
-function finishPlay(el){
-  var sts=$$(".stamps i",el), row=$(".stamps",el);
-  if(celebrated.fin||rm()){ el.classList.add("refreshed"); return; }
-  celebrated.fin=1; el.classList.add("play");
-  if(row) row.classList.add("play");
-  sts.forEach(function(d,i){ if(!d.classList.contains("got")) return; setTimeout(function(){ if(curEl!==el) return; sfx(i===5?"thud":"tick"); },300+i*230+260); });
-  /* the confetti rises from the edges and the stamps, never over the words */
-  setTimeout(function(){ if(curEl!==el) return; sfx("fanfare"); burst(120,innerWidth*.05,innerHeight*.98,1.3); burst(120,innerWidth*.95,innerHeight*.98,1.3); },2100);
-}
+/* the player's sound button follows the one at the top of the page */
+function paintStorySound(){ $$("[data-story]").forEach(function(p){ p.classList.toggle("muted",!S.sfx); var b=$('[data-s="sound"]',p); if(b) b.setAttribute("aria-label",S.sfx?"Turn sound off":"Turn sound on"); }); }
 function autoGrow(t){ if(!t||t.offsetParent===null) return; t.style.height="auto"; t.style.height=Math.min(t.scrollHeight+2,420)+"px"; }
 /* fonts arriving late or a resized window change how tall a line of words is */
 var GROW="textarea.big, textarea.sf-in, textarea.sf-how";
@@ -3440,6 +4053,10 @@ document.addEventListener("toggle",function(e){ var d=e.target; if(d&&d.tagName=
    ========================================================= */
 var autoT=null;
 document.addEventListener("click",function(e){
+  /* the finish plays out on its own; selecting anything skips to the card */
+  if(curEl&&curEl._rvSkip&&curEl.contains(e.target)){ curEl._rvSkip(); return; }
+  /* a menu of moves closes when someone selects anywhere else */
+  if(mvOpen&&!(e.target.closest&&(e.target.closest(".mvmenu")||e.target.closest('[data-act="mvopen"]')))){ mvOpen=null; if(S.at==="moves") refresh(); }
   var b=e.target.closest("[data-act]"); if(!b) return;
   if(b.closest(".frame")&&!curEl.contains(b)) return;
   var a=b.getAttribute("data-act"), path=b.getAttribute("data-path"), id=b.getAttribute("data-id"), g=b.getAttribute("data-group");
@@ -3473,11 +4090,10 @@ document.addEventListener("click",function(e){
       var pi=+b.getAttribute("data-i"); if(!has(S.why[pi])) break;
       var was=S.whyPick; S.whyPick=pi; syncPurpose(); save(); refresh('[data-act="ppick"][data-i="'+pi+'"]'); nextLabel();
       if(was!==pi){ sfx("select"); burstAt($('[data-act="ppick"][data-i="'+pi+'"] .pk',curEl),28,.55); } break;
-    case "tool":
-      var tv=b.getAttribute("data-v"); armed = armed===tv ? null : tv; sfx(armed?"select":"tick"); refresh(armed?'[data-act="tool"][data-v="'+tv+'"]':null); break;
-    case "apply": flip(function(){ applyMove(id); }); break;
-    case "unmove": flip(function(){ unMove(id); }); break;
-    case "replay": replayPlay(curEl,true); break;
+    case "mvopen": openMv(id); break;
+    case "mv": var mv=b.getAttribute("data-v"); flip(function(){ applyMv(id,mv); }); break;
+    case "qpick": qToggle(id); break;
+    case "again": revealPlay(curEl,true); break;
     case "vtap":
       if(e.target.closest(".vm")) break;
       if(S.picks[g]) break;
@@ -3521,7 +4137,6 @@ document.addEventListener("click",function(e){
     case "print": doPrint(); break;
     case "png": doPng(); break;
     case "email": doEmail(); break;
-    case "bow": sfx("fanfare"); burst(120,innerWidth*.06,innerHeight*.98,1.25); burst(120,innerWidth*.94,innerHeight*.98,1.25); break;
   }
 });
 function resetVotes(g){ delete S.votes[g]; delete S.picks[g]; delete S.ties[g]; delete S.revealed[g]; }
@@ -3557,7 +4172,10 @@ document.addEventListener("input",function(e){
     return;
   }
   var ps=t.getAttribute&&t.getAttribute("data-bstep");
-  if(ps){ var sid=t.getAttribute("data-id"); if(movedId&&movedId!==sid) unmark(); (getP(ps)||[]).forEach(function(x){ if(x.id===sid) x.t=t.value; }); save(); if(t.tagName==="TEXTAREA") autoGrow(t); return; }
+  if(ps){ var sid=t.getAttribute("data-id"); if(movedId&&movedId!==sid) unmark(); (getP(ps)||[]).forEach(function(x){ if(x.id===sid) x.t=t.value; }); save(); if(t.tagName==="TEXTAREA") autoGrow(t);
+    /* near the limit, a quiet count of what's left */
+    var cc=t.parentNode&&t.parentNode.querySelector(".sf-cc"); if(cc){ var left=(+t.getAttribute("maxlength")||200)-t.value.length; cc.textContent=t.value.length>=170?left+" left":""; }
+    return; }
   var pw=t.getAttribute&&t.getAttribute("data-bwhy");
   if(pw){ S.frames.forEach(function(x){ if(x.id===pw) x.why=t.value; }); save(); autoGrow(t); return; }
   var ph=t.getAttribute&&t.getAttribute("data-fhow"), pt=t.getAttribute&&t.getAttribute("data-ftext");
@@ -3595,15 +4213,23 @@ function stepEnter(t){
 document.addEventListener("keydown",function(e){
   var t=e.target, tag=(t.tagName||"").toLowerCase(), inField=tag==="input"||tag==="textarea"||tag==="select"||t.isContentEditable;
   var k=e.key;
+  if(curEl&&curEl._rvSkip&&!menuOpen&&!e.metaKey&&!e.ctrlKey&&!e.altKey&&k!=="Tab"&&k!=="Shift"){ e.preventDefault(); curEl._rvSkip(); return; }
   if(k==="Escape"){
     if(menuOpen){ closeMenu(); return; }
     if(focusOpen){ closeFocus(); return; }
     if(drawerOpen){ setDrawer(false); return; }
+    if(mvOpen){ closeMv(true); return; }
     if(inField){ t.blur(); return; }
-    if(armed&&S.at==="moves"){ armed=null; refresh(); return; }
     return;
   }
   if(menuOpen) return;
+  /* inside a menu of moves: arrows move between them, Tab puts the menu away */
+  var mm=t.closest&&t.closest(".mvmenu");
+  if(mm){
+    if(/^(ArrowUp|ArrowDown|Home|End)$/.test(k)){ e.preventDefault(); var its=$$(".mi",mm), ix=its.indexOf(t); var to=k==="Home"?0:k==="End"?its.length-1:(ix+(k==="ArrowDown"?1:-1)+its.length)%its.length; if(its[to]) its[to].focus(); return; }
+    if(k==="Tab"){ e.preventDefault(); closeMv(true); return; }
+    if(k==="ArrowLeft"||k==="ArrowRight"){ e.preventDefault(); return; }
+  }
   if(focusOpen){ if(k===" "&&!(t.closest&&t.closest("button"))){ e.preventDefault(); $("#focusPause").click(); } return; }
   if(e.altKey) return;
   if(inField){
@@ -3611,7 +4237,10 @@ document.addEventListener("keydown",function(e){
     if(k==="Enter"&&!e.shiftKey){
       if(t.hasAttribute("data-add")){ e.preventDefault(); addNote(t.getAttribute("data-add"),t); return; }
       if(t.hasAttribute("data-bstep")){ e.preventDefault(); stepEnter(t); return; }
-      if(t.hasAttribute("data-fhow")||t.hasAttribute("data-ftext")){ e.preventDefault(); t.blur(); return; }
+      /* Enter puts an answer away and goes back to its step */
+      if(t.hasAttribute("data-fhow")||t.hasAttribute("data-ftext")){ e.preventDefault(); var fid=t.getAttribute("data-fhow")||t.getAttribute("data-ftext"), hb=$(hitSel(fid),curEl); if(hb) hb.focus(); else t.blur(); return; }
+      /* in a reason for a step, Enter moves on to necessary or inherited for that step, never to the next screen */
+      if(t.hasAttribute("data-bwhy")){ e.preventDefault(); var card=t.closest(".lift"), nb=card&&($(".nec button.on",card)||$(".nec button",card)); if(nb) nb.focus(); else t.blur(); return; }
       if((tag==="input"||tag==="textarea")&&(t.classList.contains("big")||t.classList.contains("field"))){
         e.preventDefault();
         var bp=t.getAttribute("data-bind")||"";
@@ -3632,6 +4261,12 @@ document.addEventListener("keydown",function(e){
     var nb=rs[(ri+((k==="ArrowRight"||k==="ArrowDown")?1:-1)+rs.length)%rs.length]; if(nb) nb.click();
     return;
   }
+  /* in a strip of steps, arrows move between the steps and never change the screen */
+  var sp=t.closest&&t.closest(".mstrip.pick, .strip8.moves");
+  if(sp&&/^Arrow(Left|Right|Up|Down)$/.test(k)){
+    e.preventDefault(); var its=sp.classList.contains("pick")?$$(".mt",sp):$$(".sf-hit",sp), si=its.indexOf(t); if(si<0) return;
+    var sj=si+((k==="ArrowRight"||k==="ArrowDown")?1:-1); if(sj>=0&&sj<its.length) its[sj].focus(); return;
+  }
   if(k==="ArrowRight"||k==="PageDown"){ e.preventDefault(); go(1); }
   else if(k==="ArrowLeft"||k==="PageUp"){ e.preventDefault(); go(-1); }
   else if(k==="Enter"||k===" "){
@@ -3644,6 +4279,17 @@ document.addEventListener("keydown",function(e){
   else if(k==="n"||k==="N"){ if(team()) setDrawer(!drawerOpen); }
   else if(k==="m"||k==="M"){ toggleSound(); }
 });
+/* a new step left empty goes away when the group moves on from it */
+document.addEventListener("focusout",function(e){
+  var t=e.target; if(!t||!t.hasAttribute||!t.hasAttribute("data-ftext")) return;
+  var id=t.getAttribute("data-ftext");
+  setTimeout(function(){
+    if(S.at!=="moves"||!t.isConnected) return;
+    var a=document.activeElement; if(a===t||(a&&a.closest&&a.closest('.sf[data-fid="'+id+'"]'))) return;
+    var it=flowItem(id); if(!it||it.src||has(it.t)) return;
+    S.flow.splice(S.flow.indexOf(it),1); save(); refresh();
+  },150);
+});
 $("#nextBtn").addEventListener("click",function(){ ac(); go(1); });
 $("#backBtn").addEventListener("click",function(){ ac(); go(-1); });
 $("#rail").addEventListener("click",function(e){ var b=e.target.closest("button[data-ch]"); if(!b) return; ac(); var id=firstOfCh(+b.getAttribute("data-ch")); if(id) jumpTo(id); });
@@ -3652,6 +4298,8 @@ $("#rail").addEventListener("click",function(e){ var b=e.target.closest("button[
    MENU
    ========================================================= */
 var menuOpen=false, lastFocus=null;
+/* Light or Dark: until someone picks, the Lab follows the device, and the setting shows which one that is */
+function isDark(){ if(S.theme==="dark") return true; if(S.theme==="light") return false; try{ return !!(window.matchMedia&&window.matchMedia("(prefers-color-scheme: dark)").matches); }catch(e){ return false; } }
 function openMenu(){
   var s=cur(), h='<button class="ib x" type="button" data-m="close" aria-label="Close settings" style="float:right">'+ICON.x+'</button><h4>Settings</h4>';
   var seg=function(m,v,l,on){ return '<button type="button" data-m="'+m+'" data-v="'+v+'" aria-pressed="'+on+'">'+l+'</button>'; };
@@ -3664,7 +4312,7 @@ function openMenu(){
   var fid=firstOfCh(7); if(fid) jump+='<button class="mch'+(s.ch===7?' on':'')+'" type="button" data-m="jump" data-id="'+fid+'"><i aria-hidden="true"></i><span>Finish</span></button>';
   jump+='</div>';
   h+='<div class="mgroup first"><p class="mlab">Who’s here</p><div class="seg">'+seg("who","team-room","Team, in one room",team()&&S.place==="room")+seg("who","team-virtual","Team, on a call",team()&&S.place==="virtual")+seg("who","solo","Just me",!team())+'</div>'+
-    '<p class="mlab">Theme</p><div class="seg">'+seg("theme","auto","Match my device",S.theme==="auto")+seg("theme","light","Light",S.theme==="light")+seg("theme","dark","Dark",S.theme==="dark")+'</div></div>'+
+    '<p class="mlab">Theme</p><div class="seg">'+seg("theme","light","Light",!isDark())+seg("theme","dark","Dark",isDark())+'</div></div>'+
     '<div class="mgroup"><button class="sw" type="button" data-m="sfx" aria-pressed="'+S.sfx+'"><span>Sound effects and chimes</span><i aria-hidden="true"></i></button>'+
     '<button class="sw" type="button" data-m="music" aria-pressed="'+S.music+'"><span>Calm music during quiet work</span><i aria-hidden="true"></i></button></div>'+
     jump+
@@ -3724,9 +4372,9 @@ function doPrint(){
   H.push('<section><h2>5. Reimagine it</h2>'+(S.story?'<p class="meta">'+T("We said our","I said my")+' workflow is more '+(S.story==="tesla"?"Tesla: something should disappear.":"MLB: something new should be added.")+'</p>':'')+
     (cc.list.length?'<ul>'+cc.list.map(function(c){ return '<li>'+e(c.t)+'</li>'; }).join("")+'</ul>':'')+
     '<p><strong>The reimagined workflow</strong> ('+plural(m.nCut,"step","steps")+' gone, '+m.nNew+' new):</p>'+(okPhoto(S.photoNew)?'<img src="'+S.photoNew+'" alt="">':'')+'<ol>'+m.news.map(function(f){ return '<li>'+e(f.t)+'</li>'; }).join("")+'</ol></section>');
-  H.push('<section><h2>6. Share it</h2>'+askNames().map(function(nm,i){ return '<p><strong>'+(i+1)+'. '+(has(nm)?e(nm):"________________")+'</strong></p><p>What do you like?</p><div class="blank"></div><p>What do you wish?</p><div class="blank"></div><p>What do you wonder?</p><div class="blank"></div>'; }).join("")+
+  H.push('<section><h2>6. Share it</h2><p class="meta">Show each person the new workflow, then ask them three questions and write down what they say: What do you like? What do you wish? What do you wonder?</p>'+askNames().map(function(nm,i){ return '<p><strong>'+(i+1)+'. '+(has(nm)?e(nm):"________________")+'</strong></p><p>What do you like?</p><div class="blank"></div><p>What do you wish?</p><div class="blank"></div><p>What do you wonder?</p><div class="blank"></div>'; }).join("")+
     line("First test",S.test)+(has(S.owner)?line("Owner",S.owner):'')+(has(S.when)?line("By when",S.when):'')+'</section>');
-  H.push('<p style="margin-top:18px"><strong>Take it further:</strong> ExperiencePoint’s AI workshops build on what you made today. experiencepoint.com/ai-training</p>');
+  H.push('<p style="margin-top:18px"><strong>Take it further:</strong> ask ExperiencePoint about the AI workshops that build on what you made today. experiencepoint.com/contact-us</p>');
   H.push('<p class="meta" style="margin-top:20px">ExperiencePoint&reg; Reimagination Lab. This is a proprietary ExperiencePoint tool. Please don’t copy or redistribute it. Copyright &copy; ExperiencePoint Inc. 2026, all rights reserved.</p>');
   $("#printout").innerHTML=H.join("");
   setTimeout(function(){ try{ window.print(); }catch(x){ toast("Printing isn’t available here. Try opening the file in a browser."); } },80);
@@ -3741,7 +4389,7 @@ function fontsReady(){
   return new Promise(function(res){
     if(!(document.fonts&&document.fonts.load)) return res();
     var t=setTimeout(res,1800);
-    Promise.all(['600 60px "Caveat"','600 40px "Fraunces"','500 30px "Fraunces"','600 20px "Inter"','500 18px "Inter"'].map(function(f){ return document.fonts.load(f).catch(function(){}); }))
+    Promise.all(['500 50px "Fraunces"','600 30px "Fraunces"','500 30px "Fraunces"','600 18px "Inter"','550 25px "Inter"','500 18px "Inter"'].map(function(f){ return document.fonts.load(f).catch(function(){}); }))
       .then(function(){ clearTimeout(t); res(); });
   });
 }
@@ -3749,7 +4397,7 @@ function doPng(){
   fontsReady().then(function(){ try{ drawCard(); }catch(err){ toast("Couldn’t make the image here. Try Print instead."); } });
 }
 function emailBody(){
-  var m=matchSets(), ci=cardChanges(), keep=ci.list.slice(0,6), L=[];
+  var m=matchSets(), ci=cardChanges(), keep=ci.list, L=[];
   L.push(T("Here’s what we worked out","Here’s what I worked out")+" in the Reimagination Lab on "+dateStr()+".");
   L.push("");
   L.push("The workflow: "+(has(S.eyeroll)?S.eyeroll:"not named yet"));
@@ -3760,7 +4408,7 @@ function emailBody(){
   if(has(S.test)){ L.push(""); L.push("First test: "+S.test+([S.owner,S.when].filter(has).length?" ("+[S.owner?("owner "+S.owner):"",S.when?("by "+S.when):""].filter(has).join(", ")+")":"")); }
   if(has(S.ask)){ L.push(""); L.push("Who "+T("we’ll","I’ll")+" ask: "+S.ask); }
   L.push(""); L.push("The card is attached.");
-  L.push(""); L.push("Take it further: ExperiencePoint’s AI workshops build on what "+T("we","I")+" made today. "+LINKS.ai);
+  L.push(""); L.push("Take it further: ask ExperiencePoint about the AI workshops that build on what "+T("we","I")+" made today. "+LINKS.contact);
   return L.join("\n");
 }
 function doEmail(){
@@ -3779,8 +4427,9 @@ function drawCard(){
   sfx("little"); toast("Card saved as an image.");
 }
 function cardCanvas(){
-  var W=1200, c=document.createElement("canvas"), x=c.getContext("2d"); c.width=W; c.height=3200;
-  var m=matchSets(), ci=cardChanges(), keep=ci.list.slice(0,4), PAD=72, y=0;
+  var W=1200, c=document.createElement("canvas"), x=c.getContext("2d"); c.width=W; c.height=3400;
+  var m=matchSets(), cuts=cardCuts(), PAD=76, y=0;
+  var INK="#22304A", SOFT="#586A90", MUTE="#8A94AA";
   /* words wrapped to a width; text that runs past the last allowed line ends with an ellipsis */
   var wrap=function(t,X,Y,maxW,lh,font,color,maxLines){
     x.font=font; x.fillStyle=color; var paras=str(t).split(/\n/), lines=0;
@@ -3801,51 +4450,52 @@ function cardCanvas(){
     }
     return Y;
   };
+  /* the move's mark on a changed tile: a sun for new, a dot in a dashed ring for less effort, rings for more room */
+  var moveMark=function(k,cx,cy){
+    x.save(); x.lineWidth=2.2; x.lineCap="round";
+    if(k==="inv"){ x.fillStyle="#FFCC00"; x.beginPath(); x.arc(cx,cy,5.5,0,Math.PI*2); x.fill(); x.strokeStyle="#1A2234"; for(var a=0;a<8;a++){ var r=a*Math.PI/4; x.beginPath(); x.moveTo(cx+Math.cos(r)*9,cy+Math.sin(r)*9); x.lineTo(cx+Math.cos(r)*12.5,cy+Math.sin(r)*12.5); x.stroke(); } }
+    else if(k==="shr"){ x.strokeStyle="#1A2234"; x.setLineDash([3,4]); x.beginPath(); x.arc(cx,cy,11,0,Math.PI*2); x.stroke(); x.setLineDash([]); x.fillStyle="#1A2234"; x.beginPath(); x.arc(cx,cy,4,0,Math.PI*2); x.fill(); }
+    else if(k==="amp"){ x.fillStyle="#3E8E8C"; x.beginPath(); x.arc(cx,cy,4,0,Math.PI*2); x.fill(); x.strokeStyle="#1A2234"; x.beginPath(); x.arc(cx,cy,8,0,Math.PI*2); x.stroke(); x.globalAlpha=.45; x.beginPath(); x.arc(cx,cy,12.5,0,Math.PI*2); x.stroke(); x.globalAlpha=1; }
+    x.restore();
+  };
   var measure=function(t,maxW,font,maxLines){ x.font=font; var ws=str(t).split(/\s+/), ln="", n=1; for(var i=0;i<ws.length;i++){ var test=ln?ln+" "+ws[i]:ws[i]; if(x.measureText(test).width>maxW&&ln){ n++; ln=ws[i]; } else ln=test; } return Math.min(n,maxLines||99); };
   var title=has(S.eyeroll)?S.eyeroll:T("Our workflow","My workflow");
-  /* header */
-  var titleLines=measure(title,W-PAD*2,'600 64px "Caveat", "Segoe Print", cursive',4);
-  var HH=170+titleLines*70+40;
+  var TF='500 50px "Fraunces", Georgia, serif';
+  /* header: the wordmark, the date and the eye-roller, on night blue */
+  var titleLines=measure(title,W-PAD*2,TF,4);
+  var HH=150+titleLines*62+44;
   var g=x.createRadialGradient(0,0,10,0,0,900); g.addColorStop(0,"#2C3C62"); g.addColorStop(1,"#16213A");
   x.fillStyle="#16213A"; x.fillRect(0,0,W,HH); x.fillStyle=g; x.fillRect(0,0,W,HH);
-  x.font='600 18px "Inter", sans-serif'; x.fillStyle="#A8B2C7"; x.fillText("ExperiencePoint®",PAD,78);
-  x.font='600 34px "Fraunces", Georgia, serif'; x.fillStyle="#F2F4F8";
-  var wx=PAD, wy=128; x.fillText("Re",wx,wy); var w1=x.measureText("Re").width; x.fillText("ı",wx+w1,wy); var wi=x.measureText("ı").width; x.fillText("magination Lab",wx+w1+wi,wy);
-  x.fillStyle="#FFCC00"; x.beginPath(); x.arc(wx+w1+wi/2,wy-25,4.6,0,Math.PI*2); x.fill();
-  x.font='500 18px "Inter", sans-serif'; x.fillStyle="#A8B2C7"; var ds=dateStr(); x.fillText(ds,W-PAD-x.measureText(ds).width,78);
-  y=wrap(title,PAD,212,W-PAD*2,70,'600 64px "Caveat", "Segoe Print", cursive',"#F2F4F8",4);
+  x.font='600 30px "Fraunces", Georgia, serif'; x.fillStyle="#F2F4F8";
+  var wx=PAD, wy=96; x.fillText("Re",wx,wy); var w1=x.measureText("Re").width; x.fillText("ı",wx+w1,wy); var wi=x.measureText("ı").width; x.fillText("magination Lab",wx+w1+wi,wy);
+  x.fillStyle="#FFCC00"; x.beginPath(); x.arc(wx+w1+wi/2,wy-22,4.2,0,Math.PI*2); x.fill();
+  x.font='500 18px "Inter", sans-serif'; x.fillStyle="#A8B2C7"; var ds=dateStr(); x.fillText(ds,W-PAD-x.measureText(ds).width,92);
+  wrap(title,PAD,180,W-PAD*2,62,TF,"#F2F4F8",4);
   /* body */
-  var BY=HH; x.fillStyle="#FFFFFF"; x.fillRect(0,BY,W,c.height-BY); y=BY+70;
-  var label=function(t){ x.font='600 19px "Inter", sans-serif'; x.fillStyle="#586A90"; x.fillText(t,PAD,y); y+=40; };
-  var val=function(t){ y=wrap(has(t)?t:"Not filled in",PAD,y,W-PAD*2,42,(has(t)?'500':'italic 400')+' 30px "Fraunces", Georgia, serif',has(t)?"#293851":"#8A94AA",5); y+=26; };
-  var frames=function(list,marks,cutMarks,chMarks){
-    if(!list.length){ val(""); return; }
-    var fw=170, fh=104, gap=12, perRow=Math.floor((W-PAD*2+gap)/(fw+gap)), X=PAD;
-    list.forEach(function(f,i){
-      if(i&&i%perRow===0){ X=PAD; y+=fh+gap; }
-      x.fillStyle="#0B1120"; roundRect(x,X,y-28,fw,fh,6); x.fill();
-      x.fillStyle=(cutMarks&&cutMarks[f.id])?"#D3D8E1":"#E9EDF4"; roundRect(x,X+7,y-21,fw-14,fh-14,4); x.fill();
-      x.font='600 15px "Fraunces", serif'; x.fillStyle="#5E6A84"; x.fillText(String(i+1),X+18,y);
-      wrap(f.t,X+18,y+24,fw-40,20,'600 16px "Inter", sans-serif',(cutMarks&&cutMarks[f.id])?"#4A5570":"#1A2234",3);
-      if(cutMarks&&cutMarks[f.id]){ x.strokeStyle="#D86527"; x.lineWidth=4; x.lineCap="round"; x.beginPath(); x.moveTo(X+16,y+44); x.lineTo(X+fw-16,y+8); x.stroke(); }
-      if(marks&&marks[f.id]){ x.fillStyle="#FFCC00"; x.beginPath(); x.arc(X+fw-22,y-8,8,0,Math.PI*2); x.fill(); }
-      else if(chMarks&&chMarks[f.id]){ x.strokeStyle="#3E8E8C"; x.lineWidth=3; x.beginPath(); x.arc(X+fw-22,y-8,7,0,Math.PI*2); x.stroke(); }
-      X+=fw+gap;
-    });
-    y+=fh+30;
-  };
+  var BY=HH; x.fillStyle="#FFFFFF"; x.fillRect(0,BY,W,c.height-BY); y=BY+72;
+  var label=function(t,side){ x.font='650 19px "Inter", sans-serif'; x.fillStyle=SOFT; x.fillText(t,PAD,y); if(side){ x.font='500 19px "Inter", sans-serif'; x.fillText(side,W-PAD-x.measureText(side).width,y); } y+=42; };
+  var val=function(t){ y=wrap(has(t)?t:"Not filled in",PAD,y,W-PAD*2,42,(has(t)?'500':'italic 400')+' 30px "Fraunces", Georgia, serif',has(t)?INK:MUTE,5); y+=34; };
   label("Real purpose"); val(S.purpose);
-  label("Today"+(m.olds.length?", "+plural(m.olds.length,"step","steps"):"")); frames(m.olds,null,m.cut);
-  label("Reimagined"+(m.news.length?", "+plural(m.news.length,"step","steps"):"")); frames(m.news,m.nw,null,m.ch);
-  label(ci.label);
-  if(keep.length){ keep.forEach(function(k){ var y0=y; x.fillStyle="#FFCC00"; x.beginPath(); x.arc(PAD+8,y0-11,6,0,Math.PI*2); x.fill(); y=wrap(k.t,PAD+28,y0,W-PAD*2-28,40,'600 34px "Caveat", cursive',"#293851",2)+4; }); y+=20; }
-  else val("");
+  label("The new workflow",anyMoves()?stepCount(m):"");
+  if(m.news.length){
+    var cols=4, gap=16, fw=(W-PAD*2-gap*(cols-1))/cols, fh=124;
+    m.news.forEach(function(f,i){
+      var X=PAD+(i%cols)*(fw+gap), Y=y-22+Math.floor(i/cols)*(fh+gap), isNew=!!m.nw[f.id], isCh=!!m.ch[f.id];
+      x.fillStyle=isNew?"#FFF8E6":isCh?(m.ch[f.id]==="amp"?"#E2F3F2":"#E9EDF5"):"#F3F5F9"; roundRect(x,X,Y,fw,fh,14); x.fill();
+      if(isNew||isCh){ x.strokeStyle=isNew?"#E0B23A":(m.ch[f.id]==="amp"?"#3E8E8C":"#586A90"); x.lineWidth=2.5; roundRect(x,X+1.25,Y+1.25,fw-2.5,fh-2.5,13); x.stroke(); }
+      x.font='600 17px "Fraunces", serif'; x.fillStyle=isNew?"#9A7600":SOFT; x.fillText(String(i+1),X+18,Y+32);
+      if(isNew||isCh) moveMark(isNew?"inv":m.ch[f.id],X+fw-30,Y+26);
+      wrap(f.t,X+18,Y+62,fw-36,23,'600 18px "Inter", sans-serif',"#1A2234",3);
+    });
+    y+=Math.ceil(m.news.length/cols)*(fh+gap)+30;
+  } else val("");
+  if(cuts.length){ label(T("What we cut","What I cut")); y=wrap(cuts.join("; "),PAD,y,W-PAD*2,38,'500 27px "Fraunces", Georgia, serif',INK,4); y+=34; }
   label("First test"); val(has(S.test)?S.test+([S.owner,S.when].filter(has).length?" ("+[S.owner,S.when].filter(has).join(", ")+")":""):"");
   /* footer */
-  y+=10; x.fillStyle="rgba(41,56,81,.12)"; x.fillRect(PAD,y,W-PAD*2,2); y+=48;
-  for(var cI=1;cI<=6;cI++){ x.beginPath(); x.arc(PAD+10+(cI-1)*32,y-6,10,0,Math.PI*2); if(has(railVal(cI))){ x.fillStyle="#FFCC00"; x.fill(); } else { x.strokeStyle="rgba(41,56,81,.3)"; x.lineWidth=2.5; x.stroke(); } }
-  x.font='500 17px "Inter", sans-serif'; x.fillStyle="#586A90"; var cp="© ExperiencePoint Inc. 2026"; x.fillText(cp,W-PAD-x.measureText(cp).width,y);
-  var H=Math.min(c.height,y+56);
+  y+=6; x.fillStyle="rgba(41,56,81,.12)"; x.fillRect(PAD,y,W-PAD*2,2); y+=46;
+  x.font='600 17px "Inter", sans-serif'; x.fillStyle=SOFT; x.fillText("ExperiencePoint®",PAD,y);
+  x.font='500 17px "Inter", sans-serif'; var cp="© ExperiencePoint Inc. 2026"; x.fillText(cp,W-PAD-x.measureText(cp).width,y);
+  var H=Math.min(c.height,y+52);
   var out=document.createElement("canvas"); out.width=W; out.height=H; out.getContext("2d").drawImage(c,0,0);
   return out;
 }

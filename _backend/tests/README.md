@@ -66,26 +66,29 @@ fifteen minutes to find, or miss entirely.
   a browser that blocks storage, no analytics or brand names, and one primary button per screen.
 - `qa-reimagination-lab.mjs` tests `../../field-tools/reimagination-lab/index.html` (the
   Reimagination Lab) in a simulated browser. It walks a whole team session, in a room and
-  then on a call: the plan of six steps, the rail that fills with the group's own words,
-  timers that take 30 seconds off or on and end once you move past their screen, the wall of
-  eye-rollers, the vote revealed through Next with ties waiting for a pick, the why chain
-  (each line unlocks the next) and picking which line is the real purpose, the three ways to
-  draw it, the strip of frames the steps become (typed in, moved, removed with undo), one
-  face stamped on each frame, necessary or inherited for the steps lifted out to question,
-  the captioned story player (silent when the sound is off, and carrying on in captions when
-  the voice can't play), the four moves used as tools on the frames themselves (cut with undo,
-  shrink and amplify with a line on how, invent a new step after any frame), the change
-  replayed in Share it, and the first test. It walks a whole solo session too (no team-only
-  screens, and the steps typed straight in), one screen at a time with at most one filled
-  button. It checks that
-  typed text never runs as code, that everything the group types (and every line that quotes
-  it) is marked private for the feedback kit, two tabs open on one session, print, the
-  outcome image, Email this with the real send kit, picking up after a reload (including
-  sessions saved by earlier versions and screens that have since gone, and steps edited
-  after the moves keeping their changes), clear with undo,
-  that the page stays well under 1 MB with the voice in its own file beside it
-  (`story.mp3`), and the hooks the feedback board uses: its parts (every screen in exactly
-  one) and opening any screen with made-up content.
+  then on a call: the plan of six steps, the rail that fills with the group's own words (and
+  shows only the names of steps still ahead), timers that take 30 seconds off or on and end
+  once you move past their screen, the wall of eye-rollers, the vote revealed through Next
+  with ties waiting for a pick, the why chain (each line unlocks the next) and picking which
+  line is the real purpose, the three ways to draw it, the strip of frames the steps become
+  (typed in between where the workflow starts and ends, moved, removed with undo), one face
+  stamped on each frame, up to three steps picked to question as necessary or inherited, the
+  captioned story player (silent when the sound is off, captions and sound in the player
+  itself, and carrying on in captions when the voice can't play), the four moves (select a
+  step and pick a move from its menu: cut, shrink or amplify with a line on how, a new step
+  after it, or leave it as it was, by mouse or keyboard), the new workflow in Share it, the
+  workshops with one way to contact ExperiencePoint, the finish that plays today's workflow
+  turning into the new one before the card (with motion on, and at once with reduced
+  motion), and the first test. It walks a whole solo session too (no team-only screens, and
+  the steps typed straight in), one screen at a time with at most one filled button. It
+  checks that typed text never runs as code, that everything the group types (and every
+  line that quotes it) is marked private for the feedback kit, two tabs open on one
+  session, the Light and Dark setting, print, the outcome image, Email this with the real
+  send kit, picking up after a reload (including sessions saved by earlier versions and
+  screens that have since gone, and steps edited after the moves keeping their changes),
+  clear with undo, that the page stays well under 1 MB with the voice in its own file
+  beside it (`story.mp3`), and the hooks the feedback board uses: its parts (every screen
+  in exactly one) and opening any screen with made-up content.
 - `qa-kit.mjs` tests the shared kits in `../../assets/kit/` in a simulated browser, against
   the real worker code with the fake database: the feedback kit (`feedback.js`, and the
   comment bar it loads only in feedback mode) and the Email this kit (`send.js`). It covers
