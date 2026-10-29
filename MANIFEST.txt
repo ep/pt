@@ -1,1 +1,0 @@
-Reimagination Lab v8: replace these 3 files at the same paths in pt (Lab page, its test suite, the tests README paragraph on the Lab).
