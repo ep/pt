@@ -1,6 +1,6 @@
 # Tests for the pt backend, field tools and shared kits
 
-Ten automated test suites live here. They are robot users: each one loads the real
+Eleven automated test suites live here. They are robot users: each one loads the real
 code, clicks through entire sessions in a simulated browser, and checks that
 everything behaves. They catch breakage in seconds that manual testing would take
 fifteen minutes to find, or miss entirely.
@@ -44,6 +44,19 @@ fifteen minutes to find, or miss entirely.
   console, a projector tab and every phone, reloads, a newcomer at the second pulse, a
   Focused session, an older session, the results download and reading it back, the
   over-time player, ending with undo, the gate screens, and the test drive.
+- `qa-success-factors.mjs` tests `../../field-tools/success-factors/index.html` (Success Factors) in a
+  simulated browser, against the real worker code with the fake database. It runs a whole session with
+  a studio, a console and several laptops: setup and its limits, the closed session and the key the
+  worker demands, the lobby QR (decoded with jsQR) and both copy buttons, seats and mascots (two people
+  picking one mascot at once, the 21st person refused), hidden ideas with edit and delete, one timer
+  across clocks 30 seconds apart that locks every laptop at zero and moves to Reveal after a 3-2-1,
+  another round, grouping by drag and by menu (never more than 3 writes), naming, merge, split, delete,
+  edits with history, undo, build-on ideas under their parent, classifying, stacked votes with the cap,
+  votes given back after going back, live tallies that match everywhere, the vote closing at zero,
+  Olympic ranking (ties at every position and 2,000 random tallies), the scoreboard and levels that
+  never drop, Finalize, the report and its appendix, downloads on every laptop, Email this through the
+  send kit, a reload that keeps its seat, two console tabs, presence, ending with a two-click clear,
+  a full 20-seat, 200-idea session against the row and size limits, and the test drive with no network.
 - `qa-report-builder.mjs` tests `../../wbwai201/report-builder/index.html` (the WBWAI 201
   report builder) in a simulated browser. It loads made-up sessions built inside the file
   (no CSV files in the repo), and covers the highlights and their numbers, one organization
@@ -146,6 +159,7 @@ Then, from anywhere in the repo:
     node _backend/tests/qa-kit.mjs
     node _backend/tests/qa-feedback-board.mjs
     node _backend/tests/qa-reimagination-lab.mjs
+    node _backend/tests/qa-success-factors.mjs
 
 Every line prints PASS or FAIL, and the process exits nonzero on any failure.
 

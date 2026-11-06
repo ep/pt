@@ -56,7 +56,7 @@
   KEYS (gated tools only; see GATED_TOOLS_DEFAULT below)
     Every session has one key, chosen by the tool at session start and sent as
     X-Session-Key. Two kinds of session exist:
-    - Closed session (create without "open", the chips model): every request needs
+    - Closed session (create without "open", the chips model; Success Factors too): every request needs
       the key. The key rides inside the join link, so participants click and never
       type. Anyone with the link can do anything in the session.
     - Open session (create with "open", the Pair Poll model): anyone who knows the
@@ -104,7 +104,7 @@ var ROOM_ROWS_MAX = 6000;
 
 /* Which tools require a session key. Edit this list and commit to change it.
    A GATED_TOOLS variable in the dashboard, if you ever set one, overrides this. */
-var GATED_TOOLS_DEFAULT = 'pyc,pair-poll,room-pulse';
+var GATED_TOOLS_DEFAULT = 'pyc,pair-poll,room-pulse,sf';
 
 /* Which origins may call this worker. Edit and redeploy to change it.
    An ALLOW_ORIGIN variable in the dashboard, if you ever set one, overrides this.

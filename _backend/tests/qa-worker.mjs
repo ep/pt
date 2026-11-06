@@ -19,7 +19,7 @@ const KH={'X-Session-Key':SK};
 (async function(){
 // health names the gated tools
 let r=await call('GET','/api/health');
-check('gating works with no dashboard variable set, Room Pulse included', r.data.ok===true && r.data.gatedTools.join()==='pyc,pair-poll,room-pulse');
+check('gating works with no dashboard variable set, Room Pulse and Success Factors included', r.data.ok===true && r.data.gatedTools.join()==='pyc,pair-poll,room-pulse,sf');
 /* and a dashboard variable, if ever set, still wins */
 const ovEnv={ DB: FakeDB(), GATED_TOOLS:'other-tool' };
 const ovRes=await worker.fetch(new Request(base+'/api/health'), ovEnv);
