@@ -975,7 +975,12 @@ function openLinks() {
   d.appendChild(links);
   var other = el("input"); other.type = "text"; other.placeholder = "Paste a tool's address"; other.setAttribute("aria-label", "Another tool's address"); other.style.width = "100%"; other.style.marginTop = "12px";
   other.addEventListener("change", function () {
-    try { var u = new URL(other.value.trim()); u.searchParams.delete("feedback"); u.hash = ""; var q = u.searchParams.toString(); addLink(u.origin + u.pathname + "?" + (q ? q + "&" : "") + "feedback=" + S.code); other.value = ""; } catch (e) { toast("That isn't a web address."); }
+    try {
+      /* the #part stays: it carries a live session, so a pasted join link still opens it */
+      var u = new URL(other.value.trim()), h = u.hash && u.hash !== "#" ? u.hash : ""; u.searchParams.delete("feedback"); u.hash = "";
+      var q = u.searchParams.toString(); addLink(u.origin + u.pathname + "?" + (q ? q + "&" : "") + "feedback=" + S.code + h); other.value = "";
+      if (u.searchParams.has("host") || /[#&]r=host(&|$)/.test(h)) toast("That's a facilitator link. Testers who open it can run the session.");
+    } catch (e) { toast("That isn't a web address."); }
   });
   d.appendChild(other);
   var row = el("div", "row");

@@ -359,6 +359,8 @@ const w = openLab();
   check("stories: and back on", !$(w, ".story").classList.contains("nocap") && stored(w).cc === true);
   $(w, '.st-ctl [data-s="next"]').click(); await sleep(60);
   check("stories: Next line moves the still and the caption on", $(w, ".still.on").getAttribute("data-i") === "1" && /Model 3 ramp/.test($(w, ".st-cap").textContent));
+  $(w, '.st-ctl [data-s="next"]').click(); $(w, '.st-ctl [data-s="next"]').click();
+  check("stories: two quick taps on Next move two lines, before the next frame", $(w, ".still.on").getAttribute("data-i") === "3");
   for (let i = 0; i < 12; i++) { $(w, '.st-ctl [data-s="next"]').click(); await sleep(15); }
   check("stories: the last still asks which story sounds like yours", $(w, ".still.on").classList.contains("last") && $$(w, ".spk").length === 2);
   $(w, '.st-ctl [data-s="replay"]').click(); await sleep(60);
@@ -722,6 +724,30 @@ const w = openLab();
   x = await replay("no-such-screen", { mode: "team" });
   check("replay: an unknown screen falls back to the cover and says so", cur(x.r) === "cover" && x.msg.ok === false);
   check("replay: no page errors", x.errors.length === 0, x.errors.join(" | "));
+
+  /* every screen, as the board's sandboxed frame has it: no storage, no network, no settings to go on */
+  const every = (x.map ? x.map.sections : []).reduce((a, s) => a.concat(s.screens), []);
+  const bad = [], errs = []; let fetches = 0;
+  for (const sc of every) {
+    const vc = new VirtualConsole();
+    vc.on("jsdomError", (e) => { if (!/getContext|Not implemented/.test(e.message)) errs.push(sc + ": " + e.message); });
+    const dom = new JSDOM(HTML, { url: URL0, runScripts: "dangerously", pretendToBeVisual: true, virtualConsole: vc, beforeParse: (r) => {
+      prepare(r);
+      for (const k of ["localStorage", "sessionStorage"]) Object.defineProperty(r, k, { configurable: true, get() { throw new r.DOMException("blocked", "SecurityError"); } });
+      r.fetch = () => { fetches++; return Promise.reject(new Error("offline")); };
+      r.EPKitReplay = { screen: sc, settings: {}, scroll: 0 }; r.scrollTo = () => {};
+    } });
+    const r = dom.window; let msg = null;
+    r.addEventListener("message", (e) => { if (e.data.type === "epkit-replay") msg = e.data; });
+    await until(() => r.document.readyState === "complete", 3000);
+    r.eval(BOOT); r.eval(REPLAY);
+    await until(() => msg, 4000);
+    if (!(msg && msg.ok === true && cur(r) === sc)) bad.push(sc);
+    r.close();
+  }
+  check("replay: every screen in the Lab's parts opens with no storage, no network and no settings", every.length === 19 && bad.length === 0, bad.join(", "));
+  check("replay: one-mode screens open in their mode (the solo build, the team vote)", !bad.includes("b-solo") && !bad.includes("b-vote"));
+  check("replay: none of them errors or reaches the network", errs.length === 0 && fetches === 0, errs.slice(0, 3).join(" | "));
 }
 
 console.log(`\n${pass} passed, ${fail} failed`);

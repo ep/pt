@@ -2368,7 +2368,9 @@ function restoreDemo(o){
   var d=demoState(o.settings||{});
   Object.keys(d).forEach(function(k){ S[k]=d[k]; });
   syncPurpose();
-  var known=vis().some(function(x){ return x.id===o.screen; });
+  var has=function(){ return vis().some(function(x){ return x.id===o.screen; }); }, known=has();
+  /* a screen only one mode has (the solo build, the team vote) opens in that mode, whatever the settings say */
+  if(!known){ S.mode=S.mode==="solo"?"team":"solo"; syncPurpose(); known=has(); if(!known){ S.mode=d.mode; syncPurpose(); } }
   S.at=known?o.screen:"cover";
   ["fin","spin","ba","plan"].forEach(function(k){ celebrated[k]=1; });
   applyTheme(); chrome(); render(0);
@@ -4020,7 +4022,7 @@ function initStory(root){
     if(!raf) raf=requestAnimationFrame(loop);
   }
   function pause(){ if(!playing) return; at=now(); playing=false; clearTimeout(watch); if(storyAudio){ try{ storyAudio.pause(); }catch(e){} } p.classList.remove("playing"); p.classList.add("paused"); setToggle(); }
-  function seekLine(i){ var t=lineStart(Math.max(0,Math.min(STORY.length-1,i))); if(playing){ start(t); replayLine(t); } else { at=t; paint(t); } }
+  function seekLine(i){ var t=lineStart(Math.max(0,Math.min(STORY.length-1,i))); if(playing){ start(t); paint(t); replayLine(t); } else { at=t; paint(t); } }
   p._stop=function(){ pause(); if(raf) cancelAnimationFrame(raf); raf=null; };
   /* sound switched on or off mid-story: the voice joins or leaves at the same moment */
   p._sound=function(){ if(!playing) return; var t=now(); if(S.sfx) start(t); else silent(t); };
