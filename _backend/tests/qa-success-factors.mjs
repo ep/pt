@@ -101,6 +101,7 @@ function drag(d, src, target){
   check('the house look: Montserrat and Georgia, warm paper, teal for essential and clay for aspirational', /family=Montserrat/.test(html) && /Georgia/.test(html) && /#FBF8F3/i.test(html) && /\.col\.e\{[^}]*--teal/.test(html) && /\.col\.a\{[^}]*--clay/.test(html) && !/Big Shoulders|Archivo/.test(html));
   check('control groups and board groups keep separate classes', /\.controls \.cgrp\{/.test(html) && !/\.controls \.grp\b/.test(html) && !/class="grp"><button/.test(html));
   check('vote rows keep their own class (no clash with the ideas list)', /\.bopt\.voted\{/.test(html) && !/\.bopt\.mine/.test(html));
+  check('an empty podium step has its own class (no clash with the empty-state message that lifted it)', /\.pstep\.vacant \.blk\{/.test(html) && !/\.pstep\.empty/.test(html) && !/" empty"\) \+ '" data-medal/.test(html));
 
   /* ---------- the gate ---------- */
   let r = await call('GET','/api/health');
@@ -110,12 +111,12 @@ function drag(d, src, target){
   const st = load(HOSTED); const sw = st.window, sd = sw.document;
   await until(()=>on(st,'studio'));
   check('the studio opens with no hash, on its first step', on(st,'studio') && !on(st,'console') && sd.getElementById('st0').classList.contains('on') && sw.EPKit.tool.screen()==='studio-start');
-  check('studio defaults: 5 votes, top 10, a goal of 100 ideas, and 5, 15 and 3 minutes', ['stVotes','stTop','stGoal','stTi','stTs','stTv'].map(id=>txt(st,id)).join()==='5,10,100,5,15,3');
+  check('studio defaults: 5 votes, top 10, a goal of 100 ideas, and 5, 15, 2 and 3 minutes', ['stVotes','stTop','stGoal','stTi','stTs','stTm','stTv'].map(id=>txt(st,id)).join()==='5,10,100,5,15,2,3');
   click(sw, sd.getElementById('stBuild'));
   check('Set up a session opens the question step', sd.getElementById('st1').classList.contains('on') && sw.EPKit.tool.screen()==='studio-question');
   type(sw, sd.getElementById('stInit'), 'Northwind relaunch');
-  check('the question fills in from the initiative', sd.getElementById('stQ').value==='What has to be true for Northwind relaunch to succeed?');
-  check('timing has its own step, apart from the votes and the goal', !!sd.querySelector('#st2 .stepper[data-k="votes"]') && !!sd.querySelector('#st2 .stepper[data-k="goal"]') && !!sd.querySelector('#st3 .stepper[data-k="ti"]') && !sd.querySelector('#st2 .stepper[data-k="ti"]') && !sd.querySelector('#st3 .stepper[data-k="votes"]'));
+  check('the prompt fills in from the initiative, as a sentence to finish', sd.getElementById('stQ').value==='This Northwind relaunch will be successful if\u2026');
+  check('timing has its own step, apart from the votes and the goal', !!sd.querySelector('#st2 .stepper[data-k="votes"]') && !!sd.querySelector('#st2 .stepper[data-k="goal"]') && !!sd.querySelector('#st3 .stepper[data-k="ti"]') && !!sd.querySelector('#st3 .stepper[data-k="tm"]') && !sd.querySelector('#st2 .stepper[data-k="ti"]') && !sd.querySelector('#st3 .stepper[data-k="votes"]'));
   click(sw, sd.querySelector('#st1 [data-next="2"]'));
   const step = (k, d, n) => { for (let i=0;i<n;i++) click(sw, sd.querySelector('.stepper[data-k="'+k+'"] [data-d="'+d+'"]')); };
   step('votes', '1', 20);
@@ -127,7 +128,7 @@ function drag(d, src, target){
   click(sw, sd.querySelector('#st2 [data-next="3"]'));
   check('the timing step names its screen', sw.EPKit.tool.screen()==='studio-timing');
   click(sw, sd.querySelector('#st3 [data-next="4"]'));
-  check('the review lists every choice', /Northwind relaunch/.test(txt(st,'review')) && /3 votes each, top 3 ranked/.test(txt(st,'review')) && /20 ideas/.test(txt(st,'review')) && /5 min ideas, 15 min share and build, 3 min vote/.test(txt(st,'review')));
+  check('the review lists every choice', /Northwind relaunch/.test(txt(st,'review')) && /3 votes each, top 3 ranked/.test(txt(st,'review')) && /20 ideas/.test(txt(st,'review')) && /5 min ideas, 15 min share and build, 2 min marking, 3 min vote/.test(txt(st,'review')));
   click(sw, sd.getElementById('stCopySetup'));
   const setupUrl = sw.copied.pop();
   const SU = load(setupUrl); await until(()=>on(SU,'studio'));
@@ -148,7 +149,7 @@ function drag(d, src, target){
   check('a 6-letter code and a session key', /^[A-Z]{6}$/.test(CODE) && /^[A-Za-z0-9]{24}$/.test(KEY));
   check('the session is closed: a key, and no open paths', env.DB._rows.has('sf:'+CODE+'|_sk') && !env.DB._rows.has('sf:'+CODE+'|_open'));
   const c0 = row(CODE,'ctl');
-  check('the control row holds the setup', c0.phase==='lobby' && c0.initiative==='Northwind relaunch' && c0.q==='What has to be true for Northwind relaunch to succeed?' && c0.set.votes===3 && c0.set.topN===3 && c0.set.goal===20 && c0.set.t.share===15 && c0.allIn===false);
+  check('the control row holds the setup', c0.phase==='lobby' && c0.initiative==='Northwind relaunch' && c0.q==='This Northwind relaunch will be successful if\u2026' && c0.set.votes===3 && c0.set.topN===3 && c0.set.goal===20 && c0.set.t.share===15 && c0.allIn===false);
   check('the address carries the facilitator link in its hash', sw.location.hash==='#c='+CODE+'&k='+KEY+'&r=host');
   r = await call('GET','/api/state?tool=sf&code='+CODE);
   check('no key: the session refuses to be read', r.status===401);
@@ -305,21 +306,37 @@ function drag(d, src, target){
   click(aw, ad.querySelector('#pMine [data-p="share"][data-id="p1x1"]'));
   await until(()=>row(CODE,'idea/p1x1').sh && sd.querySelector('#cStage .card[data-id="p1x1"]'));
   check('Share puts one idea on the board for everyone', !!row(CODE,'idea/p1x1').sh && !!sd.querySelector('#cStage .card[data-id="p1x1"]') && !/Clear owners/.test(stageText(st)));
-  check('a shared idea says so on its author\'s list, and can no longer be shared or edited', /Shared/.test(ad.querySelector('#pMine li[data-mine="p1x1"]').textContent) && !ad.querySelector('#pMine li[data-mine="p1x1"] button'));
+  check('a shared idea says so on its author\'s list, and can no longer be shared or edited', /On the board/.test(ad.querySelector('#pMine li[data-mine="p1x1"]').textContent) && !ad.querySelector('#pMine li[data-mine="p1x1"] button'));
+  check('your ideas and the board are two separate, named spaces', /Your ideas/.test(ad.querySelector('.pnote').textContent) && /Only you can see these/.test(ad.querySelector('.pnote').textContent) && /The board/.test(ad.querySelector('.pboardp').textContent) && /Same as the shared screen/.test(ad.querySelector('.pboardp').textContent) && ad.querySelector('.pnote').contains(ad.getElementById('pMine')) && ad.querySelector('.pboardp').contains(ad.getElementById('pBoard')));
+  check('the next idea to share stands out', ad.querySelector('#pMine li.next').getAttribute('data-mine')==='p1x2');
+  await until(()=>ad.querySelector('#pBoard .card[data-id="p1x1"]'));
+  check('your own cards on the board say so', !!ad.querySelector('#pBoard .card[data-id="p1x1"] .ytag'));
+  check('on a phone, two tabs switch between your ideas and the board', ad.getElementById('pShare').getAttribute('data-tab')==='mine' && /Your ideas/.test(txt(A,'tabMine')) && /The board\s*1/.test(txt(A,'tabBoard')));
+  click(aw, ad.getElementById('tabBoard'));
+  check('the board tab shows the board', ad.getElementById('pShare').getAttribute('data-tab')==='board' && ad.getElementById('tabBoard').getAttribute('aria-selected')==='true');
+  click(aw, ad.getElementById('tabMine'));
   await until(()=>txt(st,'chip').includes('shared') && sd.getElementById('chipMore').textContent==='1');
   check('the chip counts what is shared', sd.getElementById('chipMore').textContent==='1');
   click(aw, ad.querySelector('#pMine [data-p="share"][data-id="p1x3"]'));
   click(bw, bd.querySelector('#pMine [data-p="share"][data-id="p2x1"]'));
   await until(()=>bd.querySelector('#pBoard [data-p="on"][data-id="p1x1"]'));
   click(bw, bd.querySelector('#pBoard [data-p="on"][data-id="p1x1"]'));
-  check('Build on picks the card you build on', /Building on A sponsor who shows up/.test(txt(P2,'pBuilding')) && txt(P2,'pSend')==='Add your build');
-  type(bw, bd.getElementById('pIdea'), '...who joins the monthly demo'); key(bw, bd.getElementById('pIdea'), 'Enter');
+  const bcard = () => bd.querySelector('#pBoard .card[data-id="p1x1"]');
+  check('Build on opens a composer right under that card', bcard().classList.contains('sel') && !!bcard().parentNode.querySelector(':scope > .bbox #pBuild') && /Your build on this/.test(bcard().parentNode.querySelector('.bbox').textContent) && bw.document.activeElement===bd.getElementById('pBuild'));
+  type(bw, bd.getElementById('pBuild'), '...who joins the monthly demo'); key(bw, bd.getElementById('pBuild'), 'Enter');
   await until(()=>row(CODE,'idea/p2x3'));
   const b1 = row(CODE,'idea/p2x3');
   check('a build records its parent and goes straight on the board', b1.par==='p1x1' && b1.ph==='b' && !!b1.sh);
-  check('the composer goes back to a new idea', txt(P2,'pBuilding')==='' && txt(P2,'pSend')==='Add to the board');
+  check('the composer closes once the build is in', !bd.getElementById('pBuild') && !bcard().classList.contains('sel'));
+  await until(()=>bd.querySelector('#pBoard [data-p="on"][data-id="p1x3"]'));
+  click(bw, bd.querySelector('#pBoard [data-p="on"][data-id="p1x3"]'));
+  type(bw, bd.getElementById('pBuild'), 'half a thou'); bd.getElementById('pBuild').focus();
   type(cw, cd.getElementById('pIdea'), 'A shared channel for questions'); click(cw, cd.getElementById('pSend'));
   await until(()=>row(CODE,'idea/p3x2'));
+  await until(()=>/A shared channel/.test(bd.getElementById('pBoard').textContent));
+  check('a half-written build survives the board redrawing as others share', bd.getElementById('pBuild') && bd.getElementById('pBuild').value==='half a thou' && bw.document.activeElement===bd.getElementById('pBuild'));
+  click(bw, bd.querySelector('.bbox [data-p="unbuild"]'));
+  check('Cancel closes the composer', !bd.getElementById('pBuild'));
   check('a new idea in sharing has no parent and goes straight on the board', row(CODE,'idea/p3x2').par===null && !!row(CODE,'idea/p3x2').sh);
   await until(()=>cd.querySelector('#pBoard .card[data-id="p1x3"]') && cd.querySelector('#pMine li[data-mine="p3x1"][draggable="true"]'));
   const dd1 = drag(P3, cd.querySelector('#pMine li[data-mine="p3x1"]'), cd.querySelector('#pBoard .card[data-id="p1x3"]'));
@@ -388,7 +405,7 @@ function drag(d, src, target){
   click(sw, sd.getElementById('cQ'));
   type(sw, sd.getElementById('cQedit'), 'What has to be true for the relaunch to land?'); key(sw, sd.getElementById('cQedit'), 'Enter');
   await until(()=>row(CODE,'ctl').q==='What has to be true for the relaunch to land?' && row(CODE,'qh/1'));
-  check('the facilitator can reword the question; the old wording is kept', row(CODE,'qh/1').q==='What has to be true for Northwind relaunch to succeed?' && txt(st,'cQ')==='What has to be true for the relaunch to land?');
+  check('the facilitator can reword the question; the old wording is kept', row(CODE,'qh/1').q==='This Northwind relaunch will be successful if\u2026' && txt(st,'cQ')==='What has to be true for the relaunch to land?');
   await until(()=>/relaunch to land/.test(bodyText(A)));
   check('laptops pick up the new wording', /relaunch to land/.test(bodyText(A)));
   click(sw, sd.getElementById('cJoin'));
@@ -396,6 +413,17 @@ function drag(d, src, target){
   check('Join info opens the link and the code from any phase', !hidden(st,'cJoin') && qrOf(sd.querySelector('#jmWays .qr'))===joinLink);
   click(sw, sd.getElementById('jmClose'));
   check('and closes', !on(st,'joinModal'));
+  /* pause screens: every laptop looks up, and the clock waits */
+  check('Pause screens sits in the top bar while people work', !hidden(st,'cPause') && txt(st,'cPause')==='Pause screens' && hidden(st,'cPausedTag'));
+  click(sw, sd.getElementById('cPause'));
+  await until(()=>row(CODE,'ctl').paused===true);
+  const tpz = row(CODE,'ctl').timer;
+  check('pausing stops the clock with the screens', tpz.running===false && tpz.left > 0 && row(CODE,'ctl').pausedT===true && !hidden(st,'cPausedTag') && txt(st,'cPause')==='Resume screens' && sw.EPKit.tool.screen()==='console-paused');
+  await until(()=>/Eyes up front/.test(bodyText(A)) && /Eyes up front/.test(bodyText(P2)));
+  check('every laptop points at the shared screen, and can\'t add anything', /paused the screens/.test(bodyText(A)) && aw.EPKit.tool.screen()==='laptop-paused' && !ad.getElementById('pIdea') && aw.addIdea()===false);
+  click(sw, sd.getElementById('cPause'));
+  await until(()=>row(CODE,'ctl').paused===false && ad.getElementById('pIdea'));
+  check('Resume brings the screens back and restarts the clock where it was', row(CODE,'ctl').timer.running===true && Math.abs(row(CODE,'ctl').timer.endsAt - Date.now() - tpz.left) < 2000 && aw.EPKit.tool.screen()==='laptop-share');
   /* time runs out on sharing: nothing locks, the console says so and waits */
   sw.chimes = [];
   tc = row(CODE,'ctl'); tc.timer.endsAt = Date.now() + 200;
@@ -404,42 +432,83 @@ function drag(d, src, target){
   await sleep(150);
   check('when sharing time runs out: a chime and a banner, and the room keeps sharing', sw.App.lastBanner==="Time's up" && row(CODE,'ctl').phase==='share' && !ad.getElementById('pIdea').disabled);
 
-  /* ---------- Sort: everything starts aspirational ---------- */
+  /* ---------- Sort: everyone marks what has to be true, then the room talks through the splits ---------- */
   const Mb = sw.model(), late = Mb.count - Mb.shared;
   click(sw, sd.getElementById('cNext'));
-  await until(()=>row(CODE,'ctl').phase==='sort' && sd.querySelector('#cStage [data-item="g1"]'));
+  await until(()=>row(CODE,'ctl').phase==='sort' && sd.getElementById('markCount'));
   check('moving on to Sort brings every unshared idea onto the board, and says how many', late===16 && row(CODE,'ctl').allIn===true && sw.App.lastBanner===late+' ideas join the board' && sw.model().count===sw.model().shared);
-  check('no timer while sorting', hidden(st,'cTimer') && row(CODE,'ctl').timer.running===false);
-  check('everything starts in Aspirational; Essential is empty', !sd.querySelector('#cStage .col.e .item') && sd.querySelectorAll('#cStage .col.a .item').length===sw.model().items.length && /Nothing here yet/.test(sd.querySelector('#cStage .col.e').textContent));
-  await until(()=>/far table/.test(bodyText(A)) && /Clear owners/.test(bodyText(P2)));
-  check('ideas nobody shared are on every board now', /far table/.test(bodyText(A)) && /Clear owners/.test(bodyText(P2)));
-  const dd3 = drag(st, sd.querySelector('[data-item="g1"]'), sd.querySelector('[data-drop="col:e"]'));
-  await until(()=>row(CODE,'grp/g1').c==='e');
-  check('dragging a group into Essential sorts it', dd3.ghost && row(CODE,'grp/g1').c==='e');
-  await until(()=>sd.querySelector('[data-imenu="p3x1"]'));
-  click(sw, sd.querySelector('[data-imenu="p3x1"]'));
-  check('the item menu offers the other column', sd.querySelector('.menu [data-mi="e"]').textContent==='Make it essential');
+  const tm0 = row(CODE,'ctl').timer;
+  check('sorting starts with marking, on its own 2-minute clock', row(CODE,'ctl').step==='mark' && tm0.phase==='sort' && tm0.running===true && tm0.dur===120000 && sw.EPKit.tool.screen()==='console-mark');
+  check('while people mark, the console shows how many have marked, never what', txt(st,'markCount')==='0' && !/sponsor|far table|Training first/.test(stageText(st)) && /Everyone/.test(stageText(st)) && txt(st,'chipMore')==='0');
+  await until(()=>ad.querySelectorAll('#pMarks .mopt').length && bd.querySelectorAll('#pMarks .mopt').length);
+  const nItems = sw.model().items.length;
+  check('every laptop lists each group and card to mark', nItems===20 && ad.querySelectorAll('#pMarks .mopt').length===nItems && aw.EPKit.tool.screen()==='laptop-mark' && /What has to be true\?/.test(bodyText(A)));
+  check('everything starts unmarked', !ad.querySelector('#pMarks .mopt.on') && txt(A,'pMarkN')==='Nothing marked yet');
+  const mark = (d,id)=>click(d.window, d.window.document.querySelector('#pMarks [data-id="'+id+'"]'));
+  mark(A,'g1'); mark(A,'p4x1'); mark(A,'p4x1'); mark(A,'p4x1');
+  await until(()=>row(CODE,'mark/p1') && row(CODE,'mark/p1').g1 && row(CODE,'mark/p1').p4x1);
+  check('a tap marks a card, a second tap takes it back', JSON.stringify(row(CODE,'mark/p1'))==='{"g1":1,"p4x1":1}' && ad.querySelector('#pMarks [data-id="g1"]').getAttribute('aria-pressed')==='true' && txt(A,'pMarkN')==='2 cards marked');
+  click(aw, ad.getElementById('pDone'));
+  await until(()=>row(CODE,'mark/p1')._d===1);
+  check('I\'m done says so, and marks can still change', row(CODE,'mark/p1')._d===1 && txt(A,'pDone')==='Done' && !ad.querySelector('#pMarks .mopt').disabled);
+  await sleep(120); const keepM = ad.querySelector('#pMarks [data-id="g1"]');
+  mark(P2,'g1'); mark(P2,'p1x3'); click(bw, bd.getElementById('pDone'));
+  mark(P3,'g1'); click(cw, cd.getElementById('pDone'));
+  await until(()=>row(CODE,'mark/p2') && row(CODE,'mark/p2')._d && row(CODE,'mark/p3') && row(CODE,'mark/p3')._d);
+  await until(()=>txt(st,'markCount')==='3');
+  check('the console counts who has marked and who is done, still without a word of what', txt(st,'markCount')==='3' && txt(st,'chipMore')==='3' && /3 people are done/.test(stageText(st)) && sd.querySelectorAll('#cStage .crowd .who.lit').length===3 && !/sponsor|far table|Training first/.test(stageText(st)));
+  await sleep(200);
+  check('other people\'s marks never redraw a laptop\'s list', ad.querySelector('#pMarks [data-id="g1"]')===keepM);
+  /* time runs out: marking locks, then the room talks it through */
+  tc = row(CODE,'ctl'); tc.timer.endsAt = Date.now() + 300;
+  await call('POST','/api/set',{ tool:'sf', code:CODE, path:'ctl', value:tc }, KEY);
+  await until(()=>ad.querySelector('#pMarks .mopt') && ad.querySelector('#pMarks .mopt').disabled, 3000);
+  check('at zero every laptop stops marking', ad.querySelector('#pMarks .mopt').disabled && !hidden(A,'pLock') && aw.toggleMark('p3x2')===false);
+  await until(()=>row(CODE,'ctl').step==='discuss' && sd.querySelector('#cStage .cols'), 3000);
+  check('after a 3-2-1 the console moves on to talking it through, with no clock', row(CODE,'ctl').phase==='sort' && row(CODE,'ctl').step==='discuss' && hidden(st,'cTimer') && sw.EPKit.tool.screen()==='console-sort');
+  const col = id => { const el = sd.querySelector('#cStage [data-item="'+id+'"]'); const c = el && el.closest('.col'); return c ? (c.classList.contains('e') ? 'e' : c.classList.contains('d') ? 'd' : 'a') : null; };
+  check('what everyone marked is essential, what some marked is to talk about, the rest is aspirational', col('g1')==='e' && col('p4x1')==='d' && col('p1x3')==='d' && col('fx1')==='a' && sd.querySelectorAll('#cStage .col.a .item').length===17);
+  check('each card shows how many marked it', /3 of 3/.test(sd.querySelector('[data-item="g1"] .mk2').textContent) && /1 of 3/.test(sd.querySelector('[data-item="p4x1"] .mk2').textContent) && sd.querySelector('[data-item="p4x1"] .mk2').classList.contains('split'));
+  check('the controls say what is left to talk about', /2 cards are still to talk about/.test(txt(st,'cCtl')) && txt(st,'cNext')==='Start voting');
+  await until(()=>/Eyes up front/.test(bodyText(P2)));
+  check('laptops point everyone at the shared screen, with nothing to drag', /talking through/.test(bodyText(P2)) && bw.EPKit.tool.screen()==='laptop-sort' && !bd.querySelector('[data-item]') && !bd.getElementById('pBoard'));
+  const dd3 = drag(st, sd.querySelector('[data-item="p1x3"]'), sd.querySelector('[data-drop="col:a"]'));
+  await until(()=>row(CODE,'meta/p1x3') && row(CODE,'meta/p1x3').c==='a');
+  check('dragging a card to Aspirational settles it', dd3.ghost && row(CODE,'meta/p1x3').c==='a' && col('p1x3')==='a');
+  click(sw, sd.querySelector('[data-imenu="p4x1"]'));
+  check('the item menu offers the other columns', [...sd.querySelectorAll('.menu button')].map(b=>b.textContent).join('|')==='Make it essential|Make it aspirational');
   click(sw, sd.querySelector('.menu [data-mi="e"]'));
-  await until(()=>row(CODE,'meta/p3x1').c==='e');
-  check('the item menu makes a card essential', row(CODE,'meta/p3x1').c==='e');
-  await until(()=>sd.querySelector('#cStage .col.e [data-imenu="p3x1"]'));
-  click(sw, sd.querySelector('[data-imenu="p3x1"]')); click(sw, sd.querySelector('.menu [data-mi="a"]'));
-  await until(()=>!row(CODE,'meta/p3x1').c);
-  check('and sends it back to aspirational', !row(CODE,'meta/p3x1').c);
-  sw.dropOn('item','p4x1','item:g1');
   await until(()=>row(CODE,'meta/p4x1') && row(CODE,'meta/p4x1').c==='e');
-  check('dropping a card on another card joins that card\'s column', row(CODE,'meta/p4x1').c==='e');
-  await until(()=>bd.querySelector('#pBoard .col.e [data-item="g1"]'));
-  check('laptops see the columns, read-only', !!bd.querySelector('#pBoard .col.e [data-item="g1"]') && !bd.querySelector('#pBoard [data-imenu]'));
+  check('the item menu makes a card essential', row(CODE,'meta/p4x1').c==='e' && col('p4x1')==='e');
+  await until(()=>sd.querySelector('[data-imenu="fx1"]'));
+  click(sw, sd.querySelector('[data-imenu="fx1"]')); click(sw, sd.querySelector('.menu [data-mi="d"]'));
+  await until(()=>row(CODE,'meta/fx1') && row(CODE,'meta/fx1').c==='d');
+  check('any card can go to the room to talk about', col('fx1')==='d');
+  click(sw, sd.querySelector('[data-imenu="fx1"]')); click(sw, sd.querySelector('.menu [data-mi="a"]'));
+  await until(()=>row(CODE,'meta/fx1').c==='a');
+  sw.dropOn('item','p4x2','item:g1');
+  await until(()=>row(CODE,'meta/p4x2') && row(CODE,'meta/p4x2').c==='e');
+  check('dropping a card on another card joins that card\'s column', row(CODE,'meta/p4x2').c==='e');
+  sw.classify('p4x2', null);
+  await until(()=>!(row(CODE,'meta/p4x2')||{}).c);
+  check('nothing is left to talk about', !sd.querySelector('#cStage .col.d .item') && /Drag a card between the columns/.test(txt(st,'cCtl')));
+  click(sw, sd.getElementById('cBack'));
+  await until(()=>row(CODE,'ctl').step==='mark');
+  check('Back returns to marking with the marks kept and the clock waiting', row(CODE,'ctl').timer.running===false && row(CODE,'mark/p1').g1===1 && txt(st,'cNext')==='Talk about the splits');
+  click(sw, sd.getElementById('cNext'));
+  await until(()=>row(CODE,'ctl').step==='discuss' && sd.querySelector('#cStage .cols'));
+  check('and forward again keeps every decision', col('p4x1')==='e' && col('p1x3')==='a' && col('g1')==='e');
 
   /* ---------- Vote ---------- */
   click(sw, sd.getElementById('cNext'));
   await until(()=>row(CODE,'ctl').phase==='vote' && bd.querySelector('[data-vote="+"]'));
   const tv0 = row(CODE,'ctl').timer;
   check('Vote starts its own 3-minute timer', tv0.phase==='vote' && tv0.running===true && tv0.dur===180000);
-  check('only aspirational items are on the ballot', !bd.querySelector('[data-t="g1"]') && !bd.querySelector('[data-t="p4x1"]') && !!bd.querySelector('[data-t="p1x3"]') && !!bd.querySelector('[data-t="fx1"]'));
+  check('every aspirational card is on the ballot on its own, nothing essential is', !bd.querySelector('[data-t="p1x1"]') && !bd.querySelector('[data-t="p2x3"]') && !bd.querySelector('[data-t="p4x1"]') && !!bd.querySelector('[data-t="p1x3"]') && !!bd.querySelector('[data-t="p3x1"]') && !!bd.querySelector('[data-t="fx1"]'));
+  const b3 = bd.querySelector('[data-bar="p3x1"]');
+  check('a build sits under the card it builds on, drawn as a chain', b3.classList.contains('build') && b3.previousElementSibling===bd.querySelector('[data-bar="p1x3"]') && b3.parentNode.classList.contains('bthread') && /building on/.test(b3.getAttribute('aria-label')));
   check('the laptop shows votes left', txt(P2,'votesLeft')==='3 of 3 votes left');
-  check('the console lists the ballot with no tallies, and the facilitator has no vote buttons', sd.querySelectorAll('#cStage [data-bar]').length===sw.model().items.filter(i=>i.c==='a').length && !sd.querySelector('#cStage [data-vote]') && [...sd.querySelectorAll('#cStage .bopt')].every(b=>b.children.length===1 && b.firstElementChild.classList.contains('lbl')));
+  check('the console lists the ballot with no tallies, and the facilitator has no vote buttons', sd.querySelectorAll('#cStage [data-bar]').length===sw.model().items.filter(i=>i.col!=='e').reduce((n,i)=>n+i.cards.length,0) && !sd.querySelector('#cStage [data-vote]') && [...sd.querySelectorAll('#cStage .bopt')].every(b=>b.children.length===1 && b.firstElementChild.classList.contains('lbl')));
   const plus = (d,id)=>click(d.window, d.window.document.querySelector('[data-vote="+"][data-t="'+id+'"]'));
   plus(P2,'p1x3'); await sleep(5); plus(P2,'p1x3');
   await until(()=>row(CODE,'vote/p2') && row(CODE,'vote/p2').p1x3===2);
@@ -467,6 +536,7 @@ function drag(d, src, target){
   /* going back: an item moved to essential gives its votes back */
   click(sw, sd.getElementById('cBack'));
   await until(()=>row(CODE,'ctl').phase==='sort');
+  check('Back from the vote lands on talking it through', row(CODE,'ctl').step==='discuss');
   sw.classify('fx1','e');
   await until(()=>row(CODE,'meta/fx1').c==='e');
   click(sw, sd.getElementById('cNext'));
@@ -486,16 +556,18 @@ function drag(d, src, target){
   check('laptops hold until the reveal', /Now we wait for the big reveal!/.test(bodyText(A)) && aw.EPKit.tool.screen()==='laptop-hold' && !bd.querySelector('.podium'));
   click(sw, sd.getElementById('rvBegin'));
   await until(()=>row(CODE,'ctl').rv===1 && /What has to be true/.test(txt(st,'rvSlide')));
-  check('first the essentials, by group', /Leadership/.test(txt(st,'rvSlide')) && /A sponsor who shows up/.test(txt(st,'rvSlide')) && /Also essential/.test(txt(st,'rvSlide')) && /Systems ready/.test(txt(st,'rvSlide')) && sw.EPKit.tool.screen()==='console-essentials');
+  check('first the essentials, one stone each, sealed', sd.querySelectorAll('#rvSlide .stone').length===3 && sd.querySelectorAll('#rvSlide .stone .seal').length===3 && /Leadership/.test(txt(st,'rvSlide')) && /A sponsor who shows up/.test(txt(st,'rvSlide')) && /Systems ready/.test(txt(st,'rvSlide')) && /Three things this initiative can't do without\./.test(txt(st,'rvSlide')) && sw.EPKit.tool.screen()==='console-essentials');
   await until(()=>/Leadership/.test(bodyText(A)));
-  check('laptops follow the reveal', aw.EPKit.tool.screen()==='laptop-essentials');
+  check('laptops follow the reveal, with the same stones', aw.EPKit.tool.screen()==='laptop-essentials' && ad.querySelectorAll('#pBoard .stone').length===3);
   key(sw, sd.body, 'ArrowRight');
   await until(()=>row(CODE,'ctl').rv===2 && sd.querySelector('#rvSlide .podium'));
   const R = sw.ranking();
   check('then the podium, by the arrow key: Olympic ranking, 4 votes gold, 3 silver', R[0].id==='p1x3' && R[0].tally===4 && R[0].medal==='gold' && R[1].id==='p3x1' && R[1].tally===3 && R[1].medal==='silver' && /Training first/.test(sd.querySelector('#rvSlide .pstep.gold').textContent) && /Front-line voices in the design/.test(sd.querySelector('#rvSlide .pstep.silver').textContent) && sw.EPKit.tool.screen()==='console-podium');
-  check('an empty step stays empty, and steps back', sd.querySelector('#rvSlide .pstep.bronze').classList.contains('empty'));
+  check('an empty step stays empty, and steps back', sd.querySelector('#rvSlide .pstep.bronze').classList.contains('vacant'));
+  check('a build that wins says what it builds on', /Builds on/.test(sd.querySelectorAll('#rvSlide .rank li')[1].textContent) && /Training first/.test(sd.querySelectorAll('#rvSlide .rank li')[1].querySelector('.ctx').textContent));
   await until(()=>bd.querySelector('#pBoard .podium') && aw.EPKit.tool.screen()==='laptop-podium');
   check('laptops get the podium too', aw.EPKit.tool.screen()==='laptop-podium' && /Training first/.test(bd.querySelector('#pBoard .pstep.gold').textContent), aw.EPKit.tool.screen()+' / '+(bd.querySelector('#pBoard .pstep.gold')||{}).textContent);
+  check('each laptop sees where its own votes went', /All three of your votes are on the podium\./.test(bd.querySelector('#pBoard .mypod').textContent) && bd.querySelectorAll('#pBoard .rank li .yours').length===2);
   click(sw, sd.getElementById('rvNext'));
   await until(()=>row(CODE,'ctl').rv==='done' && !on(st,'reveal'));
   check('Done closes the reveal onto the results', !on(st,'reveal') && !!sd.querySelector('#cStage .podium') && sw.EPKit.tool.screen()==='console-results');
@@ -524,9 +596,9 @@ function drag(d, src, target){
   check('the report file name', /^success-factors-northwind-relaunch-\d{4}-\d{2}-\d{2}\.html$/.test(name) && sw.clickedDownload===name);
   const rep = sw.reportHtml(true);
   check('the report: initiative, question, facilitator, people, level', /<h1>Northwind relaunch<\/h1>/.test(rep) && /relaunch to land/.test(rep) && /Facilitated by Pat/.test(rep) && /Ana/.test(rep) && /Dee/.test(rep) && /Level reached: Bell Ringers/.test(rep));
-  check('the report: essentials by group with detail', /<h3>Leadership<\/h3>/.test(rep) && rep.indexOf('Essential success factors') < rep.indexOf('Aspirational goals') && /Also essential/.test(rep));
-  check('the report: ranked aspirations with tallies and medals', /We will drive toward these/.test(rep) && /class="m gold">1</.test(rep) && /class="m silver">2</.test(rep));
-  check('the report appendix: other aspirations, original wording, earlier questions', /Appendix/.test(rep) && /no votes/.test(rep) && /Front-line voices <span class="d">now: Front-line voices in the design/.test(rep) && /Northwind relaunch to succeed\?<\/li>/.test(rep));
+  check('the report: essentials by group and card', /<h3>Leadership<\/h3>/.test(rep) && /<h3>Systems ready before launch<\/h3>/.test(rep) && rep.indexOf('Essential success factors') < rep.indexOf('Aspirational goals'));
+  check('the report: ranked aspirations with tallies and medals, builds with what they build on', /We will drive toward these/.test(rep) && /class="m gold">1</.test(rep) && /class="m silver">2</.test(rep) && /Front-line voices in the design <span class="d">builds on: &lt;img/.test(rep));
+  check('the report appendix: other aspirations, original wording, earlier questions', /Appendix/.test(rep) && /no votes/.test(rep) && /Front-line voices <span class="d">now: Front-line voices in the design/.test(rep) && /This Northwind relaunch will be successful if\u2026<\/li>/.test(rep));
   check('the appendix can be left out', !/Appendix/.test(sw.reportHtml(false)));
   check('the report escapes what people typed and prints cleanly', !/<img src=x/.test(rep) && /&lt;img src=x/.test(rep) && /@media print/.test(rep) && /noindex/.test(rep));
   await until(()=>bd.querySelector('[data-a="download"]'));
@@ -559,9 +631,12 @@ function drag(d, src, target){
   await until(()=>rows(CODE)===0, 3000);
   check('then it clears the session from the worker', rows(CODE)===0);
   await until(()=>on(st,'gate'));
-  check('the console says so', on(st,'gate') && txt(st,'gHead')==='Session ended and cleared.' && sw.EPKit.tool.screen()==='ended');
+  check('the console says so, with what the room made and everyone who was in it', on(st,'gate') && txt(st,'gHead')==='Session ended and cleared.' && sw.EPKit.tool.screen()==='ended' && [...sd.querySelectorAll('#gExtra .etile b')].map(b=>b.textContent).join()==='4,23,3,'+sw.ranking().filter(x=>x.top).length && sd.querySelectorAll('#gExtra .roomrow .rm').length===4);
   await until(()=>on(P2,'gate') && on(J,'gate'));
-  check('people in the session see "That\'s all, folks."', txt(P2,'gHead')==="That's all, folks." && bw.EPKit.tool.screen()==='laptop-ended');
+  const p2nick = bw.App.S.pax.p2.nick;
+  check('people in the session get their own wrap-up', txt(P2,'gHead')==='Thanks, '+p2nick+'!' && bw.EPKit.tool.screen()==='laptop-ended' && !!bd.querySelector('#gTop .endav svg') && [...bd.querySelectorAll('#gExtra .etile')].map(t=>t.textContent).join('|')==='1idea|1build|3votes' && /One of your ideas is an essential\./.test(txt(P2,'gExtra')) && bd.querySelectorAll('#gExtra .roomrow .rm').length===4);
+  click(bw, bd.querySelector('[data-a="enddl"]'));
+  check('and can still download the report after the session is gone', bw.App.lastDownload===name);
   check('a laptop that never joined is told the session isn\'t running', txt(J,'gHead')==="This session isn't running." && J.window.EPKit.tool.screen()==='gate');
   doms.forEach(d=>{ try{ d.window.stopLoops(); }catch(e){} });
 
@@ -627,21 +702,30 @@ function drag(d, src, target){
   check('the meter: marks at a quarter, half and three quarters of the goal, and the bell at the goal', [0,24,25,49,50,74,75,99,100,140].map(n=>tw.levelFor(n,100)).join('')==='0011223344' && [4,5,10,15,19,20].map(n=>tw.levelFor(n,20)).join('')==='012334');
   tw.App.S = { ctl:{ lvl:3, set:{ goal:100 } }, idea:{ p1x1:{ t:'a' } } };
   check('a level once reached never drops', tw.shownLevel(tw.model())===3);
-  check('the question fills in from the initiative', tw.defaultQ('Northwind relaunch')==='What has to be true for Northwind relaunch to succeed?' && tw.defaultQ('  ')==='What has to be true for this initiative to succeed?');
+  check('the prompt fills in from the initiative, and keeps a name\'s own article', tw.defaultQ('Northwind relaunch')==='This Northwind relaunch will be successful if\u2026' && tw.defaultQ('  ')==='This initiative will be successful if\u2026' && tw.defaultQ('our   new CRM')==='Our new CRM will be successful if\u2026');
   const ms = { ctl:{ phase:'share', set:{} }, idea:{ p1x1:{ t:'private' }, p1x2:{ t:'shared', sh:1 }, p2x1:{ t:'a build', par:'p1x2', sh:2 }, fx1:{ t:'facilitator card' } }, meta:{ p1x2:{ g:'g1' } }, grp:{ g1:{ t:'G' } } };
   let M0 = tw.model(ms);
   check('while sharing, only shared ideas, builds and the facilitator\'s cards are on the board', !M0.I.p1x1 && !!M0.I.p1x2 && !!M0.I.p2x1 && !!M0.I.fx1 && M0.count===4 && M0.shared===3);
-  check('a build sits in its parent\'s group', M0.I.p2x1.g==='g1' && M0.groups[0].cards.length===2);
+  check('a build sits in its parent\'s group, one step down its chain', M0.I.p2x1.g==='g1' && M0.groups[0].cards.length===2 && M0.I.p2x1.up==='p1x2' && M0.I.p2x1.depth===1);
   ms.ctl.phase = 'sort'; M0 = tw.model(ms);
   check('past sharing, every idea is on the board', !!M0.I.p1x1 && M0.shared===4);
-  check('everything starts aspirational', M0.items.length===3 && M0.items.every(i=>i.c==='a'));
-  const bv = { ctl:{ phase:'vote', set:{ votes:5 } }, idea:{ p1x1:{ t:'a', sh:1 }, p2x1:{ t:'b', sh:1 }, p3x1:{ t:'c', sh:1 } }, meta:{ p1x1:{ g:'g1' }, p3x1:{ c:'e' } }, grp:{ g1:{ t:'Named' } }, vote:{ p1:{ g1:9 }, p2:{ g1:2, zz:3, p3x1:2 } } };
-  const TV = tw.tallies(tw.model(bv), bv);
-  check('counting ignores votes above the cap and on things that are not aspirational', TV.tal.g1===7 && TV.used.p1===5 && TV.used.p2===2 && !TV.tal.p3x1);
+  check('with no marks, everything starts aspirational', M0.items.length===3 && M0.items.every(i=>i.col==='a') && M0.markers===0);
+  const mk = { ctl:{ phase:'sort', set:{} }, idea:{ p1x1:{ t:'x', sh:1 }, p1x2:{ t:'y', sh:1 }, p1x3:{ t:'z', sh:1 }, p1x4:{ t:'w', sh:1 } }, meta:{ p1x4:{ c:'a' } }, mark:{ p1:{ p1x1:1, p1x4:1 }, p2:{ p1x1:1, p1x2:1, p1x4:1 }, p3:{ p1x1:1, p1x4:1, _d:1 } } };
+  const cols = S => tw.model(S).items.map(i=>i.id+':'+i.col).join();
+  check('marks decide: everyone, essential; some, to talk about; nobody, aspirational; the facilitator\'s placement beats them', cols(mk)==='p1x1:e,p1x2:d,p1x3:a,p1x4:a');
+  mk.mark.p4 = { _d:1 };
+  check('someone who marked nothing still counts, so nothing is unanimous without them', cols(mk)==='p1x1:d,p1x2:d,p1x3:a,p1x4:a');
+  const bv = { ctl:{ phase:'vote', set:{ votes:5 } }, idea:{ p1x1:{ t:'a', sh:1 }, p1x2:{ t:'a build', sh:1, par:'p1x1' }, p2x1:{ t:'b', sh:1 }, p3x1:{ t:'c', sh:1 } }, meta:{ p1x1:{ g:'g1' }, p3x1:{ c:'e' } }, grp:{ g1:{ t:'Named' } }, vote:{ p1:{ p1x1:9 }, p2:{ p1x1:2, g1:3, p3x1:2, p1x2:2 } } };
+  const Mv = tw.model(bv), TV = tw.tallies(Mv, bv);
+  check('votes go on cards: above the cap, on a group, or on something essential, they don\'t count', TV.tal.p1x1===7 && TV.tal.p1x2===2 && TV.used.p1===5 && TV.used.p2===4 && !TV.tal.g1 && !TV.tal.p3x1);
+  const Rv = tw.ranking(Mv, TV);
+  check('a build wins on its own, and knows what it builds on', Rv.length===2 && Rv[1].id==='p1x2' && Rv[1].on.id==='p1x1' && Rv[0].medal==='gold' && Rv[1].medal==='silver');
   const tie = { ctl:{ phase:'vote', set:{ votes:5, topN:10 } }, idea:{}, vote:{ p1:{} } };
   ['p1x1','p1x2','p1x3','p1x4'].forEach(id=>{ tie.idea[id] = { t:'Tied '+id, sh:1 }; tie.vote.p1[id] = 1; });
   tw.App.S = tie; const Mt = tw.model(tie), ph = tw.podiumHtml(Mt, tw.tallies(Mt, tie));
-  check('a four-way tie names two on the step and counts the rest; empty steps step back', /and 2 more/.test(ph) && (ph.match(/pstep (silver|bronze) empty/g)||[]).length===2 && (ph.match(/Tied p1x/g)||[]).length===2);
+  check('a four-way tie says so plainly and points to the list; empty steps step back', /Four-way tie/.test(ph) && /All four are in the list below\./.test(ph) && !/more</.test(ph) && (ph.match(/pstep (silver|bronze) vacant/g)||[]).length===2 && !/Tied p1x/.test(ph));
+  tie.vote.p1 = { p1x1:2, p1x2:2 }; const ph2 = tw.podiumHtml(tw.model(tie), tw.tallies(tw.model(tie), tie));
+  check('a two-way tie names both', /class="tie">Tie</.test(ph2) && (ph2.match(/Tied p1x/g)||[]).length===2);
   T.window.close();
 
   /* ---------- the test drive: six practice people, a participant view, no network ---------- */
@@ -662,8 +746,11 @@ function drag(d, src, target){
   await until(()=>{ const M=dw.model(); return M.shared>=8 && Object.values(dw.App.S.idea).some(x=>x && x.par); }, 6000);
   check('they share and build while sharing', dw.model().shared>=8 && Object.values(dw.App.S.idea).some(x=>x && x.par && x.sh));
   dw.goPhase('sort');
-  check('everything starts aspirational in the test drive too', dw.model().items.every(i=>i.c==='a'));
-  dw.model().items.forEach((it,i)=>{ if (i%3===0) dw.classify(it.id,'e'); });
+  check('sorting starts with marking in the test drive too', dw.C().step==='mark' && dw.model().items.every(i=>i.col==='a'));
+  await until(()=>dw.model().markers>=6, 6000);
+  check('the practice people mark what has to be true', dw.model().markers>=6);
+  dw.next();
+  check('talking it through sorts by their marks', dw.C().step==='discuss' && dw.model().items.some(i=>i.col!=='a'));
   dw.goPhase('vote');
   await until(()=>Object.values(dw.tallies(dw.model()).used).filter(n=>n===5).length>=6, 8000);
   check('they spend their votes', Object.values(dw.tallies(dw.model()).used).filter(n=>n===5).length>=6);
@@ -700,12 +787,12 @@ function drag(d, src, target){
   check('feedback hook: its own id and name, never the folder default', !!FT && FT.id==='success-factors' && FT.name==='Success Factors');
   check('feedback hook: the studio names each step', FT.screen()==='studio-start' && FT.state().role==='studio' && FT.state().step==='start');
   const fsecs = FT.sections(), fall = fsecs.reduce((a,s)=>a.concat(s.screens),[]);
-  check('feedback hook: parts in session order, console and laptop screens together by phase', fsecs.map(s=>s.name).join('|')==='Set up|Lobby|Ideas|Share and build|Sort|Vote|Reveal|Results|End');
-  check('feedback hook: every screen sits in exactly one part', fall.length===29 && new Set(fall).size===29);
+  check('feedback hook: parts in session order, console and laptop screens together by phase', fsecs.map(s=>s.name).join('|')==='Set up|Lobby|Ideas|Share and build|Sort|Vote|Pause screens|Reveal|Results|End');
+  check('feedback hook: every screen sits in exactly one part', fall.length===33 && new Set(fall).size===33);
   check('privacy: typed setup, the initiative, the question, names, the join link and email addresses are never named in a comment',
-    ['stInit','stQ','stFac','cIni','cQ','cQedit','pMe','pAv'].every(id=>fd.getElementById(id).hasAttribute('data-feedback-private')) && /id="mailTo"[^>]*data-feedback-private/.test(html) && /class="crowd" data-feedback-private/.test(html) && /class="linkbox" data-feedback-private/.test(html) && /id="jInit" data-feedback-private/.test(html) && /r\[0\] === "Initiative" \|\| r\[0\] === "Question" \|\| r\[0\] === "Your name" \? " data-feedback-private"/.test(html));
+    ['stInit','stQ','stFac','cIni','cQ','cQedit','pMe','pAv'].every(id=>fd.getElementById(id).hasAttribute('data-feedback-private')) && /id="mailTo"[^>]*data-feedback-private/.test(html) && /class="crowd" data-feedback-private/.test(html) && /class="linkbox" data-feedback-private/.test(html) && /id="jInit" data-feedback-private/.test(html) && /r\[0\] === "Initiative" \|\| r\[0\] === "Prompt" \|\| r\[0\] === "Your name" \? " data-feedback-private"/.test(html) && /id="pBuild" class="box" maxlength="' \+ IDEA_MAX \+ '" placeholder="Yes, and\.\.\." data-feedback-private/.test(html) && /class="roomrow" aria-label="Who was in the room" data-feedback-private/.test(html) && /\$\("gHead"\)\.setAttribute\("data-feedback-private", ""\)/.test(html));
   check('stable names: key buttons carry data-act, main regions data-id',
-    ['download','copyjoin','email','send','share','buildon','addcard','bigqr'].every(a=>html.includes('data-act="'+a+'"')) && ['podium','columns','essential','aspirational','board','vote','votes-cast','join-qr','meter','essentials','aspirations','send'].every(a=>html.includes('data-id="'+a+'"')));
+    ['download','copyjoin','email','send','share','buildon','addcard','bigqr','sendbuild','unbuild','done'].every(a=>html.includes('data-act="'+a+'"')) && ['podium','columns','essential','discuss','aspirational','board','vote','votes-cast','join-qr','meter','essentials','aspirations','send','your-ideas','shared-board','build-box','marking'].every(a=>html.includes('data-id="'+a+'"')));
   click(fw, fd.getElementById('stBuild'));
   type(fw, fd.getElementById('stInit'), 'Feedback round');
   const names = [FT.screen()];
@@ -748,35 +835,40 @@ function drag(d, src, target){
   const studioOn = k => vis('studio') && sd2.getElementById('st'+k).classList.contains('on');
   const painted = {
     'studio-start': () => studioOn(0),
-    'studio-question': () => studioOn(1) && sd2.getElementById('stInit').value==='Service relaunch',
+    'studio-question': () => studioOn(1) && sd2.getElementById('stInit').value==='Service relaunch' && sd2.getElementById('stQ').value==='This Service relaunch will be successful if\u2026',
     'studio-votes': () => studioOn(2) && T2('#stVotes')==='5',
-    'studio-timing': () => studioOn(3) && T2('#stTs')==='15',
+    'studio-timing': () => studioOn(3) && T2('#stTs')==='15' && T2('#stTm')==='2',
     'studio-review': () => studioOn(4) && /Service relaunch/.test(T2('#review')),
     'console-lobby': () => vis('console') && !!sd2.querySelector('#cStage .qr svg') && n('#cStage .crowd .who')===8 && T2('#chipIn')==='8',
     'laptop-join': () => vis('laptop') && !!sd2.getElementById('jName') && n('#jPick .mpick[disabled]')===8 && /Service relaunch/.test(T2('#jInit')),
     'laptop-lobby': () => vis('laptop') && T2('#pWaitName')==="You're in, Ben!",
-    'console-ideate': () => T2('#ideaCount')==='11' && T2('#cDig')!=='0:00' && T2('#cStage .reading .lvl')==='Getting Somewhere',
+    'console-ideate': () => T2('#ideaCount')==='11' && T2('#cDig')!=='0:00' && T2('#cStage .reading .lvl')==='Getting Somewhere' && T2('#cQ')==='This Service relaunch will be successful if\u2026',
     'laptop-ideate': () => !!sd2.getElementById('pIdea') && !sd2.getElementById('pIdea').disabled && n('#pMine li')===2,
-    'console-share': () => n('#cStage .card')===12 && n('#cStage .grp')===4 && T2('#chipMore')==='12',
-    'laptop-share': () => n('#pMine li')===3 && n('#pMine [data-p="share"]')===1 && n('#pBoard .card')===12,
-    'console-sort': () => n('#cStage .col.e .item')===3 && n('#cStage .col.a .item')===7,
-    'laptop-sort': () => n('#pBoard .col.a .item')===7 && !sd2.querySelector('#pBoard [data-imenu]'),
-    'console-vote': () => n('#cStage [data-bar]')===7 && T2('#chipMore')==='5' && n('#cStage .cast .who')===8,
-    'laptop-vote': () => T2('#pBody #votesLeft')==='3 of 5 votes left' && n('#pBoard [data-vote="+"]')===7,
+    'console-share': () => n('#cStage .card')===12 && n('#cStage .grp')===4 && T2('#chipMore')==='12' && n('#cStage .kids .card')===3,
+    'laptop-share': () => n('#pMine li[data-mine]')===3 && n('#pMine [data-p="share"]')===1 && n('#pBoard .card')===12 && !!sd2.querySelector('.pnote') && !!sd2.querySelector('.pboardp') && n('#pBoard .ytag')===2,
+    'console-mark': () => T2('#markCount')==='5' && T2('#chipMore')==='5' && /3 people are done/.test(T2('#cStage')) && !/Quick wins/.test(T2('#cStage')) && T2('#cDig')!=='0:00',
+    'laptop-mark': () => n('#pMarks .mopt')===9 && n('#pMarks .mopt.on')===4 && T2('#pMarkN')==='4 cards marked' && T2('#pDone')==="I'm done",
+    'console-sort': () => n('#cStage .col.e .item')===1 && n('#cStage .col.d .item')===3 && n('#cStage .col.a .item')===5 && /5 of 8/.test(T2('#cStage [data-item="g2"] .mk2')),
+    'laptop-sort': () => T2('.eyes h2')==='Eyes up front' && /talking through/.test(T2('.eyes p')) && !sd2.querySelector('#pBoard'),
+    'console-vote': () => n('#cStage [data-bar]')===10 && n('#cStage .bopt.build')===2 && T2('#chipMore')==='5' && n('#cStage .cast .who')===8,
+    'laptop-vote': () => T2('#pBody #votesLeft')==='3 of 5 votes left' && n('#pBoard [data-vote="+"]')===10 && n('#pBoard .bopt.build')===2,
+    'console-paused': () => !sd2.getElementById('cPausedTag').classList.contains('hide') && T2('#cPause')==='Resume screens' && sd2.getElementById('tFace').classList.contains('paused'),
+    'laptop-paused': () => T2('.eyes h2')==='Eyes up front' && /paused the screens/.test(T2('.eyes p')),
     'console-standby': () => vis('reveal') && /Enough suspense\./.test(T2('#rvSlide')) && !!sd2.getElementById('rvBegin'),
     'laptop-hold': () => /Votes are in\./.test(T2('#pBody')),
-    'console-essentials': () => vis('reveal') && /Leaders who show up/.test(T2('#rvSlide')) && /Clear ownership/.test(T2('#rvSlide')) && /switched off on a set date/.test(T2('#rvSlide')),
-    'laptop-essentials': () => n('#pBoard .ess h4')===3,
-    'console-podium': () => vis('reveal') && /People ready for the change/.test(T2('#rvSlide .pstep.gold')) && /Quick wins/.test(T2('#rvSlide .pstep.silver')) && /Decisions in days/.test(T2('#rvSlide .pstep.bronze')) && n('#rvSlide .rank li')===5,
-    'laptop-podium': () => /People ready for the change/.test(T2('#pBoard .pstep.gold')),
-    'console-results': () => !vis('reveal') && !!sd2.querySelector('#cStage .podium') && !!sd2.querySelector('[data-c="finalize"]'),
+    'console-essentials': () => vis('reveal') && n('#rvSlide .stone')===3 && /Leaders who show up/.test(T2('#rvSlide')) && /Clear ownership/.test(T2('#rvSlide')) && /switched off on a set date/.test(T2('#rvSlide')) && /Three things/.test(T2('#rvSlide .stonesum')),
+    'laptop-essentials': () => n('#pBoard .stone')===3 && n('#pBoard .stone .seal')===3,
+    'console-podium': () => vis('reveal') && /Quick wins in the first 60 days/.test(T2('#rvSlide .pstep.gold')) && /Front-line voices/.test(T2('#rvSlide .pstep.silver')) && /Decisions in days/.test(T2('#rvSlide .pstep.bronze')) && n('#rvSlide .rank li')===9 && /Builds on/.test(T2('#rvSlide .rank')),
+    'laptop-podium': () => /Quick wins in the first 60 days/.test(T2('#pBoard .pstep.gold')) && T2('#pBoard .mypod')==='You put three of your five votes on the podium.' && n('#pBoard .rank .yours')===3,
+    'console-results': () => !vis('reveal') && !!sd2.querySelector('#cStage .podium') && !!sd2.querySelector('[data-c="finalize"]') && n('#cStage .ess .stone')===3,
     'laptop-results': () => !!sd2.querySelector('#pBoard .podium') && !sd2.querySelector('#pBoard [data-a="download"]'),
     'console-final': () => !!sd2.querySelector('#cCtl [data-c="download"]') && !!sd2.getElementById('mailTo') && !sd2.querySelector('[data-c="finalize"]'),
     'laptop-final': () => !!sd2.querySelector('#pBoard [data-a="download"]'),
-    'ended': () => vis('gate') && T2('#gHead')==='Session ended and cleared.' && !/test drive/i.test(T2('#gMsg')),
-    'laptop-ended': () => vis('gate') && T2('#gHead')==="That's all, folks.",
-    'gate': () => vis('gate') && T2('#gHead')==="This session isn't running."
+    'ended': () => vis('gate') && T2('#gHead')==='Session ended and cleared.' && !/test drive/i.test(T2('#gMsg')) && n('#gExtra .etile')===4 && n('#gExtra .roomrow .rm')===8,
+    'laptop-ended': () => vis('gate') && T2('#gHead')==='Thanks, Ben!' && n('#gExtra .etile')===3 && !!sd2.querySelector('#gExtra [data-a="enddl"]') && n('#gExtra .roomrow .rm')===8,
+    'gate': () => vis('gate') && T2('#gHead')==="This session isn't running." && !sd2.querySelector('#gExtra .etile')
   };
+
   const bad = [];
   for (const sc of fall){ let ok = false; try { ok = ST.restore({ screen:sc, settings:{} }); } catch(e){ sbErrs.push(sc+': '+e.message); } await sleep(30); if (!(ok===true && ST.screen()===sc && painted[sc] && painted[sc]())) bad.push(sc); }
   check('the board\'s frame: restore() opens every screen, one after another, and paints it', bad.length===0 && Object.keys(painted).length===fall.length, bad.join(', '));
@@ -786,7 +878,7 @@ function drag(d, src, target){
   ST.restore({ screen:'console-lobby', settings:{ testDrive:true } });
   check('the board\'s frame: a rebuilt live session never shows the test-drive bar; a rebuilt test drive does', liveBar && !sd2.getElementById('simBar').classList.contains('hide') && /No link in a test drive/.test(T2('#cStage')));
   ST.restore({ screen:'laptop-ideate', settings:{ timeUp:true } }); await sleep(20);
-  check('the board\'s frame: settings carry over (time up locks the laptop; 3 votes each)', sd2.getElementById('pIdea').disabled && !sd2.getElementById('pLock').classList.contains('hide') && ST.restore({ screen:'laptop-vote', settings:{ votes:3 } }) && T2('#pBody #votesLeft')==='1 of 3 votes left');
+  check('the board\'s frame: settings carry over (time up locks the laptop; 3 votes each)', sd2.getElementById('pIdea').disabled && !sd2.getElementById('pLock').classList.contains('hide') && ST.restore({ screen:'laptop-vote', settings:{ votes:3 } }) && T2('#pBody #votesLeft')==='1 of 3 votes left' && ST.restore({ screen:'laptop-mark', settings:{ timeUp:true } }) && sd2.querySelector('#pMarks .mopt').disabled);
   check('the board\'s frame: an unknown screen opens nothing', ST.restore({ screen:'console-join' })===false && ST.restore({ screen:'nope' })===false && ST.restore({})===false);
   sw2.stopLoops();
   }

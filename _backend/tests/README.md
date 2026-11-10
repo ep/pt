@@ -46,22 +46,26 @@ fifteen minutes to find, or miss entirely.
   over-time player, ending with undo, the gate screens, and the test drive.
 - `qa-success-factors.mjs` tests `../../field-tools/success-factors/index.html` (Success Factors) in a
   simulated browser, against the real worker code with the fake database. It runs a whole session with
-  a studio, a console and several laptops: the stepped setup and its limits, the question that fills in
-  from the initiative, setup links, the closed session and the key the worker demands, the console's
-  sound button, the lobby QR (decoded with jsQR) and both copy buttons, the welcome and seats and mascots
-  (two people picking one mascot at once, the 21st person refused), private ideas with edit and delete,
-  timers that start on their own with pause and a minute up or down, the chimes at one minute and zero,
-  one clock across laptops 30 seconds apart that locks input at zero and moves to sharing after a 3-2-1,
-  the meter's marks and the bell at the goal, sharing one idea at a time, builds (by button and by
-  dragging your own idea onto a card), grouping by drag and by menu (never more than 3 writes), naming,
-  merge, split, delete, edits with history, undo, rewording the question, unshared ideas joining the
-  board after sharing, everything starting aspirational, sorting by drag and by menu, stacked votes with
-  the cap, no tallies until the reveal, votes given back after going back, the vote closing at zero, the
-  reveal (standby, essentials, podium), Olympic ranking (ties at every position and 2,000 random
-  tallies), Finalize, the report and its appendix, downloads on every laptop, Email this through the
-  send kit, a reload that keeps its seat, two console tabs, presence, ending with undo, a full 20-seat,
-  300-idea session against the row and size limits, the test drive with its participant view and no
-  network, and every one of the 29 feedback screens rebuilt in the board's sandboxed frame.
+  a studio, a console and several laptops: the stepped setup and its limits, the sentence prompt that
+  fills in from the initiative, setup links, the closed session and the key the worker demands, the
+  console's sound button, the lobby QR (decoded with jsQR) and both copy buttons, the welcome and seats
+  and mascots (two people picking one mascot at once, the 21st person refused), private ideas with edit
+  and delete, timers that start on their own with pause and a minute up or down, the chimes at one minute
+  and zero, one clock across laptops 30 seconds apart that locks input at zero and moves on after a 3-2-1,
+  the meter's marks and the bell at the goal, sharing one idea at a time from your own list beside the
+  shared board (and the phone tabs between them), builds written right under the card they build on (a
+  half-written build survives the board redrawing) or dragged onto it, pausing every laptop's screen with
+  the clock, grouping by drag and by menu (never more than 3 writes), naming, merge, split, delete, edits
+  with history, undo, rewording the prompt, unshared ideas joining the board after sharing, marking what
+  has to be true in private and then talking through the splits (everyone, some, nobody), sorting by drag
+  and by menu across three columns, a vote on every card with builds drawn as chains, the cap, no tallies
+  until the reveal, votes given back after going back, redraws that never come from other people's ideas,
+  marks or votes, the vote closing at zero, the reveal (standby, essentials as stones, the podium with ties
+  stated plainly), Olympic ranking (ties at every position and 2,000 random tallies), Finalize, the report
+  and its appendix, downloads on every laptop and from the wrap-up after the session ends, Email this
+  through the send kit, a reload that keeps its seat, two console tabs, presence, ending with undo, a full
+  20-seat, 300-idea session against the row and size limits, the test drive with its participant view and
+  no network, and every one of the 33 feedback screens rebuilt in the board's sandboxed frame.
 - `qa-report-builder.mjs` tests `../../wbwai201/report-builder/index.html` (the WBWAI 201
   report builder) in a simulated browser. It loads made-up sessions built inside the file
   (no CSV files in the repo), and covers the highlights and their numbers, one organization

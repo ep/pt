@@ -138,7 +138,7 @@ textarea.box{resize:vertical;min-height:84px;}
 .review .rw:hover .go{color:var(--cobalt);transform:translateX(2px);}
 .timeline{display:flex;gap:4px;margin:22px 0 4px;height:12px;}
 .timeline i{display:block;height:100%;border-radius:6px;transition:flex-grow .3s var(--spring);}
-.timeline .ti{background:var(--sun);} .timeline .ts{background:var(--tealM);} .timeline .tv{background:var(--clayM);}
+.timeline .ti{background:var(--sun);} .timeline .ts{background:var(--tealM);} .timeline .tm{background:#9AA9C4;} .timeline .tv{background:var(--clayM);}
 .tlegend{display:flex;justify-content:space-between;font-size:11px;font-weight:700;letter-spacing:.1em;text-transform:uppercase;color:var(--aegean);}
 .flagpulse{animation:pulse .9s ease-out 2;border-radius:12px;}
 
@@ -147,7 +147,12 @@ textarea.box{resize:vertical;min-height:84px;}
 .con .topbar{padding:12px 0;}
 .con .topbar .mark{min-width:0;overflow:hidden;text-overflow:ellipsis;}
 .con .stage{flex:1;padding-top:6px;}
+.phrow{display:flex;align-items:center;justify-content:space-between;gap:12px;margin-top:14px;}
+.phrow .phases{margin-top:0;}
 .phases{display:flex;gap:6px;align-items:center;flex-wrap:wrap;margin-top:14px;}
+.pausetag{display:inline-flex;align-items:center;gap:8px;font-size:11px;font-weight:700;letter-spacing:.14em;text-transform:uppercase;color:var(--cobalt);background:var(--pollen);border:1.5px solid #EAD98C;border-radius:999px;padding:6px 12px;}
+.pausetag::before{content:'';width:8px;height:8px;border-radius:50%;background:var(--gold);animation:breathe 2.4s ease-in-out infinite;}
+#cPause.on{color:var(--cobalt);background:var(--pollen);}
 .phases span{font-size:11px;font-weight:700;letter-spacing:.12em;word-spacing:.1em;text-transform:uppercase;color:var(--pigeon);display:inline-flex;align-items:center;gap:6px;}
 .phases span.done{color:var(--teal);}
 .phases span.on{color:var(--cobalt);}
@@ -176,9 +181,9 @@ textarea.box{resize:vertical;min-height:84px;}
 .tplay{position:absolute;inset:0;display:flex;align-items:center;justify-content:center;border-radius:16px;background:rgba(251,248,243,.82);opacity:0;transition:opacity .15s;}
 .tplay svg{width:44px;height:44px;}
 .tface:hover .tplay,.tplay:focus-visible{opacity:1;}
-.tface.paused .tdig{opacity:.55;}
-.tface.paused .tplay{opacity:1;background:transparent;}
-.tface.paused .tplay svg{opacity:.85;}
+.tface.paused .tdig{opacity:.6;}
+.tface.paused .tplay{opacity:1;background:transparent;inset:auto;left:-54px;top:50%;width:46px;height:46px;transform:translateY(-50%);}
+.tface.paused .tplay svg{animation:breathe 2.4s ease-in-out infinite;}
 .tarrows{display:flex;flex-direction:column;gap:6px;}
 .tarrows button{width:36px;height:30px;border-radius:10px;border:1.5px solid var(--line);background:var(--paper);display:flex;align-items:center;justify-content:center;}
 .tarrows button:hover:not(:disabled){border-color:var(--cobalt);}
@@ -288,6 +293,23 @@ textarea.box{resize:vertical;min-height:84px;}
 .col .pill{display:inline-block;background:var(--paper);border-radius:999px;padding:7px 14px;font-size:11px;font-weight:700;letter-spacing:.14em;word-spacing:.1em;text-transform:uppercase;border:2px solid;}
 .col.e .pill{color:var(--teal);border-color:var(--tealM);}
 .col.a .pill{color:var(--clay);border-color:var(--clayM);}
+.cols.three{grid-template-columns:repeat(3,minmax(0,1fr));}
+.col.d{background:var(--pollen);}
+.col.d .pill{color:#7A5C00;border-color:var(--sun);}
+.mk2{display:inline-flex;align-items:center;gap:6px;flex:0 0 auto;font-size:11px;font-weight:700;letter-spacing:.06em;color:var(--aegean);white-space:nowrap;}
+.mk2 i{position:relative;width:34px;height:6px;border-radius:999px;background:rgba(41,56,81,.12);overflow:hidden;}
+.mk2 i::after{content:'';position:absolute;left:0;top:0;bottom:0;width:calc(var(--f) * 100%);background:var(--tealM);border-radius:999px;}
+.mk2.split{color:var(--cobalt);}
+.item ul li.bd{list-style:none;margin-left:calc(var(--d) * 14px - 14px);}
+.item ul li.bd::before{content:'\21B3';margin-right:6px;color:var(--pigeon);}
+.item .idet{font-size:13px;color:var(--aegean);margin:6px 0 0 36px;}
+.markstage{display:grid;grid-template-columns:minmax(0,1fr) minmax(0,420px);gap:40px;align-items:center;}
+.markstage .reading{padding-left:0;}
+.markhow{background:var(--paper);border:1.5px solid var(--line);border-radius:20px;padding:26px;}
+.markhow h3{margin-bottom:8px;}
+.markhow p{font-family:var(--serif);font-size:18px;color:var(--aegean);margin-bottom:14px;line-height:1.45;}
+.markhow ul{list-style:none;display:flex;flex-direction:column;gap:10px;font-family:var(--serif);font-size:17px;}
+.markhow li b{font-family:var(--sans);font-size:11px;font-weight:700;letter-spacing:.14em;text-transform:uppercase;margin-right:6px;}
 .col .cd{font-family:var(--serif);font-size:16px;color:var(--cobalt);margin:12px 0 16px;line-height:1.45;}
 .col .items{display:flex;flex-direction:column;gap:10px;min-height:60px;}
 .item{background:var(--paper);border-radius:14px;padding:12px 14px;position:relative;touch-action:none;border:1.5px solid transparent;}
@@ -301,7 +323,13 @@ textarea.box{resize:vertical;min-height:84px;}
 
 /* voting */
 .ballot{display:flex;flex-direction:column;gap:10px;}
-.bopt{display:flex;align-items:center;gap:14px;background:var(--paper);border:1.5px solid var(--line);border-radius:16px;padding:12px 14px 12px 18px;transition:border-color .2s,box-shadow .2s;}
+.ballot{gap:22px;}
+.bgrp h3{font-size:13px;font-family:var(--sans);font-weight:700;letter-spacing:.14em;text-transform:uppercase;color:var(--aegean);margin:0 0 10px 4px;}
+.bgrp{display:flex;flex-direction:column;gap:12px;}
+.bthread{display:flex;flex-direction:column;gap:8px;}
+.bopt{position:relative;display:flex;align-items:center;gap:14px;background:var(--paper);border:1.5px solid var(--line);border-radius:16px;padding:12px 14px 12px 18px;transition:border-color .2s,box-shadow .2s;}
+.bopt.build{margin-left:calc(var(--d) * 26px);}
+.bopt.build::before{content:'';position:absolute;left:-17px;top:-10px;width:13px;height:calc(50% + 10px);border-left:2px solid var(--pigeon);border-bottom:2px solid var(--pigeon);border-bottom-left-radius:10px;}
 .bopt.voted{border-color:var(--clayM);box-shadow:0 6px 20px rgba(177,78,28,.12);}
 .bopt .lbl{flex:1;font-family:var(--serif);font-size:18px;line-height:1.35;overflow-wrap:anywhere;min-width:0;}
 .bopt .my{display:flex;align-items:center;gap:8px;}
@@ -328,6 +356,29 @@ textarea.box{resize:vertical;min-height:84px;}
 .ess .pill{color:var(--teal);border-color:var(--tealM);}
 .asp .pill{color:var(--clay);border-color:var(--clayM);}
 .ess h4{font-family:var(--serif);font-weight:400;font-size:19px;margin:16px 0 6px;overflow-wrap:anywhere;}
+/* the essentials, as foundation stones */
+.eyebrow{text-align:center;font-size:12px;font-weight:700;letter-spacing:.2em;text-transform:uppercase;color:var(--teal);margin-bottom:10px;}
+.stones{display:grid;grid-template-columns:repeat(auto-fit,minmax(260px,1fr));gap:22px;margin-top:18px;}
+.stone{position:relative;background:var(--paper);border-radius:18px;border-top:8px solid var(--tealM);padding:22px 22px 20px;box-shadow:0 14px 34px rgba(41,56,81,.10);min-width:0;}
+.stone h4{font-family:var(--serif);font-weight:400;font-size:clamp(19px,1.9vw,24px);line-height:1.2;margin:2px 42px 10px 0;overflow-wrap:anywhere;}
+.stone .d{font-size:13px;color:var(--aegean);margin:-4px 0 10px;}
+.stone ul{list-style:none;display:flex;flex-direction:column;gap:6px;font-family:var(--serif);font-size:16px;line-height:1.4;}
+.stone li{position:relative;padding-left:16px;overflow-wrap:anywhere;}
+.stone li::before{content:'';position:absolute;left:0;top:.6em;width:6px;height:6px;border-radius:50%;background:var(--tealM);}
+.stone li.bd{margin-left:calc(var(--d) * 14px);}
+.stone li.bd::before{content:'\21B3';background:none;width:auto;height:auto;top:0;left:-2px;color:var(--pigeon);font-family:var(--sans);font-size:12px;}
+.stone li .d{font-family:var(--sans);font-size:12.5px;color:var(--aegean);margin:2px 0 0;}
+.stone .seal{position:absolute;top:-22px;right:18px;width:44px;height:44px;border-radius:50%;background:var(--teal);color:var(--paper);display:flex;align-items:center;justify-content:center;box-shadow:0 0 0 4px var(--paper),0 6px 16px rgba(62,142,140,.35);}
+.stone .seal svg{width:24px;height:24px;}
+.stones.landing .stone{animation:land .75s var(--spring) both;animation-delay:calc(var(--i) * 450ms + 300ms);}
+.stones.landing .seal{animation:stamp .5s var(--spring) both;animation-delay:calc(var(--i) * 450ms + 680ms);}
+@keyframes land{0%{opacity:0;transform:translateY(-46px) rotate(-1.5deg) scale(.97);}60%{opacity:1;transform:translateY(4px) rotate(0) scale(1);}100%{opacity:1;transform:none;}}
+@keyframes stamp{0%{opacity:0;transform:scale(2.4) rotate(-30deg);}100%{opacity:1;transform:none;}}
+.stonesum{text-align:center;font-family:var(--serif);font-style:italic;font-size:clamp(18px,2vw,26px);color:var(--teal);margin-top:28px;}
+.stonesum.later{animation:rise .6s var(--ease) both;animation-delay:calc(var(--n) * 450ms + 700ms);}
+.ess .stones{grid-template-columns:1fr;gap:26px;margin-top:22px;}
+.ess .stone{box-shadow:0 8px 20px rgba(41,56,81,.07);}
+.rvslide .stones{gap:30px;margin-top:34px;}
 .ess ul{margin-left:20px;font-family:var(--serif);font-size:16px;line-height:1.5;}
 .ess li{margin:4px 0;overflow-wrap:anywhere;}
 .ess li .d{font-family:var(--sans);color:var(--aegean);font-size:13px;}
@@ -338,8 +389,16 @@ textarea.box{resize:vertical;min-height:84px;}
 .pstep.gold .blk{height:150px;background:var(--gold);}
 .pstep.silver .blk{height:108px;background:var(--silver);}
 .pstep.bronze .blk{height:78px;background:var(--bronze);color:var(--paper);}
-.pstep.empty .blk{opacity:.28;}
-.pstep .pl .more{font-family:var(--sans);font-size:11px;font-weight:700;letter-spacing:.08em;text-transform:uppercase;color:var(--aegean);}
+.pstep.vacant .blk{opacity:.28;}
+.pstep .pl .tie{display:block;font-family:var(--sans);font-size:11px;font-weight:700;letter-spacing:.14em;text-transform:uppercase;color:var(--aegean);margin-bottom:4px;}
+.pstep .pl .see{display:block;font-size:.86em;color:var(--aegean);font-style:italic;}
+.pstep .blk{position:relative;overflow:hidden;}
+.podium.lit .pstep.gold .blk::after{content:'';position:absolute;top:0;bottom:0;left:-60%;width:40%;background:linear-gradient(100deg,rgba(255,255,255,0),rgba(255,255,255,.75),rgba(255,255,255,0));animation:shine 1.6s var(--ease) .2s both;}
+.pstep .spark{position:absolute;width:12px;height:12px;background:var(--paper);clip-path:polygon(50% 0,62% 38%,100% 50%,62% 62%,50% 100%,38% 62%,0 50%,38% 38%);opacity:0;}
+.podium.lit .spark{animation:twinkle 2.4s ease-in-out infinite;}
+.spark.s1{left:16%;top:30%;} .spark.s2{right:14%;top:18%;width:9px;height:9px;animation-delay:.7s !important;} .spark.s3{right:26%;bottom:20%;width:14px;height:14px;animation-delay:1.3s !important;}
+@keyframes shine{to{left:130%;}}
+@keyframes twinkle{0%,100%{opacity:0;transform:scale(.4) rotate(0);}40%{opacity:1;transform:scale(1) rotate(45deg);}70%{opacity:0;transform:scale(.6) rotate(90deg);}}
 .pstep.rise{animation:rise2 .8s var(--spring) both;}
 @keyframes rise2{from{transform:translateY(60px);opacity:0;}to{transform:none;opacity:1;}}
 .drive{font-family:var(--serif);font-style:italic;font-size:18px;margin:2px 0 8px;}
@@ -350,6 +409,11 @@ textarea.box{resize:vertical;min-height:84px;}
 .rank .m{display:inline-flex;width:34px;height:34px;border-radius:50%;align-items:center;justify-content:center;font-family:var(--serif);font-size:18px;color:var(--cobalt);}
 .m.gold{background:var(--gold);} .m.silver{background:var(--silver);} .m.bronze{background:var(--bronze);color:var(--paper) !important;}
 .rank .tt{font-family:var(--serif);font-size:17px;overflow-wrap:anywhere;}
+.rank .ctx{display:block;font-family:var(--sans);font-size:12px;color:var(--aegean);margin-top:3px;}
+.rank .ctx i{font-family:var(--serif);font-size:13px;}
+.rank .yours{display:inline-flex;gap:3px;margin-right:10px;vertical-align:middle;}
+.rank .yours i{width:9px;height:9px;border-radius:50%;background:var(--clayM);}
+.mypod{font-family:var(--serif);font-style:italic;font-size:17px;color:var(--clay);margin:-4px 0 12px;}
 .rank .v{font-family:var(--serif);font-size:20px;}
 .rank .v small{font-family:var(--sans);font-size:10px;font-weight:700;letter-spacing:.1em;color:var(--aegean);margin-left:4px;text-transform:uppercase;}
 .resend{display:flex;flex-direction:column;gap:10px;margin-top:20px;}
@@ -445,8 +509,75 @@ textarea.box{resize:vertical;min-height:84px;}
 .mine li[draggable="true"]{cursor:grab;}
 .sec2{font-size:11px;font-weight:700;letter-spacing:.14em;word-spacing:.1em;text-transform:uppercase;color:var(--aegean);margin:26px 0 10px;}
 .locked{font-family:var(--serif);font-style:italic;font-size:18px;color:var(--clay);margin:6px 0 12px;}
-.pshare{display:grid;grid-template-columns:1fr;gap:6px;}
-@media (min-width:1000px){.pwrap.wide{max-width:1180px;} .pshare{grid-template-columns:minmax(0,.9fr) minmax(0,1.1fr);gap:34px;align-items:start;}}
+.pshare{display:grid;grid-template-columns:1fr;gap:16px;margin-top:6px;}
+@media (min-width:1000px){.pwrap.wide{max-width:1240px;} .pshare{grid-template-columns:minmax(0,.85fr) minmax(0,1.15fr);gap:28px;align-items:start;}}
+.phead{display:flex;align-items:center;flex-wrap:wrap;gap:6px 10px;margin-bottom:6px;}
+.phead .ic{width:30px;height:30px;border-radius:50%;display:inline-flex;align-items:center;justify-content:center;flex:0 0 30px;}
+.phead .ic svg{width:16px;height:16px;}
+.phead h2{font-size:22px;margin-right:auto;white-space:nowrap;}
+.ptag{font-size:11px;font-weight:700;letter-spacing:.12em;text-transform:uppercase;color:var(--aegean);white-space:nowrap;}
+.ptag.live{display:inline-flex;align-items:center;gap:7px;}
+.ptag.live::before{content:'';width:7px;height:7px;border-radius:50%;background:var(--tealM);box-shadow:0 0 0 3px rgba(104,191,189,.25);}
+.pnote{background:var(--paper);border-radius:20px;padding:20px 20px 18px;box-shadow:0 1px 0 var(--line),0 14px 34px rgba(41,56,81,.08);border-left:6px solid var(--sun);}
+.pnote .phead .ic{background:var(--pollen);color:#7A5C00;}
+.pnsub{font-family:var(--serif);font-size:15px;color:var(--aegean);margin-bottom:4px;}
+.pnote .mine{margin-top:12px;}
+.pnote .mine li{background:var(--warm);border-color:transparent;}
+.pnote .mine li.next{background:var(--paper);border-color:var(--cobalt);box-shadow:0 0 0 3px rgba(255,204,0,.55);}
+.pnote .mine li.shared{background:transparent;border:1.5px dashed var(--line);}
+.pnote .mine li.sharedhead{background:none;border:none;min-height:0;padding:10px 4px 0;font-size:11px;font-weight:700;letter-spacing:.14em;text-transform:uppercase;color:var(--aegean);}
+.pnote .mine li.none{background:none;border:none;font-family:var(--serif);color:var(--aegean);padding-left:4px;}
+.mine li .tag{display:inline-flex;align-items:center;gap:4px;}
+.mine li .tag svg{width:14px;height:14px;}
+.btn.shr svg{width:14px;height:14px;}
+.newidea{margin-top:18px;padding-top:16px;border-top:1.5px dashed var(--line);}
+.newidea label{display:block;font-size:12px;font-weight:700;margin-bottom:8px;}
+.pboardp{background:var(--warm);border:2px solid rgba(41,56,81,.85);border-radius:22px;padding:16px;box-shadow:inset 0 0 0 5px var(--paper),0 12px 30px rgba(41,56,81,.1);}
+.pboardp .phead{padding:2px 4px 8px;border-bottom:1.5px solid var(--line);margin-bottom:12px;}
+.pboardp .phead .ic{background:var(--cobalt);color:var(--paper);}
+.ptabs{display:none;}
+@media (max-width:999px){
+  .ptabs{display:flex;position:sticky;top:0;z-index:3;background:var(--warm);padding:6px 0 10px;gap:6px;}
+  .ptabs button{flex:1;min-height:44px;border-radius:999px;border:1.5px solid var(--line);background:var(--paper);font-size:13px;font-weight:700;color:var(--aegean);}
+  .ptabs button b{display:inline-block;min-width:20px;margin-left:6px;padding:1px 6px;border-radius:999px;background:var(--warm);color:var(--cobalt);}
+  .ptabs button[aria-selected="true"]{background:var(--cobalt);border-color:var(--cobalt);color:var(--paper);}
+  .ptabs button[aria-selected="true"] b{background:var(--gold);}
+  .pshare[data-tab="mine"] .pboardp,.pshare[data-tab="board"] .pnote{display:none;}
+}
+.card .cfoot{display:flex;align-items:center;gap:8px;margin-top:8px;}
+@media (max-width:640px){.newidea .compose{flex-direction:column;align-items:stretch;} .newidea .compose .btn{min-height:46px;} .pstep .pl .tie{letter-spacing:.06em;font-size:10px;}}
+.card .bo{display:inline-flex;align-items:center;gap:5px;margin-left:auto;font-size:12px;font-weight:700;color:var(--aegean);padding:6px 10px;border-radius:999px;min-height:32px;}
+.card .bo svg{width:12px;height:12px;}
+.card .bo:hover:not(:disabled),.card.sel .bo{color:var(--cobalt);background:var(--pollen);}
+.card .ytag{font-size:10.5px;font-weight:700;letter-spacing:.12em;text-transform:uppercase;color:#7A5C00;background:var(--pollen);border-radius:999px;padding:3px 8px;}
+.bbox{margin:8px 0 2px 16px;padding:12px;border-radius:14px;background:var(--pollen);border:1.5px solid #EAD98C;}
+.bbox label{display:block;font-size:12px;font-weight:700;margin-bottom:6px;}
+.bbox textarea{width:100%;min-height:64px;}
+.bbox .row{justify-content:flex-end;margin-top:8px;gap:6px;}
+/* marking on a laptop: tap a card to mark it */
+.marks{display:flex;flex-direction:column;gap:10px;margin-top:6px;}
+.mopt{display:flex;align-items:center;gap:14px;width:100%;text-align:left;background:var(--paper);border:1.5px solid var(--line);border-radius:16px;padding:14px 14px 14px 18px;color:var(--cobalt);transition:background .2s,border-color .2s;}
+.mopt .mt{flex:1;min-width:0;}
+.mopt b{display:block;font-family:var(--serif);font-weight:400;font-size:18px;line-height:1.3;overflow-wrap:anywhere;}
+.mopt .mt span{display:flex;flex-direction:column;gap:2px;margin-top:6px;}
+.mopt .mt i{font-style:normal;font-size:13px;color:var(--aegean);overflow-wrap:anywhere;}
+.mopt .mchk{width:36px;height:36px;flex:0 0 36px;border-radius:50%;border:2px solid var(--pigeon);display:flex;align-items:center;justify-content:center;color:transparent;transition:all .2s var(--spring);}
+.mopt .mchk svg{width:20px;height:20px;}
+.mopt.on{background:var(--tealT);border-color:var(--tealM);}
+.mopt.on .mchk{background:var(--teal);border-color:var(--teal);color:var(--paper);transform:scale(1.06);}
+.mopt:disabled{opacity:.6;}
+.markfoot{position:sticky;bottom:0;display:flex;align-items:center;justify-content:space-between;gap:12px;background:var(--warm);padding:14px 0 6px;margin-top:10px;}
+.markfoot span{font-family:var(--serif);font-size:17px;color:var(--aegean);}
+/* eyes up front: a laptop points at the shared screen */
+.eyes{text-align:center;}
+.eyes .look{position:relative;width:120px;margin:0 auto 22px;}
+.eyes .look .av{width:110px;height:110px;display:block;margin:0 auto;}
+.eyes .chev{display:flex;flex-direction:column;align-items:center;color:var(--teal);margin-bottom:6px;}
+.eyes .chev svg{width:34px;height:20px;animation:lookup 1.6s ease-in-out infinite;}
+.eyes .chev svg + svg{margin-top:-8px;animation-delay:.18s;opacity:.55;}
+@keyframes lookup{0%,100%{transform:translateY(4px);}50%{transform:translateY(-4px);}}
+.eyes h2{font-size:clamp(30px,7vw,44px);}
+.eyes p{font-family:var(--serif);font-size:clamp(16px,4.4vw,20px);color:var(--aegean);margin-top:14px;line-height:1.5;max-width:520px;margin-left:auto;margin-right:auto;}
 .pwrap .board{grid-template-columns:1fr;}
 .pwrap .grp{padding:12px;}
 .pwrap .cols{grid-template-columns:1fr;}
@@ -479,17 +610,25 @@ textarea.box{resize:vertical;min-height:84px;}
 .endpage p{font-family:var(--serif);font-size:18px;color:var(--aegean);margin-top:16px;line-height:1.5;}
 .endpage .row{justify-content:center;margin-top:26px;}
 .endpage .brand{display:inline-block;margin-top:26px;font-weight:700;font-size:14px;color:var(--cobalt);text-decoration:none;border-bottom:2px solid var(--gold);padding-bottom:3px;}
-.clusterrow{position:relative;height:160px;margin-top:30px;overflow:hidden;}
-.cluster{position:absolute;pointer-events:none;inset:auto 0 0 auto;width:220px;height:160px;opacity:.9;left:50%;margin-left:-110px;}
-.cluster i{position:absolute;border-radius:50%;}
-.cluster i:nth-child(1){width:110px;height:110px;right:0;bottom:-30px;background:var(--sun);}
-.cluster i:nth-child(2){width:78px;height:78px;right:96px;bottom:10px;background:var(--tealM);}
-.cluster i:nth-child(3){width:58px;height:58px;right:60px;bottom:74px;background:var(--clayM);}
-.cluster i:nth-child(4){width:16px;height:16px;right:150px;bottom:96px;background:var(--sun);}
-.cluster i:nth-child(5){width:10px;height:10px;right:34px;bottom:140px;background:var(--tealM);}
+#gate .endpage{padding:9vh 20px 40px;}
+#gate.party .endpage h1{animation:bloom .6s var(--spring) both;}
+.endav{width:132px;height:132px;margin:0 auto 18px;position:relative;}
+.endav .av{width:132px;height:132px;display:block;animation:hop 1.1s var(--spring) .2s both,bob 3.2s ease-in-out 1.4s infinite;}
+.endav::after{content:'';position:absolute;left:50%;bottom:-6px;width:80px;height:12px;margin-left:-40px;border-radius:50%;background:rgba(41,56,81,.10);}
+@keyframes hop{0%{transform:translateY(40px) scale(.6);opacity:0;}55%{transform:translateY(-14px) scale(1.04);opacity:1;}100%{transform:none;opacity:1;}}
+.etiles{display:flex;justify-content:center;gap:12px;flex-wrap:wrap;margin:28px auto 0;}
+.etile{background:var(--paper);border-radius:18px;padding:16px 18px 14px;min-width:116px;box-shadow:0 10px 26px rgba(41,56,81,.08);animation:rise .5s var(--ease) both;}
+.etile:nth-child(2){animation-delay:.08s;} .etile:nth-child(3){animation-delay:.16s;} .etile:nth-child(4){animation-delay:.24s;}
+.etile b{display:block;font-family:var(--serif);font-weight:400;font-size:40px;line-height:1;}
+.etile span{display:block;margin-top:6px;font-size:11px;font-weight:700;letter-spacing:.12em;text-transform:uppercase;color:var(--aegean);}
+.ebest{font-family:var(--serif);font-style:italic;font-size:20px;color:var(--teal);margin-top:22px;}
+.roomrow{display:flex;justify-content:center;flex-wrap:wrap;gap:8px 4px;margin:34px auto 0;max-width:640px;}
+.rm{width:58px;text-align:center;font-size:10.5px;font-weight:600;color:var(--aegean);overflow-wrap:anywhere;}
+.rm .av{width:40px;height:40px;display:block;margin:0 auto 4px;animation:wave 2.8s ease-in-out infinite;animation-delay:calc(var(--i) * 120ms);}
+@keyframes wave{0%,70%,100%{transform:none;}80%{transform:translateY(-7px) rotate(-6deg);}90%{transform:translateY(0) rotate(4deg);}}
 
 @media (max-width:980px){
-  .ideate,.votebox,.res,.cols{grid-template-columns:1fr;}
+  .ideate,.votebox,.res,.cols,.cols.three,.markstage{grid-template-columns:1fr;}
   .ideate .meter{margin:0 auto;}
   .shead{flex-direction:column;gap:12px;}
 }
@@ -508,15 +647,15 @@ textarea.box{resize:vertical;min-height:84px;}
     <section class="step" id="st0">
       <div>
         <h1 id="stTitle">Agree what success takes.</h1>
-        <p class="lede">One question for a room of up to 20. Everyone adds ideas on their own screen, the room shares and builds on them, you sort what has to be true from what would make it great, and everyone votes the best onto a podium.</p>
+        <p class="lede">One question for a room of up to 20. Everyone finishes one sentence as many ways as they can, shares and builds on each other's ideas, marks what has to be true, and votes the best of the rest onto a podium.</p>
         <div class="row"><button class="btn big" id="stBuild">Set up a session</button></div>
       </div>
       <svg class="demo" id="demo" viewBox="0 0 500 320" aria-hidden="true"></svg>
     </section>
     <section class="step" id="st1">
-      <h2>The question</h2><p class="lede">What the room answers, and what it's for.</p>
+      <h2>The prompt</h2><p class="lede">What the room is for, and the sentence everyone finishes.</p>
       <div class="field" id="fInit"><label for="stInit">Initiative</label><input id="stInit" class="tin serif" maxlength="60" autocomplete="off" placeholder="For example, Service relaunch" data-feedback-private><p class="hint">Participants see it when they join, and it heads the report.</p></div>
-      <div class="field"><label for="stQ">Question</label><textarea id="stQ" class="tin serif" maxlength="200" rows="2" data-feedback-private></textarea><p class="hint">It fills in from the initiative until you change it.</p></div>
+      <div class="field"><label for="stQ">Prompt</label><textarea id="stQ" class="tin serif" maxlength="200" rows="2" data-feedback-private></textarea><p class="hint">People finish this sentence. It fills in from the initiative until you change it.</p></div>
       <div class="field"><label for="stFac">Your name, for the report</label><input id="stFac" class="tin" maxlength="40" autocomplete="off" placeholder="Optional" data-feedback-private></div>
       <p class="hint warn" id="st1Err" role="alert"></p>
       <div class="stepnav"><button class="btn ghost" data-back="0">Back</button><button class="btn" data-next="2">Next: the votes</button></div>
@@ -532,11 +671,12 @@ textarea.box{resize:vertical;min-height:84px;}
     </section>
     <section class="step" id="st3">
       <h2>The timing</h2><p class="lede">Each timer starts on its own when its phase begins. You can pause it, or add or take off a minute, any time.</p>
-      <div class="timeline" id="tline" aria-hidden="true"><i class="ti"></i><i class="ts"></i><i class="tv"></i></div>
-      <div class="tlegend" aria-hidden="true"><span>Ideas</span><span>Share and build</span><span>Vote</span></div>
+      <div class="timeline" id="tline" aria-hidden="true"><i class="ti"></i><i class="ts"></i><i class="tm"></i><i class="tv"></i></div>
+      <div class="tlegend" aria-hidden="true"><span>Ideas</span><span>Share and build</span><span>Mark</span><span>Vote</span></div>
       <div class="setgroup">
         <div class="setrow"><div><div class="t">Ideas</div><div class="d">Everyone writes on their own, in private.</div></div><div class="stepper" data-k="ti"><button data-d="-1" aria-label="Less time for ideas">&minus;</button><output id="stTi">5</output><span class="unit">min</span><button data-d="1" aria-label="More time for ideas">+</button></div></div>
         <div class="setrow"><div><div class="t">Share and build</div><div class="d">People share their ideas, build on others, and you group them.</div></div><div class="stepper" data-k="ts"><button data-d="-1" aria-label="Less time to share">&minus;</button><output id="stTs">15</output><span class="unit">min</span><button data-d="1" aria-label="More time to share">+</button></div></div>
+        <div class="setrow"><div><div class="t">Mark</div><div class="d">Everyone marks what has to be true, on their own. Then the room talks through the splits, untimed.</div></div><div class="stepper" data-k="tm"><button data-d="-1" aria-label="Less time to mark">&minus;</button><output id="stTm">2</output><span class="unit">min</span><button data-d="1" aria-label="More time to mark">+</button></div></div>
         <div class="setrow"><div><div class="t">Vote</div><div class="d">Everyone spends their votes on the aspirations.</div></div><div class="stepper" data-k="tv"><button data-d="-1" aria-label="Less time to vote">&minus;</button><output id="stTv">3</output><span class="unit">min</span><button data-d="1" aria-label="More time to vote">+</button></div></div>
       </div>
       <div class="stepnav"><button class="btn ghost" data-back="2">Back</button><button class="btn" data-next="4">Next: review</button></div>
@@ -555,8 +695,8 @@ textarea.box{resize:vertical;min-height:84px;}
 <!-- ================= CONSOLE (facilitator; shared on screen) ================= -->
 <div id="console" class="view">
   <div class="con">
-    <div class="topbar"><span class="mark" id="cMark">Success Factors<span class="ini" id="cIni" data-feedback-private></span></span><div class="chip" id="chip" aria-live="off"></div><div class="right"><button class="btn ghost hide" id="cJoin">Join info</button><span class="sound"><button class="ibtn" id="cMute"></button><input type="range" id="cVol" min="0" max="100" value="70" aria-label="Volume"></span></div></div>
-    <div class="phases" id="cPhases" aria-label="Where the session is"></div>
+    <div class="topbar"><span class="mark" id="cMark">Success Factors<span class="ini" id="cIni" data-feedback-private></span></span><div class="chip" id="chip" aria-live="off"></div><div class="right"><button class="btn ghost hide" id="cPause" aria-pressed="false">Pause screens</button><button class="btn ghost hide" id="cJoin">Join info</button><span class="sound"><button class="ibtn" id="cMute"></button><input type="range" id="cVol" min="0" max="100" value="70" aria-label="Volume"></span></div></div>
+    <div class="phrow"><div class="phases" id="cPhases" aria-label="Where the session is"></div><span class="pausetag hide" id="cPausedTag" role="status">Screens paused</span></div>
     <div class="simbar hide" id="simBar"><span class="t">Test drive &middot; facilitator view</span><div class="r"><div class="seg"><button id="segCon" aria-pressed="true">Facilitator</button><button id="segPax" aria-pressed="false">Participant</button></div><button class="btn ghost" id="simExit">Exit test drive</button></div></div>
     <div class="shead" id="cHead">
       <div class="qwrap"><button class="qtext" id="cQ" title="Edit the question" data-feedback-private></button><input class="qedit hide" id="cQedit" maxlength="200" aria-label="Question" data-feedback-private><p class="sub" id="cSub"></p></div>
@@ -579,7 +719,7 @@ textarea.box{resize:vertical;min-height:84px;}
 </div>
 
 <!-- ================= RESTING PAGES ================= -->
-<div id="gate" class="view"><div class="endpage"><h1 id="gHead"></h1><p id="gMsg"></p><div class="row"><a class="btn sec hide" id="gNew" href="./">Set up a new session</a></div><div class="clusterrow hide" id="gCluster"><div class="cluster"><i></i><i></i><i></i><i></i><i></i></div></div></div></div>
+<div id="gate" class="view"><div class="endpage"><div id="gTop"></div><h1 id="gHead"></h1><p id="gMsg"></p><div id="gExtra"></div><div class="row"><a class="btn sec hide" id="gNew" href="./">Set up a new session</a></div></div></div>
 
 <!-- ================= OVERLAYS ================= -->
 <div id="reveal" role="dialog" aria-modal="true" aria-label="The results"><button class="btn ghost rvclose" id="rvClose">Exit reveal</button><div class="rvstage"><div class="rvslide" id="rvSlide"></div></div><div class="rvfoot hide" id="rvFoot"><div class="rvdots" id="rvDots"></div><div class="r"><button class="btn ghost" id="rvBack">Back</button><button class="btn" id="rvNext">Next</button></div></div></div>
@@ -594,15 +734,15 @@ textarea.box{resize:vertical;min-height:84px;}
 /* Success Factors (tool id sf): a closed, gated session on the shared pt worker.
    Studio (no hash) sets up; the console (#c=CODE&k=KEY&r=host) is the facilitator's shared screen;
    a laptop (&r=pax) is each participant. Every screen polls the whole session and renders from it.
-   The flow: lobby, ideas (private), share and build, sort (everything starts aspirational),
-   vote, then the results through reveal mode. Tests: _backend/tests/qa-success-factors.mjs */
+   The flow: lobby, ideas (private), share and build, sort (everyone marks what has to be true,
+   then the room talks through the splits), vote on each card, then the results through reveal mode. Tests: _backend/tests/qa-success-factors.mjs */
 var TOOL_ID = "sf";
 var WORKER_URL = "https://pt.armand-khambatta.workers.dev";
 var HOSTED = "https://ep.github.io/pt/field-tools/success-factors/";
 var PH = ["lobby", "ideate", "share", "sort", "vote", "results"];
 var PH_NAME = { lobby: "Lobby", ideate: "Ideas", share: "Share", sort: "Sort", vote: "Vote", results: "Results" };
-var DEF = { votes: 5, topN: 10, goal: 100, t: { ideate: 5, share: 15, vote: 3 } };
-var LIM = { votes: [1, 15], topN: [1, 30], goal: [20, 500], ti: [1, 30], ts: [1, 60], tv: [1, 30] };
+var DEF = { votes: 5, topN: 10, goal: 100, t: { ideate: 5, share: 15, mark: 2, vote: 3 } };
+var LIM = { votes: [1, 15], topN: [1, 30], goal: [20, 500], ti: [1, 30], ts: [1, 60], tm: [1, 15], tv: [1, 30] };
 /* the meter's marks: a share of the goal; the bell rings at the goal */
 var LEVELS = [{ n: "Warming Up", f: 0 }, { n: "Getting Somewhere", f: 0.25 }, { n: "Deep Thinkers", f: 0.5 }, { n: "Visionaries", f: 0.75 }, { n: "Bell Ringers", f: 1 }];
 var SEATS = 20, IDEA_MAX = 200, DETAIL_MAX = 600, GROUP_MAX = 40, NICK_MAX = 16;
@@ -663,6 +803,12 @@ var ICON = {
   up: '<svg viewBox="0 0 16 16" aria-hidden="true"><path d="M3 10.5l5-5 5 5" stroke="currentColor" stroke-width="2" fill="none" stroke-linecap="round" stroke-linejoin="round"/></svg>',
   down: '<svg viewBox="0 0 16 16" aria-hidden="true"><path d="M3 5.5l5 5 5-5" stroke="currentColor" stroke-width="2" fill="none" stroke-linecap="round" stroke-linejoin="round"/></svg>',
   expand: '<svg viewBox="0 0 16 16" aria-hidden="true" width="14" height="14"><path d="M9.5 2.5h4v4M6.5 13.5h-4v-4M13.5 2.5l-4.5 4.5M2.5 13.5l4.5-4.5" stroke="currentColor" stroke-width="1.6" fill="none" stroke-linecap="round"/></svg>',
+  check: '<svg viewBox="0 0 24 24" aria-hidden="true"><path d="M5.5 12.5l4.2 4.2L18.5 7.8" stroke="currentColor" stroke-width="2.6" fill="none" stroke-linecap="round" stroke-linejoin="round"/></svg>',
+  lock: '<svg viewBox="0 0 24 24" aria-hidden="true"><rect x="5" y="10.5" width="14" height="10" rx="2.5" fill="currentColor"/><path d="M8.5 10.5V8a3.5 3.5 0 0 1 7 0v2.5" stroke="currentColor" stroke-width="2" fill="none"/></svg>',
+  screen: '<svg viewBox="0 0 24 24" aria-hidden="true"><rect x="3" y="4.5" width="18" height="12" rx="2" stroke="currentColor" stroke-width="2" fill="none"/><path d="M9 20h6M12 16.5V20" stroke="currentColor" stroke-width="2" stroke-linecap="round"/></svg>',
+  plus: '<svg viewBox="0 0 16 16" aria-hidden="true"><path d="M8 3v10M3 8h10" stroke="currentColor" stroke-width="2" stroke-linecap="round"/></svg>',
+  share: '<svg viewBox="0 0 16 16" aria-hidden="true"><path d="M3 8h9M8.5 4.5L12 8l-3.5 3.5" stroke="currentColor" stroke-width="2" fill="none" stroke-linecap="round" stroke-linejoin="round"/></svg>',
+  chev: '<svg viewBox="0 0 24 24" aria-hidden="true"><path d="M6 14l6-6 6 6" stroke="currentColor" stroke-width="2.6" fill="none" stroke-linecap="round" stroke-linejoin="round"/></svg>',
   bell: '<svg viewBox="0 0 72 72" class="bell" aria-hidden="true"><circle cx="36" cy="8" r="5" fill="#293851"/><path d="M14 52c4-4 6-10 6-20a16 16 0 0 1 32 0c0 10 2 16 6 20z" fill="#FFCC00" stroke="#293851" stroke-width="3" stroke-linejoin="round"/><rect x="10" y="51" width="52" height="7" rx="3.5" fill="#293851"/><circle cx="36" cy="63" r="5" fill="#293851"/></svg>'
 };
 </script>
@@ -692,8 +838,8 @@ function mascotSvg(mid, label) {
     case "m08": front = '<path d="M14 46 Q12 58 18 58 Q20 50 24 50 Q24 60 30 58 Q30 50 34 50 Q34 60 40 58 Q40 50 44 50 Q46 58 50 56 Q52 48 50 44Z" fill="' + c + '"/>'; nose = '<path d="M27 42 Q32 46 37 42" stroke="' + k + '" stroke-width="2" fill="none" stroke-linecap="round"/>'; break;
     case "m09": back = '<ellipse cx="20" cy="10" rx="4" ry="10" fill="' + c + '"/><ellipse cx="44" cy="10" rx="4" ry="10" fill="' + c + '"/>'; front = '<path d="M20 16 Q24 8 28 14 Q32 6 36 14 Q40 8 44 16 Q32 20 20 16Z" fill="' + w + '"/>'; break;
     case "m10": eyes = '<ellipse cx="24" cy="34" rx="7" ry="5" fill="#4A3B2C" transform="rotate(15 24 34)"/><ellipse cx="40" cy="34" rx="7" ry="5" fill="#4A3B2C" transform="rotate(-15 40 34)"/><circle cx="24" cy="34" r="2" fill="' + w + '"/><circle cx="40" cy="34" r="2" fill="' + w + '"/>'; front = '<path d="M14 30 Q32 18 50 30 Q50 22 32 18 Q14 22 14 30Z" fill="' + lt + '"/>'; break;
-    case "m11": back = '<path d="M31 14 L36 -2 L34 14Z" fill="#F1E4C8" stroke="' + k + '" stroke-width=".6"/>'; nose = '<path d="M26 42 Q32 47 38 42" stroke="' + k + '" stroke-width="2" fill="none" stroke-linecap="round"/>'; front = '<circle cx="20" cy="42" r="3" fill="#F3A7BD" opacity=".7"/><circle cx="44" cy="42" r="3" fill="#F3A7BD" opacity=".7"/>'; break;
-    case "m12": back = '<path d="M12 20 L16 6 L26 16Z M52 20 L48 6 L38 16Z" fill="' + c + '"/>'; front = '<path d="M12 33 Q22 25 32 31 Q42 25 52 33 Q42 40 32 36 Q22 40 12 33Z" fill="' + k + '"/>'; eyes = '<circle cx="24" cy="33" r="2.6" fill="' + w + '"/><circle cx="40" cy="33" r="2.6" fill="' + w + '"/>'; break;
+    case "m11": back = '<path d="M31 14 L36 -2 L34 14Z" fill="#F1E4C8" stroke="' + k + '" stroke-width=".6"/><path d="M42 52.5 Q55 55 57.5 44" stroke="' + c + '" stroke-width="7.5" fill="none" stroke-linecap="round"/><path d="M57.6 45.5 Q50.5 41 50.8 33.5 Q55.6 36.6 57.8 40.6 Q59.6 36 63.4 33.2 Q64 41 57.6 45.5Z" fill="' + c + '"/>'; nose = '<path d="M26 42 Q32 47 38 42" stroke="' + k + '" stroke-width="2" fill="none" stroke-linecap="round"/>'; front = '<circle cx="20" cy="42" r="3" fill="#F3A7BD" opacity=".7"/><circle cx="44" cy="42" r="3" fill="#F3A7BD" opacity=".7"/>'; break;
+    case "m12": back = '<path d="M12 20 L16 6 L26 16Z M52 20 L48 6 L38 16Z" fill="' + c + '"/>'; front = '<path d="M12 33 Q22 25 32 31 Q42 25 52 33 Q42 40 32 36 Q22 40 12 33Z" fill="' + k + '"/><path d="M21.5 16.4 L41.5 13.2 L34.6 1.8Z" fill="#FFCC00"/><path d="M26.9 11.3 L38.8 9.5 M30.6 6.9 L36.3 6" stroke="#D86527" stroke-width="2.2"/><circle cx="34.6" cy="3" r="2.8" fill="#68BFBD"/>'; eyes = '<circle cx="24" cy="33" r="2.6" fill="' + w + '"/><circle cx="40" cy="33" r="2.6" fill="' + w + '"/>'; break;
     case "m13": back = '<circle cx="21" cy="17" r="8" fill="' + c + '"/><circle cx="43" cy="17" r="8" fill="' + c + '"/>'; eyes = '<circle cx="21" cy="16" r="5" fill="' + w + '"/><circle cx="43" cy="16" r="5" fill="' + w + '"/><circle cx="21" cy="16" r="2.6" fill="' + k + '"/><circle cx="43" cy="16" r="2.6" fill="' + k + '"/>'; nose = '<path d="M20 40 Q32 50 44 40" stroke="' + k + '" stroke-width="2.2" fill="none" stroke-linecap="round"/>'; break;
     case "m14": back = '<circle cx="15" cy="18" r="6" fill="' + c + '"/><circle cx="49" cy="18" r="6" fill="' + c + '"/>'; front = '<path d="M32 12 L30 20 L34 20Z M14 30 L22 31 L14 34Z M50 30 L42 31 L50 34Z" fill="' + k + '"/>'; break;
     case "m15": back = '<path d="M24 12 Q20 2 16 4 M40 12 Q44 2 48 4" stroke="' + k + '" stroke-width="2" fill="none"/><circle cx="16" cy="4" r="2.5" fill="' + k + '"/><circle cx="48" cy="4" r="2.5" fill="' + k + '"/>'; front = '<path d="M11 44 Q32 52 53 44 L52 49 Q32 56 12 49Z" fill="' + k + '"/>'; nose = '<path d="M27 41 Q32 45 37 41" stroke="' + k + '" stroke-width="2" fill="none" stroke-linecap="round"/>'; break;
@@ -912,7 +1058,7 @@ function handle(res) {
 function C() { return App.S.ctl || {}; }
 function setOf(c) {
   var s = (c || C()).set || {}, t = s.t || {};
-  return { votes: s.votes || DEF.votes, topN: s.topN || DEF.topN, goal: s.goal || DEF.goal, t: { ideate: t.ideate || DEF.t.ideate, share: t.share || DEF.t.share, vote: t.vote || DEF.t.vote } };
+  return { votes: s.votes || DEF.votes, topN: s.topN || DEF.topN, goal: s.goal || DEF.goal, t: { ideate: t.ideate || DEF.t.ideate, share: t.share || DEF.t.share, mark: t.mark || DEF.t.mark, vote: t.vote || DEF.t.vote } };
 }
 function setCtl(patch) { var c = Object.assign({}, clone(C()), patch); return write("ctl", c); }
 function phaseIdx(p) { var i = PH.indexOf(p || "lobby"); return i < 0 ? 0 : i; }
@@ -935,40 +1081,57 @@ function model(S) {
   Object.keys(ideas).forEach(function (id) {
     var v = ideas[id]; if (!v || typeof v !== "object" || !v.t) return;
     var m = metas[id] || {}; if (m.x) return;
-    var x = { id: id, seat: seatOfId(id), orig: v.t, t: m.t || v.t, d: m.d || "", c: m.c === "e" ? "e" : null, mg: m.mg || null, h: m.h || [], ph: v.ph || "i", par: v.par || null, at: v.at || 0, sh: v.sh || 0, r: v.r || 1, g: null, kids: [], merged: [] };
+    var x = { id: id, seat: seatOfId(id), orig: v.t, t: m.t || v.t, d: m.d || "", c: /^[ead]$/.test(m.c || "") ? m.c : null, mg: m.mg || null, h: m.h || [], ph: v.ph || "i", par: v.par || null, at: v.at || 0, sh: v.sh || 0, r: v.r || 1, g: null, up: null, depth: 0, kids: [], merged: [] };
     x.on = every || !!v.sh || !!v.par || x.seat === "f";
     A[id] = x; if (x.on) I[id] = x;
   });
   function rootOf(x) { var seen = {}, y = x; while (y.mg && I[y.mg] && !seen[y.id]) { seen[y.id] = 1; y = I[y.mg]; } return y; }
   Object.keys(I).forEach(function (id) { var x = I[id]; if (x.mg) { if (!I[x.mg] || x.mg === id) x.mg = null; else { var r = rootOf(x); x.mg = (r === x || r.mg) ? null : r.id; } } });
   var G = {};
-  Object.keys(grps).forEach(function (gid) { var g = grps[gid]; if (!g || typeof g !== "object") return; G[gid] = { id: gid, kind: "g", t: g.t || "", c: g.c === "e" ? "e" : null, o: g.o || 0, cards: [] }; });
+  Object.keys(grps).forEach(function (gid) { var g = grps[gid]; if (!g || typeof g !== "object") return; G[gid] = { id: gid, kind: "g", t: g.t || "", c: /^[ead]$/.test(g.c || "") ? g.c : null, o: g.o || 0, cards: [] }; });
   var order = Object.keys(I).map(function (k) { return I[k]; }).sort(function (a, b) { return ((a.sh || a.at) - (b.sh || b.at)) || (a.id < b.id ? -1 : 1); });
   /* a card's group is its own, if the facilitator ever placed it (g may be null for not grouped);
-     a build-on idea nobody has placed sits with its parent */
+     a build nobody has placed sits with its parent */
+  function hostOf(id) { var p = id, guard = 0; while (p && I[p] && I[p].mg && guard++ < 50) p = I[p].mg; return p && I[p] ? I[p] : null; }
   function groupOf(x, depth) {
     var m = metas[x.id] || {};
     if (Object.prototype.hasOwnProperty.call(m, "g")) return m.g && G[m.g] ? m.g : null;
-    var p = x.par && I[x.par]; if (p && p.mg && I[p.mg]) p = I[p.mg];
-    return p && depth < 20 ? groupOf(p, depth + 1) : null;
+    var p = x.par && hostOf(x.par);
+    return p && p !== x && depth < 20 ? groupOf(p, depth + 1) : null;
   }
   var vis = [];
   order.forEach(function (x) {
     var gid = groupOf(x, 0); if (gid) x.g = gid;
     if (x.mg) { I[x.mg].merged.push(x); return; }
-    vis.push(x); if (x.g) G[x.g].cards.push(x);
+    vis.push(x);
   });
+  /* chains: a build sits under the card it builds on when both are in the same place on the board */
+  var V = {}; vis.forEach(function (x) { V[x.id] = x; });
+  vis.forEach(function (x) { var p = x.par && hostOf(x.par); if (p && V[p.id] && p !== x && (p.g || null) === (x.g || null)) x.up = p.id; });
+  vis.forEach(function (x) { var seen = {}, y = x; while (y.up && !seen[y.id]) { seen[y.id] = 1; y = V[y.up]; } if (y.up) x.up = null; });
+  vis.forEach(function (x) { if (x.up) V[x.up].kids.push(x); });
+  function flat(x, d, out) { x.depth = d; x.root = out.length ? out[0].id : x.id; out.push(x); x.kids.forEach(function (k) { flat(k, d + 1, out); }); return out; }
+  var roots = vis.filter(function (x) { return !x.up; });
+  roots.forEach(function (x) { if (x.g) G[x.g].cards = G[x.g].cards.concat(flat(x, 0, [])); });
   var groups = Object.keys(G).map(function (k) { return G[k]; }).filter(function (g) { return g.cards.length; }).sort(function (a, b) { return (a.o - b.o) || (+a.id.slice(1) - +b.id.slice(1)); });
   var loose = vis.filter(function (x) { return !x.g; });
-  /* sorting: everything is aspirational until the room moves it to essential */
-  var items = groups.map(function (g) { return { id: g.id, kind: "g", t: g.t || (g.cards[0].t + (g.cards.length > 1 ? " (and " + (g.cards.length - 1) + " more)" : "")), c: g.c === "e" ? "e" : "a", cards: g.cards, o: g.o }; })
-    .concat(loose.map(function (x, i) { return { id: x.id, kind: "i", t: x.t, d: x.d, c: x.c === "e" ? "e" : "a", cards: [x], seat: x.seat, o: 100000 + i }; }));
-  return { ctl: ctl, set: set, A: A, I: I, vis: vis, groups: groups, loose: loose, items: items, count: Object.keys(A).length, shared: Object.keys(I).length };
+  /* sorting: groups and loose chains. Marks decide a column unless the facilitator placed it:
+     everyone who marked chose it, essential; some did, to talk about; nobody did, aspirational */
+  var marks = S.mark || {}, markers = Object.keys(marks).filter(function (k) { return marks[k] && typeof marks[k] === "object"; });
+  var items = groups.map(function (g) { return { id: g.id, kind: "g", t: g.t || (g.cards[0].t + (g.cards.length > 1 ? " (and " + (g.cards.length - 1) + " more)" : "")), c: g.c, cards: g.cards, o: g.o }; })
+    .concat(roots.filter(function (x) { return !x.g; }).map(function (x, i) { return { id: x.id, kind: "i", t: x.t, d: x.d, c: x.c, cards: flat(x, 0, []), seat: x.seat, o: 100000 + i }; }));
+  items.forEach(function (it) {
+    it.marks = markers.filter(function (k) { return !!marks[k][it.id]; }).length;
+    it.col = it.c || (markers.length && it.marks === markers.length ? "e" : it.marks ? "d" : "a");
+    it.cards.forEach(function (x) { x.item = it.id; x.col = it.col; });
+  });
+  return { ctl: ctl, set: set, A: A, I: I, vis: vis, groups: groups, loose: loose, items: items, markers: markers.length, count: Object.keys(A).length, shared: Object.keys(I).length };
 }
-/* votes: each voter's row is the only truth; counts on items that are not aspirational, or above the cap, don't count */
+/* votes go on cards. Each voter's row is the only truth; counts on cards that are not aspirational, or above the cap, don't count.
+   Anything still to talk about when the vote starts is aspirational. */
 function tallies(M, S) {
   S = S || App.S; var asp = {}, cap = M.set.votes, tal = {}, used = {}, V = S.vote || {};
-  M.items.forEach(function (it) { if (it.c === "a") asp[it.id] = 1; });
+  M.items.forEach(function (it) { if (it.col !== "e") it.cards.forEach(function (x) { asp[x.id] = 1; }); });
   Object.keys(V).forEach(function (voter) {
     var row = V[voter] || {}, sum = 0;
     if (typeof row !== "object") return;
@@ -990,14 +1153,20 @@ function rankItems(list, topN) {
   });
   return r;
 }
-function ranking(M, T) { M = M || model(); T = T || tallies(M); return rankItems(M.items.filter(function (it) { return it.c === "a"; }).map(function (it) { return { id: it.id, t: it.t, item: it, tally: T.tal[it.id] || 0, o: it.o }; }), M.set.topN); }
+function ranking(M, T) {
+  M = M || model(); T = T || tallies(M); var list = [], n = 0;
+  M.items.forEach(function (it) { if (it.col === "e") return; it.cards.forEach(function (x) { list.push({ id: x.id, t: x.t, card: x, item: it, on: x.up ? M.I[x.up] : null, tally: T.tal[x.id] || 0, o: n++ }); }); });
+  return rankItems(list, M.set.topN);
+}
 /* the meter: the room's ideas against its goal; a level never drops once reached */
 function levelFor(n, goal) { var l = 0; LEVELS.forEach(function (x, i) { if (n >= Math.ceil(x.f * goal)) l = i; }); return l; }
 function shownLevel(M) { return Math.max(levelFor(M.count, M.set.goal), C().lvl || 0); }
 function remaining(t) { if (!t) return 0; if (t.running && t.endsAt) return Math.max(0, t.endsAt - wnow()); return Math.max(0, t.left || 0); }
-function phaseDur(p, set) { var t = (set && set.t) || DEF.t; return p === "ideate" ? t.ideate * 60000 : p === "share" ? t.share * 60000 : p === "vote" ? t.vote * 60000 : 0; }
+function phaseDur(p, set, step) { var t = (set && set.t) || DEF.t; return p === "ideate" ? t.ideate * 60000 : p === "share" ? t.share * 60000 : p === "sort" && step !== "discuss" ? (t.mark || DEF.t.mark) * 60000 : p === "vote" ? t.vote * 60000 : 0; }
+/* whether the current phase runs a clock: sorting does while people mark, not while the room talks */
+function timedNow(c) { c = c || C(); return !c.final && phaseDur(c.phase, setOf(c), c.step) > 0; }
 function timeUp(c) { c = c || C(); var t = c.timer; return !!(t && t.phase === c.phase && t.running && t.endsAt && wnow() >= t.endsAt); }
-function canWrite(c) { c = c || C(); if (c.final) return false; if ((c.phase === "ideate" || c.phase === "vote") && timeUp(c)) return false; return c.phase === "ideate" || c.phase === "share" || c.phase === "vote"; }
+function canWrite(c) { c = c || C(); if (c.final || c.paused) return false; if ((c.phase === "ideate" || c.phase === "vote" || c.phase === "sort") && timeUp(c)) return false; return c.phase === "ideate" || c.phase === "share" || c.phase === "vote" || (c.phase === "sort" && c.step !== "discuss"); }
 function seatLabel(seat) { var s = (App.S.pax || {})[seat]; return seat === "f" || seat === "fac" ? "Facilitator" : s ? s.nick : "Someone"; }
 function avatarFor(seat) {
   if (seat === "f" || seat === "fac") return '<svg viewBox="0 0 64 64" class="av" role="img" aria-label="Facilitator"><circle cx="32" cy="32" r="26" fill="#293851"/><path d="M32 16 L36 28 L49 28 L39 36 L43 49 L32 41 L21 49 L25 36 L15 28 L28 28Z" fill="#FFCC00"/></svg>';
@@ -1028,6 +1197,8 @@ var Snd = {
   zero: function () { [1046.5, 783.99, 523.25].forEach(function (f, i) { Snd.tone(f, i * 0.24, 1.2, "sine", 0.2); Snd.tone(f * 2.01, i * 0.24, 0.5, "sine", 0.04); }); },
   /* the bell at the top of the meter */
   ding: function () { this.tone(1568, 0, 2.4, "sine", 0.24); this.tone(2349.3, 0, 1.6, "sine", 0.08); this.tone(3136, 0.01, 0.9, "sine", 0.05); this.tone(784, 0, 1.2, "triangle", 0.05); },
+  /* a stone landing: a low, soft thud */
+  stone: function (f) { this.tone(130.8, 0, 0.42, "sine", 0.3, f); this.tone(261.6, 0, 0.16, "triangle", 0.07, f); this.tone(1046.5, 0.03, 0.3, "sine", 0.025, f); },
   swell: function () { [392, 523.25, 659.25, 783.99].forEach(function (f, i) { Snd.tone(f, i * 0.1, 1, "sine", 0.08); }); },
   fanfare: function (at) { at = at || 0; [523.25, 659.25, 783.99, 1046.5].forEach(function (f, i) { Snd.tone(f, at + i * 0.11, 0.5, "triangle", 0.13); }); this.tone(1046.5, at + 0.5, 1.1, "triangle", 0.11); },
   /* music: plays only on the console, and only if the files are there. Missing files stay silent. */
@@ -1153,7 +1324,11 @@ var Idle = (function () {
 function openView(id) { ["studio", "console", "laptop", "gate"].forEach(function (v) { $(v).classList.toggle("on", v === id); }); if (id !== "laptop") Idle.stop(); }
 function resting(head, msg, opts) {
   opts = opts || {}; openView("gate"); closeReveal(true);
-  $("gHead").textContent = head; $("gMsg").textContent = msg; show("gNew", !!opts.again); show("gCluster", !!opts.cluster);
+  $("gHead").textContent = head; $("gMsg").textContent = msg; show("gNew", !!opts.again);
+  $("gTop").innerHTML = opts.top || ""; $("gExtra").innerHTML = opts.extra || "";
+  var g = $("gate"); g.classList.toggle("party", !!opts.party);
+  if (!App.gateBound) { App.gateBound = true; g.addEventListener("click", function (e) { if (e.target.closest('[data-a="enddl"]')) downloadReport(); }); }
+  if (opts.party && !reduced()) setTimeout(function () { confetti(48); }, 350);
 }
 function gate(kind) {
   if (App.ended) return; App.ended = kind === "gone" || kind === "locked"; App.gateKind = kind;
@@ -1163,11 +1338,37 @@ function gate(kind) {
 }
 function ended() {
   App.ended = true; App.gateKind = "ended"; stopLoops(); Snd.stopMusic(); Bots.stop();
-  resting("Session ended and cleared.", App.drive ? "That was a test drive. Nothing was saved." : "Everything from this session is deleted from the server. The reports people downloaded are the only record.", { again: true, cluster: true });
+  resting("Session ended and cleared.", App.drive ? "That was a test drive. Nothing was saved." : "Everything from this session is deleted from the server. The reports people downloaded are the only record.", { again: true, party: true, extra: roomEndHtml() });
+}
+/* what the room made, and everyone who was in it */
+function roomEndHtml() {
+  var M = model(), ss = seats(); if (!ss.length && !M.count) return "";
+  var ess = M.items.filter(function (i) { return i.col === "e"; }).length, ranked = ranking(M).filter(function (x) { return x.top; }).length;
+  var tile = function (n, one, many) { return '<div class="etile"><b>' + n + "</b><span>" + (n === 1 ? one : many) + "</span></div>"; };
+  return '<div class="etiles">' + tile(ss.length, "person", "people") + tile(M.count, "idea", "ideas") + tile(ess, "essential", "essentials") + tile(ranked, "aspiration ranked", "aspirations ranked") + "</div>" + roomRowHtml(ss);
+}
+function roomRowHtml(ss) {
+  if (!ss.length) return "";
+  return '<div class="roomrow" aria-label="Who was in the room" data-feedback-private>' + ss.map(function (s, i) { return '<span class="rm" style="--i:' + i + '">' + avatarFor(s.seat) + "<small>" + esc(s.nick) + "</small></span>"; }).join("") + "</div>";
 }
 function paxEnded() {
-  App.ended = true; App.gateKind = "paxended"; stopLoops();
-  resting("That's all, folks.", "Thanks for your ideas. The facilitator has closed the session.", { cluster: true });
+  App.ended = true; App.gateKind = "paxended"; stopLoops(); Idle.stop();
+  var me = App.seat && (App.S.pax || {})[App.seat], name = me ? me.nick : "";
+  resting(name ? "Thanks, " + name + "!" : "That's all, folks.", "That's a wrap. The facilitator has closed the session.", { party: true, top: name ? '<div class="endav" data-feedback-private>' + avatarFor(App.seat) + "</div>" : "", extra: myEndHtml() });
+  if (name) $("gHead").setAttribute("data-feedback-private", ""); else $("gHead").removeAttribute("data-feedback-private");
+}
+/* a laptop's own wrap-up: what you added, the best thing that happened to it, and the report */
+function myEndHtml() {
+  if (!App.seat) return ""; var M = model(), T = tallies(M), seat = App.seat, mine = Object.keys(M.A).map(function (k) { return M.A[k]; }).filter(function (x) { return x.seat === seat; });
+  var builds = mine.filter(function (x) { return x.par; }).length, votes = T.used[seat] || 0;
+  var tile = function (n, one, many) { return '<div class="etile"><b>' + n + "</b><span>" + (n === 1 ? one : many) + "</span></div>"; };
+  var best = "", R = ranking(M, T), medal = R.filter(function (x) { return x.medal && x.top && x.card.seat === seat; })[0];
+  var essential = mine.filter(function (x) { return x.col === "e"; })[0], builtOn = Object.keys(M.A).filter(function (k) { var y = M.A[k]; return y.par && y.seat !== seat && M.A[y.par] && M.A[y.par].seat === seat; }).length;
+  if (medal) best = "Your idea took " + medal.medal + ".";
+  else if (essential) best = "One of your ideas is an essential.";
+  else if (builtOn) best = (builtOn === 1 ? "Someone built on your ideas." : numWord(builtOn).charAt(0).toUpperCase() + numWord(builtOn).slice(1) + " builds on your ideas.");
+  return '<div class="etiles">' + tile(mine.length - builds, "idea", "ideas") + tile(builds, "build", "builds") + tile(votes, "vote", "votes") + "</div>" + (best ? '<p class="ebest">' + esc(best) + "</p>" : "") +
+    (C().final ? '<div class="row" style="justify-content:center"><button class="btn" data-a="enddl" data-act="download">Download the report</button></div>' : "") + roomRowHtml(seats());
 }
 function render(force) {
   if (App.ended) return;
@@ -1178,25 +1379,31 @@ function render(force) {
 /* ---------- Studio: a stepped setup, one idea per screen ---------- */
 var STUDIO = { step: 0, bound: false, v: null };
 var STEP_NAME = ["start", "question", "votes", "timing", "review"];
-function blankSetup() { return { initiative: "", q: "", qTouched: false, fac: "", votes: DEF.votes, topN: DEF.topN, goal: DEF.goal, ti: DEF.t.ideate, ts: DEF.t.share, tv: DEF.t.vote }; }
-function defaultQ(init) { return "What has to be true for " + (String(init || "").trim() || "this initiative") + " to succeed?"; }
+function blankSetup() { return { initiative: "", q: "", qTouched: false, fac: "", votes: DEF.votes, topN: DEF.topN, goal: DEF.goal, ti: DEF.t.ideate, ts: DEF.t.share, tm: DEF.t.mark, tv: DEF.t.vote }; }
+/* the prompt people finish: "This Service relaunch will be successful if..." (a name that starts with its own article keeps it) */
+function defaultQ(init) {
+  var n = String(init || "").trim().replace(/\s+/g, " ");
+  if (!n) return "This initiative will be successful if\u2026";
+  if (/^(the|this|that|our|a|an|my|your|their)\s/i.test(n)) return n.charAt(0).toUpperCase() + n.slice(1) + " will be successful if\u2026";
+  return "This " + n + " will be successful if\u2026";
+}
 function cleanSetup(o) {
   var v = blankSetup(); o = o && typeof o === "object" ? o : {};
   v.initiative = String(o.initiative || "").slice(0, 60); v.fac = String(o.fac || "").slice(0, 40);
   v.qTouched = !!o.qTouched && !!String(o.q || "").trim(); v.q = v.qTouched ? String(o.q).slice(0, IDEA_MAX) : "";
-  ["votes", "topN", "goal", "ti", "ts", "tv"].forEach(function (k) { var L = LIM[k], n = Math.round(+o[k]); if (!isNaN(n)) v[k] = Math.max(L[0], Math.min(L[1], n)); });
+  ["votes", "topN", "goal", "ti", "ts", "tm", "tv"].forEach(function (k) { var L = LIM[k], n = Math.round(+o[k]); if (!isNaN(n)) v[k] = Math.max(L[0], Math.min(L[1], n)); });
   return v;
 }
 function saveDraft() { lsSet("sf-draft", JSON.stringify(STUDIO.v)); }
 function studioValues() {
   var v = STUDIO.v || blankSetup();
-  return { initiative: v.initiative.trim().slice(0, 60), q: (v.qTouched && v.q.trim() ? v.q.trim() : defaultQ(v.initiative)).slice(0, IDEA_MAX), fac: v.fac.trim().slice(0, 40), set: { votes: v.votes, topN: v.topN, goal: v.goal, t: { ideate: v.ti, share: v.ts, vote: v.tv } } };
+  return { initiative: v.initiative.trim().slice(0, 60), q: (v.qTouched && v.q.trim() ? v.q.trim() : defaultQ(v.initiative)).slice(0, IDEA_MAX), fac: v.fac.trim().slice(0, 40), set: { votes: v.votes, topN: v.topN, goal: v.goal, t: { ideate: v.ti, share: v.ts, mark: v.tm, vote: v.tv } } };
 }
 function studioCheck(forDrive) {
   var vals = studioValues();
   if (!vals.initiative) {
     if (!forDrive) { goStep(1); $("st1Err").textContent = "Add the initiative's name to start a live session."; flag("fInit"); var i = $("stInit"); if (i) i.focus(); return null; }
-    vals.initiative = "Practice run"; if (!(STUDIO.v.qTouched && STUDIO.v.q.trim())) vals.q = defaultQ("this initiative");
+    vals.initiative = "Practice run"; if (!(STUDIO.v.qTouched && STUDIO.v.q.trim())) vals.q = defaultQ("");
   }
   return vals;
 }
@@ -1212,25 +1419,25 @@ function fillStudio() {
   var v = STUDIO.v;
   $("stInit").value = v.initiative; $("stFac").value = v.fac; $("stQ").value = v.qTouched ? v.q : defaultQ(v.initiative);
   $("stVotes").textContent = v.votes; $("stTop").textContent = v.topN; $("stGoal").textContent = v.goal;
-  $("stTi").textContent = v.ti; $("stTs").textContent = v.ts; $("stTv").textContent = v.tv;
+  $("stTi").textContent = v.ti; $("stTs").textContent = v.ts; $("stTm").textContent = v.tm; $("stTv").textContent = v.tv;
   Array.prototype.forEach.call(document.querySelectorAll(".stepper"), function (s) {
     var k = s.getAttribute("data-k"), L = LIM[k], val = v[k], b = s.querySelectorAll("button");
     b[0].disabled = val <= L[0]; b[1].disabled = val >= L[1];
   });
-  var tl = $("tline").children; tl[0].style.flexGrow = v.ti; tl[1].style.flexGrow = v.ts; tl[2].style.flexGrow = v.tv;
+  var tl = $("tline").children; tl[0].style.flexGrow = v.ti; tl[1].style.flexGrow = v.ts; tl[2].style.flexGrow = v.tm; tl[3].style.flexGrow = v.tv;
   renderReview();
 }
 function renderReview() {
   var vals = studioValues(), v = STUDIO.v;
   var rows = [
     ["Initiative", v.initiative.trim() ? esc(v.initiative.trim()) : '<span class="v warn">Add one</span>', 1, !v.initiative.trim()],
-    ["Question", esc(vals.q), 1],
+    ["Prompt", esc(vals.q), 1],
     ["Votes", plural(v.votes, "vote", "votes") + " each, top " + v.topN + " ranked", 2],
     ["Idea goal", plural(v.goal, "idea", "ideas"), 2],
-    ["Timing", v.ti + " min ideas, " + v.ts + " min share and build, " + v.tv + " min vote", 3],
+    ["Timing", v.ti + " min ideas, " + v.ts + " min share and build, " + v.tm + " min marking, " + v.tv + " min vote", 3],
     ["Your name", v.fac.trim() ? esc(v.fac.trim()) : "Not added", 1]
   ];
-  $("review").innerHTML = rows.map(function (r) { return '<button class="rw" data-go="' + r[2] + '"><span class="k">' + r[0] + '</span><span class="v' + (r[3] ? " warn" : "") + '"' + (r[0] === "Initiative" || r[0] === "Question" || r[0] === "Your name" ? " data-feedback-private" : "") + ">" + (r[3] ? "Add one" : r[1]) + '</span><span class="go" aria-hidden="true">&rsaquo;</span></button>'; }).join("");
+  $("review").innerHTML = rows.map(function (r) { return '<button class="rw" data-go="' + r[2] + '"><span class="k">' + r[0] + '</span><span class="v' + (r[3] ? " warn" : "") + '"' + (r[0] === "Initiative" || r[0] === "Prompt" || r[0] === "Your name" ? " data-feedback-private" : "") + ">" + (r[3] ? "Add one" : r[1]) + '</span><span class="go" aria-hidden="true">&rsaquo;</span></button>'; }).join("");
   var st = $("steps"); st.innerHTML = [1, 2, 3, 4].map(function (i) { return "<i class=\"" + (i === STUDIO.step ? "on" : i < STUDIO.step ? "done" : "") + (i === 1 && !v.initiative.trim() && STUDIO.step > 1 ? " gap" : "") + '"></i>'; }).join("");
   show(st, STUDIO.step > 0);
 }
@@ -1286,7 +1493,7 @@ function checkResume() {
   } catch (e) {}
 }
 function firstCtl(v) {
-  return { phase: "lobby", round: 1, q: v.q, initiative: v.initiative, fac: v.fac, set: v.set, timer: { phase: "lobby", dur: 0, left: 0, running: false, endsAt: null }, final: false, lvl: 0, rv: null, allIn: false, created: today() };
+  return { phase: "lobby", round: 1, q: v.q, initiative: v.initiative, fac: v.fac, set: v.set, timer: { phase: "lobby", dur: 0, left: 0, running: false, endsAt: null }, final: false, lvl: 0, rv: null, allIn: false, step: null, paused: false, created: today() };
 }
 function startSession() {
   var v = studioCheck(false); if (!v) return Promise.resolve(false);
@@ -1314,15 +1521,18 @@ function startDrive() {
 
 
 /* ---------- Console ---------- */
-var NEXT_LABEL = { lobby: "Start ideas", ideate: "Start sharing", share: "Sort them", sort: "Start voting", vote: "Show results" };
+var NEXT_LABEL = { lobby: "Start ideas", ideate: "Start sharing", share: "Mark what has to be true", mark: "Talk about the splits", sort: "Start voting", vote: "Show results" };
 var SUB = {
   lobby: "Join on your own screen. It takes a few seconds.",
-  ideate: "Add as many ideas as you can. They stay private until you share them.",
+  ideate: "Finish the sentence as many ways as you can. Ideas stay private until you share them.",
   share: "Share your ideas one at a time, build on anyone's, and add what's missing.",
-  sort: "Everything starts as aspirational. What has to be true moves to essential.",
-  vote: "Spend your votes on the aspirations you'd drive toward.",
+  mark: "Everyone marks what has to be true, on their own screen. Nobody sees anyone else's marks.",
+  sort: "What everyone marked is essential. Talk through the ones you split on.",
+  vote: "Spend your votes on the aspirations you'd drive toward. Every card can win on its own.",
   results: "What this room agreed."
 };
+/* sorting runs in two steps: everyone marks, then the room talks through the splits */
+function stepOf(c) { c = c || C(); return c.phase === "sort" ? (c.step === "discuss" ? "sort" : "mark") : c.phase || "lobby"; }
 function startConsole() {
   openView("console"); App.role = "host"; App.host = true; bindConsole();
   syncSound(); startLoops(); poll();
@@ -1339,6 +1549,7 @@ function bindConsole() {
   $("cVol").addEventListener("input", function () { Snd.setVol(+$("cVol").value / 100); });
   $("cVol").addEventListener("change", function () { if (Snd.on) Snd.plink(); });
   $("cJoin").addEventListener("click", openJoin);
+  $("cPause").addEventListener("click", togglePause);
   $("jmClose").addEventListener("click", closeJoin);
   $("jmCopyHost").addEventListener("click", function () { copyText(hostLink(), this); });
   $("joinModal").addEventListener("click", function (e) { if (e.target === this) closeJoin(); var a = e.target.closest("[data-a]"); if (a) stageAction(a); });
@@ -1363,9 +1574,10 @@ function saveQuestion() {
   var n = Object.keys(App.S.qh || {}).length + 1; write("qh/" + n, { q: old, at: wnow() }); setCtl({ q: nq }); render(true);
 }
 function goPhase(p, extra) {
-  var c = C(), set = setOf(c), dur = phaseDur(p, set);
+  var c = C(), set = setOf(c); extra = extra || {};
+  var step = p === "sort" ? (extra.step || "mark") : null, dur = phaseDur(p, set, step);
   var timer = dur ? { phase: p, dur: dur, left: dur, running: true, endsAt: wnow() + dur } : { phase: p, dur: 0, left: 0, running: false, endsAt: null };
-  var patch = Object.assign({ phase: p, timer: timer }, extra || {});
+  var patch = Object.assign({ phase: p, timer: timer, step: step, paused: false, pausedT: false }, extra, { step: step });
   if (phaseIdx(p) > phaseIdx("share") && !c.allIn) {
     patch.allIn = true;
     var M = model(), late = M.count - M.shared; if (late > 0) banner(plural(late, "idea joins", "ideas join") + " the board", false);
@@ -1375,26 +1587,51 @@ function goPhase(p, extra) {
   if (p === "results") openReveal(); else closeReveal(true);
   render(true);
 }
-function next() { var c = C(); if (c.final) return; var i = phaseIdx(c.phase); if (i < PH.length - 1) goPhase(PH[i + 1]); }
-function back() { var c = C(); if (c.final) return; var i = phaseIdx(c.phase); if (i > 0) goPhase(PH[i - 1]); }
-
+/* from marking to talking: the clock stops; from talking back to marking: marks stay, the clock waits */
+function sortStep(step) {
+  var c = C(); if (c.phase !== "sort" || c.final) return;
+  var d = phaseDur("sort", setOf(c), step), timer = step === "mark" ? { phase: "sort", dur: d, left: d, running: false, endsAt: null } : { phase: "sort", dur: 0, left: 0, running: false, endsAt: null };
+  App.zeroKey = null; App.warned = false; setCtl({ step: step, timer: timer, paused: false, pausedT: false });
+  render(true);
+}
+function next() { var c = C(); if (c.final) return; if (c.phase === "sort" && c.step !== "discuss") return sortStep("discuss"); var i = phaseIdx(c.phase); if (i < PH.length - 1) goPhase(PH[i + 1]); }
+function back() {
+  var c = C(); if (c.final) return;
+  if (c.phase === "sort" && c.step === "discuss") return sortStep("mark");
+  if (c.phase === "vote") return goPhase("sort", { step: "discuss" });
+  var i = phaseIdx(c.phase); if (i > 0) goPhase(PH[i - 1]);
+}
+/* pause screens: every laptop looks up at the shared screen, and a running clock waits with them */
+function togglePause() {
+  var c = C(); if (c.final) return; var t = clone(c.timer);
+  if (!c.paused) {
+    var patch = { paused: true, pausedT: false };
+    if (t && t.running && t.phase === c.phase && t.endsAt) { t.left = remaining(t); t.running = false; t.endsAt = null; patch.timer = t; patch.pausedT = true; }
+    setCtl(patch); say("Screens paused");
+  } else {
+    var p2 = { paused: false, pausedT: false };
+    if (c.pausedT && t && t.phase === c.phase && t.left > 0) { t.running = true; t.endsAt = wnow() + t.left; p2.timer = t; }
+    setCtl(p2); say("Screens back on");
+  }
+  render(true);
+}
 /* ---------- the timer: starts itself; pause, or a minute up or down ---------- */
-function curTimer() { var c = C(), t = clone(c.timer); if (!t || t.phase !== c.phase) { var d = phaseDur(c.phase, setOf(c)); t = { phase: c.phase, dur: d, left: d, running: false, endsAt: null }; } return t; }
+function curTimer() { var c = C(), t = clone(c.timer); if (!t || t.phase !== c.phase) { var d = phaseDur(c.phase, setOf(c), c.step); t = { phase: c.phase, dur: d, left: d, running: false, endsAt: null }; } return t; }
 function tToggle() {
-  var c = C(), t = curTimer(); if (c.final || !phaseDur(c.phase, setOf(c))) return;
+  var c = C(), t = curTimer(); if (!timedNow(c)) return;
   if (t.running) { t.left = remaining(t); t.running = false; t.endsAt = null; }
   else { var left = t.left > 0 ? t.left : 0; if (!(left > 0)) return; t.running = true; t.left = left; t.endsAt = wnow() + left; }
   setCtl({ timer: t }); renderClock();
 }
 function tAdj(d) {
-  var c = C(), t = curTimer(); if (c.final || !phaseDur(c.phase, setOf(c))) return;
+  var c = C(), t = curTimer(); if (!timedNow(c)) return;
   var ms = d * 60000;
   if (t.running) { var rem = Math.max(0, t.endsAt - wnow()); t.endsAt = wnow() + Math.max(0, rem + ms); }
   else t.left = Math.max(0, (t.left || 0) + ms);
   setCtl({ timer: t }); renderClock();
 }
 function renderClock() {
-  var c = C(), t = c.timer, timed = phaseDur(c.phase, setOf(c)) > 0 && !c.final;
+  var c = C(), t = c.timer, timed = timedNow(c);
   var has = !!(t && t.phase === c.phase && timed), rem = has ? remaining(t) : 0, run = has && !!t.running;
   var up = has && run && t.endsAt && wnow() >= t.endsAt, low = run && rem <= 60000 && !up;
   if (App.role === "host") {
@@ -1415,7 +1652,7 @@ function tick() {
   var c = C(); renderClock();
   if (App.host) {
     var t = c.timer;
-    if (t && t.running && t.endsAt && t.phase === c.phase && !c.final && phaseDur(c.phase, setOf(c))) {
+    if (t && t.running && t.endsAt && t.phase === c.phase && timedNow(c)) {
       var rem = t.endsAt - wnow();
       if (rem > 61000) App.warned = false;
       if (t.dur > 60000 && rem <= 60000 && rem > 0 && !App.warned) { App.warned = true; Snd.oneMin(); say("One minute left"); }
@@ -1430,6 +1667,10 @@ function onZero(p) {
     var o = document.createElement("div"); o.className = "count321"; o.setAttribute("role", "status"); document.body.appendChild(o);
     var n = 3; o.textContent = n; say("Time's up. Sharing starts in 3");
     var iv = setInterval(function () { n--; if (n > 0) { o.textContent = n; return; } clearInterval(iv); o.remove(); if (C().phase === "ideate") goPhase("share"); }, App.countMs);
+  } else if (p === "sort") {
+    var o2 = document.createElement("div"); o2.className = "count321"; o2.setAttribute("role", "status"); document.body.appendChild(o2);
+    var n2 = 3; o2.textContent = n2; say("Time's up. Talking it through in 3");
+    var iv2 = setInterval(function () { n2--; if (n2 > 0) { o2.textContent = n2; return; } clearInterval(iv2); o2.remove(); var c2 = C(); if (c2.phase === "sort" && c2.step !== "discuss") sortStep("discuss"); }, App.countMs);
   } else if (p === "vote") { banner("Votes are in", false, App.bannerMs); if (C().phase === "vote") goPhase("results"); }
   else banner("Time's up", false, App.bannerMs);
 }
@@ -1440,7 +1681,8 @@ function renderConsole(force) {
   $("cIni").textContent = c.initiative || "";
   /* the chip: the one home for counts */
   var here = seats().filter(function (s) { return present(s.seat); }), voted = here.filter(function (s) { return (T.used[s.seat] || 0) > 0; }).length;
-  var chip = '<span id="chipIn">' + here.length + "</span><small>in</small>";
+  var chip = '<span id="chipIn">' + here.length + "</span><small>in</small>", st0 = stepOf(c);
+  if (st0 === "mark") chip += '<span class="sep">&middot;</span><span id="chipMore">' + M.markers + "</span><small>marked</small>";
   if (ph === "share") chip += '<span class="sep">&middot;</span><span id="chipMore">' + M.shared + "</span><small>shared</small>";
   if (ph === "vote") chip += '<span class="sep">&middot;</span><span id="chipMore">' + voted + "</span><small>voted</small>";
   var ch = $("chip"); if (ch.innerHTML !== chip) ch.innerHTML = chip;
@@ -1449,8 +1691,11 @@ function renderConsole(force) {
   $("cPhases").innerHTML = PH.map(function (p, i) { return (i ? "<em></em>" : "") + '<span class="' + (p === ph ? "on" : i < phaseIdx(ph) ? "done" : "") + '">' + PH_NAME[p] + "</span>"; }).join("");
   show("simBar", App.drive); $("segCon").setAttribute("aria-pressed", "true"); $("segPax").setAttribute("aria-pressed", "false");
   show("cJoin", ph !== "lobby" && !App.drive && !c.final);
+  var canPause = /^(ideate|share|sort|vote)$/.test(ph) && !c.final, pb = $("cPause");
+  show(pb, canPause); pb.textContent = c.paused ? "Resume screens" : "Pause screens"; pb.setAttribute("aria-pressed", String(!!c.paused)); pb.classList.toggle("on", !!c.paused);
+  show("cPausedTag", canPause && !!c.paused);
   if ($("cQ").textContent !== (c.q || "")) $("cQ").textContent = c.q || "";
-  $("cSub").textContent = SUB[ph] || "";
+  $("cSub").textContent = SUB[stepOf(c)] || "";
   renderClock();
   /* the level the room reaches stays reached */
   var lv = levelFor(M.count, M.set.goal); if (lv > (c.lvl || 0) && !c.final) setCtl({ lvl: lv });
@@ -1458,7 +1703,7 @@ function renderConsole(force) {
   if (App.lastPhase !== ph) { App.lastPhase = ph; musicFor(); App.popReady = false; }
   if (ph === "results" && App.rvOpen) renderReveal();
   if (App.dragging || App.dlg) { App.dirty = true; return; }
-  var sig = JSON.stringify([ph, c.round, c.final, c.set, c.rv, c.allIn, App.S.idea, App.S.meta, App.S.grp, App.S.vote, App.S.pax, App.S.who, here.map(function (s) { return s.seat; }), App.pick, Snd.on, App.ending, App.drive, App.rvOpen, M.count >= M.set.goal]);
+  var sig = JSON.stringify([ph, c.step, c.paused, App.S.mark, c.round, c.final, c.set, c.rv, c.allIn, App.S.idea, App.S.meta, App.S.grp, App.S.vote, App.S.pax, App.S.who, here.map(function (s) { return s.seat; }), App.pick, Snd.on, App.ending, App.drive, App.rvOpen, M.count >= M.set.goal]);
   if (!force && sig === App.conSig) return;
   App.conSig = sig;
   var st = $("cStage"), focusGt = App.focusGt; App.focusGt = null;
@@ -1467,7 +1712,7 @@ function renderConsole(force) {
   if (ph === "lobby") st.innerHTML = lobbyHtml();
   else if (ph === "ideate") st.innerHTML = ideateHtml(M);
   else if (ph === "share") st.innerHTML = shareHtml(M);
-  else if (ph === "sort") st.innerHTML = sortHtml(M, true);
+  else if (ph === "sort") st.innerHTML = c.step === "discuss" ? sortHtml(M, true) : markConHtml(M);
   else if (ph === "vote") st.innerHTML = voteConHtml(M, T);
   else st.innerHTML = resultsHtml(M, T, "host");
   if (ph === "lobby") { var q = st.querySelector(".qr"); if (q) renderQr(q, joinLink()); }
@@ -1483,7 +1728,7 @@ function popNew(M) {
 }
 function controlsHtml(ph, c, M) {
   if (App.ending) return '<div class="endbar" style="flex:1;margin:0"><span>Ending the session in a few seconds. Everything will be deleted.</span><button class="btn sec sm" data-c="undoend" id="cUndoEnd">Undo</button></div>';
-  var L = "", R = "";
+  var L = "", R = "", st = stepOf(c);
   if (ph === "lobby") {
     L = '<div class="cgrp">' + (App.drive ? "" : '<button class="btn ghost" data-c="copyhost">Copy facilitator link</button>') + (Snd.on ? "" : '<span class="hint">Sound is off. Turn it on with the speaker above, then tick "Share sound" when you share this screen.</span>') + "</div>";
     R = '<button class="btn big" id="cNext" data-c="next">' + NEXT_LABEL.lobby + "</button>";
@@ -1493,9 +1738,10 @@ function controlsHtml(ph, c, M) {
     if (!c.final) R = '<button class="btn sec" data-c="replay">Play the reveal again</button>' + (rv && rv !== "done" ? '<button class="btn big" data-c="contreveal" id="cNext">Continue the reveal</button>' : '<button class="btn big" data-c="finalize" id="cNext">Finalize results</button>');
     else R = '<button class="btn sec" data-c="end" id="cEnd">' + (App.drive ? "End test drive" : "End session") + '</button><button class="btn sec" data-c="replay">Play the reveal again</button><button class="btn big" data-c="download" id="cNext">Download report</button>';
   } else {
-    var hint = ph === "share" ? '<span class="hint">Drag a card onto another to group them. Double-click to edit. Ctrl+Z undoes.</span>' : ph === "sort" ? '<span class="hint">Drag a card between the columns, or use its menu.</span>' : "";
+    var left = st === "sort" ? M.items.filter(function (i) { return i.col === "d"; }).length : 0;
+    var hint = ph === "share" ? '<span class="hint">Drag a card onto another to group them. Double-click to edit. Ctrl+Z undoes.</span>' : st === "mark" ? '<span class="hint">Marks stay private. When you talk them through, the room sees only how many marked each one.</span>' : st === "sort" ? '<span class="hint">' + (left ? plural(left, "card is", "cards are") + " still to talk about. Anything left there goes to the vote as aspirational." : "Drag a card between the columns, or use its menu.") + "</span>" : "";
     L = '<div class="cgrp"><button class="btn ghost" id="cBack" data-c="back">Back</button>' + hint + "</div>";
-    R = (ph === "share" && !c.final ? '<button class="btn sec" data-c="addcard" data-act="addcard">Add a card</button>' : "") + '<button class="btn big" id="cNext" data-c="next">' + NEXT_LABEL[ph] + "</button>";
+    R = (ph === "share" && !c.final ? '<button class="btn sec" data-c="addcard" data-act="addcard">Add a card</button>' : "") + '<button class="btn big" id="cNext" data-c="next">' + NEXT_LABEL[st] + "</button>";
   }
   return L + R;
 }
@@ -1541,21 +1787,21 @@ function ideateHtml(M) {
     (ss.length ? '<div class="crowd dim" data-feedback-private aria-label="Who has added an idea">' + crowdHtml(ss, lit) + "</div>" : "") + "</div></div>";
 }
 function cardHtml(x, M, o) {
-  var sel = o.sel === x.id ? " sel" : "";
-  return '<div class="card' + sel + '" data-id="' + x.id + '" data-drop="card:' + x.id + '" style="--mc:' + colorFor(x.seat) + '">' + avatarFor(x.seat) +
+  var sel = o.sel === x.id ? " sel" : "", mine = o.build && App.seat && x.seat === App.seat;
+  return '<div class="card' + sel + (mine ? " yours" : "") + '" data-id="' + x.id + '" data-drop="card:' + x.id + '" style="--mc:' + colorFor(x.seat) + '">' + avatarFor(x.seat) +
     '<div class="tx"><div class="t" data-feedback-private>' + esc(x.t) + "</div>" + (x.d ? '<div class="d" data-feedback-private>' + esc(x.d) + "</div>" : "") +
-    (x.merged.length ? '<div class="mg">+' + x.merged.length + " merged</div>" : "") + "</div>" +
-    (o.edit ? '<button class="cm" data-menu="' + x.id + '" aria-label="Options for this card" aria-haspopup="menu">&middot;&middot;&middot;</button>' : "") +
-    (o.build ? '<button class="btn sec sm bo" data-p="on" data-act="buildon" data-id="' + x.id + '"' + (o.locked ? " disabled" : "") + ">Build on</button>" : "") + "</div>";
+    (x.merged.length ? '<div class="mg">+' + x.merged.length + " merged</div>" : "") +
+    (o.build ? '<div class="cfoot">' + (mine ? '<span class="ytag">Yours</span>' : "") + '<button class="bo" data-p="on" data-act="buildon" data-id="' + x.id + '"' + (o.locked ? " disabled" : "") + ">" + ICON.plus + (o.sel === x.id ? "Building on this" : "Build on this") + "</button></div>" : "") + "</div>" +
+    (o.edit ? '<button class="cm" data-menu="' + x.id + '" aria-label="Options for this card" aria-haspopup="menu">&middot;&middot;&middot;</button>' : "") + "</div>";
 }
+/* a chain: each build sits under the card it builds on */
 function stackHtml(cards, M, o) {
-  var ids = {}, kids = {}, roots = [], done = {};
-  cards.forEach(function (x) { ids[x.id] = 1; });
-  cards.forEach(function (x) { var p = x.par, guard = 0; while (p && M.I[p] && M.I[p].mg && guard++ < 50) p = M.I[p].mg; if (p && ids[p] && p !== x.id) (kids[p] = kids[p] || []).push(x); else roots.push(x); });
-  function rec(x) { if (done[x.id]) return ""; done[x.id] = 1; var k = (kids[x.id] || []).map(rec).join(""); return '<div class="cw">' + cardHtml(x, M, o) + (k ? '<div class="kids">' + k + "</div>" : "") + "</div>"; }
-  var out = roots.map(rec).join("");
-  cards.forEach(function (x) { if (!done[x.id]) out += rec(x); });
-  return out;
+  var ids = {}; cards.forEach(function (x) { ids[x.id] = 1; });
+  function rec(x) {
+    var k = x.kids.filter(function (y) { return ids[y.id]; }).map(rec).join("");
+    return '<div class="cw">' + cardHtml(x, M, o) + (o.build && o.sel === x.id && typeof buildBoxHtml === "function" ? buildBoxHtml(x) : "") + (k ? '<div class="kids">' + k + "</div>" : "") + "</div>";
+  }
+  return cards.filter(function (x) { return !x.up || !ids[x.up]; }).map(rec).join("");
 }
 function boardHtml(M, o) {
   if (!M.vis.length) return '<p class="empty">' + (o.edit ? "Nothing shared yet. Ideas appear here as people share them." : "Nothing on the board yet. Share an idea to start it.") + "</p>";
@@ -1570,60 +1816,122 @@ function shareHtml(M) {
   var pick = App.pick ? '<div class="pickbar"><span>' + (App.pick.mode === "merge" ? "Pick the card to merge it into." : "Pick the card to group it with.") + '</span><button class="btn sec sm" data-a="pickcancel" data-act="pickcancel">Cancel</button></div>' : "";
   return '<div class="' + (App.pick ? "picking" : "") + '">' + pick + boardHtml(M, { edit: !C().final }) + "</div>";
 }
-function itemHtml(it, edit) {
-  return '<div class="item" data-item="' + it.id + '" data-drop="item:' + it.id + '"' + (edit ? ' tabindex="0"' : "") + '><div class="ih">' + (it.kind === "i" ? avatarFor(it.seat) : "") + "<b data-feedback-private>" + esc(it.t) + "</b>" +
+/* a sort item: a group, or a card with the builds under it */
+function itemHtml(it, edit, M) {
+  var list = it.kind === "g" ? it.cards : it.cards.slice(1), showMarks = M && M.markers > 0;
+  var marks = showMarks ? '<span class="mk2' + (it.col === "d" ? " split" : "") + '" title="' + it.marks + " of " + M.markers + ' marked it as essential"><i style="--f:' + (it.marks / M.markers).toFixed(3) + '"></i>' + it.marks + " of " + M.markers + "</span>" : "";
+  return '<div class="item" data-item="' + it.id + '" data-drop="item:' + it.id + '"' + (edit ? ' tabindex="0"' : "") + '><div class="ih">' + (it.kind === "i" ? avatarFor(it.seat) : "") + "<b data-feedback-private>" + esc(it.t) + "</b>" + marks +
     (edit ? '<button class="cm" data-imenu="' + it.id + '" aria-label="Move this" aria-haspopup="menu">&middot;&middot;&middot;</button>' : "") + "</div>" +
-    (it.kind === "g" ? "<ul>" + it.cards.map(function (x) { return "<li data-feedback-private>" + esc(x.t) + "</li>"; }).join("") + "</ul>" : (it.d ? '<ul style="list-style:none;margin-left:0"><li data-feedback-private>' + esc(it.d) + "</li></ul>" : "")) + "</div>";
+    (it.kind === "i" && it.d ? '<p class="idet" data-feedback-private>' + esc(it.d) + "</p>" : "") +
+    (list.length ? "<ul>" + list.map(function (x) { var d = it.kind === "g" ? x.depth : x.depth - 1; return '<li class="' + (d > 0 ? "bd" : "") + '" style="--d:' + Math.min(d, 3) + '" data-feedback-private>' + esc(x.t) + "</li>"; }).join("") + "</ul>" : "") + "</div>";
 }
 function sortHtml(M, edit) {
   edit = edit && !C().final;
-  var e = M.items.filter(function (i) { return i.c === "e"; }), a = M.items.filter(function (i) { return i.c !== "e"; });
-  var f = function (l) { return l.map(function (i) { return itemHtml(i, edit); }).join(""); };
-  return '<div class="cols" data-id="columns"><div class="col e" data-drop="col:e" data-id="essential"><span class="pill">Essential</span><p class="cd">Has to be true, or the initiative fails.</p><div class="items">' + (f(e) || '<p class="hint">Nothing here yet.</p>') + "</div></div>" +
-    '<div class="col a" data-drop="col:a" data-id="aspirational"><span class="pill">Aspirational</span><p class="cd">Would make it great. These go to the vote.</p><div class="items">' + (f(a) || '<p class="hint">Nothing here.</p>') + "</div></div></div>";
+  var by = { e: [], d: [], a: [] }; M.items.forEach(function (i) { by[i.col].push(i); });
+  var f = function (l, empty) { return l.map(function (i) { return itemHtml(i, edit, M); }).join("") || '<p class="hint">' + empty + "</p>"; };
+  var talk = M.markers > 0 || by.d.length;
+  return '<div class="cols' + (talk ? " three" : "") + '" data-id="columns"><div class="col e" data-drop="col:e" data-id="essential"><span class="pill">Essential</span><p class="cd">Has to be true, or the initiative fails.</p><div class="items">' + f(by.e, "Nothing here yet.") + "</div></div>" +
+    (talk ? '<div class="col d" data-drop="col:d" data-id="discuss"><span class="pill">To talk about</span><p class="cd">Some people marked these. Decide together.</p><div class="items">' + f(by.d, "Nothing left to talk about.") + "</div></div>" : "") +
+    '<div class="col a" data-drop="col:a" data-id="aspirational"><span class="pill">Aspirational</span><p class="cd">Would make it great. These go to the vote.</p><div class="items">' + f(by.a, "Nothing here.") + "</div></div></div>";
+}
+/* while people mark: how many are done, never what they chose */
+function markConHtml(M) {
+  var ss = seats(), here = ss.filter(function (s) { return present(s.seat); }), marks = App.S.mark || {}, lit = {};
+  ss.forEach(function (s) { if (marks[s.seat]) lit[s.seat] = 1; });
+  var done = ss.filter(function (s) { return marks[s.seat] && marks[s.seat]._d; }).length;
+  return '<div class="markstage" data-id="marking"><div class="reading"><div class="num" id="markCount">' + M.markers + '</div><div class="of">of ' + plural(here.length || ss.length, "person has", "people have") + ' started marking</div><div class="lvl">' + (done ? plural(done, "person is", "people are") + " done" : "Marks stay private") + "</div>" +
+    (ss.length ? '<div class="crowd dim" data-feedback-private aria-label="Who has marked">' + crowdHtml(ss, lit) + "</div>" : "") + '</div><div class="markhow"><h3>On every screen</h3><p>Tap each card this initiative fails without. Leave the rest.</p><ul><li><b>Everyone</b> marked it: essential.</li><li><b>Some</b> marked it: the room talks it through.</li><li><b>Nobody</b> marked it: aspirational, and on the ballot.</li></ul></div></div>';
 }
 function voteConHtml(M, T) {
-  var asp = M.items.filter(function (i) { return i.c !== "e"; }), cap = M.set.votes;
-  var list = asp.map(function (i) { return '<div class="bopt" data-bar="' + i.id + '"><div class="lbl" data-feedback-private>' + esc(i.t) + "</div></div>"; }).join("");
+  var cap = M.set.votes;
   var cast = seats().map(function (s) { var u = T.used[s.seat] || 0, pips = ""; for (var k = 0; k < cap; k++) pips += "<i" + (k < u ? ' class="on"' : "") + "></i>"; return '<div class="who' + (present(s.seat) ? "" : " away") + '">' + avatarFor(s.seat) + '<span class="pips">' + pips + "</span></div>"; }).join("");
-  return '<div class="votebox"><div class="ballot" data-id="vote">' + (list || '<p class="empty">Nothing is aspirational. Go back to Sort and move something across.</p>') + '</div><aside class="cast" data-id="votes-cast"><h3>Who has voted</h3><div class="crowd" data-feedback-private>' + cast + "</div></aside></div>";
+  return '<div class="votebox">' + ballotHtml(M, T, null) + '<aside class="cast" data-id="votes-cast"><h3>Who has voted</h3><div class="crowd" data-feedback-private>' + cast + "</div></aside></div>";
 }
-function essentialsHtml(M) {
-  var e = M.items.filter(function (i) { return i.c === "e"; }); if (!e.length) return '<p class="lede">None marked.</p>';
-  var gs = e.filter(function (i) { return i.kind === "g"; }), ls = e.filter(function (i) { return i.kind === "i"; });
-  var li = function (x) { return "<li><span data-feedback-private>" + esc(x.t) + "</span>" + (x.d ? '<div class="d" data-feedback-private>' + esc(x.d) + "</div>" : "") + "</li>"; };
-  return gs.map(function (g) { return "<h4 data-feedback-private>" + esc(g.t) + "</h4><ul>" + g.cards.map(li).join("") + "</ul>"; }).join("") + (ls.length ? (gs.length ? "<h4>Also essential</h4>" : "") + "<ul>" + ls.map(function (i) { return li(i.cards[0]); }).join("") + "</ul>" : "");
+/* the ballot: every aspirational card on its own, drawn as chains under its group's name.
+   o: null on the console (read only), or { row, left, locked } on a laptop */
+function ballotHtml(M, T, o) {
+  var asp = M.items.filter(function (i) { return i.col !== "e"; }), cap = M.set.votes, groups = asp.some(function (i) { return i.kind === "g"; });
+  var opt = function (x) {
+    var my = o ? Math.max(0, Math.floor(+o.row[x.id] || 0)) : 0, dots = ""; for (var k = 0; k < Math.min(my, cap); k++) dots += "<i></i>";
+    var on = x.up ? M.I[x.up] : null;
+    return '<div class="bopt' + (x.depth ? " build" : "") + (my ? " voted" : "") + '" data-bar="' + x.id + '" style="--d:' + Math.min(x.depth, 3) + '"' + (on ? ' aria-label="' + esc(x.t) + ", building on " + esc(on.t) + '"' : "") + '><div class="lbl" data-feedback-private>' + esc(x.t) + "</div>" +
+      (o ? '<div class="my"><span class="dots" aria-label="' + plural(my, "vote", "votes") + ' from you">' + dots + '</span><button class="vstep" data-vote="-" data-t="' + x.id + '" aria-label="Take a vote back from ' + esc(x.t) + '"' + (my < 1 || o.locked ? " disabled" : "") + '>&minus;</button><button class="vstep" data-vote="+" data-t="' + x.id + '" aria-label="Vote for ' + esc(x.t) + '"' + (o.left < 1 || o.locked ? " disabled" : "") + ">+</button></div>" : "") + "</div>";
+  };
+  var thread = function (cards) { var out = [], cur = null; cards.forEach(function (x) { if (!x.depth || !cur) { cur = []; out.push(cur); } cur.push(x); }); return out.map(function (t) { return '<div class="bthread">' + t.map(opt).join("") + "</div>"; }).join(""); };
+  var gs = asp.filter(function (i) { return i.kind === "g"; }), ls = asp.filter(function (i) { return i.kind === "i"; });
+  var html = gs.map(function (g) { return '<section class="bgrp"><h3 data-feedback-private>' + esc(g.t) + "</h3>" + thread(g.cards) + "</section>"; }).join("") +
+    (ls.length ? '<section class="bgrp">' + (groups ? "<h3>Not grouped</h3>" : "") + ls.map(function (i) { return thread(i.cards); }).join("") + "</section>" : "");
+  return '<div class="ballot" data-id="vote">' + (html || '<p class="empty">' + (o ? "Nothing to vote on yet." : "Nothing is aspirational. Go back to Sort and move something across.") + "</p>") + "</div>";
 }
+/* the essentials, as foundation stones: one per group or card the room said has to be true */
+var NUMW = ["no", "one", "two", "three", "four", "five", "six", "seven", "eight", "nine", "ten"];
+function numWord(n) { return NUMW[n] || String(n); }
+function essentialsHtml(M, anim) {
+  var e = M.items.filter(function (i) { return i.col === "e"; });
+  if (!e.length) return '<p class="lede">Nothing was marked essential.</p>';
+  var li = function (x, d) { return '<li class="' + (d > 0 ? "bd" : "") + '" style="--d:' + Math.min(d, 3) + '"><span data-feedback-private>' + esc(x.t) + "</span>" + (x.d ? '<div class="d" data-feedback-private>' + esc(x.d) + "</div>" : "") + "</li>"; };
+  return '<div class="stones' + (anim ? " landing" : "") + '" data-id="essentials">' + e.map(function (it, i) {
+    var lead = it.kind === "g" ? null : it.cards[0], list = it.kind === "g" ? it.cards : it.cards.slice(1);
+    return '<article class="stone" style="--i:' + i + '"><span class="seal" aria-hidden="true">' + ICON.check + "</span><h4 data-feedback-private>" + esc(it.kind === "g" ? it.t : lead.t) + "</h4>" + (lead && lead.d ? '<p class="d" data-feedback-private>' + esc(lead.d) + "</p>" : "") +
+      (list.length ? "<ul>" + list.map(function (x) { return li(x, it.kind === "g" ? x.depth : x.depth - 1); }).join("") + "</ul>" : "") + "</article>";
+  }).join("") + "</div>";
+}
+function essentialsLine(M) { var n = M.items.filter(function (i) { return i.col === "e"; }).length; return n ? (n === 1 ? "One thing" : numWord(n).charAt(0).toUpperCase() + numWord(n).slice(1) + " things") + " this initiative can't do without." : ""; }
 function podiumHtml(M, T) {
   var R = ranking(M, T), top = R.filter(function (x) { return x.top; }), medals = { gold: [], silver: [], bronze: [] };
   top.forEach(function (x) { if (x.medal) medals[x.medal].push(x); });
-  var step = function (m, label) { var l = medals[m], names = l.slice(0, 2).map(function (x) { return esc(x.t); }).join("<br>") + (l.length > 2 ? '<br><span class="more">and ' + (l.length - 2) + " more</span>" : ""); return '<div class="pstep ' + m + (l.length ? "" : " empty") + '" data-medal="' + m + '"><div class="pl" data-feedback-private>' + (l.length ? names : "&nbsp;") + '</div><div class="blk">' + (l.length ? label : "") + "</div></div>"; };
+  var step = function (m, label) {
+    var l = medals[m], k = l.length, names = "";
+    if (k === 1) names = esc(l[0].t);
+    else if (k === 2) names = '<span class="tie">Tie</span>' + l.map(function (x) { return esc(x.t); }).join("<br>");
+    else if (k > 2) { var w = numWord(k); names = '<span class="tie">' + (k <= 10 ? w.charAt(0).toUpperCase() + w.slice(1) + "-way tie" : k + "-way tie") + '</span><span class="see">All ' + w + " are in the list below.</span>"; }
+    return '<div class="pstep ' + m + (k ? "" : " vacant") + '" data-medal="' + m + '"><div class="pl" data-feedback-private>' + (k ? names : "&nbsp;") + '</div><div class="blk">' + (k ? label : "") + (k && m === "gold" ? '<i class="spark s1"></i><i class="spark s2"></i><i class="spark s3"></i>' : "") + "</div></div>";
+  };
   if (!R.length) return '<p class="lede">No votes were cast.</p>';
   return '<div class="podium" data-id="podium">' + step("silver", "2") + step("gold", "1") + step("bronze", "3") + "</div>" + (top.some(function (x) { return x.medal; }) ? '<p class="drive">We will drive toward these.</p>' : "");
 }
-function rankHtml(M, T) {
+/* the ranked list; on a laptop, row is that person's own votes, shown as their dots */
+function rankHtml(M, T, row) {
   var top = ranking(M, T).filter(function (x) { return x.top; });
   if (!top.length) return "";
-  return '<ol class="rank">' + top.map(function (x) { return '<li class="' + (x.medal ? "won" : "") + '"><span class="r">' + (x.medal ? '<span class="m ' + x.medal + '" aria-label="' + x.medal + '">' + x.rank + "</span>" : x.rank) + '</span><span class="tt" data-feedback-private>' + esc(x.t) + '</span><span class="v">' + x.tally + "<small>" + (x.tally === 1 ? "vote" : "votes") + "</small></span></li>"; }).join("") + "</ol>";
+  return '<ol class="rank">' + top.map(function (x) {
+    var mine = row ? Math.max(0, Math.floor(+row[x.id] || 0)) : 0, dots = ""; for (var k = 0; k < Math.min(mine, 15); k++) dots += "<i></i>";
+    return '<li class="' + (x.medal ? "won" : "") + '"><span class="r">' + (x.medal ? '<span class="m ' + x.medal + '" aria-label="' + x.medal + '">' + x.rank + "</span>" : x.rank) + '</span><span class="tt"><span data-feedback-private>' + esc(x.t) + "</span>" + (x.on ? '<span class="ctx">Builds on <i data-feedback-private>' + esc(x.on.t) + "</i></span>" : "") + "</span>" +
+      '<span class="v">' + (mine ? '<span class="yours" aria-label="' + plural(mine, "vote", "votes") + ' from you">' + dots + "</span>" : "") + x.tally + "<small>" + (x.tally === 1 ? "vote" : "votes") + "</small></span></li>";
+  }).join("") + "</ol>";
+}
+/* on a laptop: how many of this person's votes landed on the podium */
+function myPodiumLine(M, T, row) {
+  if (!row) return ""; var n = 0, total = 0;
+  ranking(M, T).forEach(function (x) { if (x.medal && x.top) n += Math.max(0, Math.floor(+row[x.id] || 0)); });
+  Object.keys(row).forEach(function (k) { if (T.asp[k]) total += Math.max(0, Math.floor(+row[k] || 0)); });
+  if (!n) return "";
+  return '<p class="mypod">' + (n === total ? (total === 1 ? "Your vote is on the podium." : "All " + numWord(total) + " of your votes are on the podium.") : "You put " + numWord(n) + " of your " + numWord(total) + " votes on the podium.") + "</p>";
 }
 function resultsHtml(M, T, who) {
-  var c = C();
+  var c = C(), row = who === "pax" ? (App.S.vote || {})[App.seat] || null : null;
   if (who === "host" && c.rv && c.rv !== "done") return '<p class="empty">The reveal is paused. Continue it when the room is ready.</p>';
   var send = who === "host" && c.final ? '<div class="resend" data-id="send"><label class="hint" style="display:flex;gap:8px;align-items:center"><input type="checkbox" id="appx"' + (App.noAppendix ? "" : " checked") + '> Include the appendix in the report</label><div class="row"><input id="mailTo" class="tin" style="flex:1;min-width:200px" placeholder="Email addresses, separated by commas" autocomplete="off" data-feedback-private value="' + esc(App.mailTo || "") + '"><button class="btn sec" data-a="email" data-act="email">Email report</button></div></div>' : "";
   var dl = who === "pax" ? (c.final ? '<div class="resend"><button class="btn full" data-a="download" data-act="download">Download the report</button></div>' : '<p class="hint" style="margin-top:14px">The facilitator will finalize the results. Then you can download the report.</p>') : "";
-  return '<div class="res"><section class="ess" data-id="essentials"><span class="pill">Essential</span>' + essentialsHtml(M) + '</section><section class="asp" data-id="aspirations"><span class="pill">Aspirational</span>' + podiumHtml(M, T) + rankHtml(M, T) + send + dl + "</section></div>";
+  return '<div class="res"><section class="ess" data-id="essentials-panel"><span class="pill">Essential</span>' + essentialsHtml(M) + '</section><section class="asp" data-id="aspirations"><span class="pill">Aspirational</span>' + podiumHtml(M, T) + myPodiumLine(M, T, row) + rankHtml(M, T, row) + send + dl + "</section></div>";
 }
-function podiumIn(root, sound) {
-  var order = ["bronze", "silver", "gold"], lag = reduced() ? 0 : 800;
+function podiumIn(root, host) {
+  var order = ["bronze", "silver", "gold"], lag = reduced() ? 0 : 800, pod = root.querySelector(".podium");
   order.forEach(function (m, i) {
     var el = root.querySelector('.pstep[data-medal="' + m + '"]'); if (!el) return;
     if (!reduced()) { el.classList.add("rise"); el.style.animationDelay = (300 + i * lag) + "ms"; }
-    if (sound && el.querySelector(".blk").textContent) setTimeout(function () { Snd.fanfare(); }, 300 + i * lag);
+    if (el.querySelector(".blk").textContent) setTimeout(function () { if (host) Snd.fanfare(); else paxSound(m === "gold" ? "plink" : "pop"); }, 300 + i * lag);
   });
+  if (pod) setTimeout(function () { pod.classList.add("lit"); }, reduced() ? 0 : 300 + 3 * lag);
   if (!reduced()) Array.prototype.forEach.call(root.querySelectorAll(".rank li"), function (li, i) { li.classList.add("slide"); li.style.animationDelay = (300 + 3 * lag + i * 60) + "ms"; });
-  setTimeout(function () { if (C().phase === "results") confetti(60); }, 300 + 2 * lag);
+  setTimeout(function () { if (C().phase === "results") confetti(host ? 60 : 36); }, 300 + 2 * lag);
 }
-
+/* the stones land one after another, each with a soft thud */
+function stonesIn(root, host) {
+  var n = root.querySelectorAll(".stone").length, gap = reduced() ? 0 : 450;
+  for (var i = 0; i < n; i++) setTimeout(function () { if (host) Snd.stone(); else paxSound("stone"); }, 300 + i * gap + 380);
+  if (n && !reduced()) setTimeout(function () { if (host) Snd.swell(); }, 300 + n * gap + 500);
+}
 /* ---------- reveal mode: the standby, then essentials, then the podium ---------- */
 function standbyHtml() { return '<div class="standby"><div class="orb"></div><h1>Enough suspense.</h1><p>The votes are locked in. Share your screen, then show the room.</p><button class="btn big gold" id="rvBegin">Let\'s see the results</button></div>'; }
 function openReveal() { if (App.role !== "host") return; App.rvOpen = true; $("reveal").classList.add("on"); App.rvKey = null; renderReveal(); }
@@ -1633,15 +1941,19 @@ function renderReveal() {
   var c = C(), rv = c.rv, M = model(), T = tallies(M), key = JSON.stringify([rv, App.S.vote, App.S.grp, App.S.meta, App.S.idea]);
   if (key === App.rvKey) return; App.rvKey = key;
   var s = $("rvSlide");
-  if (!rv || rv === "standby") { s.innerHTML = standbyHtml(); show("rvFoot", false); App.podiumShown = false; var b = $("rvBegin"); if (b) try { b.focus(); } catch (e) {} return; }
+  if (!rv || rv === "standby") { s.innerHTML = standbyHtml(); show("rvFoot", false); App.podiumShown = false; App.stonesShown = false; var b = $("rvBegin"); if (b) try { b.focus(); } catch (e) {} return; }
   if (rv === "done") { closeReveal(); return; }
   show("rvFoot", true);
-  if (rv === 1) { s.innerHTML = '<h2>What has to be true</h2><div class="ess" data-id="essentials">' + essentialsHtml(M) + "</div>"; App.podiumShown = false; }
-  else { s.innerHTML = "<h2>What we'll drive toward</h2>" + podiumHtml(M, T) + rankHtml(M, T); if (!App.podiumShown) { App.podiumShown = true; podiumIn(s, true); } }
+  if (rv === 1) {
+    var fresh = !App.stonesShown; App.stonesShown = true; App.podiumShown = false;
+    s.innerHTML = '<p class="eyebrow">The essentials</p><h2>What has to be true</h2>' + essentialsHtml(M, fresh && !reduced()) + '<p class="stonesum' + (fresh && !reduced() ? " later" : "") + '" style="--n:' + M.items.filter(function (i) { return i.col === "e"; }).length + '">' + esc(essentialsLine(M)) + "</p>";
+    if (fresh) stonesIn(s, true);
+  }
+  else { App.stonesShown = false; s.innerHTML = "<h2>What we'll drive toward</h2>" + podiumHtml(M, T) + rankHtml(M, T); if (!App.podiumShown) { App.podiumShown = true; podiumIn(s, true); } }
   $("rvDots").innerHTML = '<i class="' + (rv === 1 ? "on" : "done") + '"></i><i class="' + (rv === 2 ? "on" : "") + '"></i>';
   $("rvBack").disabled = rv === 1; $("rvNext").textContent = rv === 2 ? "Done" : "Next";
 }
-function rvGo(v) { setCtl({ rv: v }); if (v === 1) Snd.swell(); App.rvKey = null; if (v === "done") closeReveal(); else renderReveal(); render(true); }
+function rvGo(v) { setCtl({ rv: v }); App.rvKey = null; if (v === "done") closeReveal(); else renderReveal(); render(true); }
 
 /* ---------- join info, from anywhere on the console ---------- */
 function openJoin() { $("jmWays").innerHTML = waysHtml(); var q = $("jmWays").querySelector(".qr"); if (q) renderQr(q, joinLink()); $("joinModal").classList.add("on"); }
@@ -1676,11 +1988,11 @@ function editCard(id, t, d) {
   act([["meta/" + id, m]]);
 }
 function renameGroup(gid, t) { var g = clone((App.S.grp || {})[gid]); if (!g) return; t = String(t || "").trim().slice(0, GROUP_MAX); if ((g.t || "") === t) return; g.t = t; act([["grp/" + gid, g]]); }
-/* sorting: "e" moves a card or group to essential; anything else sends it back to aspirational */
+/* sorting: "e" essential, "a" aspirational, "d" to talk about; the facilitator's placement beats the marks */
 function classify(itemId, c) {
-  c = c === "e" ? "e" : null;
-  if (/^g\d+$/.test(itemId)) { var g = clone((App.S.grp || {})[itemId]); if (!g || (g.c === "e" ? "e" : null) === c) return; g.c = c; act([["grp/" + itemId, g]]); }
-  else { var m = metaOf(itemId); if ((m.c === "e" ? "e" : null) === c) return; if (c) m.c = c; else delete m.c; act([["meta/" + itemId, m]]); }
+  c = /^[ead]$/.test(c || "") ? c : null;
+  if (/^g\d+$/.test(itemId)) { var g = clone((App.S.grp || {})[itemId]); if (!g || (g.c || null) === c) return; if (c) g.c = c; else delete g.c; act([["grp/" + itemId, g]]); }
+  else { var m = metaOf(itemId); if ((m.c || null) === c) return; if (c) m.c = c; else delete m.c; act([["meta/" + itemId, m]]); }
 }
 function facIdea(t, d) {
   t = String(t || "").trim().slice(0, IDEA_MAX); if (!t) return; var id = newIdeaId("f"), c = C();
@@ -1696,8 +2008,8 @@ function dropOn(kind, id, tgt) {
   if (kind === "card") {
     if (k === "card" && t !== id) groupWith(id, t); else if (k === "grp") joinGroup(id, t); else if (k === "tray") ungroup(id);
   } else if (kind === "item") {
-    if (k === "col") classify(id, t === "e" ? "e" : null);
-    else if (k === "item" && t !== id) { var M = model(), o = M.items.filter(function (i) { return i.id === t; })[0]; if (o) classify(id, o.c); }
+    if (k === "col") classify(id, t);
+    else if (k === "item" && t !== id) { var M = model(), o = M.items.filter(function (i) { return i.id === t; })[0]; if (o) classify(id, o.col); }
   }
 }
 
@@ -1709,7 +2021,7 @@ function dragDown(e) {
   var ph = C().phase, src = e.target.closest(".card,[data-item]"); if (!src) return;
   var kind = src.hasAttribute("data-item") ? "item" : "card";
   if (kind === "card" && ph !== "share") return;
-  if (kind === "item" && ph !== "sort") return;
+  if (kind === "item" && (ph !== "sort" || C().step !== "discuss")) return;
   D = { src: src, kind: kind, id: kind === "item" ? src.getAttribute("data-item") : src.getAttribute("data-id"), x0: e.clientX, y0: e.clientY, on: false, tgt: null };
   window.addEventListener("pointermove", dragMove); window.addEventListener("pointerup", dragUp); window.addEventListener("pointercancel", dragUp);
 }
@@ -1771,7 +2083,8 @@ function moveMenu(id, anchor) { var M = model(); openMenu(anchor, [{ head: "Move
 function splitMenu(id, anchor) { var M = model(), x = M.I[id]; openMenu(anchor, [{ head: "Split back out" }].concat(x.merged.map(function (k) { return { label: k.t, fn: function () { splitOut(k.id); } }; }))); }
 function itemMenu(id, anchor) {
   var M = model(), it = M.items.filter(function (i) { return i.id === id; })[0]; if (!it) return;
-  openMenu(anchor, it.c === "e" ? [{ label: "Back to aspirational", id: "a", fn: function () { classify(id, null); } }] : [{ label: "Make it essential", id: "e", fn: function () { classify(id, "e"); } }]);
+  var all = [{ c: "e", label: "Make it essential" }, { c: "d", label: "Talk about it" }, { c: "a", label: "Make it aspirational" }];
+  openMenu(anchor, all.filter(function (x) { return x.c !== it.col && (x.c !== "d" || M.markers > 0 || it.col === "d"); }).map(function (x) { return { label: x.label, id: x.c, fn: function () { classify(id, x.c); } }; }));
 }
 function dlg(html, onOpen) {
   closeDlg(); var d = document.createElement("div"); d.className = "dlg"; d.innerHTML = '<div class="dbox" role="dialog" aria-modal="true">' + html + "</div>";
@@ -1897,6 +2210,8 @@ function lostMascot() { var m = myMascot(); return !!m && mascotOwner(m) !== App
 function paxView() {
   var c = C(), ph = c.phase || "lobby";
   if (!iAmSeated()) return "join"; if (!myMascot() || lostMascot()) return "repick";
+  if (c.paused && !c.final && /^(ideate|share|sort|vote)$/.test(ph)) return "paused";
+  if (ph === "sort") return c.step === "discuss" ? "sort" : "mark";
   if (ph === "results") { var rv = c.rv; return !rv || rv === "done" ? (c.final ? "final" : "results") : rv === "standby" ? "hold" : rv === 1 ? "essentials" : "podium"; }
   return ph;
 }
@@ -1914,37 +2229,47 @@ function renderLaptop(force) {
   var key = v + "|" + (c.round || 1);
   if (key !== App.paxKey) {
     App.paxKey = key; App.paxSig = null; App.editing = null; App.buildOn = null;
-    body.className = "body" + (v === "lobby" || v === "hold" ? "" : " top"); $("pwrap").classList.toggle("wide", v === "share");
+    body.className = "body" + (/^(lobby|hold|sort|paused)$/.test(v) ? "" : " top"); $("pwrap").classList.toggle("wide", v === "share");
     body.innerHTML = paxSkeleton(v, c);
     if (v === "lobby") Idle.start("room"); else if (v === "final") Idle.start("handful"); else Idle.stop();
     if (v === "podium") App.paxPodium = true;
+    if (v === "essentials") App.paxStones = true;
     if (!reduced()) { body.classList.remove("defrost"); void body.offsetWidth; body.classList.add("defrost"); }
   }
   if (App.editing && !force) return;
-  var ae = document.activeElement; if (!force && ae && (ae.id === "pIdea" || ae.id === "pEdit") && App.paxSig) { /* keep typing undisturbed */ }
-  /* redraw only for what this screen shows: other people's private ideas and votes never redraw it, so a tap can't land mid-redraw */
-  var board = v !== "ideate", votes = v === "vote" ? (App.S.vote || {})[App.seat] || null : v === "ideate" || v === "share" || v === "sort" ? null : App.S.vote;
-  var sig = JSON.stringify([board ? App.S.idea : myIdeas(), board ? App.S.meta : null, board ? App.S.grp : null, votes, App.S.who, App.S.pax, c.q, c.set, c.allIn, c.final, timeUp(c), App.buildOn, App.editing, App.dragId]);
+  /* redraw only for what this screen shows: other people's private ideas, marks and votes never redraw it, so a tap can't land mid-redraw */
+  var own = function (k) { return (App.S[k] || {})[App.seat] || null; };
+  var parts = v === "ideate" ? [myIdeas()] : v === "mark" ? [App.S.idea, App.S.meta, App.S.grp, own("mark")] : v === "sort" || v === "paused" || v === "lobby" || v === "hold" ? [] :
+    v === "share" ? [App.S.idea, App.S.meta, App.S.grp] : v === "vote" ? [App.S.idea, App.S.meta, App.S.grp, App.S.mark, own("vote")] : [App.S.idea, App.S.meta, App.S.grp, App.S.mark, App.S.vote];
+  var sig = JSON.stringify(parts.concat([App.S.who, App.S.pax, c.q, c.set, c.allIn, c.final, c.step, timeUp(c), App.buildOn, App.editing, App.dragId, App.ptab]));
   if (sig === App.paxSig && !force) return; App.paxSig = sig;
   var q = body.querySelector(".pq"); if (q && q.textContent !== (c.q || "")) q.textContent = c.q || "";
   if (v === "lobby") { var w = body.querySelector("#pWaitName"); if (w) w.textContent = "You're in, " + ((App.S.pax[App.seat] || {}).nick || "") + "!"; var a = body.querySelector("#pWaitAv"); if (a && a.getAttribute("data-m") !== myMascot()) { a.innerHTML = avatarFor(App.seat); a.setAttribute("data-m", myMascot() || ""); } }
+  else if (v === "sort" || v === "paused") { var e = body.querySelector("#pEyesAv"); if (e && e.getAttribute("data-m") !== myMascot()) { e.innerHTML = avatarFor(App.seat); e.setAttribute("data-m", myMascot() || ""); } }
   else if (v === "ideate") paxIdeate(body, M, c);
   else if (v === "share") paxShare(body, M, c);
-  else if (v === "sort") body.querySelector("#pBoard").innerHTML = sortHtml(M, false);
+  else if (v === "mark") paxMark(body, M, c);
   else if (v === "vote") paxVote(body, M, c);
-  else if (v === "essentials") body.querySelector("#pBoard").innerHTML = '<div class="ess">' + essentialsHtml(M) + "</div>";
-  else if (v === "podium") { var pb = body.querySelector("#pBoard"); pb.innerHTML = podiumHtml(M, tallies(M)) + rankHtml(M, tallies(M)); if (App.paxPodium) { App.paxPodium = false; podiumIn(pb, false); } }
+  else if (v === "essentials") { var eb = body.querySelector("#pBoard"), anim = App.paxStones && !reduced(); eb.innerHTML = essentialsHtml(M, anim) + '<p class="stonesum' + (anim ? " later" : "") + '" style="--n:' + M.items.filter(function (i) { return i.col === "e"; }).length + '">' + esc(essentialsLine(M)) + "</p>"; if (App.paxStones) { App.paxStones = false; stonesIn(eb, false); } }
+  else if (v === "podium") { var pb = body.querySelector("#pBoard"), T = tallies(M), row = own("vote"); pb.innerHTML = podiumHtml(M, T) + myPodiumLine(M, T, row) + rankHtml(M, T, row); if (App.paxPodium) { App.paxPodium = false; podiumIn(pb, false); } else { var pd = pb.querySelector(".podium"); if (pd) pd.classList.add("lit"); } }
   else if (v === "results" || v === "final") body.querySelector("#pBoard").innerHTML = resultsHtml(M, tallies(M), "pax");
 }
+function eyesHtml(head, msg) { return '<div class="eyes"><div class="look" aria-hidden="true"><span class="chev">' + ICON.chev + ICON.chev + '</span><span id="pEyesAv" data-feedback-private></span></div><h2>' + head + "</h2><p>" + msg + "</p></div>"; }
 function paxSkeleton(v, c) {
   var q = '<h1 class="instr pq" data-feedback-private></h1>';
   if (v === "lobby") return '<div class="waitpage"><span id="pWaitAv" data-feedback-private></span><h2 id="pWaitName" data-feedback-private></h2><p>Hang tight. We\'ll start in a moment.</p></div>';
-  if (v === "ideate") return q + '<p class="psub">Add as many ideas as you can. Nobody sees them until you share them.</p><p class="locked hide" id="pLock" role="status">Time\'s up. Your ideas are saved.</p><div class="compose"><textarea id="pIdea" class="box" maxlength="' + IDEA_MAX + '" placeholder="One idea at a time" aria-label="Your idea" data-feedback-private></textarea><button class="btn" id="pSend" data-p="send" data-act="send">Add</button></div><p class="sec2" id="pMineHead"></p><ul class="mine" id="pMine" aria-label="Your ideas"></ul>';
-  if (v === "share") return '<div class="pshare"><div>' + q + '<p class="psub">Share your ideas one at a time. Build on anyone\'s, or add something new.</p><div id="pBuilding"></div><div class="compose"><textarea id="pIdea" class="box" maxlength="' + IDEA_MAX + '" placeholder="A new idea" aria-label="Your idea" data-feedback-private></textarea><button class="btn" id="pSend" data-p="send" data-act="send">Add to the board</button></div><p class="sec2" id="pMineHead"></p><ul class="mine" id="pMine" aria-label="Your ideas"></ul></div><div><p class="sec2">The board</p><div id="pBoard"></div></div></div>';
-  if (v === "sort") return '<h1 class="instr">Essential or aspirational?</h1><p class="psub">The facilitator is sorting with the room. Everything starts as aspirational.</p><div id="pBoard"></div>';
-  if (v === "vote") return '<h1 class="instr">Vote for the aspirations you\'d drive toward.</h1><p class="psub">You can stack your votes on one.</p><p class="locked hide" id="pLock" role="status">Voting is closed.</p><p class="left" id="votesLeft"></p><div id="pBoard"></div>';
+  if (v === "paused") return eyesHtml("Eyes up front", "The facilitator has paused the screens for a moment. Look at the shared screen.");
+  if (v === "sort") return eyesHtml("Eyes up front", "The room is talking through the cards you split on. Look at the shared screen.");
+  if (v === "ideate") return q + '<p class="psub">Finish the sentence as many ways as you can. Nobody sees your ideas until you share them.</p><p class="locked hide" id="pLock" role="status">Time\'s up. Your ideas are saved.</p><div class="compose"><textarea id="pIdea" class="box" maxlength="' + IDEA_MAX + '" placeholder="One idea at a time" aria-label="Your idea" data-feedback-private></textarea><button class="btn" id="pSend" data-p="send" data-act="send">Add</button></div><p class="sec2" id="pMineHead"></p><ul class="mine" id="pMine" aria-label="Your ideas"></ul>';
+  if (v === "share") return q + '<p class="psub">Share your ideas one at a time. Then build on what others share.</p>' +
+    '<div class="pshare" id="pShare" data-tab="mine"><div class="ptabs" role="tablist" aria-label="Your ideas or the board"><button role="tab" id="tabMine" data-p="tab" data-id="mine"></button><button role="tab" id="tabBoard" data-p="tab" data-id="board"></button></div>' +
+    '<section class="pnote" data-id="your-ideas" aria-labelledby="pNoteH"><div class="phead"><span class="ic">' + ICON.lock + '</span><h2 id="pNoteH">Your ideas</h2><span class="ptag" id="pMineHead"></span></div><p class="pnsub">Only you can see these until you share them.</p><ul class="mine" id="pMine" aria-label="Your ideas"></ul>' +
+    '<div class="newidea"><label for="pIdea">Something new?</label><div class="compose"><textarea id="pIdea" class="box" maxlength="' + IDEA_MAX + '" placeholder="It goes straight on the board" data-feedback-private></textarea><button class="btn sec" id="pSend" data-p="send" data-act="send">Add to the board</button></div></div></section>' +
+    '<section class="pboardp" data-id="shared-board" aria-labelledby="pBoardH"><div class="phead"><span class="ic">' + ICON.screen + '</span><h2 id="pBoardH">The board</h2><span class="ptag live">Same as the shared screen</span></div><div id="pBoard"></div></section></div>';
+  if (v === "mark") return '<h1 class="instr">What has to be true?</h1><p class="psub">Tap each card this initiative fails without. Nobody else sees your marks.</p><p class="locked hide" id="pLock" role="status">Time\'s up. Your marks are in.</p><div id="pMarks" class="marks"></div><div class="markfoot"><span id="pMarkN"></span><button class="btn" id="pDone" data-p="done" data-act="done">I\'m done</button></div>';
+  if (v === "vote") return '<h1 class="instr">Vote for the aspirations you\'d drive toward.</h1><p class="psub">Every card can win on its own. You can stack your votes on one.</p><p class="locked hide" id="pLock" role="status">Voting is closed.</p><p class="left" id="votesLeft"></p><div id="pBoard"></div>';
   if (v === "hold") return '<div class="holdpage"><div class="dot"></div><h2>Votes are in.</h2><p>Now we wait for the big reveal!</p></div>';
-  if (v === "essentials") return '<h1 class="instr">What has to be true</h1><div id="pBoard"></div>';
+  if (v === "essentials") return '<p class="eyebrow">The essentials</p><h1 class="instr">What has to be true</h1><div id="pBoard"></div>';
   if (v === "podium") return '<h1 class="instr">What we\'ll drive toward</h1><div id="pBoard"></div>';
   return '<h1 class="instr">What this room agreed</h1><div id="pBoard"></div>';
 }
@@ -1962,39 +2287,66 @@ function paxIdeate(body, M, c) {
 function paxShare(body, M, c) {
   var locked = !canWrite(c), every = allIn(c);
   if (App.buildOn && !M.I[App.buildOn]) App.buildOn = null;
-  var on = App.buildOn ? M.I[App.buildOn] : null;
-  body.querySelector("#pBuilding").innerHTML = on ? '<div class="building"><span>Building on <b data-feedback-private>' + esc(on.t) + '</b></span><button class="btn ghost sm" data-p="unbuild" data-act="unbuild">Cancel</button></div>' : "";
-  body.querySelector("#pSend").textContent = on ? "Add your build" : "Add to the board";
-  body.querySelector("#pIdea").placeholder = on ? "Your build on it" : "A new idea";
   body.querySelector("#pIdea").disabled = locked; body.querySelector("#pSend").disabled = locked;
-  var list = myIdeas(), waiting = list.filter(function (x) { return !(x.sh || x.par || every); }).length;
-  body.querySelector("#pMineHead").textContent = list.length ? (waiting ? "Your ideas, " + waiting + " to share" : "Your ideas, all shared") : "";
-  body.querySelector("#pMine").innerHTML = list.map(function (x) {
-    var shared = !!(x.sh || x.par || every);
+  var list = myIdeas(), waiting = list.filter(function (x) { return !(x.sh || x.par || every); }), done = list.filter(function (x) { return x.sh || x.par || every; });
+  body.querySelector("#pMineHead").textContent = list.length ? (waiting.length ? waiting.length + " to share" : "All shared") : "";
+  var li = function (x, shared, first) {
     if (App.editing === x.id) return '<li><input class="tin" id="pEdit" maxlength="' + IDEA_MAX + '" value="' + esc(x.t) + '" aria-label="Edit your idea" data-feedback-private><button class="btn sm" data-p="save" data-act="save" data-id="' + x.id + '">Save</button></li>';
-    return '<li class="' + (shared ? "shared" : "") + '" data-mine="' + x.id + '"' + (shared || locked ? "" : ' draggable="true"') + '><span data-feedback-private>' + esc(x.t) + "</span>" + (shared ? '<span class="tag">Shared</span>' : (locked ? "" : '<button class="btn ghost sm" data-p="edit" data-act="edit" data-id="' + x.id + '">Edit</button><button class="btn sec sm" data-p="share" data-act="share" data-id="' + x.id + '">Share</button>')) + "</li>";
-  }).join("");
+    return '<li class="' + (shared ? "shared" : first ? "next" : "") + '" data-mine="' + x.id + '"' + (shared || locked ? "" : ' draggable="true"') + "><span data-feedback-private>" + esc(x.t) + "</span>" +
+      (shared ? '<span class="tag">' + ICON.check + "On the board</span>" : (locked ? "" : '<button class="btn ghost sm" data-p="edit" data-act="edit" data-id="' + x.id + '">Edit</button><button class="btn sec sm shr" data-p="share" data-act="share" data-id="' + x.id + '">Share' + ICON.share + "</button>")) + "</li>";
+  };
+  body.querySelector("#pMine").innerHTML = waiting.map(function (x, i) { return li(x, false, i === 0); }).join("") + (done.length ? '<li class="sharedhead" aria-hidden="true">Shared</li>' + done.map(function (x) { return li(x, true); }).join("") : "") + (list.length ? "" : '<li class="none">Nothing to share. Add something new below.</li>');
+  /* the board redraws as people share; a half-written build survives it */
+  var bb = $("pBuild"), keep = bb ? { v: bb.value, f: document.activeElement === bb, s: bb.selectionStart } : null;
   body.querySelector("#pBoard").innerHTML = boardHtml(M, { build: true, sel: App.buildOn, locked: locked });
+  var nb = $("pBuild"); if (nb && keep) { nb.value = keep.v; if (keep.f) { nb.focus(); try { nb.setSelectionRange(keep.s, keep.s); } catch (e) {} } }
+  var tab = App.ptab === "board" ? "board" : "mine"; $("pShare").setAttribute("data-tab", tab);
+  $("tabMine").innerHTML = "Your ideas" + (waiting.length ? " <b>" + waiting.length + "</b>" : ""); $("tabBoard").innerHTML = "The board <b>" + M.vis.length + "</b>";
+  $("tabMine").setAttribute("aria-selected", String(tab === "mine")); $("tabBoard").setAttribute("aria-selected", String(tab === "board"));
+}
+/* building happens on the card: the composer opens right under what you build on */
+function buildBoxHtml(x) {
+  return '<div class="bbox" data-id="build-box"><label for="pBuild">Your build on this</label><textarea id="pBuild" class="box" maxlength="' + IDEA_MAX + '" placeholder="Yes, and..." data-feedback-private></textarea><div class="row"><button class="btn ghost sm" data-p="unbuild" data-act="unbuild">Cancel</button><button class="btn sm" id="pSendBuild" data-p="sendbuild" data-act="sendbuild">Add your build</button></div></div>';
+}
+/* marking: tap what has to be true; only the counts ever leave this screen together */
+function paxMark(body, M, c) {
+  var locked = !canWrite(c), row = (App.S.mark || {})[App.seat] || {}, n = 0;
+  show(body.querySelector("#pLock"), locked && timeUp(c));
+  body.querySelector("#pMarks").innerHTML = M.items.map(function (it) {
+    var on = !!row[it.id]; if (on) n++;
+    var list = it.kind === "g" ? it.cards : it.cards.slice(1);
+    return '<button class="mopt' + (on ? " on" : "") + '" data-p="mark" data-id="' + it.id + '" aria-pressed="' + on + '"' + (locked ? " disabled" : "") + '><span class="mt"><b data-feedback-private>' + esc(it.t) + "</b>" + (list.length ? "<span>" + list.map(function (x) { return '<i data-feedback-private>' + esc(x.t) + "</i>"; }).join("") + "</span>" : "") + '</span><span class="mchk" aria-hidden="true">' + ICON.check + "</span></button>";
+  }).join("") || '<p class="empty">Nothing on the board yet.</p>';
+  body.querySelector("#pMarkN").textContent = n ? plural(n, "card", "cards") + " marked" : "Nothing marked yet";
+  var d = body.querySelector("#pDone"); d.disabled = locked; d.textContent = row._d ? "Done" : "I'm done"; d.classList.toggle("sec", !!row._d);
+}
+function toggleMark(id, done) {
+  var c = C(); if (!canWrite(c) || c.phase !== "sort" || c.step === "discuss") return false;
+  var row = clone((App.S.mark || {})[App.seat]) || {};
+  if (done) row._d = 1; else if (row[id]) delete row[id]; else row[id] = 1;
+  write("mark/" + App.seat, row); paxSound(done ? "plink" : "click"); renderLaptop(true); return true;
 }
 function paxVote(body, M, c) {
   var T = tallies(M), cap = M.set.votes, row = (App.S.vote || {})[App.seat] || {}, used = T.used[App.seat] || 0, left = cap - used, locked = !canWrite(c);
   show(body.querySelector("#pLock"), locked);
   body.querySelector("#votesLeft").textContent = left + " of " + cap + " votes left";
-  var asp = M.items.filter(function (i) { return i.c !== "e"; });
-  body.querySelector("#pBoard").innerHTML = '<div class="ballot" data-id="vote">' + (asp.map(function (i) {
-    var my = Math.max(0, Math.floor(+row[i.id] || 0)), dots = ""; for (var k = 0; k < Math.min(my, cap); k++) dots += "<i></i>";
-    return '<div class="bopt' + (my ? " voted" : "") + '" data-bar="' + i.id + '"><div class="lbl" data-feedback-private>' + esc(i.t) + '</div><div class="my"><span class="dots" aria-label="' + plural(my, "vote", "votes") + ' from you">' + dots + '</span><button class="vstep" data-vote="-" data-t="' + i.id + '" aria-label="Take a vote back from ' + esc(i.t) + '"' + (my < 1 || locked ? " disabled" : "") + '>&minus;</button><button class="vstep" data-vote="+" data-t="' + i.id + '" aria-label="Vote for ' + esc(i.t) + '"' + (left < 1 || locked ? " disabled" : "") + ">+</button></div></div>";
-  }).join("") || '<p class="empty">Nothing to vote on yet.</p>') + "</div>";
+  body.querySelector("#pBoard").innerHTML = ballotHtml(M, T, { row: row, left: left, locked: locked });
 }
 function addIdea() {
-  var c = C(), ta = $("pIdea"); if (!ta || !canWrite(c)) return false;
+  var c = C(), ta = $("pIdea"); if (!ta || !canWrite(c) || (c.phase !== "ideate" && c.phase !== "share")) return false;
   var t = ta.value.trim().slice(0, IDEA_MAX); if (!t) return false;
-  var sharing = c.phase === "share", par = sharing && App.buildOn ? App.buildOn : null;
-  var id = newIdeaId(App.seat), row = { t: t, ph: par ? "b" : "i", par: par, at: wnow(), r: c.round || 1 };
+  var sharing = c.phase === "share";
+  var id = newIdeaId(App.seat), row = { t: t, ph: "i", par: null, at: wnow(), r: c.round || 1 };
   if (sharing) row.sh = wnow();
   write("idea/" + id, row);
-  ta.value = ""; paxSound("click"); say(sharing ? "On the board" : "Added"); App.buildOn = null;
+  ta.value = ""; paxSound(sharing ? "pop" : "click"); say(sharing ? "On the board" : "Added");
   renderLaptop(true); ta = $("pIdea"); if (ta) ta.focus(); return id;
+}
+function addBuild() {
+  var c = C(), ta = $("pBuild"), on = App.buildOn; if (!ta || !on || !canWrite(c) || c.phase !== "share") return false;
+  var t = ta.value.trim().slice(0, IDEA_MAX); if (!t) return false;
+  var id = newIdeaId(App.seat); write("idea/" + id, { t: t, ph: "b", par: on, at: wnow(), sh: wnow(), r: c.round || 1 });
+  App.buildOn = null; paxSound("pop"); say("Your build is on the board"); renderLaptop(true); return id;
 }
 function shareIdea(id, par) {
   var c = C(); if (!canWrite(c) || c.phase !== "share") return false;
@@ -2006,11 +2358,15 @@ function paxClick(e) {
   var p = e.target.closest("[data-p]"), vb = e.target.closest("[data-vote]"), a = e.target.closest("[data-a]");
   if (vb) return castVote(App.seat, vb.getAttribute("data-t"), vb.getAttribute("data-vote") === "+" ? 1 : -1);
   if (a && a.getAttribute("data-a") === "download") return downloadReport();
-  if (!p) return; var k = p.getAttribute("data-p"), id = p.getAttribute("data-id");
+  if (!p || p.disabled) return; var k = p.getAttribute("data-p"), id = p.getAttribute("data-id");
   if (k === "send") addIdea();
   else if (k === "share") shareIdea(id);
-  else if (k === "on") { App.buildOn = id; renderLaptop(true); var ta = $("pIdea"); if (ta) ta.focus(); }
+  else if (k === "on") { App.buildOn = App.buildOn === id ? null : id; renderLaptop(true); var ta = $("pBuild"); if (ta) ta.focus(); }
   else if (k === "unbuild") { App.buildOn = null; renderLaptop(true); }
+  else if (k === "sendbuild") addBuild();
+  else if (k === "tab") { App.ptab = id; renderLaptop(true); }
+  else if (k === "mark") toggleMark(id);
+  else if (k === "done") toggleMark(null, true);
   else if (k === "edit") { App.editing = id; renderLaptop(true); var i = $("pEdit"); if (i) i.focus(); }
   else if (k === "save") saveOwn(id, $("pEdit").value);
   else if (k === "del") { var c = C(); if (!canWrite(c) || c.phase !== "ideate") return; write("idea/" + id, null); renderLaptop(true); }
@@ -2022,6 +2378,8 @@ function saveOwn(id, t) {
 }
 function paxKey(e) {
   if (e.target.id === "pIdea" && e.key === "Enter" && !e.shiftKey) { e.preventDefault(); addIdea(); }
+  if (e.target.id === "pBuild" && e.key === "Enter" && !e.shiftKey) { e.preventDefault(); addBuild(); }
+  if (e.target.id === "pBuild" && e.key === "Escape") { App.buildOn = null; renderLaptop(true); }
   if (e.target.id === "pEdit" && e.key === "Enter") { e.preventDefault(); saveOwn(App.editing, e.target.value); }
   if (e.target.id === "pEdit" && e.key === "Escape") { App.editing = null; renderLaptop(true); }
   if (e.target.id === "jName" && e.key === "Enter") { e.preventDefault(); joinNow(); }
@@ -2095,17 +2453,18 @@ function beat() { if (App.role === "pax" && App.seat && !App.ended) api("set", {
 function reportName() { return "success-factors-" + slug(C().initiative) + "-" + today() + ".html"; }
 function reportHtml(withAppendix) {
   var c = C(), M = model(), T = tallies(M), R = ranking(M, T), top = R.filter(function (x) { return x.top; }), rest = R.filter(function (x) { return !x.top; });
-  var unranked = M.items.filter(function (i) { return i.c !== "e" && !(T.tal[i.id] > 0); });
+  var unranked = []; M.items.forEach(function (i) { if (i.col !== "e") i.cards.forEach(function (x) { if (!(T.tal[x.id] > 0)) unranked.push(x); }); });
   var lvl = LEVELS[shownLevel(M)].n, ss = seats();
   var people = ss.map(function (s) { return '<span class="p">' + avatarFor(s.seat) + esc(s.nick) + "</span>"; }).join("");
-  var li = function (x) { return "<li>" + esc(x.t) + (x.d ? '<div class="d">' + esc(x.d) + "</div>" : "") + "</li>"; };
-  var ess = M.items.filter(function (i) { return i.c === "e"; }), egs = ess.filter(function (i) { return i.kind === "g"; }), els = ess.filter(function (i) { return i.kind === "i"; });
-  var essH = (egs.map(function (g) { return "<h3>" + esc(g.t) + "</h3><ul>" + g.cards.map(li).join("") + "</ul>"; }).join("") + (els.length ? (egs.length ? "<h3>Also essential</h3>" : "") + "<ul>" + els.map(function (i) { return li(i.cards[0]); }).join("") + "</ul>" : "")) || "<p>None marked.</p>";
-  var rk = top.map(function (x) { return '<tr class="' + (x.medal ? "won" : "") + '"><td class="r">' + (x.medal ? '<span class="m ' + x.medal + '">' + x.rank + "</span>" : x.rank) + "</td><td>" + esc(x.t) + "</td><td class=\"v\">" + x.tally + "</td></tr>"; }).join("");
+  var li = function (x, d) { return '<li' + (d > 0 ? ' class="bd" style="margin-left:' + (Math.min(d, 3) * 18) + 'px"' : "") + ">" + (d > 0 ? "&#8627; " : "") + esc(x.t) + (x.d ? '<div class="d">' + esc(x.d) + "</div>" : "") + "</li>"; };
+  var ess = M.items.filter(function (i) { return i.col === "e"; });
+  var essH = ess.map(function (it) { var lead = it.kind === "g" ? null : it.cards[0], list = it.kind === "g" ? it.cards : it.cards.slice(1); return "<h3>" + esc(it.kind === "g" ? it.t : lead.t) + "</h3>" + (lead && lead.d ? '<p class="d">' + esc(lead.d) + "</p>" : "") + (list.length ? "<ul>" + list.map(function (x) { return li(x, it.kind === "g" ? x.depth : x.depth - 1); }).join("") + "</ul>" : ""); }).join("") || "<p>None marked.</p>";
+  var on = function (x) { return x.on ? ' <span class="d">builds on: ' + esc(x.on.t) + "</span>" : ""; };
+  var rk = top.map(function (x) { return '<tr class="' + (x.medal ? "won" : "") + '"><td class="r">' + (x.medal ? '<span class="m ' + x.medal + '">' + x.rank + "</span>" : x.rank) + "</td><td>" + esc(x.t) + on(x) + "</td><td class=\"v\">" + x.tally + "</td></tr>"; }).join("");
   var edited = Object.keys(M.A).map(function (k) { return M.A[k]; }).filter(function (x) { return x.t !== x.orig; });
   var qh = Object.keys(App.S.qh || {}).sort(function (a, b) { return a - b; }).map(function (k) { return App.S.qh[k]; }).filter(Boolean);
   var app = withAppendix === false ? "" : '<section class="appx"><h2>Appendix</h2>' +
-    "<h3>Other aspirations</h3>" + (rest.length || unranked.length ? "<ul>" + rest.map(function (x) { return "<li>" + esc(x.t) + " (" + plural(x.tally, "vote", "votes") + ")</li>"; }).join("") + unranked.map(function (i) { return "<li>" + esc(i.t) + " (no votes)</li>"; }).join("") + "</ul>" : "<p>None.</p>") +
+    "<h3>Other aspirations</h3>" + (rest.length || unranked.length ? "<ul>" + rest.map(function (x) { return "<li>" + esc(x.t) + " (" + plural(x.tally, "vote", "votes") + ")" + on(x) + "</li>"; }).join("") + unranked.map(function (i) { return "<li>" + esc(i.t) + " (no votes)</li>"; }).join("") + "</ul>" : "<p>None.</p>") +
     "<h3>Original wording of edited ideas</h3>" + (edited.length ? "<ul>" + edited.map(function (x) { return "<li>" + esc(x.orig) + ' <span class="d">now: ' + esc(x.t) + "</span></li>"; }).join("") + "</ul>" : "<p>None edited.</p>") +
     "<h3>Earlier wordings of the question</h3>" + (qh.length ? "<ol>" + qh.map(function (q) { return "<li>" + esc(q.q) + "</li>"; }).join("") + "</ol>" : "<p>Unchanged.</p>") + "</section>";
   var css = "body{font-family:Montserrat,Arial,sans-serif;color:#293851;background:#FBF8F3;max-width:820px;margin:40px auto;padding:0 24px;line-height:1.5;}h1{font-family:Georgia,serif;font-weight:400;font-size:46px;line-height:1.08;margin:0 0 10px;}h2{font-family:Georgia,serif;font-weight:400;font-size:28px;margin:36px 0 10px;}h3{font-family:Georgia,serif;font-weight:400;font-size:19px;margin:16px 0 4px;}.q{font-family:Georgia,serif;font-size:20px;margin:12px 0;}.meta{color:#586A90;font-size:13px;}.people{display:flex;flex-wrap:wrap;gap:6px 14px;margin-top:12px;}.p{display:inline-flex;align-items:center;gap:6px;font-size:13px;}.p svg{width:24px;height:24px;}ul,ol{padding-left:22px;font-family:Georgia,serif;}li{margin:4px 0;}.d{color:#586A90;font-size:13px;font-family:Montserrat,Arial,sans-serif;}.ess{background:#E4F4F4;border-radius:18px;padding:6px 22px 16px;}table{border-collapse:collapse;width:100%;font-family:Georgia,serif;}td{padding:9px 6px;border-bottom:1px solid rgba(41,56,81,.16);vertical-align:top;}td.r{width:44px;text-align:center;}td.v{text-align:right;}.m{display:inline-block;width:28px;height:28px;line-height:28px;border-radius:50%;text-align:center;}.m.gold{background:#FFCC00;}.m.silver{background:#B9C1CF;}.m.bronze{background:#C98A55;color:#fff;}.drive{font-family:Georgia,serif;font-style:italic;}.appx{color:#586A90;}@page{size:auto;margin:16mm;}@media print{body{margin:0;max-width:none;background:#fff;}h2{break-after:avoid;}tr,li{break-inside:avoid;}.ess,.m{-webkit-print-color-adjust:exact;print-color-adjust:exact;}}";
@@ -2123,7 +2482,7 @@ function downloadReport() {
 }
 function emailBody() {
   var c = C(), M = model(), R = ranking(M).filter(function (x) { return x.medal; }), lines = [c.initiative, c.q, ""];
-  lines.push("Essential success factors:"); M.items.filter(function (i) { return i.c === "e"; }).forEach(function (i) { if (i.kind === "g") { lines.push(i.t + ":"); i.cards.forEach(function (x) { lines.push("- " + x.t); }); } else lines.push("- " + i.t); });
+  lines.push("Essential success factors:"); M.items.filter(function (i) { return i.col === "e"; }).forEach(function (i) { if (i.kind === "g") { lines.push(i.t + ":"); i.cards.forEach(function (x) { lines.push("- " + x.t); }); } else { lines.push("- " + i.t); i.cards.slice(1).forEach(function (x) { lines.push("  - " + x.t); }); } });
   lines.push("", "We will drive toward these:"); R.forEach(function (x) { lines.push(x.rank + ". " + x.t + " (" + plural(x.tally, "vote", "votes") + ")"); });
   if (!R.length) lines.push("- No votes were cast.");
   lines.push("", "The full report is attached."); return lines.join("\n");
@@ -2173,6 +2532,12 @@ var Bots = {
           var M = model(st), pool = M.vis.filter(function (x) { return x.seat !== b.seat; });
           if (pool.length) { b.bn++; var p = pool[Math.floor(Math.random() * pool.length)]; Sim.set("idea/" + b.seat + "x" + (++b.k), { t: self.pick(BUILD_POOL), ph: "b", par: p.id, at: Date.now(), sh: Date.now(), r: c.round || 1 }); st = Sim.read().state; }
         }
+      } else if (ph === "sort" && c.step !== "discuss" && !up) {
+        var mrow = (st.mark || {})[b.seat];
+        if (!(mrow && mrow._d) && Math.random() < 0.3) {
+          var M3 = model(st), r3 = {}; M3.items.forEach(function (it, i) { var pr = i % 4 === 0 ? 0.95 : i % 4 === 1 ? 0.5 : 0.08; if (Math.random() < pr) r3[it.id] = 1; }); r3._d = 1;
+          Sim.set("mark/" + b.seat, r3); st = Sim.read().state;
+        }
       } else if (ph === "vote" && !up && !c.final) {
         var M2 = model(st), T = tallies(M2, st), asp = Object.keys(T.asp), used = T.used[b.seat] || 0;
         if (asp.length && used < M2.set.votes && Math.random() < 0.5) {
@@ -2190,8 +2555,9 @@ var FB_SECTIONS = [
   { name: "Lobby", screens: ["console-lobby", "laptop-join", "laptop-lobby"] },
   { name: "Ideas", screens: ["console-ideate", "laptop-ideate"] },
   { name: "Share and build", screens: ["console-share", "laptop-share"] },
-  { name: "Sort", screens: ["console-sort", "laptop-sort"] },
+  { name: "Sort", screens: ["console-mark", "laptop-mark", "console-sort", "laptop-sort"] },
   { name: "Vote", screens: ["console-vote", "laptop-vote"] },
+  { name: "Pause screens", screens: ["console-paused", "laptop-paused"] },
   { name: "Reveal", screens: ["console-standby", "laptop-hold", "console-essentials", "laptop-essentials", "console-podium", "laptop-podium"] },
   { name: "Results", screens: ["console-results", "laptop-results", "console-final", "laptop-final"] },
   { name: "End", screens: ["ended", "laptop-ended", "gate"] }
@@ -2202,7 +2568,8 @@ function fbScreen() {
   var c = C(), ph = c.phase || "lobby";
   if (App.role === "host") {
     if (App.rvOpen) return c.rv === 1 ? "console-essentials" : c.rv === 2 ? "console-podium" : "console-standby";
-    return ph === "results" ? (c.final ? "console-final" : "console-results") : "console-" + ph;
+    if (c.paused && !c.final && /^(ideate|share|sort|vote)$/.test(ph)) return "console-paused";
+    return ph === "results" ? (c.final ? "console-final" : "console-results") : "console-" + stepOf(c);
   }
   if (App.role === "pax") { var v = paxView(); return v === "join" || v === "repick" ? "laptop-join" : v === "hold" ? "laptop-hold" : "laptop-" + v; }
   return "studio-start";
@@ -2212,7 +2579,7 @@ function fbState() {
   if (App.role) {
     var M = model();
     o.phase = c.phase || "lobby"; o.round = c.round || 1; o.people = seats().length; o.ideas = M.count; o.shared = M.shared;
-    o.votes = s.votes; o.topN = s.topN; o.goal = s.goal; o.timeUp = timeUp(c); o.final = !!c.final; o.reveal = c.rv || null; o.testDrive = !!App.drive; o.sound = App.role === "host" ? Snd.on : !!App.paxSound;
+    o.votes = s.votes; o.topN = s.topN; o.goal = s.goal; o.timeUp = timeUp(c); o.final = !!c.final; o.reveal = c.rv || null; o.step = c.phase === "sort" ? (c.step === "discuss" ? "discuss" : "mark") : null; o.paused = !!c.paused; o.testDrive = !!App.drive; o.sound = App.role === "host" ? Snd.on : !!App.paxSound;
   } else o.step = STEP_NAME[STUDIO.step || 0];
   if ($("gate").classList.contains("on")) o.gate = App.gateKind || "ended";
   return o;
@@ -2229,17 +2596,22 @@ var DEMO_IDEAS = [
   ["p5x2", "Honest updates when things slip", "a"], ["p6x2", "Decisions in days, not weeks", "a"]
 ];
 var DEMO_BUILDS = [["p7x2", "p1x1", "...with a monthly demo to show it"], ["p8x2", "p4x1", "Start with one pilot team"], ["p2x3", "p8x1", "Pair each team with a champion"]];
-var DEMO_GROUPS = [["g1", "Leaders who show up", "e"], ["g2", "Clear ownership", "e"], ["g3", "People ready for the change", null]];
-var DEMO_VOTES = { p1: { g3: 3, p4x1: 2 }, p2: { g3: 2, p6x2: 2, p3x2: 1 }, p3: { g3: 2, p4x1: 1, p4x2: 2 }, p4: { p4x1: 3, p6x2: 2 },
-  p5: { g3: 2, p3x2: 3 }, p6: { g3: 3, p6x2: 1, p4x1: 1 }, p7: { p4x1: 2, p6x2: 2, g3: 1 }, p8: { g3: 1, p3x2: 2, p4x2: 2 } };
+var DEMO_GROUPS = [["g1", "Leaders who show up", null], ["g2", "Clear ownership", "e"], ["g3", "People ready for the change", null]];
+/* everyone marked the first group; the room split on three more, then settled them (DEMO_SETTLED) */
+var DEMO_MARKS = { p1: { g1: 1, g2: 1, p7x1: 1, _d: 1 }, p2: { g1: 1, g2: 1, p7x1: 1, p4x1: 1, _d: 1 }, p3: { g1: 1, g2: 1, p7x1: 1, _d: 1 }, p4: { g1: 1, p7x1: 1, _d: 1 },
+  p5: { g1: 1, g2: 1, p7x1: 1, p4x1: 1, _d: 1 }, p6: { g1: 1, g2: 1, _d: 1 }, p7: { g1: 1, p7x1: 1, _d: 1 }, p8: { g1: 1, _d: 1 } };
+var DEMO_SETTLED = { p7x1: "e", p4x1: "a" };
+var DEMO_VOTES = { p1: { p4x1: 2, p8x1: 2, p3x1: 1 }, p2: { p6x2: 2, p3x2: 2, p4x1: 1 }, p3: { p4x1: 2, p2x3: 2, p4x2: 1 }, p4: { p8x1: 3, p6x2: 2 },
+  p5: { p3x2: 3, p4x1: 2 }, p6: { p6x2: 2, p2x3: 2, p8x1: 1 }, p7: { p4x1: 3, p8x2: 1, p6x2: 1 }, p8: { p8x1: 2, p3x2: 1, p2x3: 1, p1x2: 1 } };
 function demoRows(ph, o) {
   var R = {}, t = Date.now(), at = phaseIdx(ph);
   var num = function (v, lo, hi, d) { v = Math.round(+v); return v >= lo && v <= hi ? v : d; };
-  var set = { votes: num(o.votes, 1, 15, DEF.votes), topN: num(o.topN, 1, 30, DEF.topN), goal: num(o.goal, 20, 500, 40), t: { ideate: 5, share: 15, vote: 3 } };
+  var set = { votes: num(o.votes, 1, 15, DEF.votes), topN: num(o.topN, 1, 30, DEF.topN), goal: num(o.goal, 20, 500, 40), t: { ideate: 5, share: 15, mark: 2, vote: 3 } };
+  var step = ph === "sort" ? (o.step === "mark" ? "mark" : "discuss") : null;
   var put = function (p, v) { R[p] = { v: v, t: t }; };
-  var left = { ideate: 205000, share: 512000, vote: 98000 }[ph];
-  var timer = left ? { phase: ph, dur: phaseDur(ph, set), left: 0, running: true, endsAt: o.timeUp ? t - 1000 : t + left } : { phase: ph, dur: 0, left: 0, running: false, endsAt: null };
-  put("ctl", { phase: ph, round: num(o.round, 1, 9, 1), q: "What has to be true for Service relaunch to succeed?", initiative: "Service relaunch", fac: "", set: set, timer: timer, final: !!o.final, lvl: 0, rv: o.rv === undefined ? null : o.rv, allIn: at > 2, created: today() });
+  var left = { ideate: 205000, share: 512000, vote: 98000, sort: step === "mark" ? 85000 : 0 }[ph];
+  var timer = left ? (o.paused ? { phase: ph, dur: phaseDur(ph, set, step), left: left, running: false, endsAt: null } : { phase: ph, dur: phaseDur(ph, set, step), left: 0, running: true, endsAt: o.timeUp ? t - 1000 : t + left }) : { phase: ph, dur: 0, left: 0, running: false, endsAt: null };
+  put("ctl", { phase: ph, round: num(o.round, 1, 9, 1), q: "This Service relaunch will be successful if\u2026", initiative: "Service relaunch", fac: "", set: set, timer: timer, final: !!o.final, lvl: 0, rv: o.rv === undefined ? null : o.rv, allIn: at > 2, step: step, paused: !!o.paused, pausedT: !!o.paused && !!left, created: today() });
   DEMO_PEOPLE.forEach(function (n, i) { var seat = "p" + (i + 1); put("pax/" + seat, { nick: n }); put("who/" + seat, { m: MASCOTS[(i * 3) % MASCOTS.length][0], at: i }); put("here/" + seat, 1); });
   if (at < 1) return R;
   DEMO_IDEAS.forEach(function (x, i) {
@@ -2250,10 +2622,12 @@ function demoRows(ph, o) {
   });
   if (at < 2) return R;
   DEMO_BUILDS.forEach(function (x, i) { put("idea/" + x[0], { t: x[2], ph: "b", r: 1, par: x[1], at: t - 200000 + i * 9000, sh: t - 200000 + i * 9000 }); });
-  DEMO_GROUPS.forEach(function (g, i) { put("grp/" + g[0], { t: g[1], c: at >= 3 ? g[2] : null, o: i + 1 }); });
-  DEMO_IDEAS.forEach(function (x) { var m = {}; if (/^g/.test(x[2])) m.g = x[2]; if (at >= 3 && x[2] === "e") m.c = "e"; if (Object.keys(m).length) put("meta/" + x[0], m); });
+  DEMO_GROUPS.forEach(function (g, i) { var row = { t: g[1], o: i + 1 }; if (at >= 4 && g[2]) row.c = g[2]; put("grp/" + g[0], row); });
+  DEMO_IDEAS.forEach(function (x) { var m = {}; if (/^g/.test(x[2])) m.g = x[2]; if (at >= 4 && DEMO_SETTLED[x[0]]) m.c = DEMO_SETTLED[x[0]]; if (Object.keys(m).length) put("meta/" + x[0], m); });
+  if (at < 3) return R;
+  Object.keys(DEMO_MARKS).forEach(function (seat, i) { if (step === "mark" && i > 4) return; var m = clone(DEMO_MARKS[seat]); if (step === "mark" && (seat === "p2" || i > 3)) delete m._d; put("mark/" + seat, m); });
   if (at < 4) return R;
-  Object.keys(DEMO_VOTES).forEach(function (seat, i) { if (at === 4 && i > 4) return; put("vote/" + seat, at === 4 && seat === "p2" ? { g3: 2 } : DEMO_VOTES[seat]); });
+  Object.keys(DEMO_VOTES).forEach(function (seat, i) { if (at === 4 && i > 4) return; put("vote/" + seat, at === 4 && seat === "p2" ? { p8x1: 2 } : DEMO_VOTES[seat]); });
   return R;
 }
 function fbRestore(o) {
@@ -2261,20 +2635,20 @@ function fbRestore(o) {
   var known = false; FB_SECTIONS.forEach(function (s) { if (s.screens.indexOf(sc) > -1) known = true; }); if (!known) return false;
   stopLoops(); Bots.stop(); Snd.on = false; Snd.stopMusic(); closeMenu(); closeDlg(); closeJoin(); closeReveal(true); clearTimeout(App.endT);
   App.anim = false; App.ended = false; App.drive = !!st.testDrive; App.paxSound = st.sound !== false; App.ending = false;
-  App.lastLvl = null; App.lastPhase = null; App.lastCount = undefined; App.seen = {}; App.seenReady = false; App.knownCards = {}; App.paxKey = null; App.paxSig = null; App.conSig = null; App.editing = null; App.pick = null; App.pend = {}; App.undo = []; App.buildOn = null; App.podiumShown = true; App.paxPodium = false;
+  App.lastLvl = null; App.lastPhase = null; App.lastCount = undefined; App.seen = {}; App.seenReady = false; App.knownCards = {}; App.paxKey = null; App.paxSig = null; App.conSig = null; App.editing = null; App.pick = null; App.pend = {}; App.undo = []; App.buildOn = null; App.podiumShown = true; App.stonesShown = true; App.paxPodium = false; App.paxStones = false; App.ptab = null;
   var m = /^studio-(\w+)$/.exec(sc);
   if (m) {
     App.role = null; App.sim = false; STUDIO.v = cleanSetup({ initiative: "Service relaunch", fac: "Sam", votes: st.votes || 5, topN: st.topN || 10, goal: st.goal || 100, ti: 5, ts: 15, tv: 3 });
     openView("studio"); bindStudio(); fillStudio(); drawDemo(); syncSound(); goStep(Math.max(0, STEP_NAME.indexOf(m[1]))); return true;
   }
   var role = /^console-/.test(sc) ? "host" : /^laptop-/.test(sc) ? "pax" : null, what = sc.replace(/^(console|laptop)-/, "");
-  var ph = { join: "lobby", lobby: "lobby", ideate: "ideate", share: "share", sort: "sort", vote: "vote", standby: "results", hold: "results", essentials: "results", podium: "results", results: "results", final: "results", ended: "results" }[what] || "results";
+  var ph = { join: "lobby", lobby: "lobby", ideate: "ideate", share: "share", mark: "sort", sort: "sort", paused: "ideate", vote: "vote", standby: "results", hold: "results", essentials: "results", podium: "results", results: "results", final: "results", ended: "results" }[what] || "results";
   var rv = { standby: "standby", hold: "standby", essentials: 1, podium: 2, results: "done", final: "done" }[what];
   App.sim = true; App.code = "DRIVE"; App.key = "drive"; App.offset = 0; App.offs = []; App.host = role === "host";
-  Sim.rows = demoRows(ph, Object.assign({}, st, { rv: rv === undefined ? null : rv, final: what === "final" }));
+  Sim.rows = demoRows(ph, Object.assign({}, st, { rv: rv === undefined ? null : rv, final: what === "final" || /ended$/.test(sc), step: what === "mark" ? "mark" : "discuss", paused: what === "paused" }));
   var d = Sim.read(); App.S = d.state; App.times = d.times; App.started = true;
   if (sc === "ended") { App.role = "host"; ended(); return true; }
-  if (sc === "laptop-ended") { App.role = "pax"; paxEnded(); return true; }
+  if (sc === "laptop-ended") { App.role = "pax"; App.seat = "p2"; paxEnded(); return true; }
   if (sc === "gate") { App.role = "pax"; gate(st.gate === "locked" ? "locked" : "gone"); return true; }
   if (role === "host") {
     App.role = "host"; App.seat = null; openView("console"); bindConsole(); syncSound(); render(true);
