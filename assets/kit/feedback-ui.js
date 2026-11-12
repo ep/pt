@@ -41,6 +41,7 @@ function svg(d, w) {
   return s;
 }
 var BUBBLE = "M21 12a8 8 0 0 1-11.6 7.1L4 20l1-4.6A8 8 0 1 1 21 12z", TICK = "M5 12.5l4.2 4.2L19 7";
+var REFRESH = "M20 11a8 8 0 1 0-2.3 5.7M20 4v7h-7";
 
 /* ---------- what the tool says about itself ---------- */
 function T() { return K.tool || {}; }
@@ -125,7 +126,15 @@ function context() {
    board can match each comment to a commit in pt's history. It reads the file from
    the address the page was opened at, so the browser can answer from the copy it is
    showing, even after a tool rewrites its own address. */
-var ver = "";
+var ver = "", verFrom = "", verAt = 0;
+function gitSha(buf) {
+  if (!buf) return Promise.resolve("");
+  var head = new TextEncoder().encode("blob " + buf.byteLength + "\u0000"), all = new Uint8Array(head.length + buf.byteLength);
+  all.set(head); all.set(new Uint8Array(buf), head.length);
+  return crypto.subtle.digest("SHA-1", all).then(function (d) { return Array.prototype.map.call(new Uint8Array(d), function (b) { return ("0" + b.toString(16)).slice(-2); }).join(""); });
+}
+/* When the server last changed the file, if it says (GitHub Pages does); 0 if not. */
+function changedAt(r) { try { var t = Date.parse(r.headers && r.headers.get ? r.headers.get("last-modified") || "" : ""); return isNaN(t) ? 0 : t; } catch (e) { return 0; } }
 (function () {
   var own = str(hook("version")) ? "tool:" + clip(hook("version"), 40) : "";
   ver = own;
@@ -136,16 +145,41 @@ var ver = "";
       var nav = win.performance && performance.getEntriesByType && performance.getEntriesByType("navigation")[0], u = nav && nav.name ? new URL(nav.name) : null;
       if (u && u.origin === location.origin && u.pathname === location.pathname) from = u.pathname + u.search;
     } catch (e) {}
-    fetch(from, { cache: "force-cache", credentials: "same-origin" }).then(function (r) { return r.ok ? r.arrayBuffer() : null; }).then(function (buf) {
-      if (!buf) return null;
-      var head = new TextEncoder().encode("blob " + buf.byteLength + "\u0000"), all = new Uint8Array(head.length + buf.byteLength);
-      all.set(head); all.set(new Uint8Array(buf), head.length);
-      return crypto.subtle.digest("SHA-1", all);
-    }).then(function (d) {
-      if (d) ver = "git:" + Array.prototype.map.call(new Uint8Array(d), function (b) { return ("0" + b.toString(16)).slice(-2); }).join("");
+    verFrom = from;
+    fetch(from, { cache: "force-cache", credentials: "same-origin" }).then(function (r) { if (!r.ok) return null; verAt = changedAt(r); return r.arrayBuffer(); }).then(gitSha).then(function (h) {
+      if (h) { ver = "git:" + h; lookSoon(); }
     }).catch(function () {});
   } catch (e) {}
 })();
+
+/* ---------- a newer version of the page ----------
+   A tab can keep showing an old copy of a tool: left open across a release, restored,
+   or reused by the browser for a few minutes after one. Comments made there count as
+   earlier-version comments on the board. So, in feedback mode only, the kit asks the
+   server whether the file has changed: once after the page settles, when the tab comes
+   back, and when a comment starts, never more than once a minute. The browser answers
+   most of these with a tiny "not changed"; the tool is never touched or slowed, and
+   nothing reloads unless the tester presses Refresh. */
+var newer = false, looking = false, lastLook = 0, lookT = 0, reloading = false;
+function idle(f) { if (win.requestIdleCallback) win.requestIdleCallback(f, { timeout: 5000 }); else setTimeout(f, 1); }
+function lookSoon() { clearTimeout(lookT); lookT = setTimeout(function () { idle(function () { lookForNewer(true); }); }, 2500); }
+function lookForNewer(force) {
+  if (newer || looking || reloading || !FB.on || ver.indexOf("git:") !== 0 || !verFrom) return;
+  if (!force && Date.now() - lastLook < 60000) return;
+  lastLook = Date.now(); looking = true;
+  var at = 0;
+  fetch(verFrom, { cache: "no-cache", credentials: "same-origin" }).then(function (r) { if (!r.ok) return null; at = changedAt(r); return r.arrayBuffer(); }).then(gitSha).then(function (h) {
+    looking = false;
+    /* different bytes count only if the server's copy is no older than ours, so a
+       cache that still holds the old file after a release never raises a false alarm */
+    if (!h || "git:" + h === ver || (at && verAt && at < verAt) || !FB.on) return;
+    newer = true; renderBar();
+    showToast("A newer version of this page is live. Refresh to comment on it.");
+  }, function () { looking = false; });
+}
+/* Unsent comments and half-written words are already kept in this browser, so the
+   reload asks nothing and the new copy posts them. (K.reload exists only for tests.) */
+function refreshNow() { reloading = true; try { flush(); } catch (e) {} setTimeout(function () { if (typeof K.reload === "function") K.reload(); else location.reload(); }, 120); }
 
 /* ---------- the part of the page a comment is about ---------- */
 var ACTIONABLE = "button,a,input,select,textarea,label,summary,[role=button],[role=link],[role=tab],[role=checkbox],[role=radio],[role=switch],[role=option],[data-act]";
@@ -439,6 +473,7 @@ var CSS_TEXT = [
   ".b.p{background:" + GOLD + ";color:" + INK + "}",
   ".b.p:hover{background:#F8CD66}",
   ".b:disabled{opacity:.4;cursor:default}",
+  ".b.nv{color:" + GOLD + ";box-shadow:inset 0 0 0 1px rgba(245,192,74,.55)}",
   ".b svg{width:16px;height:16px;flex:none}",
   ".c .b{min-height:44px}",
   ".n{min-width:36px;justify-content:center;padding:0 10px;color:#D8D4C8}",
@@ -520,7 +555,8 @@ function showToast(t, done) {
   toast.textContent = "";
   if (done) toast.appendChild(svg(TICK, "2.6"));
   toast.appendChild(doc.createTextNode(t));
-  var r = bar.getBoundingClientRect(), up = /^t/.test(corner);
+  /* above (or below) the tip when one is showing, so the two never overlap */
+  var r = (tip.hidden ? bar : tip).getBoundingClientRect(), up = /^t/.test(corner);
   toast.style.left = clamp(r.left, 8, Math.max(8, win.innerWidth - 350)) + "px";
   toast.style.top = (up ? r.bottom + 8 : Math.max(8, r.top - 40)) + "px";
   toast.classList.add("on");
@@ -561,11 +597,17 @@ function renderBar() {
     var cnt = btn("b n" + (Date.now() < bumpUntil ? " bump" : ""), String(n), function () { openList(); });
     cnt.setAttribute("aria-label", plural(n, "comment", "comments")); cnt.setAttribute("data-k", "count"); bar.appendChild(cnt);
   }
+  if (newer) {
+    var rf = btn("b nv", null, refreshNow); rf.appendChild(svg(REFRESH)); rf.appendChild(doc.createTextNode("Refresh"));
+    rf.setAttribute("data-k", "refresh"); rf.setAttribute("title", "A newer version of this page is live. Refresh to comment on it.");
+    rf.setAttribute("aria-label", "Refresh. A newer version of this page is live."); bar.appendChild(rf);
+  }
   var d = btn("b", "Done", function () { openDone(); }); d.setAttribute("data-k", "done"); bar.appendChild(d);
 }
 
 /* ---------- choosing what a comment is about ---------- */
 function startComment() {
+  lookForNewer(false);
   closeCard(); st.list = false; st.mode = "pick"; st.editing = null; st.target = null; st.picked = false;
   ls(function (l) { l.setItem(COACH, "1"); });
   shield.hidden = false; box.hidden = true; hoverBox.hidden = true;
@@ -874,7 +916,7 @@ function listenKeys(on) { if (on) doc.addEventListener("keydown", onKey, true); 
 /* ---------- turning it off ---------- */
 var timers = [];
 function turnOff() {
-  timers.forEach(clearInterval); timers = [];
+  timers.forEach(clearInterval); timers = []; clearTimeout(lookT);
   ss(function (s) { s.removeItem(FB.flag || "ep-feedback"); s.removeItem(FB.codeKey || "ep-feedback-code"); });
   try {
     var u = new URL(location.href);
@@ -887,7 +929,7 @@ function turnOff() {
 
 /* ---------- leaving the page ---------- */
 function onLeaving(e) {
-  if (!FB.on) return;
+  if (!FB.on || reloading) return;
   var typed = composer && composer.ta.value.trim() && composer.ta.value !== (composer.existing ? composer.existing.text : "");
   if (!typed && !unsent()) return;
   e.preventDefault(); e.returnValue = ""; return "";
@@ -896,7 +938,7 @@ win.addEventListener("beforeunload", onLeaving);
 win.addEventListener("blur", function () { if (holdStop) holdStop(); });
 win.addEventListener("storage", function (e) { if (e.key === MINE || e.key === GONE || e.key === null) { merge(); renderBar(); renderPins(); } });
 win.addEventListener("pagehide", sendOnLeave);
-doc.addEventListener("visibilitychange", function () { if (doc.visibilityState === "hidden") { if (holdStop) holdStop(); sendOnLeave(); } });
+doc.addEventListener("visibilitychange", function () { if (doc.visibilityState === "hidden") { if (holdStop) holdStop(); sendOnLeave(); } else lookForNewer(false); });
 
 /* ---------- start ---------- */
 (doc.documentElement || doc.body).appendChild(host);
@@ -924,7 +966,8 @@ doc.addEventListener("scroll", pinsSoon, true);
 FB.ui = {
   start: startComment, cancel: cancelComment, list: openList, done: openDone, turnOff: turnOff, flush: flush, clear: clearAll,
   mine: mine, state: st, context: context, describe: describe, areaAt: areaAt, cleanUrl: cleanUrl, selOf: selOf,
-  version: function () { return ver; }, link: function () { return linkOk; }, host: host, root: root
+  version: function () { return ver; }, link: function () { return linkOk; }, host: host, root: root,
+  newer: function () { return newer; }, look: lookForNewer
 };
 try { doc.dispatchEvent(new CustomEvent("epkit:feedback-ready")); } catch (e) {}
 })();

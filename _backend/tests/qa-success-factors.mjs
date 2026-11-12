@@ -317,6 +317,7 @@ function drag(d, src, target){
   click(aw, ad.getElementById('tabMine'));
   await until(()=>txt(st,'chip').includes('shared') && sd.getElementById('chipMore').textContent==='1');
   check('the chip counts what is shared', sd.getElementById('chipMore').textContent==='1');
+  await until(()=>ad.querySelector('#pMine [data-p="share"][data-id="p1x3"]') && bd.querySelector('#pMine [data-p="share"][data-id="p2x1"]'));
   click(aw, ad.querySelector('#pMine [data-p="share"][data-id="p1x3"]'));
   click(bw, bd.querySelector('#pMine [data-p="share"][data-id="p2x1"]'));
   await until(()=>bd.querySelector('#pBoard [data-p="on"][data-id="p1x1"]'));

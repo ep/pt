@@ -119,7 +119,9 @@ fifteen minutes to find, or miss entirely.
   comment cursor, the outline, a click on a part or the whole screen, no drawing, moving a
   comment to another part while writing), posting straight to the worker with the context
   every comment carries (keys and codes removed, typed words never recorded, the file's Git
-  fingerprint, the exact place of the part), the posted moment, pins that follow their
+  fingerprint, the exact place of the part), noticing when a newer version of the page is live
+  (at most one quiet look a minute, Refresh offered and never forced, no false alarm from a
+  cache that still holds the old file), the posted moment, pins that follow their
   part, editing and deleting your own comments, words that are never lost (kept as they
   are typed, back after a reload, Cancel that asks first, a warning before leaving), waiting
   offline, sending on the way out and posting later, a comment an older kit couldn't post,

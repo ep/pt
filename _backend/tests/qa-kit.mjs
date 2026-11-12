@@ -107,7 +107,7 @@ const k = (root, name) => root.querySelector(`[data-k="${name}"]`);
   }
   const ui = src("feedback-ui.js");
   check("feedback-ui.js: no pictures of the screen and no PDF", !/getDisplayMedia|toDataURL|application\/pdf/.test(ui));
-  check("feedback-ui.js: talks only to the pt worker, plus reading its own page once", (ui.match(/fetch\(/g) || []).length === 2 && /fetch\(API \+ path/.test(ui) && /fetch\(from, \{ cache: "force-cache"/.test(ui));
+  check("feedback-ui.js: talks only to the pt worker, plus reading its own page (once as open, then only to ask whether it changed)", (ui.match(/fetch\(/g) || []).length === 3 && /fetch\(API \+ path/.test(ui) && /fetch\(from, \{ cache: "force-cache"/.test(ui) && /fetch\(verFrom, \{ cache: "no-cache"/.test(ui));
   const rp = src("feedback-replay.js");
   check("feedback-replay.js: talks to nothing, only to the board that framed it", !/fetch\(|XMLHttpRequest|localStorage|sessionStorage|document\.cookie/.test(rp) && /win\.parent\.postMessage/.test(rp));
   check("feedback-replay.js: listens only to the board that framed it", /e\.source !== win\.parent/.test(rp));
@@ -682,6 +682,83 @@ check("turn off: nothing more is recorded", FB.actions.length === before);
   runKit(f, "feedback.js"); runKit(f, "feedback-ui.js"); await settle();
   check("a file opened from a computer stamps the tool's own version", f.EPKit.feedback.ui.version() === "tool:v9");
   check("a file's address shows only its name, never the tester's folders", f.EPKit.feedback.ui.context().page === "a file on the tester's computer: test-tool.html?feedback");
+}
+
+/* =================== a newer version of the page =================== */
+{
+  const FCODE = (await team("POST", "/api/fb/code", {})).data.code;
+  const NEWB = Buffer.from(PAGE.replace("Pick a pair", "Pick a better pair"), "utf8");
+  const OLD_AT = "Tue, 10 Nov 2026 10:00:00 GMT", NEW_AT = "Wed, 11 Nov 2026 09:00:00 GMT";
+  /* the page: what the tab has open (force-cache), and what the server has now (no-cache) */
+  const fresh = (opts = {}) => {
+    const p = makePage("https://ep.github.io/pt/field-tools/fresh/?feedback=" + FCODE, { before(win) {
+      win.localStorage.setItem("ep-feedback-coach", "1"); win.localStorage.setItem("ep-feedback-name", "Ana");
+      const inner = win.fetch; win.pageLooks = [];
+      win.fetch = async (u, o = {}) => {
+        const url = new URL(String(u), win.location.href);
+        if (String(u).indexOf(API) !== 0 && url.pathname === win.location.pathname) {
+          win.pageLooks.push(o.cache || "");
+          if (o.cache === "no-cache" && win.pageDown) throw new Error("offline");
+          const now = o.cache === "no-cache" && win.served, b = now ? win.served : PAGE_BYTES, at = now ? win.servedAt : OLD_AT;
+          return { ok: true, status: 200, headers: { get: (h) => (/last-modified/i.test(h) ? at || null : null) }, arrayBuffer: async () => b.buffer.slice(b.byteOffset, b.byteOffset + b.length) };
+        }
+        return inner(u, o);
+      };
+      win.reloads = 0; win.EPKit = { reload: () => { win.reloads++; }, tool: { id: "fresh-tool", screen: () => "s1" } };
+      Object.assign(win, opts);
+    } });
+    runKit(p, "feedback.js"); runKit(p, "feedback-ui.js");
+    return p;
+  };
+  const kq = (p, key) => fbRoot(p).querySelector('[data-k="' + key + '"]');
+  const looks = (p) => p.pageLooks.filter((c) => c === "no-cache").length;
+
+  // the same file on the server: one quiet look after the page settles, and nothing changes
+  const a = fresh();
+  await until(() => a.EPKit.feedback.ui.version().startsWith("git:") && a.EPKit.feedback.ui.link() === true);
+  check("newer: no look while the page is still settling", looks(a) === 0);
+  await until(() => looks(a) === 1, 4000); await settle(10);
+  check("newer: one look after the page settles; the same file means no Refresh", looks(a) === 1 && !kq(a, "refresh") && a.EPKit.feedback.ui.newer() === false);
+  a.document.dispatchEvent(new a.Event("visibilitychange")); kq(a, "comment").click(); await settle(10);
+  check("newer: never more than one look a minute, however often the tab comes back or a comment starts", looks(a) === 1);
+  a.EPKit.feedback.ui.cancel();
+
+  // a newer file on the server: the bar offers Refresh and says why; nothing reloads by itself
+  const b = fresh({ served: NEWB, servedAt: NEW_AT });
+  await until(() => b.EPKit.feedback.ui.newer() === true, 5000); await settle(6);
+  const rb = kq(b, "refresh");
+  check("newer: a newer file adds Refresh to the bar, before Done", !!rb && rb.textContent === "Refresh" && rb.nextElementSibling === kq(b, "done") && /newer version of this page is live/.test(rb.getAttribute("title")));
+  check("newer: a short note says why", /A newer version of this page is live\. Refresh to comment on it\./.test(fbRoot(b).querySelector(".toast").textContent));
+  kq(b, "comment").click();
+  check("newer: nothing reloads on its own, and comments still work", b.reloads === 0 && b.EPKit.feedback.ui.state.mode === "pick");
+  b.EPKit.feedback.ui.cancel();
+  // a comment not yet posted is kept in this browser, so Refresh reloads without asking to leave
+  const kept = JSON.parse(b.localStorage.getItem("ep-feedback-mine") || "[]");
+  b.localStorage.setItem("ep-feedback-mine", JSON.stringify(kept.concat([{ id: "zzunsentcomment", edit: "E".repeat(24), tool: "fresh-tool", created: Date.now(), updated: Date.now(), name: "Ana", text: "Not posted yet", status: "failed" }])));
+  b.dispatchEvent(new b.StorageEvent("storage", { key: "ep-feedback-mine" })); await settle(4);
+  const ask = new b.Event("beforeunload", { cancelable: true }); b.dispatchEvent(ask);
+  check("newer: (before Refresh, leaving with an unsent comment still asks)", ask.defaultPrevented === true);
+  kq(b, "refresh").click();
+  const leave = new b.Event("beforeunload", { cancelable: true }); b.dispatchEvent(leave);
+  await until(() => b.reloads === 1, 1500);
+  check("newer: Refresh reloads once, without the leave-this-page question", b.reloads === 1 && !leave.defaultPrevented);
+  check("newer: comments not yet posted stay in this browser for the new copy", JSON.parse(b.localStorage.getItem("ep-feedback-mine")).some((c) => c.text === "Not posted yet"));
+
+  // a cache still holding the old file after a release: different bytes, but older, so no alarm
+  const c = fresh({ served: NEWB, servedAt: "Mon, 09 Nov 2026 09:00:00 GMT" });
+  await until(() => looks(c) === 1, 5000); await settle(10);
+  check("newer: a copy older than the one open never raises Refresh", !kq(c, "refresh") && c.EPKit.feedback.ui.newer() === false);
+
+  // offline: the look fails quietly
+  const d = fresh({ served: NEWB, servedAt: NEW_AT, pageDown: true });
+  await until(() => looks(d) === 1, 5000); await settle(10);
+  check("newer: when the look fails, nothing shows and nothing breaks", !kq(d, "refresh") && !!kq(d, "comment"));
+
+  // Turn off stops looking
+  const e2 = fresh({ served: NEWB, servedAt: NEW_AT });
+  await until(() => e2.EPKit.feedback.ui.link() === true); e2.EPKit.feedback.ui.turnOff();
+  await tick(3200); await settle(6);
+  check("newer: after Turn off, the kit never looks", looks(e2) === 0);
 }
 
 /* =================== Email this =================== */
