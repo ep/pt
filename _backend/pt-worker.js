@@ -70,6 +70,13 @@
     them: anonymous ballots, yes; notes about colleagues, no. Anyone with the code
     can also overwrite rows under the open prefixes, so results you would defend
     forensically call for a closed session too.
+    Icebox (tool id "ice", field-tools/icebreakers) is the one open tool that carries
+    nicknames and typed answers. It may because its codes are eight letters from an
+    alphabet of 23 (about 78 billion codes), too many to find by guessing in any
+    useful time, and its prompts stay harmless. Nothing locks out a guesser, so the
+    size of the code is the whole lock. It opens "p", "a", "v" and "here". Anyone in
+    the room can still read the session, and overwrite rows under those prefixes,
+    with the code.
 
   CONFIGURATION lives in the constants below and in wrangler.toml. Dashboard
   variables GATED_TOOLS and ALLOW_ORIGIN override the constants if ever set, but
@@ -104,7 +111,7 @@ var ROOM_ROWS_MAX = 6000;
 
 /* Which tools require a session key. Edit this list and commit to change it.
    A GATED_TOOLS variable in the dashboard, if you ever set one, overrides this. */
-var GATED_TOOLS_DEFAULT = 'pyc,pair-poll,room-pulse,sf';
+var GATED_TOOLS_DEFAULT = 'pyc,pair-poll,room-pulse,sf,ice';
 
 /* Which origins may call this worker. Edit and redeploy to change it.
    An ALLOW_ORIGIN variable in the dashboard, if you ever set one, overrides this.

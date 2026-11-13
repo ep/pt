@@ -92,6 +92,7 @@ const ANALYTICS = [
 const EXEMPT = {
   'join/index.html': { skip: ['kit', 'id', 'restore'], why: 'a redirect to Pair Poll, with no screen of its own' },
   'pulse/index.html': { skip: ['kit', 'id', 'restore'], why: 'a redirect to Room Pulse, with no screen of its own' },
+  'play/index.html': { skip: ['kit', 'id', 'restore'], why: 'a redirect to Icebox, with no screen of its own' },
   'feedback/index.html': { skip: ['kit', 'id', 'restore'], allow: ['api.github.com', 'raw.githubusercontent.com'], why: 'the board itself, which reads older versions of each tool from the public repo' },
   'wbwai201/report-builder/index.html': { skip: ['kit', 'id', 'restore'], why: 'handles real session exports, so its security policy blocks every outgoing request' },
   'kc/report-builder/index.html': { skip: ['kit', 'id', 'restore'], why: 'handles real session exports, so its security policy blocks every outgoing request' }

@@ -1,0 +1,19 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="robots" content="noindex, nofollow">
+<title>Play</title>
+<!-- The short address players type from the big screen: ep.github.io/pt/play
+     It forwards to the game's join screen, where they type the eight letters. A code after a
+     question mark (pt/play/?ABCDEFGH) is carried along so the screen fills it in. -->
+<script>
+  (function(){ var c=(location.search||'').replace(/^\?/,'').replace(/[^A-Za-z]/g,'').slice(0,8); location.replace('/pt/field-tools/icebreakers/?join'+(c?'='+c.toUpperCase():'')); })();
+</script>
+<meta http-equiv="refresh" content="0;url=/pt/field-tools/icebreakers/?join">
+</head>
+<body>
+<p style="font-family:Arial,sans-serif;padding:24px;color:#293851">Opening the game. If nothing happens, <a href="/pt/field-tools/icebreakers/?join" style="color:#293851">tap here</a>.</p>
+</body>
+</html>

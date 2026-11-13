@@ -1,6 +1,6 @@
 # Tests for the pt backend, field tools and shared kits
 
-Twelve automated test suites live here. They are robot users: each one loads the real
+Thirteen automated test suites live here. They are robot users: each one loads the real
 code, clicks through entire sessions in a simulated browser, and checks that
 everything behaves. They catch breakage in seconds that manual testing would take
 fifteen minutes to find, or miss entirely.
@@ -66,6 +66,24 @@ fifteen minutes to find, or miss entirely.
   through the send kit, a reload that keeps its seat, two console tabs, presence, ending with undo, a full
   20-seat, 300-idea session against the row and size limits, the test drive with its participant view and
   no network, and every one of the 33 feedback screens rebuilt in the board's sandboxed frame.
+- `qa-icebreakers.mjs` tests `../../field-tools/icebreakers/index.html` (Icebox) in a simulated
+  browser, against the real worker code with the fake database. It checks the box itself (every
+  game, pack, set, announcer line, theme and band is complete, and no twist is named where the
+  room can read it), then the scoring and matching directly (bluffs, best answer, guess who, two
+  truths, the show of hands and its tolerance by room size, word matching through case, accents,
+  plurals and any alphabet, brain twins, who gets featured). Then it runs whole sessions with a
+  stage and several controllers: the front page and its looks, opening an open session with an
+  eight-letter code and what the code alone can and cannot do, a worker that does not gate the
+  tool yet (no live session starts), games that wait until the room is big enough, the lobby QR
+  (decoded with jsQR), joining by link and by typed letters, every kind of round with its points
+  worked out by hand (including the second fake in Spot the Fake and the secret card), pause, more
+  time and skip, hiding an answer and voiding a round, removing a player, changing the look
+  mid-game, sets with one running score, reloads of a controller and of the stage mid-vote and on
+  a finished reveal, a late joiner, clocks that run out, an answer sent in the last second, two
+  quick taps arriving out of order, a full room of 60 against the worker's row and size limits,
+  ending with undo, the gate screens, the reveal played as a show with motion on, the practice
+  room with no network, the one-filled-button and no-forward-controls rules on every screen, and
+  every one of the 58 feedback screens rebuilt in one frame.
 - `qa-report-builder.mjs` tests `../../wbwai201/report-builder/index.html` (the WBWAI 201
   report builder) in a simulated browser. It loads made-up sessions built inside the file
   (no CSV files in the repo), and covers the highlights and their numbers, one organization
@@ -181,6 +199,7 @@ Then, from anywhere in the repo:
     node _backend/tests/qa-feedback-board.mjs
     node _backend/tests/qa-reimagination-lab.mjs
     node _backend/tests/qa-success-factors.mjs
+    node _backend/tests/qa-icebreakers.mjs
     node _backend/tests/qa-kit-coverage.mjs
     node _backend/tests/qa-kit-coverage.mjs field-tools/my-tool/index.html   (one page)
     node _backend/tests/qa-kit-coverage.mjs --shrink   (after bringing a page up to a rule)
