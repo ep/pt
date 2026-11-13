@@ -1,6 +1,6 @@
 # Tests for the pt backend, field tools and shared kits
 
-Eleven automated test suites live here. They are robot users: each one loads the real
+Twelve automated test suites live here. They are robot users: each one loads the real
 code, clicks through entire sessions in a simulated browser, and checks that
 everything behaves. They catch breakage in seconds that manual testing would take
 fifteen minutes to find, or miss entirely.
@@ -149,6 +149,16 @@ fifteen minutes to find, or miss entirely.
   first board, Copy for AI (what goes in, in what order, what is left out, no names), the
   tester link and a new code, deleting, small screens, more than one tool, escaping, no
   dropdowns, and that the team key never travels in an address.
+- `qa-kit-coverage.mjs` checks the rules every page meets, on every page in the repo: the
+  noindex tag, requests only to pt itself, the pt worker, Google Fonts and any analytics the
+  page carries, the feedback kit's line, a feedback id no other page uses, and every screen in
+  the tool's sections opening through restore() in a frame like the board's (the real kit and
+  replay files, no storage, no cookies, no network). It also lists which pages carry analytics,
+  as a record rather than a failure. Its EXEMPT list names the pages a rule doesn't apply to,
+  with reasons; its NOT_YET list names the pages still coming up to a rule, which print TODO
+  instead of FAIL. That list only shrinks: an entry that starts passing fails until it's taken
+  off, and `--shrink` takes off every such entry and rewrites the file. Give it one file to
+  check just that page, or a draft outside the repo with `--as <repo path>`.
 - `fake-db.mjs` is the shared fake database the worker, pair-poll and room-pulse suites use.
   It also counts the rows each request touches, so the worker suite can check what a read costs.
 
@@ -171,8 +181,12 @@ Then, from anywhere in the repo:
     node _backend/tests/qa-feedback-board.mjs
     node _backend/tests/qa-reimagination-lab.mjs
     node _backend/tests/qa-success-factors.mjs
+    node _backend/tests/qa-kit-coverage.mjs
+    node _backend/tests/qa-kit-coverage.mjs field-tools/my-tool/index.html   (one page)
+    node _backend/tests/qa-kit-coverage.mjs --shrink   (after bringing a page up to a rule)
 
-Every line prints PASS or FAIL, and the process exits nonzero on any failure.
+Every line prints PASS or FAIL (qa-kit-coverage also prints TODO for a page still on its NOT_YET
+list), and the process exits nonzero on any failure.
 
 ## The rule
 
