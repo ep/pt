@@ -111,7 +111,7 @@ var ROOM_ROWS_MAX = 6000;
 
 /* Which tools require a session key. Edit this list and commit to change it.
    A GATED_TOOLS variable in the dashboard, if you ever set one, overrides this. */
-var GATED_TOOLS_DEFAULT = 'pyc,pair-poll,room-pulse,sf,ice';
+var GATED_TOOLS_DEFAULT = 'pyc,pair-poll,room-pulse,sf,ice,two-truths';
 
 /* Which origins may call this worker. Edit and redeploy to change it.
    An ALLOW_ORIGIN variable in the dashboard, if you ever set one, overrides this.

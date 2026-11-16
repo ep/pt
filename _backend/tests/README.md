@@ -1,6 +1,6 @@
 # Tests for the pt backend, field tools and shared kits
 
-Thirteen automated test suites live here. They are robot users: each one loads the real
+Fourteen automated test suites live here. They are robot users: each one loads the real
 code, clicks through entire sessions in a simulated browser, and checks that
 everything behaves. They catch breakage in seconds that manual testing would take
 fifteen minutes to find, or miss entirely.
@@ -104,6 +104,20 @@ fifteen minutes to find, or miss entirely.
   notes (left out of the report unless ticked), the plan fields, the text, report and CSV
   (escaping everything typed; downloads only on the hosted page), picking up after a reload,
   a browser that blocks storage, no analytics or brand names, and one primary button per screen.
+- `qa-two-truths.mjs` tests `../../field-tools/two-truths/index.html` (Two Truths and a Hallucination) in a
+  simulated browser, against the real worker code with the fake database. It checks the guess assignment
+  directly (every set guessed the same number of times and never by its author, for rooms of 2 to 40), the
+  scoring (spot it +1, pick a truth -1, +1 for each person fooled, guesses from an old assignment ignored),
+  ties, the reveal's steps and the hallucination helper. Then it runs a whole session with a console and five
+  participants: the stepped setup and setup links, a worker that doesn't gate the tool (no live session
+  starts), the closed session and its key, the lobby QR (decoded with jsQR), joining with a name and a mascot,
+  a reload that keeps its seat, writing with both kinds of help, submitting and changing a set, pausing every
+  screen, a minute up, the lock at zero that sends in a complete unsubmitted set, someone with no set who
+  watches, guessing in a stable shuffled order, scores worked out by hand, the reveal (standby, places,
+  awards), anyone's three from the scores, each participant's breakdown adding up to their score, ending
+  with undo, the test drive with no network, and every one of the 28 feedback screens.
+  The live session uses the worker's own gated list; the ungated check takes two-truths off it through the
+  GATED_TOOLS variable.
 - `qa-reimagination-lab.mjs` tests `../../field-tools/reimagination-lab/index.html` (the
   Reimagination Lab) in a simulated browser. It walks a whole team session, in a room and
   then on a call: the plan of six steps, the rail that fills with the group's own words (and
@@ -206,6 +220,7 @@ Then, from anywhere in the repo:
     node _backend/tests/qa-reimagination-lab.mjs
     node _backend/tests/qa-success-factors.mjs
     node _backend/tests/qa-icebreakers.mjs
+    node _backend/tests/qa-two-truths.mjs
     node _backend/tests/qa-kit-coverage.mjs
     node _backend/tests/qa-kit-coverage.mjs field-tools/my-tool/index.html   (one page)
     node _backend/tests/qa-kit-coverage.mjs --shrink   (after bringing a page up to a rule)
