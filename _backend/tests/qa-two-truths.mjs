@@ -138,6 +138,36 @@ async function guessAll(d, pickH){
      The scores call Dev 4th, so the podium has no third step. */
   const Tie2 = tw.results({ ppl:{a:{nick:'Ana'},b:{nick:'Ben'},c:{nick:'Chi'},d:{nick:'Dev'}}, ctl:{asg:{id:'u',k:1,m:{a:['b'],b:['c'],c:['d'],d:['a']}}}, gs:{ a:{a:'u',g:{b:2}}, b:{a:'u',g:{c:2}}, c:{a:'u',g:{d:2}}, d:{a:'u',g:{a:0}} } });
   check('a tie for 2nd leaves 3rd empty, matching the ranks on the scores', Tie2.places[0].length===1 && Tie2.places[1].length===2 && Tie2.places[2].length===0 && Tie2.list.find(r=>r.id==='d').rank===4 && tw.rvSteps(Tie2).join()==='standby,p2,p1,awards', JSON.stringify(Tie2.list.map(r=>[r.id,r.score,r.rank])));
+  /* random rooms of 2 to 40, with ties wherever they fall: the podium, the scores and each person's breakdown agree */
+  {
+    const keepS = tw.App.S; let agree = true, why = '';
+    for (let m=2; m<=40 && agree; m++) for (let rep=0; rep<6 && agree; rep++){
+      const ids = Array.from({length:m}, (_, i) => 'q'+i), a = tw.assign(ids), nick = i => 'n'+i+'x';
+      const S = { ppl:{}, st:{}, gs:{}, ctl:{ asg:a } };
+      ids.forEach((id, i) => {
+        S.ppl[id] = { nick:nick(i), m:tw.MASCOTS[i % tw.MASCOTS.length][0] }; S.st[id] = { t:['t1','t2','h'] };
+        const g = {}; a.m[id].forEach(t => { const r = Math.random(); if (r < 0.9) g[t] = r < 0.45 ? 2 : r < 0.7 ? 0 : 1; }); S.gs[id] = { a:a.id, g };
+      });
+      tw.App.S = S; const Rs = tw.results(S), steps = tw.rvSteps(Rs);
+      const holders = p => Rs.list.filter(r => r.rank === p);
+      if (Rs.list.some(r => r.score !== r.correct - r.missed + r.fooled)) { agree = false; why = m+': a breakdown does not add up to its score'; break; }
+      const box = tw.document.createElement('div'); box.innerHTML = tw.scoresHtml();
+      const board = {}; box.querySelectorAll('.board2 li').forEach(li => { board[li.querySelector('.nm').textContent] = li.querySelector('.rk').textContent; });
+      box.innerHTML = tw.podiumSlide(Rs, steps, 'p1');
+      [['gold',1,'p1'],['silver',2,'p2'],['bronze',3,'p3']].forEach(([cls, p, st]) => {
+        if (!agree) return;
+        const h = holders(p), el = box.querySelector('.pstep[data-medal="'+cls+'"]'), vacant = el.classList.contains('vacant');
+        if (!h.length){ if (!vacant || (p > 1 && steps.includes(st))) { agree = false; why = m+': place '+p+' is held by nobody on the scores but shows on the podium'; } return; }
+        const names = el.querySelector('.pn') ? el.querySelector('.pn').textContent : '';
+        if (vacant || !steps.includes(st)) { agree = false; why = m+': place '+p+' is held on the scores but empty on the podium'; return; }
+        if (el.querySelector('.pp').textContent !== tw.fmtPts(h[0].score)) { agree = false; why = m+': place '+p+' shows the wrong points'; return; }
+        const shown = Object.keys(board).filter(n => names.includes(n));
+        if (shown.some(n => board[n] !== tw.ordinal(p)) || shown.length !== Math.min(h.length, h.length > 4 ? 3 : 4)) { agree = false; why = m+': place '+p+' on the podium is '+names+', the scores say '+h.map(r => S.ppl[r.id].nick+' '+tw.ordinal(r.rank)).join(', '); }
+      });
+    }
+    tw.App.S = keepS;
+    check('in random rooms of 2 to 40, every place on the podium matches the scores, ties included, and every breakdown adds up', agree, why);
+  }
   check('the hallucination helper suggests something in the spirit of the truths, and never the same one twice in a row',
     (()=>{ const used=[]; const a=tw.suggestHallucination(['I walked across Spain','I climbed a mountain in Peru'], used), b=tw.suggestHallucination(['I walked across Spain','I climbed a mountain in Peru'], used); return a && b && a!==b && tw.THEMES.travel.h.includes(a); })());
   T.window.close();

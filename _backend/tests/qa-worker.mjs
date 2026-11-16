@@ -1,4 +1,5 @@
 import worker from '../pt-worker.js';
+import fs from 'fs';
 let failures = 0;
 function check(name, cond){ console.log((cond?'PASS  ':'FAIL  ')+name); if(!cond) failures++; }
 
@@ -19,7 +20,10 @@ const KH={'X-Session-Key':SK};
 (async function(){
 // health names the gated tools
 let r=await call('GET','/api/health');
-check('gating works with no dashboard variable set, Room Pulse, Success Factors, Icebox and Two Truths included', r.data.ok===true && r.data.gatedTools.join()==='pyc,pair-poll,room-pulse,sf,ice,two-truths');
+/* compared with the line in the worker file, so adding a tool never breaks this check;
+   qa-kit-coverage.mjs (rule gate) checks that every page using sessions has its id on that line */
+const gatedInCode=(fs.readFileSync(new URL('../pt-worker.js', import.meta.url),'utf8').match(/var GATED_TOOLS_DEFAULT = '([^']*)'/)||[])[1]||'';
+check('gating works with no dashboard variable set: health lists the gated tools named in the worker file', r.data.ok===true && gatedInCode.length>0 && r.data.gatedTools.join()===gatedInCode && r.data.gatedTools.includes('pyc'));
 /* and a dashboard variable, if ever set, still wins */
 const ovEnv={ DB: FakeDB(), GATED_TOOLS:'other-tool' };
 const ovRes=await worker.fetch(new Request(base+'/api/health'), ovEnv);

@@ -1,7 +1,7 @@
 /* qa-kit-coverage.mjs: the rules every page on pt meets, run as a test across the whole repo.
    GitHub Actions runs it on every push with the other suites. A contributor's chat runs it on one file.
 
-   For every page in the repo it checks five rules:
+   For every page in the repo it checks six rules:
      noindex    <meta name="robots" content="noindex, nofollow">
      requests   it loads and calls only pt itself (ep.github.io/pt/), the pt worker, Google Fonts and
                 any analytics it carries. Links people click can go anywhere; this is about what the
@@ -16,6 +16,11 @@
                 no cookies, no network, no address to go on). restore() returns true, screen() then
                 names that screen, nothing errors, each screen draws something of its own, and they
                 also open one after another in a single frame.
+     gate       only for a page that uses the worker's sessions (state, set, create, claim, clear):
+                its tool id is written as TOOL_ID = "my-tool", no other page uses it, and it is on
+                the GATED_TOOLS_DEFAULT line in _backend/pt-worker.js, unless OPEN_TOOLS below
+                lists it with a reason. A new tool's package carries its own line there, so the
+                checks run on exactly what gets committed. Pages that don't use sessions skip it.
    It also records which pages carry analytics (Clarity, Google Analytics, Hotjar and the like) and
    lists them at the end. That's a record, never a failure.
 
@@ -72,7 +77,7 @@ const ROOT = path.resolve(here, '../..');
 const SITE = 'https://ep.github.io/pt/';
 const WORKER = 'pt.armand-khambatta.workers.dev';
 const OK_HOSTS = [WORKER, 'fonts.googleapis.com', 'fonts.gstatic.com'];
-const RULES = ['noindex', 'requests', 'kit', 'id', 'restore'];
+const RULES = ['noindex', 'requests', 'kit', 'id', 'restore', 'gate'];
 const SELF = fileURLToPath(import.meta.url);
 const KIT = fs.readFileSync(path.join(ROOT, 'assets/kit/feedback.js'), 'utf8');
 const REPLAY = fs.readFileSync(path.join(ROOT, 'assets/kit/feedback-replay.js'), 'utf8');
@@ -117,6 +122,15 @@ const EXEMPT = {
   'wbwai201/report-builder/index.html': { skip: ['kit', 'id', 'restore'], why: 'handles real session exports, so its security policy blocks every outgoing request' },
   'kc/report-builder/index.html': { skip: ['kit', 'id', 'restore'], why: 'handles real session exports, so its security policy blocks every outgoing request' }
 };
+
+/* Tools that use the worker's sessions without being gated, each with its reason. Every live tool
+   with a backend is gated today, so this is empty. Changing it is a team decision. */
+const OPEN_TOOLS = {};
+
+/* The gated list as the worker has it, and how a page names its tool id. */
+const GATED = ((fs.readFileSync(path.join(ROOT, '_backend/pt-worker.js'), 'utf8').match(/var GATED_TOOLS_DEFAULT = '([^']*)'/) || [])[1] || '').split(',').map((t) => t.trim()).filter(Boolean);
+function usesSessions(html) { return html.includes(WORKER) && /api\/(?:state|set|create|claim|clear)\b|['"]\/api\/['"]\s*\+/.test(html); }
+function toolIdOf(html) { const m = /\bTOOL_ID\s*[:=]\s*["']([^"']*)["']/.exec(html); return m ? m[1] : null; }
 
 /* Small labels above a heading that stay on purpose, so the notes at the end leave them out.
    Changing it is a team decision. */
@@ -419,7 +433,7 @@ function notYetFor(rel) {
   return new Set(hit.flatMap(([, rules]) => rules.split(/\s+/)));
 }
 
-async function checkPage(p, ids) {
+async function checkPage(p, ids, toolIds) {
   const ex = EXEMPT[p.rel] || {}, skip = new Set(ex.skip || []), allow = ex.allow || [];
   const res = {};
   const doc = new JSDOM(p.html, { url: p.url }).window.document;
@@ -483,6 +497,16 @@ async function checkPage(p, ids) {
     }
     res.restore = why ? { ok: false, why } : { ok: true, note: r.screens.length + (r.screens.length === 1 ? ' screen' : ' screens') };
   }
+  if (!skip.has('gate') && usesSessions(p.html)) {
+    const t = toolIdOf(p.html);
+    let why = '';
+    if (!t) why = 'it uses the worker\'s sessions but names no tool id the test can read: write it as TOOL_ID = "my-tool"';
+    else if (!/^[a-z0-9-]{1,12}$/.test(t)) why = 'tool id "' + t + '" isn\'t lowercase letters, numbers and hyphens, at most 12, so the worker refuses it';
+    else { const twin = Object.keys(toolIds).find((k) => k !== p.rel && toolIds[k] === t);
+      if (twin) why = 'tool id "' + t + '" is already used by ' + twin + ', so their sessions would share rooms';
+      else if (!GATED.includes(t) && !OPEN_TOOLS[t]) why = 'tool id "' + t + '" isn\'t on the GATED_TOOLS_DEFAULT line in _backend/pt-worker.js: add it there in the same package, or list it in OPEN_TOOLS with its reason'; }
+    res.gate = why ? { ok: false, why } : { ok: true, note: t + (GATED.includes(t) ? ', gated' : ', open on purpose') };
+  }
   res.words = r ? r.words : {};
   return res;
 }
@@ -508,6 +532,11 @@ for (const k of Object.keys(EXEMPT)) if (!all.includes(k)) line('FAIL', 'EXEMPT 
 const ids = {};
 for (const rel of all) { const id = staticId(fs.readFileSync(path.join(ROOT, rel), 'utf8')); if (id) ids[rel] = id; }
 for (const p of pages) { delete ids[p.rel]; const id = staticId(p.html); if (id) ids[p.rel] = id; }
+/* Every page's worker tool id, the same way. */
+const toolIds = {};
+for (const rel of all) { const h = fs.readFileSync(path.join(ROOT, rel), 'utf8'); if (usesSessions(h)) { const t = toolIdOf(h); if (t) toolIds[rel] = t; } }
+for (const p of pages) { delete toolIds[p.rel]; if (usesSessions(p.html)) { const t = toolIdOf(p.html); if (t) toolIds[p.rel] = t; } }
+for (const t of Object.keys(OPEN_TOOLS)) if (GATED.includes(t)) line('FAIL', 'OPEN_TOOLS names ' + t + ', which the worker gates');
 
 const t0 = Date.now();
 console.log('qa-kit-coverage: ' + pages.length + (pages.length === 1 ? ' page' : ' pages') + '\n');
@@ -515,7 +544,7 @@ let pass = 0, todo = 0;
 const tracked = {}, wordy = [], everyRows = [];
 let counted = 0;
 for (const p of pages) {
-  const res = await checkPage(p, ids);
+  const res = await checkPage(p, ids, toolIds);
   res.analytics.forEach((name) => (tracked[name] = tracked[name] || []).push(p.rel));
   const opened = Object.keys(res.words);
   if (opened.length) {

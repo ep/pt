@@ -108,7 +108,9 @@ fifteen minutes to find, or miss entirely.
   simulated browser, against the real worker code with the fake database. It checks the guess assignment
   directly (every set guessed the same number of times and never by its author, for rooms of 2 to 40), the
   scoring (spot it +1, pick a truth -1, +1 for each person fooled, guesses from an old assignment ignored),
-  ties, the reveal's steps and the hallucination helper. Then it runs a whole session with a console and five
+  ties (a tie for 2nd leaves 3rd empty), the reveal's steps and the hallucination helper, then plays random
+  rooms of 2 to 40 and checks that every place on the podium matches the scores and every breakdown adds up.
+  Then it runs a whole session with a console and five
   participants: the stepped setup and setup links, a worker that doesn't gate the tool (no live session
   starts), the closed session and its key, the lobby QR (decoded with jsQR), joining with a name and a mascot,
   a reload that keeps its seat, writing with both kinds of help, submitting and changing a set, pausing every
@@ -185,7 +187,10 @@ fifteen minutes to find, or miss entirely.
   noindex tag, requests only to pt itself, the pt worker, Google Fonts and any analytics the
   page carries, the feedback kit's line, a feedback id no other page uses, and every screen in
   the tool's sections opening through restore() in a frame like the board's (the real kit and
-  replay files, no storage, no cookies, no network). It also lists which pages carry analytics,
+  replay files, no storage, no cookies, no network). A page that uses the worker's sessions must
+  also name its tool id as TOOL_ID, use one no other page uses, and have it on the
+  GATED_TOOLS_DEFAULT line in `../pt-worker.js` (unless its OPEN_TOOLS list says why not), so a
+  new tool's package carries that line and is tested as it will be committed. It also lists which pages carry analytics,
   as a record rather than a failure. Its EXEMPT list names the pages a rule doesn't apply to,
   with reasons; its NOT_YET list names the pages still coming up to a rule, which print TODO
   instead of FAIL. That list only shrinks: an entry that starts passing fails until it's taken
