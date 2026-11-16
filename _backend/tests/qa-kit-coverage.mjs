@@ -19,6 +19,24 @@
    It also records which pages carry analytics (Clarity, Google Analytics, Hotjar and the like) and
    lists them at the end. That's a record, never a failure.
 
+   And it counts the words on every screen it opens, then lists the screens that run longer than
+   usual. These are notes, never failures: nothing here blocks a commit, and a screen can stay as
+   it is when it reads well. This comment is the home for the counts.
+     words      the interface's own words that show on a screen, leaving out anything marked
+                data-feedback-private (what people typed) and anything hidden. The usual most:
+                  40  a participant's screen   (its name starts laptop-, pad-, phone-, participant-,
+                                                player- or join-)
+                  25  a shared screen          (its name starts stage-, shared-, room- or projector-)
+                  80  any other screen, such as a facilitator's or a setup screen
+                Set on 2026-11-15 from Success Factors and Icebox as they were that day.
+     labels     a small capital label sitting right above a heading (an eyebrow label). A unit
+                under a number, a strip of phases and a label that is a list's only heading are fine
+                and aren't listed. KEPT_LABELS below names the labels that stay on purpose.
+   The count reads a page's own styles without laying the page out, so words that hide at some
+   window sizes can count a few high. Checked against a real browser at laptop size on 2026-11-15:
+   90 of the 91 screens in Success Factors and Icebox counted the same, and the other was four
+   words apart. A screen a few words over is fine.
+
    Two lists below change what a failure means.
      EXEMPT   pages a rule doesn't apply to, or extra hosts a page may reach, each with its reason.
               Changing it is a team decision.
@@ -37,6 +55,8 @@
      node _backend/tests/qa-kit-coverage.mjs /path/to/draft.html --as field-tools/my-tool/index.html
    Before packaging a change, in a fresh clone with the package's files in place:
      node _backend/tests/qa-kit-coverage.mjs --shrink
+   List every screen's word count, not only the long ones (add a page to list just its screens):
+     node _backend/tests/qa-kit-coverage.mjs --words
 
    What it doesn't check: the tool's own behaviour (its harness does that), whether a live tool keeps
    feedback mode in the links it makes, what a rebuilt screen shows beyond being its own, names or
@@ -98,6 +118,12 @@ const EXEMPT = {
   'kc/report-builder/index.html': { skip: ['kit', 'id', 'restore'], why: 'handles real session exports, so its security policy blocks every outgoing request' }
 };
 
+/* Small labels above a heading that stay on purpose, so the notes at the end leave them out.
+   Changing it is a team decision. */
+const KEPT_LABELS = {
+  'field-tools/success-factors/index.html': { labels: ['The essentials'], why: 'section labels kept by the project owner, 2026-11-15' }
+};
+
 /* Pages live before a rule, one line each. A pattern must match exactly one page. --shrink edits these lines. */
 const NOT_YET = [
   ['Logistics/EC/In-Person/es/index.html', 'noindex kit id restore'],
@@ -141,10 +167,11 @@ const NOT_YET_SIZE = 119;
 
 /* ---------- reading the command line ---------- */
 const argv = process.argv.slice(2);
-let only = null, as = null, shrinking = false;
+let only = null, as = null, shrinking = false, everyCount = false;
 for (let i = 0; i < argv.length; i++) {
   if (argv[i] === '--as') as = argv[++i];
   else if (argv[i] === '--shrink') shrinking = true;
+  else if (argv[i] === '--words') everyCount = true;
   else if (!only) only = argv[i];
 }
 
@@ -312,9 +339,42 @@ async function visit(p) {
   return { tried, live };
 }
 
+/* ---------- words on a screen: counted for the notes at the end, never judged ---------- */
+const USUAL = { participant: 40, shared: 25, other: 80 };
+const KIND = [[/^(laptop|pad|phone|participant|player|join)(-|$)/, 'participant'], [/^(stage|shared|room|projector)(-|$)/, 'shared']];
+const KIND_SAYS = { participant: 'a participant\'s screen', shared: 'a shared screen', other: 'a screen like this' };
+function kindOf(screen) { for (const [re, k] of KIND) if (re.test(screen)) return k; return 'other'; }
+const NO_WORDS = /^(script|style|noscript|template|title|desc|option|datalist|head|meta|link)$/;
+function countWords(text) { return String(text).split(/\s+/).filter((x) => /[A-Za-z0-9]/.test(x)).length; }
+function shows(w, el) {
+  if (el.hidden || el.getAttribute('aria-hidden') === 'true') return false;
+  let cs; try { cs = w.getComputedStyle(el); } catch (e) { return true; }
+  return !(cs.display === 'none' || cs.visibility === 'hidden' || cs.opacity === '0');
+}
+/* Walks only what shows, so a hidden view costs one look at its top element. */
+function wordsOn(w) {
+  let n = 0; const labels = [];
+  const own = (el) => [...el.childNodes].filter((c) => c.nodeType === 3).map((c) => c.nodeValue).join(' ').trim();
+  (function walk(el) {
+    for (const c of el.childNodes) {
+      if (c.nodeType === 3) { n += countWords(c.nodeValue); continue; }
+      if (c.nodeType !== 1) continue;
+      const tag = c.tagName.toLowerCase();
+      if (NO_WORDS.test(tag) || c.hasAttribute('data-epkit') || c.hasAttribute('data-feedback-private') || !shows(w, c)) continue;
+      const mine = own(c), next = c.nextElementSibling;
+      if (mine && countWords(mine) <= 5 && next && (/^h[1-4]$/i.test(next.tagName) || next.getAttribute('role') === 'heading') && !/^(button|a|label|h[1-6])$/.test(tag)) {
+        let caps = false; try { caps = w.getComputedStyle(c).textTransform === 'uppercase'; } catch (e) {}
+        if (caps || (mine === mine.toUpperCase() && /[A-Z]{3}/.test(mine))) labels.push('"' + mine.slice(0, 40) + '" above "' + next.textContent.trim().replace(/\s+/g, ' ').slice(0, 40) + '"');
+      }
+      walk(c);
+    }
+  })(w.document.body);
+  return { n, labels };
+}
+
 /* ---------- the board's rebuild: sections, then every screen ---------- */
 async function rebuild(p) {
-  const out = { id: undefined, hook: false, sections: null, screens: [], bad: [], errs: [], net: [], rowBad: [], same: [] };
+  const out = { id: undefined, hook: false, sections: null, screens: [], bad: [], errs: [], net: [], rowBad: [], same: [], words: {} };
   /* The board's map frame, which only reads sections; here it then opens every screen in a row. */
   let map = null;
   const w = frame(p, { map: true }, out.errs, out.net, 'in a row');
@@ -343,6 +403,7 @@ async function rebuild(p) {
     const ft = tool(f), ok = !!(msg && msg.ok === true) && !!ft && screenOf(ft) === sc;
     if (!ok) out.bad.push(sc + (msg ? (msg.ok ? ' (screen() says ' + JSON.stringify(screenOf(ft)) + ')' : ' (restore() said no)') : ' (no answer)'));
     const fp = print(f);
+    if (ok) { try { out.words[sc] = wordsOn(f); } catch (e) {} }
     f.close();
     return fp;
   });
@@ -422,6 +483,7 @@ async function checkPage(p, ids) {
     }
     res.restore = why ? { ok: false, why } : { ok: true, note: r.screens.length + (r.screens.length === 1 ? ' screen' : ' screens') };
   }
+  res.words = r ? r.words : {};
   return res;
 }
 
@@ -450,10 +512,20 @@ for (const p of pages) { delete ids[p.rel]; const id = staticId(p.html); if (id)
 const t0 = Date.now();
 console.log('qa-kit-coverage: ' + pages.length + (pages.length === 1 ? ' page' : ' pages') + '\n');
 let pass = 0, todo = 0;
-const tracked = {};
+const tracked = {}, wordy = [], everyRows = [];
+let counted = 0;
 for (const p of pages) {
   const res = await checkPage(p, ids);
   res.analytics.forEach((name) => (tracked[name] = tracked[name] || []).push(p.rel));
+  const opened = Object.keys(res.words);
+  if (opened.length) {
+    counted += opened.length;
+    const long = opened.map((sc) => ({ sc, n: res.words[sc].n, kind: kindOf(sc) })).filter((x) => x.n > USUAL[x.kind]);
+    const kept = (KEPT_LABELS[p.rel] || {}).labels || [];
+    const labels = opened.flatMap((sc) => res.words[sc].labels.filter((l) => !kept.some((k) => l.startsWith('"' + k + '"'))).map((l) => sc + ': ' + l));
+    if (everyCount) everyRows.push({ rel: p.rel, rows: opened.map((sc) => ({ sc, n: res.words[sc].n, kind: kindOf(sc) })) });
+    if (long.length || labels.length) wordy.push({ rel: p.rel, of: opened.length, long, labels });
+  }
   const later = notYetFor(p.rel), ok = [], wait = [];
   for (const rule of RULES) {
     const r = res[rule];
@@ -500,5 +572,31 @@ else if (size < NOT_YET_SIZE && shrinking && !drop.size) {
 const names = Object.keys(tracked).sort();
 console.log('\nAnalytics on ' + (pages.length === 1 ? 'this page' : 'these pages') + (names.length ? ' (a record, not a failure):' : ': none'));
 for (const n of names) console.log('NOTE  ' + n + ': ' + tracked[n].join(', '));
+
+/* --words: every screen's count, for setting the usual counts. */
+for (const x of everyRows) {
+  console.log('\nWORDS ' + x.rel);
+  const wide = Math.max(...x.rows.map((r) => r.sc.length));
+  for (const r of x.rows) console.log('        ' + r.sc.padEnd(wide) + '  ' + String(r.n).padStart(4) + '  ' + r.kind);
+}
+
+/* The words on each screen. Notes, never failures: they don't change the result below. */
+if (!counted) console.log('\nWords on screen: no screens to count here (the test counts the screens a page opens through restore())');
+else if (!wordy.length) console.log('\nWords on screen: all ' + counted + ' screens the test opened are within the usual counts');
+else {
+  console.log('\nWords on screen (notes, not failures: worth a look, and fine to leave when a screen reads well):');
+  for (const x of wordy) {
+    if (x.long.length) {
+      console.log('NOTE  ' + x.rel + ': ' + x.long.length + ' of ' + x.of + (x.of === 1 ? ' screen runs' : ' screens run') + ' longer than usual');
+      const wide = Math.max(...x.long.map((l) => l.sc.length));
+      for (const l of x.long) console.log('        ' + l.sc.padEnd(wide) + '  ' + String(l.n).padStart(4) + ' words; ' + KIND_SAYS[l.kind] + ' usually has ' + USUAL[l.kind] + ' or fewer');
+    }
+    if (x.labels.length) {
+      console.log('NOTE  ' + x.rel + ': ' + x.labels.length + (x.labels.length === 1 ? ' small label sits' : ' small labels sit') + ' right above a heading');
+      for (const l of x.labels.slice(0, 12)) console.log('        ' + l);
+      if (x.labels.length > 12) console.log('        and ' + (x.labels.length - 12) + ' more');
+    }
+  }
+}
 console.log('\n' + pass + ' rules pass, ' + todo + ' not yet, ' + failures + ' failed, in ' + ((Date.now() - t0) / 1000).toFixed(1) + 's');
 process.exit(failures ? 1 : 0);

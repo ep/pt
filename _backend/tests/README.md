@@ -177,6 +177,12 @@ fifteen minutes to find, or miss entirely.
   instead of FAIL. That list only shrinks: an entry that starts passing fails until it's taken
   off, and `--shrink` takes off every such entry and rewrites the file. Give it one file to
   check just that page, or a draft outside the repo with `--as <repo path>`.
+  It ends with notes on the words on each screen it opened: the screens that run longer than
+  usual (40 words on a participant's screen, 25 on a shared screen, 80 on any other, leaving out
+  what people typed), and any small capital label sitting right above a heading. These are notes
+  and never failures. They don't change the result or block a commit, and a screen can stay as it
+  is when it reads well. `--words` lists every screen's count. The test's header comment is the
+  home for the counts, and its KEPT_LABELS list names the labels that stay on purpose.
 - `fake-db.mjs` is the shared fake database the worker, pair-poll and room-pulse suites use.
   It also counts the rows each request touches, so the worker suite can check what a read costs.
 
@@ -203,6 +209,7 @@ Then, from anywhere in the repo:
     node _backend/tests/qa-kit-coverage.mjs
     node _backend/tests/qa-kit-coverage.mjs field-tools/my-tool/index.html   (one page)
     node _backend/tests/qa-kit-coverage.mjs --shrink   (after bringing a page up to a rule)
+    node _backend/tests/qa-kit-coverage.mjs --words    (every screen's word count)
 
 Every line prints PASS or FAIL (qa-kit-coverage also prints TODO for a page still on its NOT_YET
 list), and the process exits nonzero on any failure.
