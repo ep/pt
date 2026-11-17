@@ -161,6 +161,7 @@ async function handOff(d){ const before = d.window.App.log; const n = JSON.strin
   check('a phone asks for a first name, then the table', true);
   await until(()=>txt(con,'[data-table="1"] .cnt')==='3');
   check('a full table shows a teal 3', txt(con,'[data-table="1"] .cnt')==='3' && $(con,'[data-table="1"]').classList.contains('full'));
+  await until(()=>/Table 1, Team Fox/.test(txt(ana,'#pWaitH')) && /Mo/.test(txt(ana,'#pMates')) && /You start at Pricing/.test(txt(ana,'#pStation')));
   check('phones in the lobby see their table, tablemates and starting station', /Table 1, Team Fox/.test(txt(ana,'#pWaitH')) && /Ana \(you\)/.test(txt(ana,'#pMates')) && /Mo/.test(txt(ana,'#pMates')) && /You start at Pricing/.test(txt(ana,'#pStation')));
   await until(()=>/You start at Reply/.test(txt(sam,'#pStation')));
   await until(()=>/You start at Policy/.test(txt(mo,'#pStation')));
@@ -246,8 +247,8 @@ async function partTwo(){
   click(sam.window, $(sam,'#pHand'));
   await until(()=>boardVal(1)==='1');
   check('the order ships and the board counts it', boardVal(1)==='1');
-  await until(()=>/1 out/.test(desk(ana).team));
-  check('each phone\'s team line agrees with the board', /Team Fox · 1 out · 1st/.test(desk(ana).team) && /1 out/.test(desk(sam).team), desk(ana).team);
+  await until(()=>/Team Fox · 1 out · 1st/.test(desk(ana).team) && /1 out/.test(desk(sam).team));
+  check('each phone\'s team line agrees with the board', /Team Fox · 1 out · 1st/.test(desk(ana).team) && /1 out/.test(desk(sam).team), 'Ana: '+desk(ana).team+' | Sam: '+desk(sam).team);
   check('the rows in the store stay under 4,000 characters', rowSizes(code) < 4000);
 
   section('The clock');
@@ -309,7 +310,7 @@ async function partThree(){
   nextC();
   await until(()=>screen(con)==='console-intro' && screen(ana)==='phone-intro');
   check('the round opens on its title, with Start round 2', txt(con,'#cTitle')==='Round 2: Sign your name' && txt(con,'#cNext')==='Start round 2');
-  await until(()=>/Policy/.test(txt(ana,'#pEyesH')) && /Pricing and Policy/.test(txt(kai,'#pEyesH')));
+  await until(()=>/Policy/.test(txt(ana,'#pEyesH')) && /Reply/.test(txt(mo,'#pEyesH')) && /Pricing/.test(txt(sam,'#pEyesH')) && /Pricing and Policy/.test(txt(kai,'#pEyesH')) && /Reply/.test(txt(jo,'#pEyesH')));
   check('everyone moves one station down the line', /Round 2: you're on Policy\./.test(txt(ana,'#pEyesH')) && /Round 2: you're on Reply\./.test(txt(mo,'#pEyesH')) && /Round 2: you're on Pricing\./.test(txt(sam,'#pEyesH')));
   check('a team of two swaps who runs two stations', /Round 2: you're on Pricing and Policy\./.test(txt(kai,'#pEyesH')) && /Round 2: you're on Reply\./.test(txt(jo,'#pEyesH')));
   check('between rounds the console offers the tables', !!$(con,'[data-c="tables"]'));
@@ -390,9 +391,9 @@ async function partThree(){
   check('the board flips from orders out to points, every table right', truth.every(x => boardVal(x.t)===cw.num(x.pts)), truth.map(x => x.t+':'+x.pts+'/'+boardVal(x.t)).join(' '));
   check('and reorders by points, Gold on the leader', placesNow.every(x => $(con,'#rvSlide [data-t="'+x.t+'"]').classList.contains('lead')===(x.place===1)) && txt(con,'#rvSlide .colhead')==='Points');
   check('the room hears it, once', cw.sounds.filter(s=>s==='fanfare').length===1 && cw.App.celebrated);
-  await until(()=>screen(ana)==='phone-audit' && /Your desk finished/.test(txt(ana,'#pRes h2')));
+  await until(()=>screen(ana)==='phone-audit' && /Your desk finished/.test(txt(ana,'#pRes h2')) && screen(jo)==='phone-audit');
   const anaPlace = placesNow.find(x => x.t===1);
-  check('each phone shows its own audit, and its place agrees with the board', txt(ana,'#pRes h2')==='Your desk finished '+cw.placeWords(anaPlace)+'.' && screen(jo)==='phone-audit', txt(ana,'#pRes h2'));
+  check('each phone shows its own audit, and its place agrees with the board', txt(ana,'#pRes h2')==='Your desk finished '+cw.placeWords(anaPlace)+'.' && screen(jo)==='phone-audit', 'Ana: '+txt(ana,'#pRes h2')+' (board says '+cw.placeWords(anaPlace)+') | Jo: '+screen(jo));
   const anaP = GG.person(anaSeat, truth[0].reps);
   check('the phone\'s rounds and mistakes match the stored moves', $$(ana,'#pRes .rlist li:not(.miss)').length===3 && $$(ana,'#pRes li.miss').length===anaP.mistakes.length && (anaP.shipped[0] ? new RegExp('Your name is on '+anaP.shipped[0]).test(txt(ana,'.tline')) : /No mistakes carry your name/.test(txt(ana,'.tline'))));
   check('the public board now carries points', Object.values(row(code,'pub/board')).every(v => v[1]!==null));
@@ -447,7 +448,7 @@ async function partFour(){
   check('taking someone out reseats their table for the next round', s3[1].length===2 && s3[1].indexOf(anaSeat)===0 && /Not playing\s*Mo/.test(txt(con,'#tblBody')));
   check('the late arrival joins their table at the next round', s3[3].length===2 && s3[3][1]===max.window.App.seat);
   click(cw, $(con,'#tblDone'));
-  await until(()=>screen(ana)==='phone-intro' && screen(max)==='phone-intro' && /Round 4/.test(txt(ana,'#pEyesH')));
+  await until(()=>screen(ana)==='phone-intro' && screen(max)==='phone-intro' && /Round 4/.test(txt(ana,'#pEyesH')) && /Round 4/.test(txt(sam,'#pEyesH')) && /Round 4/.test(txt(max,'#pEyesH')));
   check('phones see their new stations', /Round 4: you're on Reply\./.test(txt(ana,'#pEyesH')) && /Round 4: you're on Pricing and Policy\./.test(txt(sam,'#pEyesH')) && /Round 4: you're on Pricing and Policy\./.test(txt(max,'#pEyesH')), txt(ana,'#pEyesH')+' | '+txt(max,'#pEyesH'));
 
   section('Round 4: the AI waits until you ask');
@@ -477,8 +478,8 @@ async function partFour(){
   ana.window.App.lastToast = null; pickTruth(ana); click(ana.window, $(ana,'#pHand'));
   await until(()=>!!ana.window.App.lastToast);
   check('Reply sees what it shipped', /Shipped|Caught|beat/.test(ana.window.App.lastToast), ana.window.App.lastToast);
-  await until(()=>{ const v = boardVal(1); return v && v !== '0' && new RegExp('Team Fox · ' + v.replace('−','\\u2212') + ' points?').test(desk(ana).team); }, 4000);
-  check('points go up on the board as orders are checked, and the phones agree', boardVal(1)!=='0' && desk(ana).team.indexOf(boardVal(1))>0 && desk(sam).team.indexOf(boardVal(1))>0, boardVal(1)+' | '+desk(ana).team);
+  await until(()=>{ const v = boardVal(1); return v && v !== '0' && new RegExp('Team Fox · ' + v.replace('−','\\u2212') + ' points?').test(desk(ana).team) && desk(sam).team.indexOf(v)>0; }, 4000);
+  check('points go up on the board as orders are checked, and the phones agree', boardVal(1)!=='0' && desk(ana).team.indexOf(boardVal(1))>0 && desk(sam).team.indexOf(boardVal(1))>0, boardVal(1)+' | Ana: '+desk(ana).team+' | Sam: '+desk(sam).team);
 
   section('Round 5: no AI');
   nextC(); await until(()=>screen(con)==='console-intro' && txt(con,'#cTitle')==='Round 5: Pull the plug');
