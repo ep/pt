@@ -1,6 +1,6 @@
 # Tests for the pt backend, field tools and shared kits
 
-Fourteen automated test suites live here. They are robot users: each one loads the real
+Fifteen automated test suites live here. They are robot users: each one loads the real
 code, clicks through entire sessions in a simulated browser, and checks that
 everything behaves. They catch breakage in seconds that manual testing would take
 fifteen minutes to find, or miss entirely.
@@ -84,6 +84,19 @@ fifteen minutes to find, or miss entirely.
   ending with undo, the gate screens, the reveal played as a show with motion on, the practice
   room with no network, the one-filled-button and no-forward-controls rules on every screen, and
   every one of the 58 feedback screens rebuilt in one frame.
+- `qa-good-call.mjs` tests `../../field-tools/good-call/index.html` (Good Call) in a simulated browser,
+  against the real worker code with the fake database. It runs a whole session with a console and seven
+  phones: the stepped setup and setup links, the closed session and its key, the lobby QR (decoded with
+  jsQR), joining with a first name and a table number, the facilitator moving someone with two taps,
+  tables of one to four and the stations each gets, orders passing between real players station by
+  station, the book, the clock (pause, a minute up or down, the chimes, every phone locking at zero),
+  pausing every screen, a move stamped after time was called that never counts, names on every hand-off,
+  sending back, a phone reloading mid-round without losing its moves, covering for a phone that went
+  away, a late arrival, points kept off the public row until the audit, the audit and debrief numbers
+  worked out again from the stored moves, the hidden AI and the own-call bonus, the final board, ending
+  with undo, a full room of 60, the gate screens, the practice room with no network, and every feedback
+  screen rebuilt in one frame. It also plays random rooms of 2 to 12 desks of 1 to 5 people, with ties,
+  and checks that the board, the public row, every phone and the rules agree on every score and place.
 - `qa-report-builder.mjs` tests `../../wbwai201/report-builder/index.html` (the WBWAI 201
   report builder) in a simulated browser. It loads made-up sessions built inside the file
   (no CSV files in the repo), and covers the highlights and their numbers, one organization
@@ -226,6 +239,7 @@ Then, from anywhere in the repo:
     node _backend/tests/qa-success-factors.mjs
     node _backend/tests/qa-icebreakers.mjs
     node _backend/tests/qa-two-truths.mjs
+    node _backend/tests/qa-good-call.mjs
     node _backend/tests/qa-kit-coverage.mjs
     node _backend/tests/qa-kit-coverage.mjs field-tools/my-tool/index.html   (one page)
     node _backend/tests/qa-kit-coverage.mjs --shrink   (after bringing a page up to a rule)
