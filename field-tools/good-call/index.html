@@ -383,7 +383,58 @@ textarea.box{resize:vertical;min-height:84px;}
 .opening .line span{font-weight:700;font-size:clamp(16px,1.8vw,21px);background:var(--paper);border:1.5px solid var(--line);border-radius:999px;padding:10px 22px;}
 .opening .line i{font-style:normal;color:var(--aegean);font-size:22px;}
 .rules{list-style:none;display:flex;flex-direction:column;gap:10px;align-items:center;}
-.rules li{font-family:var(--serif);font-size:clamp(22px,2.8vw,34px);animation:rise .6s var(--ease) both;animation-delay:calc(1.6s + var(--d) * 1.1s);}
+.rules li{font-family:var(--serif);font-size:clamp(26px,3.6vw,46px);animation:rise .6s var(--ease) both;animation-delay:calc(.3s + var(--d) * 1s);}
+.rules{gap:16px;padding:6vh 0;}
+/* the opening's story and its desk slide */
+.opening .story{font-family:var(--serif);font-size:clamp(26px,3.4vw,44px);line-height:1.2;max-width:22em;margin:28px auto 0;text-wrap:balance;animation:rise .6s var(--ease) .7s both;}
+.opening .story2{font-size:clamp(17px,1.9vw,22px);font-weight:600;color:var(--aegean);max-width:34em;margin:16px auto 0;line-height:1.45;text-wrap:balance;animation:rise .6s var(--ease) 1.1s both;}
+.opening .line.wide span{display:flex;flex-direction:column;gap:4px;border-radius:16px;padding:16px 26px;font-weight:600;color:var(--aegean);}
+.opening .line.wide span b{font-family:var(--serif);font-weight:400;font-size:clamp(22px,2.4vw,30px);color:var(--cobalt);}
+/* the first order on the shared screen: one track per desk */
+.fhead,.flist li{display:grid;grid-template-columns:52px 40px minmax(0,1fr) repeat(3,minmax(70px,110px)) 120px;align-items:center;gap:12px;}
+.fhead{padding:0 18px 6px;font-size:13px;font-weight:700;color:var(--aegean);}
+.fhead span{text-align:center;}
+.flist{list-style:none;display:flex;flex-direction:column;gap:6px;}
+.flist li{min-height:46px;padding:4px 18px;background:var(--paper);border:1.5px solid var(--line);border-radius:14px;}
+.flist.dense li{min-height:38px;}
+.flist .no{font-family:var(--serif);font-size:21px;color:var(--aegean);text-align:center;}
+.flist .av{width:34px;height:34px;display:block;}
+.flist .tn{font-weight:700;font-size:17px;min-width:0;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;}
+.flist .fdots{display:contents;}
+.flist .fdots i{justify-self:center;width:18px;height:18px;border-radius:50%;border:2px solid var(--line);transition:background .3s,border-color .3s;}
+.flist .fdots i.done{background:var(--teal);border-color:var(--teal);}
+.flist .fdots i.now{background:var(--sun);border-color:var(--sun);}
+.flist .fok{font-weight:700;color:var(--teal);text-align:right;}
+@media (max-width:640px){.fhead,.flist li{grid-template-columns:30px 28px minmax(0,1fr) repeat(3,34px) 70px;gap:6px;padding-left:10px;padding-right:10px;} .flist .fok{font-size:13px;}}
+/* the phone's role card, each round's job line, and the first order's line of teammates */
+.role{display:flex;flex-direction:column;gap:12px;padding-top:6vh;}
+.role .rlbl,.fwait .rlbl{font-size:13px;font-weight:700;color:var(--aegean);}
+.role h2{font-family:var(--serif);font-weight:400;font-size:34px;line-height:1.1;}
+.job{font-size:16px;line-height:1.45;color:var(--cobalt);}
+.eyes .job{margin-top:10px;}
+.rdim{font-size:15px;color:var(--aegean);}
+.trk{display:grid;grid-template-columns:1fr auto 1fr auto 1fr;align-items:start;gap:4px;margin:8px 0;text-align:center;}
+.trk .tn{display:flex;flex-direction:column;align-items:center;gap:5px;min-width:0;}
+.trk .tn i{width:18px;height:18px;border-radius:50%;border:2px solid var(--line);display:block;}
+.trk .tn.done i{background:var(--teal);border-color:var(--teal);}
+.trk .tn.now i{background:var(--sun);border-color:var(--sun);}
+.trk .tn b{font-size:14px;font-weight:700;color:var(--cobalt);max-width:100%;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;}
+.trk .tn.you b{color:var(--teal);}
+.trk .tn span{font-size:12px;font-weight:600;color:var(--aegean);}
+.trk .tar{color:var(--aegean);line-height:18px;}
+.fwait{display:flex;flex-direction:column;gap:12px;padding-top:8vh;}
+.fwait h2{font-family:var(--serif);font-weight:400;font-size:28px;line-height:1.2;margin-top:8px;}
+.fwait p{font-size:16px;line-height:1.45;color:var(--cobalt);}
+/* the first order's tips: one at a time, beside the part each one names */
+.coach{position:relative;display:flex;align-items:center;justify-content:space-between;gap:10px;margin:12px 0 2px;padding:10px 12px;border-radius:12px;background:var(--cobalt);color:#fff;font-size:14px;font-weight:600;line-height:1.35;animation:rise .3s var(--ease) both;}
+.coach::before{content:"";position:absolute;top:-6px;left:24px;width:12px;height:12px;background:var(--cobalt);transform:rotate(45deg);}
+.coach.down{margin:0 0 12px;}
+.coach.down::before{top:auto;bottom:-6px;left:50%;margin-left:-6px;}
+.coach.down.right::before{left:75%;}
+.coach.down.left::before{left:25%;}
+.coach .btn.sm{flex:none;background:#fff;color:var(--cobalt);border:none;min-height:32px;padding:4px 14px;}
+.fdesk .hl{box-shadow:0 0 0 3px var(--sun);}
+.fdesk .dtop span:last-child{color:var(--aegean);}
 
 /* the board: one row per table, ranked */
 .colhead{display:flex;justify-content:flex-end;gap:0;font-size:11px;font-weight:700;letter-spacing:.12em;word-spacing:.12em;text-transform:uppercase;color:var(--aegean);padding:0 18px 8px;}
@@ -468,13 +519,14 @@ textarea.box{resize:vertical;min-height:84px;}
 .desk{display:flex;flex-direction:column;}
 .dtop{display:flex;justify-content:space-between;align-items:baseline;gap:10px;font-size:12.5px;font-weight:700;color:var(--aegean);margin-bottom:4px;}
 .dtop .ds{color:var(--cobalt);}
-.desk .instr{font-size:clamp(20px,5vw,24px);margin-bottom:2px;}
-.queue{font-size:12px;font-weight:600;color:var(--aegean);text-align:right;margin:4px 2px 6px;min-height:15px;}
+.desk .instr{font-size:clamp(20px,5vw,24px);margin-bottom:12px;}
 .cover{display:flex;align-items:center;gap:10px;background:var(--pollen);border:1.5px solid #EAD98C;border-radius:14px;padding:6px 6px 6px 14px;margin-bottom:10px;font-size:13.5px;font-weight:600;}
 .cover span{flex:1;}
 .tk{background:var(--paper);border:1.5px solid var(--line);border-radius:16px;padding:14px 16px;}
-.tk .cust{font-family:var(--serif);font-weight:400;font-size:23px;line-height:1.15;overflow-wrap:anywhere;}
-.tk .order{display:flex;justify-content:space-between;gap:4px 10px;flex-wrap:wrap;font-size:14.5px;font-weight:600;margin-top:6px;}
+.tk .tkline{font-family:var(--sans);font-size:19px;line-height:1.3;font-weight:600;color:var(--aegean);white-space:nowrap;overflow:hidden;}
+.tk .tkline .ord{font-weight:800;color:var(--cobalt);}
+.tk .tkline .cust{color:var(--cobalt);}
+.tk .tkline .dot{color:var(--aegean);font-weight:600;}
 .tk .note{font-family:var(--serif);font-style:italic;color:var(--aegean);font-size:15.5px;margin-top:8px;line-height:1.4;}
 .tk .up{display:flex;flex-wrap:wrap;gap:4px 16px;margin-top:10px;font-size:13.5px;color:var(--aegean);}
 .tk .up b{font-weight:700;color:var(--cobalt);}
@@ -569,7 +621,7 @@ textarea.box{resize:vertical;min-height:84px;}
     <section class="step" id="st2">
       <h2>The timing</h2><p class="lede">Each round's clock starts when you start the round. You can pause it, or add or take off a minute, any time.</p>
       <div class="setgroup">
-        <div class="setrow"><div><div class="t">Round length</div><div class="d">Round 4 runs a minute longer, since every order starts with each player's own call.</div></div><div class="stepper" data-k="len"><button data-d="-1" aria-label="Shorter rounds">&minus;</button><output id="stLen">4</output><span class="unit">min</span><button data-d="1" aria-label="Longer rounds">+</button></div></div>
+        <div class="setrow"><div><div class="t">Round length</div><div class="d">Round 4 runs a minute longer, since every order starts with each player's own call.</div></div><div class="stepper" data-k="len"><button data-d="-1" aria-label="Shorter rounds">&minus;</button><output id="stLen">3</output><span class="unit">min</span><button data-d="1" aria-label="Longer rounds">+</button></div></div>
         <div class="setrow"><div><div class="t">Before the audit</div><div class="d">Each team talks over what it was optimizing for.</div></div><div class="fixedv">1<span class="unit">min</span></div></div>
       </div>
       <div class="stepnav"><button class="btn ghost" data-back="1">Back</button><button class="btn" data-next="3">Next: review</button></div>
@@ -818,13 +870,17 @@ var QR = (function(){
    tool's page ahead of good-call-rules.js, which works out every right answer, option and default AI draft
    from the three reference books below. Edit orders here, then run the checker (node engine/check.mjs).
 
+   Every check is one glance: four items with round prices, books of four short lines, and quantities that
+   make totals obvious (2, 4, 5, 10, 20, 25, 30, 40, 50, 60). Traps test attention, not arithmetic.
+
    How an order is written:
      c     customer id (CUSTOMERS)
      l     what they want: "item qty", or "item qty, item qty" for two lines
-     say   the customer's note. In a words round (Round 4), {q} becomes the order in words ("Forty Ridgeline tents").
-     by    optional date the customer needs it by
-     ai    only where the AI is NOT plainly right: p (Pricing), d (Policy, discount), r (Reply)
-             v     the AI's wrong answer: a total for p, a percent for d, "all" or "by" for r
+     say   the customer's note. In a words round (Round 4), {q} becomes the order in words ("forty tents").
+           A rental partner always says so: the name alone doesn't tell you.
+     by    optional date the customer needs it by (shown at Delivery)
+     ai    only where the AI is NOT plainly right: p (Pricing), d (Policy, discount), r (Delivery)
+             v     the AI's wrong answer: a total for p, a percent for d, "all" for r
              q     for p in a words round, how the AI read the order ("tent 14")
              conf  how sure it says it is
              why   the reason it gives
@@ -835,174 +891,168 @@ var QR = (function(){
    keeps going with routine orders the AI gets right (see TAIL), so it never runs dry. */
 var GC = (typeof GC !== 'undefined' && GC) || {};
 
-GC.TODAY = 'February 24';
-GC.SHIP_DAYS = 2;
-GC.LATER = 'March 10';           /* the date a "half now, half later" option uses for items with no delivery due */
+GC.LATER = 'March 10';           /* the date a "half now, half later" option uses for items with plenty in stock */
 
-/* price is this year's (from January 1); last is last year's, which the AI sometimes still uses */
+/* price is this year's; last is last year's, which the AI sometimes still uses (never shown in the books)
+   stock: how many are in, or null for plenty; on: when more come */
 GC.ITEMS = {
-  tent:    { one:'Ridgeline tent',    many:'Ridgeline tents',    short:'tents',     price:180, last:165, stock:22,  more:30, on:'March 10' },
-  daypack: { one:'Daypack 30',        many:'Daypack 30s',        short:'daypacks',  price:90,  last:80,  stock:60 },
-  bag:     { one:'Sleeping bag',      many:'sleeping bags',      short:'bags',      price:90,  last:80,  stock:80 },
-  stove:   { one:'Camp stove',        many:'camp stoves',        short:'stoves',    price:70,  last:60,  stock:4,   more:20, on:'March 2' },
-  poles:   { one:'Trekking pole set', many:'trekking pole sets', short:'pole sets', price:55,  last:50,  stock:90 },
-  filter:  { one:'Water filter',      many:'water filters',      short:'filters',   price:45,  last:40,  stock:150 },
-  lamp:    { one:'Headlamp',          many:'headlamps',          short:'headlamps', price:32,  last:30,  stock:500 }
+  tent:  { one:'Tent',  many:'tents',  short:'tents',  price:200, last:180, stock:20,   on:'March 10' },
+  bag:   { one:'Bag',   many:'bags',   short:'bags',   price:100, last:80,  stock:null },
+  stove: { one:'Stove', many:'stoves', short:'stoves', price:50,  last:40,  stock:4,    on:'March 2' },
+  lamp:  { one:'Lamp',  many:'lamps',  short:'lamps',  price:10,  last:8,   stock:null }
 };
 
 /* the policy book */
-GC.POLICY = { volumeMin:25, volume:10, club:10, partner:15, partnerItems:['tent','bag'], loyaltyEnded:'January 1' };
+GC.POLICY = { volumeMin:20, volume:10, partner:15, loyaltyEnded:'January 1' };
 
-/* kind: store (no discount of its own), club (clubs, camps and schools), partner (rental partners) */
+/* kind: store or club (no discount of their own), partner (rental partners: 15% off) */
 GC.CUSTOMERS = {
-  birchwood:  { name:'Birchwood Outfitters', kind:'store' },
-  cedar:      { name:'Cedar Lake Lodge',     kind:'store' },
-  trailhead:  { name:'Trailhead Co-op',      kind:'store' },
-  northline:  { name:'Northline Outfitters', kind:'store' },
-  summit:     { name:'Summit Supply',        kind:'store' },
-  willow:     { name:'Willow Bend Outfitters', kind:'store' },
-  copper:     { name:'Copper Ridge Sports',  kind:'store' },
-  heron:      { name:'Blue Heron Lodge',     kind:'store' },
-  stonegate:  { name:'Stonegate Outfitters', kind:'store' },
-  fernbrook:  { name:'Fernbrook Scouts',     kind:'club' },
-  pinehollow: { name:'Pine Hollow Camp',     kind:'club' },
-  pineridge:  { name:'Pine Ridge Scouts',    kind:'club' },
-  aldercreek: { name:'Alder Creek School',   kind:'club' },
-  redfern:    { name:'Redfern Hiking Club',  kind:'club' },
-  stillwater: { name:'Stillwater Camp',      kind:'club' },
-  lakeside:   { name:'Lakeside Rentals',     kind:'partner' },
-  harborview: { name:'Harbor View Rentals',  kind:'partner' },
-  granite:    { name:'Granite Peak Rentals', kind:'partner' }
+  birchwood:  { name:'Birchwood',    kind:'store' },
+  cedar:      { name:'Cedar Lake',   kind:'store' },
+  trailhead:  { name:'Trailhead',    kind:'store' },
+  northline:  { name:'Northline',    kind:'store' },
+  summit:     { name:'Summit',       kind:'store' },
+  willow:     { name:'Willow Bend',  kind:'store' },
+  copper:     { name:'Copper Ridge', kind:'store' },
+  heron:      { name:'Blue Heron',   kind:'store' },
+  stonegate:  { name:'Stonegate',    kind:'store' },
+  fernbrook:  { name:'Fernbrook',    kind:'club' },
+  pinehollow: { name:'Pine Hollow',  kind:'club' },
+  pineridge:  { name:'Pine Ridge',   kind:'club' },
+  aldercreek: { name:'Alder Creek',  kind:'club' },
+  redfern:    { name:'Redfern',      kind:'club' },
+  stillwater: { name:'Stillwater',   kind:'club' },
+  lakeside:   { name:'Lakeside',     kind:'partner' },
+  harborview: { name:'Harbor View',  kind:'partner' },
+  granite:    { name:'Granite Peak', kind:'partner' }
 };
 
 /* mode: ai (the AI's answer is shown and picked), ask (hidden behind Ask the AI), none (no AI)
-   stamps: hand-offs show "Checked by" or "Passed through by"   live: the board counts points as it goes
+   stamps: hand-offs show "Checked by" or "Not checked by"   live: the board counts points as it goes
    words: orders arrive as the customer's words, so Pricing reads the order as well as pricing it
    dur: default round length in seconds   start: orders waiting at the start   every: seconds between new orders */
 GC.ROUNDS = [
-  { title:'Meet the desk', line:'An AI helper drafts every answer.',
+  { title:'Meet the desk', line:'The first orders of the day.',
     mode:'ai', stamps:false, live:false, words:false, dur:240, start:3, every:5,
     orders:[
-      { c:'birchwood',  l:'filter 10',  say:'Can these ship this week?' },
-      { c:'cedar',      l:'stove 6',    say:'For our guest kitchen.' },
-      { c:'trailhead',  l:'tent 40',    say:'Stock for our spring sale.' },
-      { c:'northline',  l:'daypack 26', say:'Same as last spring.',
-        ai:{ p:{ conf:66, why:'26 × $90. Last spring’s price may differ.' } } },
-      { c:'summit',     l:'poles 12',   say:'Quick one, thanks.' },
-      { c:'fernbrook',  l:'lamp 30',    say:'For our spring camp.' },
-      { c:'lakeside',   l:'bag 20',     say:'We’re a rental partner.' },
-      { c:'pinehollow', l:'filter 12',  say:'For the summer camp.' },
-      { c:'willow',     l:'lamp 15',    say:'Restock for the shop.' },
-      { c:'aldercreek', l:'daypack 30', say:'For our outdoor program.' },
-      { c:'granite',    l:'tent 10',    say:'For the rental fleet.' },
-      { c:'copper',     l:'bag 8',      say:'Top-up order.' }
+      { c:'birchwood',  l:'lamp 10',   say:'For the night trail.' },
+      { c:'cedar',      l:'stove 2',   say:'For our guest kitchen.' },
+      { c:'trailhead',  l:'tent 40',   say:'For our spring sale.' },
+      { c:'northline',  l:'bag 5',     say:'Same as last spring.',
+        ai:{ p:{ conf:66, why:'5 × $100. Last spring’s price may differ.' } } },
+      { c:'summit',     l:'stove 4',   say:'Quick one, thanks.' },
+      { c:'fernbrook',  l:'lamp 30',   say:'For our spring camp.' },
+      { c:'lakeside',   l:'bag 20',    say:'We’re a rental partner.' },
+      { c:'pinehollow', l:'lamp 20',   say:'For the summer camp.' },
+      { c:'willow',     l:'tent 4',    say:'Restock for the shop.' },
+      { c:'aldercreek', l:'bag 25',    say:'For our outdoor program.' },
+      { c:'granite',    l:'tent 10',   say:'Rental partner order.' },
+      { c:'copper',     l:'lamp 50',   say:'Top-up order.' }
     ] },
 
-  { title:'Sign your name', line:'Every hand-off now carries your name.',
+  { title:'Sign your name', line:'Finance wants a name on every order.',
     mode:'ai', stamps:true, live:false, words:false, dur:240, start:3, every:5,
     orders:[
-      { c:'fernbrook',  l:'lamp 40',    by:'March 5', say:'For our spring camp.' },
-      { c:'lakeside',   l:'bag 30',     by:'March 1', say:'Busy season starts soon.' },
-      { c:'northline',  l:'daypack 26', by:'March 8', say:'No rush.' },
-      { c:'summit',     l:'filter 20',  say:'Restock, thanks.' },
-      { c:'pinehollow', l:'stove 8',    by:'March 1', say:'Camp opens March 1.',
-        ai:{ r:{ v:'all', conf:70, why:'Stock looks tight. Count not confirmed.' } } },
-      { c:'cedar',      l:'lamp 12',    by:'March 3', say:'For the night trail.' },
-      { c:'willow',     l:'tent 12',    say:'For the spring display.' },
-      { c:'redfern',    l:'poles 25',   say:'For our members.' },
-      { c:'heron',      l:'bag 10',     say:'For the guest rooms.' },
-      { c:'granite',    l:'bag 40',     say:'For the rental fleet.' },
-      { c:'copper',     l:'daypack 18', say:'Top-up order.' },
-      { c:'stonegate',  l:'stove 3',    say:'Quick one, thanks.' }
+      { c:'fernbrook',  l:'lamp 40',   by:'March 5', say:'For our spring camp.' },
+      { c:'lakeside',   l:'bag 30',    by:'March 1', say:'We’re a rental partner.' },
+      { c:'pinehollow', l:'stove 8',   by:'March 1', say:'For opening day.',
+        ai:{ r:{ v:'all', conf:70, why:'Stock looks tight.' } } },
+      { c:'northline',  l:'bag 10',    say:'No rush.' },
+      { c:'cedar',      l:'tent 2',    by:'March 3', say:'For the guest cabins.' },
+      { c:'summit',     l:'lamp 20',   say:'Restock, thanks.' },
+      { c:'willow',     l:'tent 10',   say:'For the spring display.' },
+      { c:'redfern',    l:'bag 25',    say:'For our members.' },
+      { c:'heron',      l:'bag 10',    say:'For the guest rooms.' },
+      { c:'granite',    l:'bag 40',    say:'Rental partner order.' },
+      { c:'copper',     l:'lamp 30',   say:'Top-up order.' },
+      { c:'stonegate',  l:'stove 2',   say:'Quick one, thanks.' }
     ] },
 
-  { title:'The rush', line:'More orders, less time.',
+  { title:'The rush', line:'The afternoon rush. Bigger orders, less time.',
     mode:'ai', stamps:true, live:false, words:false, dur:240, start:8, every:3,
     orders:[
-      { c:'northline',  l:'daypack 26', say:'Standard order, thanks.' },
-      { c:'trailhead',  l:'tent 40',    by:'March 3', say:'The usual discount, please.', flag:'trailhead',
+      { c:'northline',  l:'bag 25',    say:'Standard order, thanks.' },
+      { c:'trailhead',  l:'tent 40',   say:'Same discount as usual, please.', flag:'trailhead',
         ai:{ d:{ v:15, conf:97, why:'Loyalty 5% plus volume 10%' },
-             r:{ v:'by', conf:95, why:'Matches the customer’s date.' } } },
-      { c:'summit',     l:'poles 12',   say:'Any discount on these?' },
-      { c:'fernbrook',  l:'lamp 300',   say:'For our troop’s spring camp.',
-        ai:{ p:{ v:960, conf:95, why:'300 headlamps at list price' },
-             d:{ why:'Club rate applies' } } },
-      { c:'lakeside',   l:'bag 50',     say:'We’re a rental partner.',
+             r:{ v:'all', conf:95, why:'Tents are in stock.' } } },
+      { c:'summit',     l:'lamp 5',    say:'Any discount on these?' },
+      { c:'fernbrook',  l:'lamp 30',   say:'For our spring camp.',
+        ai:{ p:{ v:30, conf:95, why:'30 lamps at list price' } } },
+      { c:'lakeside',   l:'bag 50',    say:'We’re a rental partner.',
         ai:{ d:{ v:25, conf:92, why:'Partner 15% plus volume 10%' } } },
-      { c:'pinehollow', l:'stove 8',    say:'We run a summer camp for kids.',
-        ai:{ d:{ conf:64, why:'Club and school rate' } } },
-      { c:'willow',     l:'filter 30',  say:'Spring restock.' },
-      { c:'copper',     l:'lamp 20',    say:'Small restock.' },
-      { c:'aldercreek', l:'bag 25',     say:'For the outdoor program.' },
-      { c:'heron',      l:'stove 4',    say:'For guest cookouts.' },
-      { c:'granite',    l:'tent 15',    say:'For the rental fleet.' },
-      { c:'stonegate',  l:'daypack 40', say:'For our spring sale.' },
-      { c:'redfern',    l:'filter 18',  say:'For our members.' },
-      { c:'birchwood',  l:'poles 30',   say:'Restock, thanks.' },
-      { c:'cedar',      l:'bag 12',     say:'For the guest rooms.' }
+      { c:'pinehollow', l:'lamp 20',   say:'One for each cabin.',
+        ai:{ d:{ conf:64, why:'Exactly 20. It may not count.' } } },
+      { c:'willow',     l:'lamp 40',   say:'Spring restock.' },
+      { c:'copper',     l:'lamp 20',   say:'Small restock.' },
+      { c:'aldercreek', l:'bag 20',    say:'For the outdoor program.' },
+      { c:'heron',      l:'stove 4',   say:'For guest cookouts.' },
+      { c:'granite',    l:'tent 10',   say:'We’re a rental partner.' },
+      { c:'stonegate',  l:'bag 40',    say:'For our spring sale.' },
+      { c:'redfern',    l:'lamp 25',   say:'For our members.' },
+      { c:'birchwood',  l:'bag 30',    say:'Restock, thanks.' },
+      { c:'cedar',      l:'bag 10',    say:'For the guest rooms.' }
     ] },
 
-  { title:'Your rules', line:'Accuracy counts on the board. Results come instantly. The AI waits until you ask.',
+  { title:'Your rules', line:'Your house rules. The board counts accuracy, and the AI waits until you ask.',
     mode:'ask', stamps:true, live:true, words:true, dur:300, start:3, every:6,
     orders:[
-      { c:'cedar',      l:'filter 10',  say:'{q}, please.' },
-      { c:'trailhead',  l:'tent 40',    say:'{q} for the spring sale.',
-        ai:{ p:{ v:2520, q:'tent 14', conf:94, why:'14 × $180' } } },
-      { c:'summit',     l:'poles 12',   say:'{q}.' },
-      { c:'birchwood',  l:'stove 6, filter 6', say:'{q}.',
-        ai:{ p:{ conf:62, why:'6 × $70 plus 6 × $45. Two items, so less sure.' } },
-        po:[ { t:420, q:'stove 6' }, { t:690 }, { t:750 } ] },
-      { c:'lakeside',   l:'bag 50',     say:'{q} for the rental fleet.',
-        ai:{ p:{ v:4000, conf:96, why:'50 × $80' } } },
-      { c:'northline',  l:'daypack 26', say:'{q}.' },
-      { c:'harborview', l:'tent 30',    say:'{q} for our rental fleet.',
+      { c:'cedar',      l:'lamp 10',   say:'{q}, please.' },
+      { c:'trailhead',  l:'tent 40',   say:'{q} for the spring sale.',
+        ai:{ p:{ v:2800, q:'tent 14', conf:94, why:'14 × $200' } },
+        po:[ { t:800, q:'tent 4' }, { t:2800, q:'tent 14' }, { t:8000 } ] },
+      { c:'summit',     l:'stove 2',   say:'{q}.' },
+      { c:'birchwood',  l:'bag 5, lamp 5', say:'{q}.',
+        ai:{ p:{ conf:62, why:'5 × $100 plus 5 × $10. Two items, so less sure.' } },
+        po:[ { t:500, q:'bag 5' }, { t:550 }, { t:600 } ] },
+      { c:'lakeside',   l:'bag 50',    say:'Rental partner order: {q}.',
+        ai:{ p:{ v:4000, conf:96, why:'50 × $80' } },
+        po:[ { t:4000 }, { t:5000 }, { t:6000 } ] },
+      { c:'northline',  l:'bag 10',    say:'{q}.' },
+      { c:'harborview', l:'tent 30',   say:'Rental partner order: {q}.',
         ai:{ d:{ v:25, conf:93, why:'Partner 15% plus volume 10%' } } },
-      { c:'stillwater', l:'stove 10',   say:'{q} before camp opens.',
-        ai:{ r:{ v:'all', conf:95, why:'Camp stoves are in stock.' } } },
-      { c:'fernbrook',  l:'lamp 45',    say:'{q} for our spring camp.' },
-      { c:'willow',     l:'daypack 20', say:'{q} for the shop.' },
-      { c:'redfern',    l:'bag 15',     say:'{q} for club trips.' },
-      { c:'copper',     l:'filter 24',  say:'{q}, please.' }
+      { c:'stillwater', l:'stove 10',  say:'{q} before camp opens.',
+        ai:{ r:{ v:'all', conf:95, why:'Stoves are in stock.' } } },
+      { c:'fernbrook',  l:'lamp 40',   say:'{q} for our spring camp.' },
+      { c:'willow',     l:'bag 20',    say:'{q} for the shop.' },
+      { c:'redfern',    l:'bag 10',    say:'{q} for club trips.' },
+      { c:'copper',     l:'lamp 25',   say:'{q}, please.' }
     ] },
 
-  { title:'Pull the plug', line:'No AI this round.',
+  { title:'Pull the plug', line:'The AI helper is down. The orders keep coming.',
     mode:'none', stamps:true, live:true, words:false, dur:240, start:3, every:6,
     orders:[
-      { c:'pineridge',  l:'lamp 30',    say:'For the troop.' },
-      { c:'harborview', l:'tent 20',    say:'We’re a rental partner.' },
-      { c:'trailhead',  l:'tent 40',    say:'Same discount as usual, please.' },
-      { c:'summit',     l:'daypack 18', say:'Small top-up order.' },
-      { c:'lakeside',   l:'bag 60',     say:'Rental partner, big order.' },
-      { c:'pinehollow', l:'stove 5',    say:'For the camp kitchen.' },
-      { c:'copper',     l:'poles 25',   say:'Spring restock.' },
-      { c:'granite',    l:'lamp 20',    say:'For the rental counter.' },
-      { c:'birchwood',  l:'filter 26',  say:'Restock, thanks.' },
-      { c:'heron',      l:'tent 8',     say:'For guest campsites.' },
-      { c:'aldercreek', l:'poles 20',   say:'For the outdoor program.' },
-      { c:'stonegate',  l:'bag 30',     say:'Winter isn’t over yet.' }
+      { c:'pineridge',  l:'lamp 30',   say:'For the troop.' },
+      { c:'harborview', l:'tent 10',   say:'We’re a rental partner.' },
+      { c:'trailhead',  l:'tent 40',   say:'Same discount as usual.' },
+      { c:'summit',     l:'bag 5',     say:'Small top-up order.' },
+      { c:'lakeside',   l:'bag 60',    say:'Rental partner, big order.' },
+      { c:'pinehollow', l:'stove 4',   say:'For the camp kitchen.' },
+      { c:'copper',     l:'bag 25',    say:'Spring restock.' },
+      { c:'granite',    l:'lamp 20',   say:'Rental partner order.' },
+      { c:'birchwood',  l:'bag 20',    say:'Restock, thanks.' },
+      { c:'heron',      l:'tent 4',    say:'For guest campsites.' },
+      { c:'aldercreek', l:'lamp 50',   say:'For the outdoor program.' },
+      { c:'stonegate',  l:'bag 30',    say:'Winter isn’t over yet.' }
     ] }
 ];
 
 /* after the written orders: routine orders the AI gets right, made the same way for every desk */
 GC.TAIL = {
   qty: {
-    tent:    [4, 6, 8, 10, 12, 15, 20, 24, 30, 40],
-    daypack: [6, 8, 10, 12, 15, 20, 24, 25, 30, 40],
-    bag:     [6, 8, 10, 12, 15, 20, 25, 30, 40, 50],
-    stove:   [2, 3, 4, 6, 8, 10, 12],
-    poles:   [6, 8, 10, 12, 15, 20, 25, 30],
-    filter:  [8, 10, 12, 15, 20, 24, 25, 30, 40],
-    lamp:    [10, 12, 15, 20, 24, 25, 30, 40, 50]
+    tent:  [2, 4, 5, 10, 20, 30, 40],
+    bag:   [2, 4, 5, 10, 20, 25, 30, 40, 50, 60],
+    stove: [2, 4, 10],
+    lamp:  [5, 10, 20, 25, 30, 40, 50, 60]
   },
   say: {
     store:   ['Restock, thanks.', 'Top-up order.', 'For the spring season.', 'Quick one, thanks.', 'For the shop floor.'],
     club:    ['For our members.', 'For spring trips.', 'For the program.'],
-    partner: ['For the rental fleet.', 'Rental partner order.']
+    partner: ['Rental partner order.', 'We’re a rental partner.']
   },
   sayWords: {
     store:   ['{q}, please.', '{q} for the shop.', '{q} for spring.'],
     club:    ['{q} for our members.', '{q} for spring trips.'],
-    partner: ['{q} for the rental fleet.', '{q}, please.']
+    partner: ['Rental partner order: {q}.']
   }
 };
 
@@ -1011,7 +1061,7 @@ GC.TAIL = {
    code on the same action logs and get the same answer. Load after good-call-orders.js.
 
    The model
-   - An order passes Pricing (0) -> Policy (1) -> Reply (2), then ships. Each station holds one answer
+   - An order passes Pricing (0) -> Policy (1) -> Delivery (2), then ships. Each station holds one answer
      (an option index) for each order.
    - Each player writes only their own action log for the round. The order's path is rebuilt by replaying
      every log on the team, order by order: whoever holds the station the order sits at acts next. No clock
@@ -1033,10 +1083,10 @@ var GC = (typeof GC !== 'undefined' && GC) || {};
   G.STATIONS = [
     { key:'pricing', name:'Pricing', noun:'total',    book:'price'  },
     { key:'policy',  name:'Policy',  noun:'discount', book:'policy' },
-    { key:'reply',   name:'Reply',   noun:'promise',  book:'cal'    }
+    { key:'reply',   name:'Delivery', noun:'promise',  book:'cal'    }
   ];
   G.SCORE = { out:10, wrong:-40, catch:10, backGood:-5, own:10 };
-  G.PCTS = [0, 5, 10, 15, 25];
+  G.PCTS = [0, 10, 15, 25];
   G.LOOKED = 1; G.ASKED = 2; G.OWN = 4;
   G.HALVES = [[0, 1, 2], [3, 4]];
 
@@ -1056,7 +1106,7 @@ var GC = (typeof GC !== 'undefined' && GC) || {};
   function parseLines(str) {
     return String(str).split(',').map(function (p) { var m = p.trim().split(/\s+/); return [m[0], parseInt(m[1], 10)]; });
   }
-  function lineText(lines, form) {        /* form: 'many' "40 Ridgeline tents", 'short' "40 tents", 'words' "forty Ridgeline tents" */
+  function lineText(lines, form) {        /* form: 'many' or 'short' "40 tents", 'words' "forty tents" */
     return andList(lines.map(function (l) {
       var it = G.ITEMS[l[0]];
       return (form === 'words' ? words(l[1]) : l[1]) + ' ' + (form === 'short' ? it.short : it.many);
@@ -1070,21 +1120,20 @@ var GC = (typeof GC !== 'undefined' && GC) || {};
   G.lineText = lineText;
 
   /* ---------- the three reference books ---------- */
+  /* four short lines each, so every check is one glance */
   G.books = function () {
     var I = G.ITEMS, P = G.POLICY, keys = Object.keys(I);
+    var plenty = keys.filter(function (k) { return I[k].stock == null; }).map(function (k) { return I[k].many; });
     return {
-      price:  { title:'Price list', lines: keys.map(function (k) { return I[k].one + ': ' + money(I[k].price); })
-                  .concat(['These prices started January 1.']) },
+      price:  { title:'Price list', lines: keys.map(function (k) { return I[k].one + ': ' + money(I[k].price); }) },
       policy: { title:'Policy book', lines: [
                   P.volumeMin + ' or more of one item: ' + P.volume + '% off.',
-                  'Clubs, camps and schools: ' + P.club + '% off.',
-                  'Rental partners: ' + P.partner + '% off ' + andList(P.partnerItems.map(function (k) { return I[k].many; })) + '.',
-                  'Discounts never stack. Use the biggest one.',
-                  'The 5% loyalty discount ended ' + P.loyaltyEnded + '.',
-                  'Anything upstream look wrong? Send it back.'] },
-      cal:    { title:'Warehouse calendar', lines: ['Today is ' + G.TODAY + '.', 'In-stock orders ship within ' + G.SHIP_DAYS + ' days.']
-                  .concat(keys.map(function (k) { var it = I[k];
-                    return cap(it.many) + ': ' + it.stock + ' in stock.' + (it.more ? ' ' + it.more + ' more on ' + it.on + '.' : ''); })) }
+                  'Rental partners: ' + P.partner + '% off.',
+                  'Discounts never stack. Use the bigger one.',
+                  'No loyalty discount. It ended ' + P.loyaltyEnded + '.'] },
+      cal:    { title:'Warehouse calendar', lines: keys.filter(function (k) { return I[k].stock != null; })
+                  .map(function (k) { return cap(I[k].many) + ': ' + I[k].stock + ' in stock. More on ' + I[k].on + '.'; })
+                  .concat(plenty.length ? [cap(andList(plenty)) + ': plenty in stock.'] : [], ['In-stock orders ship this week.']) }
     };
   };
 
@@ -1093,13 +1142,10 @@ var GC = (typeof GC !== 'undefined' && GC) || {};
   function discount(kind, lines) {
     var P = G.POLICY, best = { v:0, why:'none' };
     if (lines.some(function (l) { return l[1] >= P.volumeMin; })) best = { v:P.volume, why:'volume' };
-    if (kind === 'club' && P.club > best.v) best = { v:P.club, why:'club' };
-    var partnerItems = lines.every(function (l) { return P.partnerItems.indexOf(l[0]) >= 0; });
-    if (kind === 'partner' && partnerItems && P.partner > best.v) best = { v:P.partner, why:'partner' };
-    if (kind === 'partner' && !partnerItems && best.v === 0) best.why = 'partner-items';
+    if (kind === 'partner' && P.partner > best.v) best = { v:P.partner, why:'partner' };   /* never stack: the bigger one */
     return best;
   }
-  function shortLines(lines) { return lines.filter(function (l) { return l[1] > G.ITEMS[l[0]].stock; }); }
+  function shortLines(lines) { return lines.filter(function (l) { var s = G.ITEMS[l[0]].stock; return s != null && l[1] > s; }); }
   G.total = total; G.discount = discount; G.parseLines = parseLines;
 
   /* ---------- options at each station ---------- */
@@ -1120,10 +1166,9 @@ var GC = (typeof GC !== 'undefined' && GC) || {};
     }
     return list.sort(function (a, b) { return a.t - b.t; });
   }
-  function replyLabel(code, lines, by) {
+  function replyLabel(code, lines) {
     var one = lines.length === 1, l = lines[0], it = G.ITEMS[l[0]];
-    if (code === 'all') return one ? 'All ' + l[1] + ' ship this week' : 'Everything ships this week';
-    if (code === 'by') return one ? 'All ' + l[1] + ' by ' + by : 'Everything by ' + by;
+    if (code === 'all') return one ? 'All ship this week' : 'Everything ships this week';
     if (code === 'half') return one ? Math.ceil(l[1] / 2) + ' now, ' + Math.floor(l[1] / 2) + ' on ' + (it.on || G.LATER) : 'Half now, half on ' + G.LATER;
     /* split: what's in stock now, the rest when the delivery comes */
     var sh = shortLines(lines)[0], si = G.ITEMS[sh[0]];
@@ -1136,13 +1181,12 @@ var GC = (typeof GC !== 'undefined' && GC) || {};
   /* ---------- the AI's default reasons, when it's right ---------- */
   function whyDefault(s, kind, lines) {
     if (s === 0) return lines.map(function (l) { return l[1] + ' × ' + money(G.ITEMS[l[0]].price); }).join(' plus ');
-    if (s === 1) return ({ volume:G.POLICY.volumeMin + ' or more of one item', club:'Club, camp and school rate', partner:'Rental partner rate',
-                           none:'Under ' + G.POLICY.volumeMin + ' units, so no discount',
-                           'partner-items':'Partner rate covers tents and sleeping bags only' })[discount(kind, lines).why];
+    if (s === 1) return ({ volume:G.POLICY.volumeMin + ' or more of one item', partner:'Rental partner rate',
+                           none:'Under ' + G.POLICY.volumeMin + ', so no discount' })[discount(kind, lines).why];
     var sh = shortLines(lines);
-    if (!sh.length) return lines.length === 1 ? G.ITEMS[lines[0][0]].stock + ' in stock' : 'All in stock';
+    if (!sh.length) { var st = lines.length === 1 ? G.ITEMS[lines[0][0]].stock : null; return st != null ? st + ' in stock.' : lines.length === 1 ? 'Plenty in stock.' : 'All in stock.'; }
     var it = G.ITEMS[sh[0][0]];
-    return 'Only ' + it.stock + ' in stock. ' + it.more + ' more on ' + it.on + '.';
+    return 'Only ' + it.stock + ' in stock. More on ' + it.on + '.';
   }
 
   /* ---------- building an order ---------- */
@@ -1151,7 +1195,7 @@ var GC = (typeof GC !== 'undefined' && GC) || {};
   function tailSource(r, k) {
     var R = G.ROUNDS[r], rnd = rng(hash(r, k, 7)), pick = function (a) { return a[Math.floor(rnd() * a.length)]; };
     var c = pick(Object.keys(G.CUSTOMERS)), kind = G.CUSTOMERS[c].kind;
-    var item = kind === 'partner' && rnd() < 0.75 ? pick(G.POLICY.partnerItems) : pick(Object.keys(G.ITEMS));
+    var item = pick(Object.keys(G.ITEMS));
     var qty = pick(G.TAIL.qty[item]);
     return { c:c, l:item + ' ' + qty, say: pick((R.words ? G.TAIL.sayWords : G.TAIL.say)[kind]) };
   }
@@ -1167,10 +1211,10 @@ var GC = (typeof GC !== 'undefined' && GC) || {};
     var pT = P.findIndex(function (x) { return x.t === total(lines) && sameLines(x.q, lines); });
     var dV = discount(cust.kind, lines).v;
     var short = shortLines(lines).length > 0;
-    var first = short ? (ai.r && ai.r.v === 'by' ? 'by' : 'all') : 'all', second = short ? 'split' : 'half';
+    var first = 'all', second = short ? 'split' : 'half';
     o.opts = [P,
               G.PCTS.map(function (p) { return { p:p, label:p + '%' }; }),
-              [{ code:first, label:replyLabel(first, lines, o.by) }, { code:second, label:replyLabel(second, lines, o.by) }]];
+              [{ code:first, label:replyLabel(first, lines) }, { code:second, label:replyLabel(second, lines) }]];
     o.truth = [pT, G.PCTS.indexOf(dV), short ? 1 : 0];
     /* the AI's drafts */
     if (R.mode === 'none') o.ai = null;
@@ -1192,7 +1236,7 @@ var GC = (typeof GC !== 'undefined' && GC) || {};
   G.arrived = function (r, sec) { var R = G.ROUNDS[r]; return sec < 0 ? 0 : R.start + Math.floor(sec / R.every); };  /* how many orders are in */
 
   /* ---------- who sits where ---------- */
-  /* roster: player ids in join order. Round 1 seats them Pricing, Policy, Reply; each round everyone moves
+  /* roster: player ids in join order. Round 1 seats them Pricing, Policy, Delivery; each round everyone moves
      one station down the line. Two players: one runs Pricing and Policy. A 4th (and any more) shares
      Pricing, which splits its orders between them. One player runs all three. */
   G.seats = function (roster, r) {
@@ -1377,7 +1421,7 @@ var HOSTED = "https://ep.github.io/pt/field-tools/good-call/";
 var G = GC;
 var PH = ["lobby", "opening", "r1", "r2", "r3", "audit", "r4", "r5", "final"];
 var PH_NAME = { lobby: "Lobby", opening: "Opening", r1: "Round 1", r2: "Round 2", r3: "Round 3", audit: "Audit", r4: "Round 4", r5: "Round 5", final: "Final" };
-var DEF = { teams: 10, len: 4 };
+var DEF = { teams: 10, len: 3 };
 var LIM = { teams: [2, 12], len: [2, 8] };
 var SEATS = 60, NICK_MAX = 14, HUDDLE_MS = 60000, CHUNK = 3800, AWAY_MS = 20000;
 
@@ -1584,6 +1628,38 @@ function tableOf(pid, r, S) { var m = seatMap(r, S); if (!m) return null; for (v
 function seatsAt(t, r, S) { var m = seatMap(r, S); var list = m && m[t]; return list && list.length ? G.seats(list, r) : null; }
 function stationsOf(pid, r, S) { var t = tableOf(pid, r, S); if (t == null) return []; return G.seats(seatMap(r, S)[t], r).of[pid] || []; }
 function stationWords(ss) { if (ss.length >= 3) return "all three stations"; return andList(ss.map(function (s) { return G.STATIONS[s].name; })); }
+/* what each station does and which book it uses, for the role card and each round's intro */
+var JOBS = ["build the quote", "set the discount", "tell the customer when it ships"];
+var BOOK_NAMES = ["the price list", "the policy book", "the warehouse calendar"];
+function jobWords(ss) { if (ss.length >= 3) return "You run all three stations."; return "You " + andList(ss.map(function (s) { return JOBS[s]; })) + ". Your book" + (ss.length > 1 ? "s: " : ": ") + andList(ss.map(function (s) { return BOOK_NAMES[s]; })) + "."; }
+
+/* ---------- the first order: one easy order down each desk's line before Round 1. No traps, the AI is right,
+   nothing is scored and nothing reaches the board. Each phone writes its own moves to tN/f/pid as
+   { m: [[n, station, "h" or "b", choice, time], ...] }, where n numbers the order's moves along its way;
+   every screen replays a table's moves in that order, so phones and the console agree on where it is ---------- */
+var FIRST = {
+  cust: "Willow Bend", text: "2 tents", by: "March 3", say: "Two for the shop window.",
+  opts: [["$300", "$400", "$500"], ["0%", "10%", "15%", "25%"], ["All ship this week", "1 now, 1 on March 10"]],
+  ai: [1, 0, 0], conf: [96, 95, 94], why: ["2 × $200", "Under 20, so no discount.", "20 in stock."]
+};
+function firstMoves(t, S) {
+  var node = (((S || App.S)["t" + t] || {}).f) || {}, all = [];
+  Object.keys(node).forEach(function (pid) { var v = node[pid]; ((v && v.m) || []).forEach(function (x) { if (Array.isArray(x) && x.length >= 5) all.push({ pid: pid, n: +x[0], s: +x[1], a: x[2], c: x[3], t: +x[4] }); }); });
+  return all.sort(function (a, b) { return (a.n - b.n) || (a.t - b.t); });
+}
+/* where a table's first order is: pos 0 to 2 is the station holding it, 3 is shipped */
+function firstState(t, S) {
+  var pos = 0, n = 0, f = [null, null, null], last = null;
+  firstMoves(t, S).forEach(function (x) {
+    if (x.n !== n || x.s !== pos || pos >= 3) return;
+    if (x.a === "h") { f[pos] = x.c; pos++; } else if (x.a === "b" && pos > 0) pos--; else return;
+    n++; last = x;
+  });
+  return { pos: pos, n: n, f: f, last: last };
+}
+/* who holds each station on a table in Round 1, which is who plays the first order */
+function holdersAt(t, S) { var s = seatsAt(t, 0, S), out = [[], [], []]; if (!s) return out; Object.keys(s.of).forEach(function (pid) { s.of[pid].forEach(function (k) { out[k].push(pid); }); }); return out; }
+
 /* tables that play: those seated in the rounds so far, or every table in the lobby */
 function playTables(c, S) {
   c = c || C(S); var seen = {};
@@ -1874,7 +1950,7 @@ function drawDemo() {
   var st = function (x, label, c) { return '<g><rect x="' + x + '" y="34" width="132" height="46" rx="23" fill="#fff" stroke="rgba(41,56,81,.16)" stroke-width="1.5"/><text x="' + (x + 66) + '" y="63" text-anchor="middle" font-family="Montserrat,Arial,sans-serif" font-weight="700" font-size="15" fill="#293851">' + label + '</text><circle cx="' + (x + 66) + '" cy="96" r="5" fill="' + c + '"/></g>'; };
   var row = function (y, w, c, lead) { return '<g class="dz" style="animation-delay:' + (y / 400) + 's"><rect x="34" y="' + y + '" width="432" height="34" rx="11" fill="' + (lead ? "#FEF6C9" : "#fff") + '" stroke="' + (lead ? "#F2C94C" : "rgba(41,56,81,.16)") + '" stroke-width="1.5"/><circle cx="62" cy="' + (y + 17) + '" r="10" fill="' + c + '"/><rect x="84" y="' + (y + 13) + '" width="' + w + '" height="8" rx="4" fill="#D5D9E3"/><rect x="420" y="' + (y + 10) + '" width="30" height="14" rx="4" fill="#293851" opacity=".75"/></g>'; };
   s.innerHTML = '<style>.dz{animation:dz 1.4s cubic-bezier(.22,1,.36,1) both}@keyframes dz{0%{transform:translate(0,12px);opacity:0}30%,100%{transform:none;opacity:1}}.mv{animation:mv 3.6s ease-in-out infinite}@keyframes mv{0%{transform:translateX(0)}30%{transform:translateX(150px)}60%,100%{transform:translateX(300px)}}@media (prefers-reduced-motion:reduce){.dz,.mv{animation:none}}</style>' +
-    st(18, "Pricing", "#68BFBD") + st(184, "Policy", "#68BFBD") + st(350, "Reply", "#68BFBD") +
+    st(18, "Pricing", "#68BFBD") + st(184, "Policy", "#68BFBD") + st(350, "Delivery", "#68BFBD") +
     '<path d="M150 57h34M316 57h34" stroke="#586A90" stroke-width="2" stroke-linecap="round"/>' +
     '<g class="mv"><rect x="70" y="104" width="44" height="30" rx="6" fill="#FFCC00"/><rect x="78" y="113" width="28" height="4" rx="2" fill="#293851"/><rect x="78" y="121" width="18" height="4" rx="2" fill="#293851"/></g>' +
     row(160, 120, "#8A6B52", true) + row(202, 100, "#E0773A") + row(244, 136, "#3E8E9E") + row(286, 90, "#4A4F5C");
@@ -1975,10 +2051,12 @@ function goTo(phase, step, rv) {
   if ((phase === "audit" && step === "reveal") || phase === "final") openReveal(); else closeReveal(true);
   publish(true); render(true);
 }
+/* the opening: three slides (the day, the desk, the rules), then the first order */
+var OPEN_STEPS = ["day", "desk", "rules", "first"];
 function next() {
   var c = C(), ph = c.phase || "lobby", r = roundIdx(ph);
-  if (ph === "lobby") return goTo("opening");
-  if (ph === "opening") return goTo("r1", "play");
+  if (ph === "lobby") return goTo("opening", "day");
+  if (ph === "opening") { var i = OPEN_STEPS.indexOf(c.step || "day"); return i < OPEN_STEPS.length - 1 ? goTo("opening", OPEN_STEPS[i + 1]) : goTo("r1", "play"); }
   if (r >= 0 && c.step === "intro") return goTo(ph, "play");
   if (r >= 0) return r === 2 ? goTo("audit", "huddle") : r === 4 ? goTo("final", null, 0) : goTo("r" + (r + 2), "intro");
   if (ph === "audit" && c.step === "huddle") return goTo("audit", "reveal", 0);
@@ -1986,8 +2064,8 @@ function next() {
 }
 function back() {
   var c = C(), ph = c.phase || "lobby", r = roundIdx(ph);
-  if (ph === "opening") return goTo("lobby");
-  if (ph === "r1") return goTo("opening");
+  if (ph === "opening") { var j = OPEN_STEPS.indexOf(c.step || "day"); return j > 0 ? goTo("opening", OPEN_STEPS[j - 1]) : goTo("lobby"); }
+  if (ph === "r1") return goTo("opening", "first");
   if (r >= 0 && c.step === "play") return goTo(ph, "intro");
   if (r >= 0) return r === 3 ? goTo("audit", "reveal", 4) : goTo("r" + r, "play");
   if (ph === "audit" && c.step === "huddle") return goTo("r3", "play");
@@ -2107,7 +2185,7 @@ function publish(force, S, times) {
 function headFor(c) {
   var ph = c.phase || "lobby", r = roundIdx(ph);
   if (ph === "lobby") return ["Take your seats.", SUB.lobby];
-  if (ph === "opening") return ["", ""];
+  if (ph === "opening") return c.step === "first" ? ["The first order", "One order down each desk\u2019s line. It doesn\u2019t count."] : ["", ""];
   if (r >= 0) return ["Round " + (r + 1) + ": " + RD(r).title, RD(r).line];
   if (ph === "audit") return c.step === "huddle" ? ["", ""] : ["The audit", "Points, now that every order has been checked."];
   if (ph === "final") return ["The final board", "First half and second half, ranked on the second."];
@@ -2138,11 +2216,12 @@ function renderConsole(force) {
   if (force || key !== App.conSig) {
     App.conSig = key;
     if (ph === "lobby") { stage.innerHTML = lobbyHtml(); var q = stage.querySelector(".qr"); if (q) renderQr(q, joinLink()); }
-    else if (ph === "opening") stage.innerHTML = openingHtml();
+    else if (ph === "opening") stage.innerHTML = c.step === "first" ? firstBoardHtml() : openingHtml(c.step);
     else if (ph === "audit" && c.step === "huddle") stage.innerHTML = huddleHtml();
     else stage.innerHTML = '<div class="colhead" aria-hidden="true" id="bHead"></div><ol class="rank" id="bList" aria-label="The board"></ol><p class="boardfoot" id="bFoot"></p>';
   }
   if (ph === "lobby") fillTables(stage.querySelector("#tables"), false);
+  else if (ph === "opening" && c.step === "first") fillFirstBoard(stage, c);
   else if (ph !== "opening" && !(ph === "audit" && c.step === "huddle")) drawBoard(stage, c, boardKey(c));
   if ($("tblDlg") && !$("tblDlg").classList.contains("hide")) fillTables($("tblBody"), true);
   $("cCtl").innerHTML = controlsHtml(ph, c);
@@ -2151,7 +2230,7 @@ function stageKey(c) { return JSON.stringify([c.phase, c.step, App.drive, c.phas
 function nextLabel(c) {
   var ph = c.phase || "lobby", r = roundIdx(ph);
   if (ph === "lobby") return "Start";
-  if (ph === "opening") return "Start round 1";
+  if (ph === "opening") return c.step === "rules" ? "Send the first order" : c.step === "first" ? "Start round 1" : "Next";
   if (r >= 0 && c.step === "intro") return "Start round " + (r + 1);
   if (r >= 0) { if (!timeUp(c)) return "End round " + (r + 1); return r === 2 ? "Before the audit" : r === 4 ? "The final board" : "Round " + (r + 2); }
   if (ph === "audit" && c.step === "huddle") return "Run the audit";
@@ -2166,6 +2245,7 @@ function controlsHtml(ph, c) {
     L += '<button class="btn ghost" id="cBack" data-c="back">Back</button>';
     if (r >= 0 && c.step === "play" && timeUp(c)) L += '<span class="hint">Read the board, and only the board.</span>';
     else if (r >= 0 && c.step === "play") L += '<span class="hint">Orders keep coming until the clock runs out.</span>';
+    else if (ph === "opening" && c.step === "first") L += '<span class="hint">Start Round 1 once most desks have shipped.</span>';
   }
   L += "</div>";
   if (seatsOpen(c) >= 0) R += '<button class="btn sec" data-c="tables">Tables</button>';
@@ -2221,10 +2301,31 @@ function stageAction(a) {
 }
 function openTables() { $("tblDlg").classList.remove("hide"); fillTables($("tblBody"), true); var d = $("tblDone"); if (d) try { d.focus(); } catch (e) {} }
 function closeTables() { var d = $("tblDlg"); if (d) d.classList.add("hide"); App.pick = null; }
-function openingHtml() {
-  return '<div class="opening" data-id="opening"><div class="qe">Quarter-end</div><p class="at">at Harbor &amp; Pine</p>' +
-    '<div class="line" aria-label="Pricing, then Policy, then Reply"><span>Pricing</span><i aria-hidden="true">&rarr;</i><span>Policy</span><i aria-hidden="true">&rarr;</i><span>Reply</span></div>' +
-    '<ul class="rules"><li style="--d:0">Speed counts.</li><li style="--d:1">The board is public.</li><li style="--d:2">Mistakes are costly.</li></ul></div>';
+/* the opening, one slide at a time: the day, the desk, the rules */
+function openingHtml(step) {
+  step = step || "day";
+  if (step === "day") return '<div class="opening" data-id="opening"><div class="qe">Quarter-end</div><p class="at">at Harbor &amp; Pine</p>' +
+    '<p class="story">The last day of the quarter, one of the busiest of the year.</p><p class="story2">It\u2019s all hands on deck. Today the leadership team works the order desks.</p></div>';
+  if (step === "desk") return '<div class="opening" data-id="opening-desk"><p class="story">Every order passes three stations.</p>' +
+    '<div class="line wide" aria-label="Pricing, then Policy, then Delivery"><span><b>Pricing</b>Builds the quote</span><i aria-hidden="true">&rarr;</i><span><b>Policy</b>Sets the discount</span><i aria-hidden="true">&rarr;</i><span><b>Delivery</b>Says when it ships</span></div>' +
+    '<p class="story2">At every station, an AI helper drafts the answer and shows how sure it is.</p></div>';
+  return '<div class="opening" data-id="opening-rules"><ul class="rules"><li style="--d:0">Speed counts.</li><li style="--d:1">The board is public.</li><li style="--d:2">Mistakes are costly.</li></ul></div>';
+}
+/* the first order on the shared screen: each desk's order moving Pricing, Policy, Delivery, then shipped */
+function firstBoardHtml() {
+  return '<div class="fboard" data-id="first-board"><div class="fhead" aria-hidden="true"><span></span><span></span><span></span><span>Pricing</span><span>Policy</span><span>Delivery</span><span></span></div><ol class="flist" id="fList" aria-label="The first order at each desk"></ol><p class="boardfoot" id="fFoot"></p></div>';
+}
+function fillFirstBoard(stage, c) {
+  var ol = stage.querySelector("#fList"); if (!ol) return;
+  var tabs = (seatMap(0) ? Object.keys(seatMap(0)).filter(function (t) { return seatMap(0)[t].length; }).map(Number) : playTables(c)).sort(function (a, b) { return a - b; });
+  var done = 0, html = tabs.map(function (t) {
+    var fs = firstState(t); if (fs.pos >= 3) done++;
+    var dots = [0, 1, 2].map(function (i) { return '<i class="' + (i < fs.pos ? "done" : i === fs.pos ? "now" : "") + '"></i>'; }).join("");
+    return '<li data-t="' + t + '" aria-label="' + esc(teamName(t)) + ", " + (fs.pos >= 3 ? "shipped" : "at " + G.STATIONS[fs.pos].name) + '"><span class="no">' + t + "</span>" + tableSvg(t) + '<span class="tn">' + esc(teamName(t)) + '</span><span class="fdots" aria-hidden="true">' + dots + '</span><span class="fok">' + (fs.pos >= 3 ? "Shipped" : "") + "</span></li>";
+  }).join("");
+  ol.classList.toggle("dense", tabs.length > 8);
+  if (ol.getAttribute("data-sig") !== html) { ol.innerHTML = html; ol.setAttribute("data-sig", html); }
+  var ft = done + " of " + tabs.length + (tabs.length === 1 ? " desk" : " desks") + " shipped", f = stage.querySelector("#fFoot"); if (f && f.textContent !== ft) f.textContent = ft;
 }
 function huddleHtml() { return '<div class="standby" data-id="huddle"><div class="orb"></div><h1>What was your team optimizing for?</h1><p>Talk it over together.</p></div>'; }
 /* the board, drawn in place: rows move to their new places, numbers bump when they change */
@@ -2345,7 +2446,7 @@ function paxView() {
   if (App.repick || t == null || t === 0) return "table";
   if (c.paused && canPause(c)) return "paused";
   if (ph === "lobby") return "lobby";
-  if (ph === "opening") return tableOf(App.seat, 0) == null ? "late" : "opening";
+  if (ph === "opening") return tableOf(App.seat, 0) == null ? "late" : c.step === "first" ? "first" : "opening";
   if (r >= 0) {
     if (tableOf(App.seat, r) == null) return "late";
     if (c.step !== "play") return "intro";
@@ -2379,22 +2480,26 @@ function renderPhone(force) {
   if (v === "late") setAv("pWaitAv", t);
   if (v === "table") return fillTablePick(body, c);
   if (v === "lobby") return fillLobby(body, c);
-  if (v === "opening" || v === "intro") return fillEyes(body, c, v);
+  if (v === "opening") return fillRole(body, c);
+  if (v === "intro") return fillEyes(body, c, v);
+  if (v === "first") return fillFirst(body, c, force);
   if (v === "timeup") return fillTimeUp(body, c);
   if (v === "desk") return renderDesk(body, c, force);
   if (v === "audit") { var s1 = JSON.stringify([PB().board, App.S["t" + t], v]); if (s1 !== App.paxSig || force) { App.paxSig = s1; $("pRes").innerHTML = auditHtml(); celebrate(); } return; }
   if (v === "final") { var s2 = JSON.stringify([PB().board, App.S["t" + t], v]); if (s2 !== App.paxSig || force) { App.paxSig = s2; $("pRes").innerHTML = finalHtml(); } return; }
 }
-function eyesHtml(head, msg, id) { return '<div class="eyes" data-id="' + (id || "eyes") + '"><div class="look" aria-hidden="true"><span class="chev">' + ICON.chev + ICON.chev + '</span><span id="pEyesAv"></span></div><h2 id="pEyesH">' + head + '</h2><p id="pEyesP">' + msg + "</p></div>"; }
+function eyesHtml(head, msg, id, extra) { return '<div class="eyes" data-id="' + (id || "eyes") + '"><div class="look" aria-hidden="true"><span class="chev">' + ICON.chev + ICON.chev + '</span><span id="pEyesAv"></span></div><h2 id="pEyesH">' + head + "</h2>" + (extra || "") + '<p id="pEyesP">' + msg + "</p></div>"; }
 function paxSkeleton(v, c) {
   if (v === "join") return '<div class="welcome"><h1>Welcome!</h1><p class="lede">You\'re about to take a shift on an order desk, with your team.</p></div><div class="field"><label for="jName">Your first name</label><input id="jName" class="tin serif" maxlength="' + NICK_MAX + '" autocomplete="given-name" data-feedback-private></div><p class="hint warn" id="jErr" role="alert"></p><div class="controls"><button class="btn big" id="jGo" data-p="join">Next</button></div>';
   if (v === "table") return '<p class="moved hide" id="pOut" role="status"></p><h1 class="instr">Which table are you at?</h1><p class="psub">Your table number is on the card in front of you.</p><div class="tgrid" id="pGrid" role="group" aria-label="Tables"></div>';
   if (v === "lobby") return '<div class="waitpage" data-id="wait"><p class="moved hide" id="pMoved" role="status">The facilitator moved you.</p><span id="pWaitAv"></span><h2 id="pWaitH"></h2><div class="mates" id="pMates" data-feedback-private></div><p class="station" id="pStation"></p><p>The facilitator will start soon.</p><button class="btn ghost" data-p="wrong">Wrong table?</button></div>';
-  if (v === "opening" || v === "intro") return eyesHtml("", "Eyes on the big screen.", v);
+  if (v === "opening") return '<div class="role" data-id="role"><p class="rlbl">Your first station</p><h2 id="pRoleH"></h2><p class="job" id="pRoleP"></p><div id="pTrack"></div><p class="rdim">Eyes on the big screen.</p></div>';
+  if (v === "intro") return eyesHtml("", "Eyes on the big screen.", v, '<p class="job" id="pJob"></p>');
+  if (v === "first") return '<div class="first" id="pFirst"></div>';
   if (v === "paused") return eyesHtml("Eyes up front", "The facilitator has paused the screens for a moment. Look at the shared screen.", "paused");
   if (v === "huddle") return eyesHtml("Phones down.", "Talk it over with your team: what were you optimizing for?", "huddle");
   if (v === "timeup") return '<div class="donepage" data-id="timeup"><h2>Time.</h2><p id="pNext"></p></div>';
-  if (v === "late") return '<div class="waitpage" data-id="late"><span id="pWaitAv"></span><h2>You\'re in.</h2><p>' + (phaseIdx(c.phase) < phaseIdx("r5") ? "You'll join your table's desk next round. Until then, eyes on the big screen." : "Eyes on the big screen.") + "</p></div>";
+  if (v === "late") return '<div class="waitpage" data-id="late"><span id="pWaitAv"></span><h2>You\'re in.</h2><p>' + (phaseIdx(c.phase) < phaseIdx("r5") ? "You'll join your team next round. Until then, eyes on the big screen." : "Eyes on the big screen.") + "</p></div>";
   if (v === "desk") return '<div class="desk" id="pDesk"></div>';
   return '<div class="res" id="pRes"></div>';
 }
@@ -2446,6 +2551,84 @@ function fillEyes(body, c, v) {
   setAv("pEyesAv", tableOf(App.seat, r) || myTableNow());
   var h = $("pEyesH"), txt = v === "opening" ? startWords(ss, 0) : (ss.length >= 3 ? "Round " + (r + 1) + ": you run all three stations." : "Round " + (r + 1) + ": you're on " + stationWords(ss) + ".");
   if (h && h.textContent !== txt) h.textContent = txt;
+  var j = $("pJob"), jt = ss.length && ss.length < 3 ? jobWords(ss) : ""; if (j && j.textContent !== jt) j.textContent = jt;
+}
+/* the opening's role card: your first station, what it does, your book, and who is down the line from you */
+function fillRole(body, c) {
+  var t = tableOf(App.seat, 0), ss = stationsOf(App.seat, 0), h = $("pRoleH"), p = $("pRoleP"), tr = $("pTrack");
+  var ht = ss.length >= 3 ? "All three stations" : stationWords(ss), pt = jobWords(ss), th = t != null ? trackHtml(t, -1) : "";
+  if (h && h.textContent !== ht) h.textContent = ht;
+  if (p && p.textContent !== pt) p.textContent = pt;
+  if (tr && tr.getAttribute("data-sig") !== th) { tr.innerHTML = th; tr.setAttribute("data-sig", th); }
+}
+/* ---------- the first order on the phone ---------- */
+/* names on the line: "You" for me, otherwise the people holding that station */
+function holderNames(t, k, youWord) { var hs = holdersAt(t)[k] || []; return hs.length ? andList(hs.map(function (pid) { return pid === App.seat ? youWord : nickOf(pid); })).replace(" and ", " or ") : "no one"; }
+function trackHtml(t, pos) {
+  var h = '<div class="trk" aria-label="The line: Pricing, Policy, Delivery">';
+  for (var i = 0; i < 3; i++) {
+    var mine = (holdersAt(t)[i] || []).indexOf(App.seat) >= 0;
+    h += '<div class="tn' + (i < pos ? " done" : i === pos ? " now" : "") + (mine ? " you" : "") + '"><i></i><b data-feedback-private>' + esc(holderNames(t, i, "You")) + "</b><span>" + G.STATIONS[i].name + "</span></div>" + (i < 2 ? '<span class="tar" aria-hidden="true">&rarr;</span>' : "");
+  }
+  return h + "</div>";
+}
+function firstView(c) { var t = tableOf(App.seat, 0); if (t == null) return "wait"; var fs = firstState(t); if (fs.pos >= 3) return "done"; return stationsOf(App.seat, 0).indexOf(fs.pos) >= 0 ? "desk" : "wait"; }
+var FIRST_DOING = ["is pricing your first order.", "is setting the discount.", "is checking when it ships."];
+/* the tips: what each part does and what it costs, never what to do, and the teammate each move depends on */
+function firstTips(t, s) {
+  var pv = s > 0 ? holderNames(t, s - 1, "you") : "", nx = s < 2 ? holderNames(t, s + 1, "you") : "";
+  if (s === 0) return [["tk", "A customer\u2019s order. You build the quote."], ["ai", "Your AI helper drafts the total and shows how sure it is."], ["look", "Look it up opens the price list. It takes a moment."], ["hand", "Hand off sends it to Policy (" + nx + ")."]];
+  if (s === 1) return [["tk", (pv === "you" ? "You built the quote. Now you set the discount." : pv + " built the quote. You set the discount.")], ["ai", "Your AI helper drafts the discount and shows how sure it is."], ["look", "Look it up opens the policy book. It takes a moment."], ["back", "Send back returns it to Pricing (" + pv + ")."], ["hand", "Hand off sends it to Delivery (" + nx + ")."]];
+  return [["tk", "You tell the customer when it ships."], ["ai", "Your AI helper drafts the promise and shows how sure it is."], ["look", "Look it up opens the warehouse calendar. It takes a moment."], ["back", "Send back returns it to Policy (" + pv + ")."], ["hand", "Hand off ships it to the customer."]];
+}
+function curFirstTip(t, s) { App.ftip = App.ftip || {}; var tips = firstTips(t, s), i = App.ftip[s] || 0; return i < tips.length ? { at: tips[i][0], text: tips[i][1], last: i === tips.length - 1 } : null; }
+function fillFirst(body, c, force) {
+  var box = $("pFirst"), t = tableOf(App.seat, 0); if (!box || t == null) return;
+  var fs = firstState(t), view = firstView(c), s = fs.pos, tip = view === "desk" ? curFirstTip(t, s) : null;
+  var sig = JSON.stringify([view, fs.pos, fs.n, tip && tip.at, holdersAt(t), view === "desk" ? null : LOB()]);
+  if (sig === App.paxSig && !force) return;
+  App.paxSig = sig; App.fs = s;
+  if (view !== "desk") {
+    var mineMin = Math.min.apply(null, stationsOf(App.seat, 0).concat([9])), h, p, after = "";
+    if (view === "done") { h = "Your desk shipped its first order."; p = "Round 1 is the real thing: more orders, and a clock."; after = '<p class="rdim">Eyes on the big screen.</p>'; }
+    else if (fs.pos < mineMin) { h = (fs.last && fs.last.a === "b" ? holderNames(t, fs.pos, "You") + " has it back." : holderNames(t, fs.pos, "You") + " " + FIRST_DOING[fs.pos]); p = fs.pos === mineMin - 1 ? "It comes to you next." : "Then " + holderNames(t, fs.pos + 1, "you") + ", then you."; }
+    else { h = holderNames(t, fs.pos, "You") + " " + FIRST_DOING[fs.pos]; p = fs.pos === 1 ? "Then " + holderNames(t, 2, "you") + " tells the customer when it ships." : "Then it ships."; }
+    closeBook();
+    box.innerHTML = '<div class="fwait" data-id="first-' + view + '"><p class="rlbl">First order</p>' + trackHtml(t, fs.pos) + '<h2 data-feedback-private>' + esc(h) + "</h2><p>" + esc(p) + "</p>" + after + "</div>";
+    return;
+  }
+  if (App.fchoiceFor !== s + ":" + fs.n) { App.fchoiceFor = s + ":" + fs.n; App.fchoice = FIRST.ai[s]; }
+  var S = G.STATIONS[s], quote = fs.f[0] != null ? FIRST.opts[0][fs.f[0]] : "";
+  var ord = FIRST.text + (s === 2 ? " by " + FIRST.by : ""), line = '<b class="ord">' + esc(ord) + "</b>" + [s === 1 ? quote : "", FIRST.cust].filter(Boolean).map(function (x, i, a) { return '<span class="dot"> \u00b7 </span>' + (i === a.length - 1 ? '<span class="cust">' + esc(x) + "</span>" : esc(x)); }).join("");
+  var up = s === 2 ? '<p class="up"><span>Quote <b>' + esc(quote) + "</b></span><span>Discount <b>" + esc(fs.f[1] != null ? FIRST.opts[1][fs.f[1]] : "") + "</b></span></p>" : "";
+  var coach = function (at, cls) { return tip && tip.at === at ? '<div class="coach' + (cls || "") + '" role="note"><span data-feedback-private>' + esc(tip.text) + "</span>" + (tip.last ? "" : '<button class="btn sm" data-p="ftip">Next</button>') + "</div>" : ""; };
+  var hl = function (at) { return tip && tip.at === at ? " hl" : ""; };
+  var ai = s === 1 ? (FIRST.ai[1] ? FIRST.opts[1][FIRST.ai[1]] + " off" : "No discount") : FIRST.opts[s][FIRST.ai[s]];
+  var opts = FIRST.opts[s], long = s === 2;
+  var html = '<div class="desk fdesk"><div class="dtop"><span class="ds">' + esc(S.name) + '</span><span>First order</span></div><h1 class="instr">' + INSTR.ai[s] + "</h1>" +
+    '<div class="work"><article class="tk' + hl("tk") + '" data-id="first-order"><h3 class="tkline">' + line + '</h3><p class="note">\u201c' + esc(FIRST.say) + "\u201d</p>" + up + "</article>" + coach("tk") +
+    '<div class="ai' + hl("ai") + '" data-id="first-ai"><div class="aihead"><span class="ailbl">AI</span><span class="conf"><i style="--c:' + (FIRST.conf[s] / 100) + '"></i>' + FIRST.conf[s] + '% sure</span></div><p class="aians"><b>' + esc(ai) + "</b><span>" + esc(FIRST.why[s]) + "</span></p></div>" + coach("ai") +
+    '<div class="opts' + (long ? " long" : "") + '" style="--n:' + opts.length + '" role="radiogroup" aria-label="Your ' + S.noun + '">' + opts.map(function (x, i) { return '<button role="radio" aria-checked="' + (i === App.fchoice) + '" data-p="fpick" data-i="' + i + '">' + esc(x) + "</button>"; }).join("") + "</div></div>" +
+    '<div class="acts">' + coach("hand", " down") + '<button class="btn big full' + hl("hand") + '" data-p="fhand">Hand off</button>' + coach("look", s > 0 ? " down left" : " down") + coach("back", " down right") + '<div class="row2"><button class="btn sec' + hl("look") + '" data-p="flook">Look it up</button>' + (s > 0 ? '<button class="btn sec' + hl("back") + '" data-p="fback">Send back</button>' : "") + "</div></div></div>";
+  box.innerHTML = html; fitLine(box.querySelector(".tkline"));
+}
+function firstAct(a) {
+  var t = tableOf(App.seat, 0); if (t == null) return; var fs = firstState(t), s = fs.pos;
+  if (s >= 3 || stationsOf(App.seat, 0).indexOf(s) < 0 || (a === "h" && App.fchoice == null)) return;
+  var tip = curFirstTip(t, s); App.ftip = App.ftip || {};
+  if (a === "b" && tip && tip.at === "back") App.ftip[s] = (App.ftip[s] || 0) + 1;
+  if (a === "h") App.ftip[s] = 99;
+  var node = ((App.S["t" + t] || {}).f || {})[App.seat], mine = ((node && node.m) || []).slice();
+  mine.push([fs.n, s, a, a === "h" ? App.fchoice : null, Math.round(wnow())]);
+  closeBook(); write("t" + t + "/f/" + App.seat, { m: mine }); paxSound("click"); App.paxSig = null; renderPhone(true);
+}
+function openFirstBook() {
+  var t = tableOf(App.seat, 0); if (t == null) return; var s = firstState(t).pos; if (s >= 3) return;
+  var b = G.books()[G.STATIONS[s].book]; App.fBookFor = s;
+  $("bookH").textContent = b.title; $("bookL").innerHTML = '<li class="opening">Opening\u2026</li>';
+  var sh = $("book"); sh.classList.add("on"); sh.setAttribute("aria-hidden", "false"); App.bookOpen = true;
+  clearTimeout(App.bookT); App.bookT = setTimeout(function () { if (App.bookOpen) $("bookL").innerHTML = b.lines.map(function (l) { return "<li>" + esc(l) + "</li>"; }).join(""); }, App.bookMs);
+  if (App.bookMs <= 0) $("bookL").innerHTML = b.lines.map(function (l) { return "<li>" + esc(l) + "</li>"; }).join("");
 }
 function fillTimeUp(body, c) {
   var r = roundIdx(c.phase), t = tableOf(App.seat, r), p = $("pNext"), txt = "Eyes on the big screen.";
@@ -2455,9 +2638,9 @@ function fillTimeUp(body, c) {
 
 /* ---------- the desk ---------- */
 var INSTR = {
-  ai: ["Check the total. Then hand off.", "Check the discount. Then hand off.", "Check what we promise. Then hand off."],
+  ai: ["Check the total. Then hand off.", "Check the discount. Then hand off.", "Check the promise. Then hand off."],
   ask: ["Make your call. Then hand off.", "Make your call. Then hand off.", "Make your call. Then hand off."],
-  none: ["Work out the total. Then hand off.", "Choose the discount. Then hand off.", "Choose what we promise. Then hand off."]
+  none: ["Work out the total. Then hand off.", "Choose the discount. Then hand off.", "Choose the promise. Then hand off."]
 };
 var BOOK_SAYS = ["The price list says ", "The policy book says ", "The calendar says "];
 function deskModel(c) {
@@ -2476,7 +2659,7 @@ function deskModel(c) {
 }
 function sameItem(a, b) { return !!a && !!b && a.k === b.k && a.s === b.s && (a.as || null) === (b.as || null); }
 function aiWords(o, s, i) { if (s === 1) { var p = o.opts[1][i].p; return p ? p + "% off" : "No discount"; } return o.opts[s][i].label; }
-function stampHtml(checked, name, mine) { return '<span class="st' + (checked ? " ok" : "") + (mine ? " mine" : "") + '">' + (checked ? ICON.check + "Checked by " : "Passed through by ") + '<span data-feedback-private>' + esc(name) + "</span></span>"; }
+function stampHtml(checked, name, mine) { return '<span class="st' + (checked ? " ok" : "") + (mine ? " mine" : "") + '">' + (checked ? ICON.check + "Checked by " : "Not checked by ") + '<span data-feedback-private>' + esc(name) + "</span></span>"; }
 function renderDesk(body, c, force) {
   var box = $("pDesk"), m = deskModel(c); if (!box || !m) return;
   var d = App.desk;
@@ -2491,16 +2674,16 @@ function renderDesk(body, c, force) {
     var fresh = !App.paxSig || !d || !App.lastItem || !sameItem(App.lastItem, d);
     App.paxSig = sig; App.lastItem = d ? { k: d.k, s: d.s, as: d.as } : null;
     box.innerHTML = deskHtml(m, d, st, fresh && !reduced());
-    markOpts();
+    fitLine(box.querySelector(".tkline")); markOpts();
   }
   var tl = $("pTeam"); if (tl && tl.textContent !== team) tl.textContent = team;
-  var qn = $("pQueue"), more = Math.max(0, m.q.length - 1), qt = d && more ? more + " more waiting" : ""; if (qn && qn.textContent !== qt) qn.textContent = qt;
 }
 function deskTeamLine(m) {
   var R = RD(m.r), key = R.live ? "pts2" : "out", p = myPlace(key), b = (PB().board || {})[m.t];
   if (!b) return "Team " + teamName(m.t);
   var v = R.live ? (b[2] || 0) : (b[0] || 0);
-  return "Team " + teamName(m.t) + " · " + (R.live ? num(v) + (Math.abs(v) === 1 ? " point" : " points") : v + " out") + (p ? " · " + placeWords(p) : "");
+  /* the place is enough in the first half; the second half keeps its live points */
+  return "Team " + teamName(m.t) + (R.live ? " · " + num(v) + (Math.abs(v) === 1 ? " point" : " points") : "") + (p ? " · " + placeWords(p) : "");
 }
 function deskHtml(m, d, st, anim) {
   var R = RD(m.r), html = "";
@@ -2512,16 +2695,22 @@ function deskHtml(m, d, st, anim) {
   var o = G.order(m.r, d.k), s = d.s, S = G.STATIONS[s];
   st = st || { f: [null, null, null], stamp: [null, null, null], back: [] };
   html += '<div class="dtop"><span class="ds">' + esc(S.name) + (d.as ? ' for <span data-feedback-private>' + esc(nickOf(d.as)) + "</span>" : "") + '</span><span id="pTeam"></span></div>';
-  html += '<h1 class="instr">' + INSTR[R.mode][s] + '</h1><p class="queue" id="pQueue"></p>';
-  var orderLine = (o.words ? "" : "<span>" + esc(o.text) + "</span>") + (o.by ? "<span>Needs it by " + esc(o.by) + "</span>" : "");
+  html += '<h1 class="instr">' + INSTR[R.mode][s] + '</h1>';
+  /* the ticket reads as one line: the order in bold, then the quote (at Policy), then the customer. Delivery gets
+     the date it's needed by, and the quote and discount on a small line under the customer's words, so it can still
+     send a mistake back. In Round 4 the order is in the customer's words, so Pricing sees only the customer, and the
+     stations after it see Pricing's reading of the order ("14 tents, $2,800") in its place */
+  var quote = st.f[0] != null ? o.opts[0][st.f[0]].label : "", by = s === 2 && o.by ? " by " + o.by : "";
+  var ord = o.words ? (s > 0 && quote ? quote + by : "") : o.text + by, amt = !o.words && s === 1 ? quote : "";
+  var tkline = ord ? '<b class="ord">' + esc(ord) + "</b>" + [amt, o.cust].filter(Boolean).map(function (x, i, a) { return '<span class="dot"> · </span>' + (i === a.length - 1 ? '<span class="cust">' + esc(x) + "</span>" : esc(x)); }).join("") : '<b class="cust">' + esc(o.cust) + "</b>";
   var up = [];
-  if (s >= 1 && st.f[0] != null) up.push("<span>Quote <b>" + esc(o.opts[0][st.f[0]].label) + "</b></span>");
-  if (s >= 2 && st.f[1] != null) up.push("<span>Discount <b>" + esc(o.opts[1][st.f[1]].label) + "</b></span>");
+  if (s === 2 && quote && !o.words) up.push("<span>Quote <b>" + esc(quote) + "</b></span>");
+  if (s === 2 && st.f[1] != null) up.push("<span>Discount <b>" + esc(o.opts[1][st.f[1]].label) + "</b></span>");
   var stamps = "";
   if (R.stamps) for (var y = 0; y < s; y++) { var sp = st.stamp[y]; if (sp) stamps += stampHtml(sp.checked, nickOf(sp.p), false); }
   var sent = st.back.filter(function (b) { return b.from === s + 1; }).slice(-1)[0];
   if (sent) stamps += '<span class="st sent">' + (R.stamps ? 'Sent back by <span data-feedback-private>' + esc(nickOf(sent.p)) + "</span>" : "Sent back from " + G.STATIONS[s + 1].name) + "</span>";
-  html += '<div class="work' + (anim ? " enter" : "") + '"><article class="tk" data-id="order"><h3 class="cust">' + esc(o.cust) + "</h3>" + (orderLine ? '<p class="order">' + orderLine + "</p>" : "") + '<p class="note">“' + esc(o.say) + '”</p>' + (up.length ? '<p class="up">' + up.join("") + "</p>" : "") + '<div class="stamps">' + stamps + "</div></article>";
+  html += '<div class="work' + (anim ? " enter" : "") + '"><article class="tk" data-id="order"><h3 class="tkline">' + tkline + '</h3><p class="note">“' + esc(o.say) + '”</p>' + (up.length ? '<p class="up">' + up.join("") + "</p>" : "") + '<div class="stamps">' + stamps + "</div></article>";
   if (R.mode === "ai" || (R.mode === "ask" && d.asked)) {
     var a = o.ai[s];
     html += '<div class="ai" data-id="ai"><div class="aihead"><span class="ailbl">AI</span><span class="conf"><i style="--c:' + (a.conf / 100) + '"></i>' + a.conf + '% sure</span></div><p class="aians"><b>' + esc(aiWords(o, s, a.i)) + "</b><span>" + esc(a.why) + "</span></p></div>";
@@ -2532,6 +2721,17 @@ function deskHtml(m, d, st, anim) {
   html += '<div class="acts"><button class="btn big full" id="pHand" data-p="hand">Hand off</button><div class="row2"><button class="btn sec" data-p="look">Look it up</button>' + (s > 0 ? '<button class="btn sec" data-p="back">Send back</button>' : "") + "</div></div>";
   return html;
 }
+/* a long name or date shrinks the ticket's line to fit; on the narrowest phones it wraps rather than cut off */
+function fitLine(el) {
+  if (!el) return; var fs = 19; el.style.fontSize = ""; el.style.whiteSpace = "";
+  if (!el.clientWidth) return;
+  while (el.scrollWidth > el.clientWidth + 1 && fs > 15) { fs--; el.style.fontSize = fs + "px"; }
+  if (el.scrollWidth > el.clientWidth + 1) el.style.whiteSpace = "normal";
+}
+/* refit on resize, and when the web font arrives after a ticket was drawn in the fallback font */
+function refitTickets() { Array.prototype.forEach.call(document.querySelectorAll("#pDesk .tkline, #pFirst .tkline"), fitLine); }
+window.addEventListener("resize", refitTickets);
+if (document.fonts && document.fonts.addEventListener) document.fonts.addEventListener("loadingdone", refitTickets);
 function markOpts() { var d = App.desk; Array.prototype.forEach.call(document.querySelectorAll("#pDesk .opts button"), function (b) { b.setAttribute("aria-checked", String(!!d && +b.getAttribute("data-i") === d.choice)); }); var h = $("pHand"); if (h) h.disabled = !d || d.choice == null; }
 function act(kind) {
   var c = C(), d = App.desk; if (!canAct(c) || !d || d.busy) return false;
@@ -2583,12 +2783,20 @@ function openBook() {
   if (App.bookMs <= 0) $("bookL").innerHTML = b.lines.map(function (l) { return "<li>" + esc(l) + "</li>"; }).join("");
   setTimeout(function () { var x = $("bookClose"); if (x && App.bookOpen) try { x.focus({ preventScroll: true }); } catch (e) {} }, 60);
 }
-function closeBook() { var sh = $("book"); if (!sh) return; clearTimeout(App.bookT); App.bookOpen = false; sh.classList.remove("on"); sh.setAttribute("aria-hidden", "true"); }
+function closeBook() {
+  var sh = $("book"); if (!sh) return; clearTimeout(App.bookT); var was = App.bookOpen; App.bookOpen = false; sh.classList.remove("on"); sh.setAttribute("aria-hidden", "true");
+  if (was && App.fBookFor != null) { var s = App.fBookFor, t = tableOf(App.seat, 0); App.fBookFor = null; var tip = t != null ? curFirstTip(t, s) : null; if (tip && tip.at === "look") { App.ftip[s] = (App.ftip[s] || 0) + 1; App.paxSig = null; renderPhone(); } }
+}
 function paxClick(e) {
   var b = e.target.closest("[data-p]"); if (!b || b.disabled) return; var p = b.getAttribute("data-p"), d = App.desk;
   if (p === "join") return joinNow();
   if (p === "table") return pickTable(+b.getAttribute("data-t"));
   if (p === "wrong") { App.repick = true; App.paxKey = null; return renderPhone(true); }
+  if (p === "fpick") { App.fchoice = +b.getAttribute("data-i"); Array.prototype.forEach.call(document.querySelectorAll('#pFirst .opts button'), function (x) { x.setAttribute("aria-checked", String(+x.getAttribute("data-i") === App.fchoice)); }); paxSound("tick"); return; }
+  if (p === "ftip") { var ft = tableOf(App.seat, 0); if (ft != null) { App.ftip = App.ftip || {}; var fs0 = firstState(ft).pos; App.ftip[fs0] = (App.ftip[fs0] || 0) + 1; App.paxSig = null; renderPhone(true); } return; }
+  if (p === "flook") return openFirstBook();
+  if (p === "fhand") return firstAct("h");
+  if (p === "fback") return firstAct("b");
   if (p === "cover") { App.cover[roundIdx(C().phase) + ":" + b.getAttribute("data-pid")] = true; App.paxSig = null; paxSound("click"); return renderPhone(true); }
   if (!d || d.busy) return;
   if (p === "pick") { d.choice = +b.getAttribute("data-i"); markOpts(); paxSound("tick"); return; }
@@ -2730,6 +2938,19 @@ var Bots = {
     this.list = list; var self = this; clearInterval(this.timer); this.timer = setInterval(function () { self.tick(); }, App.botMs);
   },
   stop: function () { clearInterval(this.timer); this.timer = null; },
+  /* the first order: a practice player holding the order hands it on after a few seconds, with the AI's answer */
+  firstTick: function (st) {
+    var now = Date.now();
+    this.list.forEach(function (b) {
+      if (!b.seat) return; var t = tableOf(b.seat, 0, st); if (t == null) return;
+      var fs = firstState(t, st); if (fs.pos >= 3 || stationsOf(b.seat, 0, st).indexOf(fs.pos) < 0) return;
+      if (b.fkey !== fs.n) { b.fkey = fs.n; b.fat = now + 2200 + Math.random() * 2600; return; }
+      if (now < b.fat) return;
+      var path = "t" + t + "/f/" + b.seat, node = ((st["t" + t] || {}).f || {})[b.seat], mine = ((node && node.m) || []).slice();
+      mine.push([fs.n, fs.pos, "h", FIRST.ai[fs.pos], Math.round(wnow())]);
+      Sim.set(path, { m: mine }); setIn(st, path, { m: mine }); b.fkey = null;
+    });
+  },
   tick: function () {
     if (!App.sim || !App.drive || App.ended) return this.stop();
     var d = Sim.read(), st = d.state, c = C(st), joined = 0;
@@ -2741,6 +2962,7 @@ var Bots = {
     this.list.forEach(function (b) { if (b.seat) Sim.set("here/" + b.seat, 1); });
     d = Sim.read(); st = d.state;
     if (App.role === "pax") publish(false, st, d.times);
+    if (c.phase === "opening" && c.step === "first" && !c.paused) return this.firstTick(st);
     if (!canAct(c) || c.paused) return;
     var r = roundIdx(c.phase), el = roundMs(c), end = roundEnd(r, c);
     this.list.forEach(function (b) {
@@ -2761,7 +2983,8 @@ var Bots = {
 var FB_SECTIONS = [
   { name: "Set up", screens: ["studio-start", "studio-room", "studio-timing", "studio-review"] },
   { name: "Lobby", screens: ["console-lobby", "phone-join", "phone-table", "phone-lobby"] },
-  { name: "Opening", screens: ["console-opening", "phone-opening"] },
+  { name: "Opening", screens: ["console-opening", "console-opening-desk", "console-opening-rules", "phone-opening"] },
+  { name: "The first order", screens: ["console-first", "phone-first", "phone-first-wait", "phone-first-done"] },
   { name: "Rounds 1 to 3", screens: ["console-intro", "phone-intro", "console-round", "phone-desk", "phone-book", "phone-cover", "phone-late", "phone-timeup"] },
   { name: "Rounds 4 and 5", screens: ["console-round4", "phone-ask", "phone-noai"] },
   { name: "Pause screens", screens: ["console-paused", "phone-paused"] },
@@ -2778,13 +3001,15 @@ function fbScreen() {
   if (App.role === "host") {
     if (App.rvOpen) return App.ending ? "console-thanks" : (RV_SCREENS[ph] || [])[c.rv || 0] || "console-audit";
     if (c.paused && canPause(c)) return "console-paused";
-    if (ph === "lobby" || ph === "opening") return "console-" + ph;
+    if (ph === "lobby") return "console-lobby";
+    if (ph === "opening") return c.step === "first" ? "console-first" : c.step === "desk" ? "console-opening-desk" : c.step === "rules" ? "console-opening-rules" : "console-opening";
     if (r >= 0) return c.step === "intro" ? "console-intro" : r >= 3 ? "console-round4" : "console-round";
     if (ph === "audit") return c.step === "huddle" ? "console-huddle" : "console-audit";
     return "console-final";
   }
   if (App.role === "pax") {
     var v = paxView();
+    if (v === "first") { var fv = firstView(); return fv === "desk" ? "phone-first" : "phone-first-" + fv; }
     if (v === "desk") { var R = RD(r); return App.bookOpen ? "phone-book" : (deskModel(c) || {}).offer ? "phone-cover" : R.mode === "ask" ? "phone-ask" : R.mode === "none" ? "phone-noai" : "phone-desk"; }
     return "phone-" + v;
   }
@@ -2819,7 +3044,8 @@ function demoRows(sc) {
   var R = {}, now = Date.now(), put = function (p, v) { R[p] = { v: v, t: now }; };
   var stageOf = {
     "console-lobby": ["lobby"], "phone-join": ["lobby"], "phone-table": ["lobby"], "phone-lobby": ["lobby"],
-    "console-opening": ["opening"], "phone-opening": ["opening"],
+    "console-opening": ["opening", "day"], "phone-opening": ["opening", "day"], "console-opening-desk": ["opening", "desk"], "console-opening-rules": ["opening", "rules"],
+    "console-first": ["opening", "first"], "phone-first": ["opening", "first"], "phone-first-wait": ["opening", "first"], "phone-first-done": ["opening", "first"],
     "console-intro": ["r2", "intro"], "phone-intro": ["r2", "intro"],
     "console-round": ["r3", "play"], "phone-desk": ["r3", "play"], "phone-book": ["r3", "play"], "phone-cover": ["r3", "play"], "phone-late": ["r2", "play"], "phone-timeup": ["r1", "play"],
     "console-round4": ["r4", "play"], "phone-ask": ["r4", "play"], "phone-noai": ["r5", "play"],
@@ -2830,7 +3056,7 @@ function demoRows(sc) {
     "ended": ["final", null, 2], "phone-ended": ["final", null, 2], "gate": ["lobby"]
   }[sc] || ["lobby"];
   var ph = stageOf[0], step = stageOf[1] || null, rv = stageOf[2] == null ? null : stageOf[2], cur = roundIdx(ph), pi = phaseIdx(ph);
-  var set = { teams: 4, len: 4, name: "" }, people = [];
+  var set = { teams: 4, len: 3, name: "" }, people = [];
   DEMO_NAMES.slice(0, 12).forEach(function (n, i) { people.push({ pid: "p" + (i + 1), nick: n, t: Math.floor(i / 3) + 1 }); });
   if (sc === "console-lobby") { people[11].t = 3; people.push({ pid: "p13", nick: "Max", t: null }); }
   if (sc === "phone-late") people.push({ pid: "p13", nick: "Max", t: 1 });
@@ -2857,6 +3083,14 @@ function demoRows(sc) {
   if (step === "play" && sc !== "phone-timeup" && sc !== "console-paused" && sc !== "phone-paused") { var k = "r" + cur; tm[k].running = true; tm[k].from = now; tm[k].ran = untilNow; }
   if (ph === "audit" && step === "huddle") tm.huddle = { dur: HUDDLE_MS, ran: 21000, from: now, running: true, add: 0 };
   put("pub/seat", seatAll);
+  /* the first order: table 1 is where the phone's screen needs it; the other desks are spread along the line */
+  if (ph === "opening" && step === "first") Object.keys(tabs).forEach(function (t) {
+    var sts = G.seats(tabs[t], 0), hold = [[], [], []], logs = {};
+    Object.keys(sts.of).forEach(function (pid) { sts.of[pid].forEach(function (k) { hold[k].push(pid); }); });
+    var want = +t === 1 ? ({ "phone-first": 1, "phone-first-wait": 0, "phone-first-done": 3 }[sc] != null ? { "phone-first": 1, "phone-first-wait": 0, "phone-first-done": 3 }[sc] : 2) : (+t + 1) % 4;
+    for (var k = 0; k < want; k++) { var pid = hold[k][0]; if (pid) (logs[pid] = logs[pid] || []).push([k, k, "h", FIRST.ai[k], now - (want - k) * 3000]); }
+    Object.keys(logs).forEach(function (pid) { put("t" + t + "/f/" + pid, { m: logs[pid] }); });
+  });
   var paused = sc === "console-paused" || sc === "phone-paused";
   put("pub/ctl", { phase: ph, step: step, rv: rv, set: set, tm: tm, paused: paused, pausedT: paused, final: false, created: today() });
   if (sc === "phone-cover") put("pub/away", { p1: 1 });
@@ -2873,10 +3107,10 @@ function fbRestore(o) {
   var known = false; FB_SECTIONS.forEach(function (s) { if (s.screens.indexOf(sc) > -1) known = true; }); if (!known) return false;
   stopLoops(); Bots.stop(); Snd.on = false; closeJoin(); closeTables(); closeReveal(true); closeBook(); clearTimeout(App.endT); clearTimeout(App.flipT);
   App.anim = false; App.ended = false; App.rvChecked = true; App.drive = !!st.testDrive; App.paxSound = st.sound !== false; App.ending = false; App.flipped = true; App.celebrated = true;
-  App.seen = {}; App.seenReady = false; App.seenNm = {}; App.nmReady = false; App.paxKey = null; App.paxSig = null; App.conSig = null; App.pick = null; App.pend = {}; App.log = {}; App.sent = {}; App.desk = null; App.cover = {}; App.repick = false; App.myPick = null;
+  App.seen = {}; App.seenReady = false; App.seenNm = {}; App.nmReady = false; App.paxKey = null; App.paxSig = null; App.conSig = null; App.pick = null; App.pend = {}; App.log = {}; App.sent = {}; App.desk = null; App.cover = {}; App.repick = false; App.myPick = null; App.ftip = {}; App.fchoiceFor = null; App.fBookFor = null;
   var m = /^studio-(\w+)$/.exec(sc);
   if (m) {
-    App.role = null; App.sim = false; STUDIO.v = cleanSetup({ teams: st.teams || 10, len: st.roundLength || 4, name: "Leadership program" });
+    App.role = null; App.sim = false; STUDIO.v = cleanSetup({ teams: st.teams || 10, len: st.roundLength || 3, name: "Leadership program" });
     openView("studio"); bindStudio(); fillStudio(); drawDemo(); syncSound(); goStep(Math.max(0, STEP_NAME.indexOf(m[1]))); return true;
   }
   var role = /^console-|^ended$/.test(sc) ? "host" : "pax";
