@@ -196,6 +196,13 @@ fifteen minutes to find, or miss entirely.
   first board, Copy for AI (what goes in, in what order, what is left out, no names), the
   tester link and a new code, deleting, small screens, more than one tool, escaping, no
   dropdowns, and that the team key never travels in an address.
+- `qa-throughline.mjs` tests `../../throughline/index.html` (the Throughline story page) in a
+  simulated browser: the file loads nothing from outside pt but Google Fonts, stores nothing and
+  makes no calls; all sixteen panels draw; each of the 22 screens the feedback board can open
+  opens and names itself; typed shifts and names show as text and never run as HTML; the setup
+  steps, the three mirror tools, the director's forecast and the sponsor report all play through;
+  and the longest and emptiest text break nothing.
+
 - `qa-kit-coverage.mjs` checks the rules every page meets, on every page in the repo: the
   noindex tag, requests only to pt itself, the pt worker, Google Fonts and any analytics the
   page carries, the feedback kit's line, a feedback id no other page uses, and every screen in
@@ -240,6 +247,7 @@ Then, from anywhere in the repo:
     node _backend/tests/qa-icebreakers.mjs
     node _backend/tests/qa-two-truths.mjs
     node _backend/tests/qa-good-call.mjs
+    node _backend/tests/qa-throughline.mjs
     node _backend/tests/qa-kit-coverage.mjs
     node _backend/tests/qa-kit-coverage.mjs field-tools/my-tool/index.html   (one page)
     node _backend/tests/qa-kit-coverage.mjs --shrink   (after bringing a page up to a rule)

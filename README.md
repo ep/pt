@@ -68,6 +68,7 @@ There is no homepage at the repo root by design. Each project lives in its own f
 - https://ep.github.io/pt/ai-champion-charter/ : Interactive tool to help sponsors draft AI champion charters.
 - https://ep.github.io/pt/kc/ : KickstartChange partner enablement hub.
 - https://ep.github.io/pt/wbwai201/ : Work Better with AI 201 partner enablement hub.
+- https://ep.github.io/pt/throughline/ : Throughline, a story page for executive education program directors: one invented week of a custom program, with three mirror tools to try and the sponsor report at the end (test page, every number made up).
 - https://ep.github.io/pt/podium-for-partners/ : Positioning Podium with IP-holder partner prospects.
 - https://ep.github.io/pt/podium-for-partners-ideo/ : Positioning Podium, IDEO version.
 - https://ep.github.io/pt/design-ideas/room-pulse/ : Podium pulse activity interaction, reveal, and design ideas.
